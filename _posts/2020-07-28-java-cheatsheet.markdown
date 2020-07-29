@@ -11,3 +11,13 @@ Convert String ArrayList to String array:
 List<String> list = new ArrayList<String>();
 String[] array = list.toArray(new String[0])
 {% endhighlight %}
+
+# Comparator
+[Comparator](https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html)
+
+Compare Strings by length in descending order, then by alphabetical order:
+{% highlight java %}
+Comparator.comparing(String::length)
+    .reversed()
+    .thenComparing(Comparator.<String>naturalOrder())
+{% endhighlight %}
