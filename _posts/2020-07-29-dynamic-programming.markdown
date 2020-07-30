@@ -36,6 +36,17 @@ public int minDistance(String word1, String word2) {
 }
 {% endhighlight %}
 
+For example, `word1 = "newton", word2 = "einstein"`, then `dp` is:
+```
+[0,1,2,3,4,5,6,7,8]
+[1,1,2,2,3,4,5,6,7]
+[2,1,2,3,3,4,4,5,6]
+[3,2,2,3,4,4,5,5,6]
+[4,3,3,3,4,4,5,6,6]
+[5,4,4,4,4,5,5,6,7]
+[6,5,5,4,5,5,6,6,6]
+```
+
 Rolling array optimization:
 * `dp[i - 1][j] -> pre[j]`
 * `dp[i][j] -> cur[j]`
