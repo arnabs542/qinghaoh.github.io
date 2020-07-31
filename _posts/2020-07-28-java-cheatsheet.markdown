@@ -21,3 +21,6 @@ Comparator.comparing(String::length)
     .reversed()
     .thenComparing(Comparator.<String>naturalOrder())
 {% endhighlight %}
+
+# StringBuilder
+[reverse()](https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html#reverse--)

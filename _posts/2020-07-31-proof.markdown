@@ -1,0 +1,62 @@
+---
+layout: post
+title:  "Proof"
+---
+## Distance Barcodes
+[Distant Barcodes][distant-barcodes]
+
+### Algorithm
+
+Let `n = barcodes.length`. Sort the unique elements by their occurences in descending order:
+```
+barcodes[i_0], barcodes[i_1], ..., barcodes[i_(n - 1)]
+```
+
+Assume an element `barcodes[i_k]` has occurences `m_k`. 
+
+Steps:
+1. Put `barcodes[i_0]` to the first `m_0` even positions
+1. Arbitrarily pick a remaining element `barcodes[i_j]` to to the next `m_j` even positions
+1. Repeat Step 2 until all the even positions are filled. Wrap around the current element to the first few odd positions if it has remaining occurrences
+1. Fill odd positions with the remaining elements in any order
+
+* Time complexity: `O(N)`
+* Space complexity: `O(N)`
+
+### Example
+
+```
+[1, 1, 1, 2, 2, 3, 4, 5, 6]
+```
+```
+1. [1, *, 1, *, 1, *, *, *, *]
+2. [1, *, 1, *, 1, *, 3, *, *]
+3. [1, *, 1, *, 1, *, 3, *, 6]
+4. [1, 4, 1, *, 1, *, 3, *, 6]
+5. [1, 4, 1, 2, 1, 2, 3, *, 6]
+6. [1, 4, 1, 2, 1, 2, 3, 5, 6]
+```
+### Proof
+It is guaranteed an answer exists, therefore:
+```
+1 <= m_0 <= (barcodes.length + 1) / 2
+```
+
+As per the rule, `barcodes[i_j]` can be adjacent to an equal value only if:
+```
+m_j > m_0
+```
+
+This can be illustrated by the example above. In Step 2, if we pick the second most frequent element `2` to put at index 6:
+```
+[1, *, 1, *, 1, *, 2, *, *]
+```
+
+Look at the left part before this `2`. Suppose another `2` can be placed adjacent to this `2`, then the empty positions between `1`'s have to be taken by `2`'s, i.e.:
+```
+[1, 2, 1, 2, 1, 2, 2, *, *]
+```
+
+Apparently now `2` has more occurrences than `1`. This is contradiction. Note this contradiction occurs although we haven't yet filled all the even positions.
+
+[distant-barcodes]: https://leetcode.com/problems/distant-barcodes/

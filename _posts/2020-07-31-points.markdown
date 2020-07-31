@@ -1,0 +1,12 @@
+---
+layout: post
+title:  "Points"
+tags: array
+---
+# Dimension Reduction
+
+Generally speaking, we need an N-dimensional array to represent an N-dimensional point. The trick to use a signle varialb is to join elements in each dimension with a delimiter. For example, `(x, y)` can be represented as `x#y`, where `#` is the delimiter.
+
+[Path Crossing][path-crossing]
+
+[path-crossing]: https://leetcode.com/problems/path-crossing/
