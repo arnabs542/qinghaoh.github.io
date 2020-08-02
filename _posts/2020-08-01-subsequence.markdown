@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "Subarray"
+title:  "Subsequence"
 tags: array
 ---
 # Definition
-`a[i], a[i + 1], ..., a[j]`
+`a[i_0], a[i_1], ..., a[i_k]`, where `i_0 < i_1 < ... < i_k`
 
 # Algorithm
 ## Dynamic Programming

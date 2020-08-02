@@ -22,5 +22,9 @@ Comparator.comparing(String::length)
     .thenComparing(Comparator.<String>naturalOrder())
 {% endhighlight %}
 
+# String
+[repeat(int count)](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html#repeat(int))
+
 # StringBuilder
 [reverse()](https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html#reverse--)
+[replace(int start, int end, String str)](https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html#replace-int-int-java.lang.String-)
