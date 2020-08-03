@@ -27,4 +27,7 @@ public void rotate(int[] nums, int k) {
 }
 {% endhighlight %}
 
+[Shift 2D Grid][shift-2d-grid]
+
 [rotate-array]: https://leetcode.com/problems/rotate-array/
+[shift-2d-grid]: https://leetcode.com/problems/shift-2d-grid/

@@ -1,0 +1,16 @@
+---
+layout: post
+title:  "Array"
+tags: array
+---
+## Buckets
+Count each element in an array `int[] a`.
+
+If `0 <= a[i] <= max`, where max is not too big, then we can use `int[] count = new int[max + 1]` as buckets, instead of `Map<Integer, Integer>` 
+
+[How Many Numbers Are Smaller Than the Current Number][how-many-numbers-are-smaller-than-the-current-number]
+
+{% highlight java %}
+{% endhighlight %}
+
+[how-many-numbers-are-smaller-than-the-current-number]: https://leetcode.com/problems/how-many-numbers-are-smaller-than-the-current-number/
