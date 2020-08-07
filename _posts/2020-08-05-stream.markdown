@@ -1,0 +1,13 @@
+---
+layout: post
+title:  "Stream"
+tags: array
+---
+[Kth Largest Element in a Stream][kth-largest-element-in-a-stream]
+
+Maintain a min priority queue with max size `k`. When the queue is full, new element is offered only if it's greater than the head of the queue.
+
+{% highlight java %}
+{% endhighlight %}
+
+[kth-largest-element-in-a-stream]: https://leetcode.com/problems/kth-largest-element-in-a-stream/

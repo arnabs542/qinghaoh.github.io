@@ -22,4 +22,16 @@ public int search(int[] nums, int target) {
 }
 {% endhighlight %}
 
+There can be variants of this template. For example [First Bad Version][first-bad-version].
+* `low <= high`, `low < high`, ...
+* `low = mid + 1`, `low = mid`, ...
+* `high = mid - 1`, `high = mid`, ...
+* `return -1`, `return low`, ...
+
+Don't try to remember all these. The easiest way is to test your code with these examples: `[0]`, `[0, 1]` and `[0, 1, 2]`. Always make sure:
+* The range shrinks
+* No dead loop
+* Returns the right thing
+
 [binary-search]: https://leetcode.com/problems/binary-search/
+[first-bad-version]: https://leetcode.com/problems/first-bad-version/

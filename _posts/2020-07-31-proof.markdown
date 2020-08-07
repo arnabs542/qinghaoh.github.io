@@ -59,4 +59,39 @@ Look at the left part before this `2`. Suppose another `2` can be placed adjacen
 
 Apparently now `2` has more occurrences than `1`. This is contradiction. Note this contradiction occurs although we haven't yet filled all the even positions.
 
+## Array Partition I
+[Arry Parition I][array-partition-i]
+
+* `max1`, `max2`: max and second max in `nums[]`
+* `P`: an n-pair partition for `nums[]`. `(max1, max2)` is a pair in partition `P`
+* `sum(P)`: sum of partition `P`
+
+If in partition `P'`, `max1` is not paired with `max2`, prove `sum(P') >= sum(P)`.
+
+### Proof
+Let pairs `(max1, num1)` and `(max2, num2)` be in partition `P'`, `num1 <= max2` and `num2 <= max2`, then `P'` has the same pairs as `P` except `(max1, max2)` and `(num1, num2)`. We wiill need to prove the following inequality (1):
+```
+min(max1, max2) + min(num1, num2) >= min(max1, num1) + min(max2, num2).
+```
+
+Apparently (2):
+```
+max1 >= max2 >= max(num1, num2)
+```
+
+Therefore (1) becomes (3):
+```
+min(max1, max2) + min(num1 + num2) >= num1 + num2
+```
+
+From (2) we know:
+```
+min(max1, max2) >= max2 >= max(num1, num2)
+
+min(max1, max2) + min(num1, num2) >= max(num1, num2) + min(num1, num2) = num1 + num2
+```
+
+Q.E.D.
+
 [distant-barcodes]: https://leetcode.com/problems/distant-barcodes/
+[array-partition-i]: https://leetcode.com/problems/array-partition-i/

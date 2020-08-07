@@ -3,8 +3,9 @@ layout: post
 title:  "Java Cheatsheet"
 tags: java
 ---
-# Array
+# Arrays
 [public static \<T\> void sort(T\[\] a, int fromIndex, int toIndex, Comparator\<? super T\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#sort-T:A-int-int-java.util.Comparator-)
+[public static void fill(Objet\[\] a, Object val)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#fill-java.lang.Object:A-java.lang.Object-)
 
 # ArrayList
 [public \<T\> T\[\] toArray(T\[\] a)](https://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html#toArray-T:A-)
