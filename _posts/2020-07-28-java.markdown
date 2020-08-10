@@ -11,4 +11,8 @@ In Java SE 7 and later, any number of underscore characters (_) can appear anywh
 private static int MOD = 1_000_000_007
 {% endhighlight %}
 
+[Enhanced For][for]
+The for statement also has another form designed for iteration through *Collections* and *arrays* This form is sometimes referred to as the enhanced for statement, and can be used to make your loops more compact and easy to read.
+
 [underscores-literals]: https://docs.oracle.com/javase/7/docs/technotes/guides/language/underscores-literals.html
+[for]: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/for.html

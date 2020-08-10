@@ -2,6 +2,7 @@
 layout: post
 title:  "Binary Search"
 ---
+# Template
 [Binary Search][binary-search]
 
 {% highlight java %}
@@ -33,5 +34,18 @@ Don't try to remember all these. The easiest way is to test your code with these
 * No dead loop
 * Returns the right thing
 
+# Variants
+[Find K Closest Elements][find-k-closest-elements]
+
+# Java
+## Arrays
+[public static \<T\> int binarySearch(T\[\] a, int fromIndex, int toIndex, T key, Comparator\<? super T\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#binarySearch-T:A-int-int-T-java.util.Comparator-)
+
+The *insertion point* is defined as the point at which the key would be inserted into the array: the index of the first element in the range **greater** than the key, or toIndex if all elements in the range are less than the specified key.
+
+## Collections
+[public static \<T\> int binarySearch(List\<? extends T\> list, T key, Comparator\<? super T\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#binarySearch-java.util.List-T-java.util.Comparator-)
+
 [binary-search]: https://leetcode.com/problems/binary-search/
+[find-k-closest-elements]: https://leetcode.com/problems/find-k-closest-elements/
 [first-bad-version]: https://leetcode.com/problems/first-bad-version/

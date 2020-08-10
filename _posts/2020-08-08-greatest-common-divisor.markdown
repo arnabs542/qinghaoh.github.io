@@ -1,0 +1,47 @@
+---
+layout: post
+title:  "Greatest Common Divisor"
+tags: math
+usemathjax: true
+---
+[Euclidean algorithm](https://en.wikipedia.org/wiki/Euclidean_algorithm)
+
+{% highlight java %}
+public int gcd(int a, int b) {
+    while (b != 0) {
+        int tmp = b;
+        b = a % b;
+        a = tmp;
+    }
+    return a;
+}
+{% endhighlight %}
+
+[Bézout's identity](https://en.wikipedia.org/wiki/B%C3%A9zout%27s_identity)
+
+Let $$ a $$ and $$ b $$ be integers with greatest common divisor $$ d $$. Then, there exist integers $$ x $$ and $$ y $$ such that $$ ax + by = d $$. More generally, the integers of the form $$ ax + by $$ are exactly the multiples of $$ d $$.
+
+[Greatest Common Divisor of Strings][greatest-common-divisor-of-strings]
+
+{% highlight java %}
+public String gcdOfStrings(String str1, String str2) {
+    if (str1.length() < str2.length()) {
+        return gcdOfStrings(str2, str1);
+    }
+
+    if (!str1.startsWith(str2)) {
+        return "";
+    }
+
+    if (str2.isEmpty()) {
+        return str1;
+    }
+
+    return gcdOfStrings(str1.substring(str2.length()), str2);
+}
+{% endhighlight %}
+
+[X of a Kind in a Deck of Cards][x-of-a-kind-in-a-deck-of-cards]
+
+[greatest-common-divisor-of-strings]: https://leetcode.com/problems/greatest-common-divisor-of-strings/
+[x-of-a-kind-in-a-deck-of-cards]: https://leetcode.com/problems/x-of-a-kind-in-a-deck-of-cards/
