@@ -8,18 +8,6 @@ tags: java
 * [public static void fill(Objet\[\] a, Object val)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#fill-java.lang.Object:A-java.lang.Object-)
 * [public static \<T\> void sort(T\[\] a, int fromIndex, int toIndex, Comparator\<? super T\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#sort-T:A-int-int-java.util.Comparator-)
 
-# List
-[List\<E\> subList(int fromIndex, int toIndex)](https://docs.oracle.com/javase/8/docs/api/java/util/List.html#subList-int-int-)
-
-[\<T\> T\[\] toArray(T\[\] a)](https://docs.oracle.com/javase/8/docs/api/java/util/List.html#toArray-T:A-)
-
-Convert String List to String array:
-{% highlight java %}
-List<String> list = new ArrayList<String>();
-list.add(0);
-String[] array = list.toArray(new String[0])
-{% endhighlight %}
-
 # Collections
 * [public static final \<T\> List\<T\> emptyList()](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#emptyList--)
 
@@ -33,8 +21,30 @@ Comparator.comparing(String::length)
     .thenComparing(Comparator.<String>naturalOrder())
 {% endhighlight %}
 
+* [static \<T\> Comparator\<T\> comparingInt(ToIntFunction\<? super T\> keyExtractor)](https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html#comparingInt-java.util.function.ToIntFunction-)
+
+# Integer
+* [public static int bitCount(int i)](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#bitCount-int-)
+* [public int intValue()](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#intValue--)
+
+# List
+* [void add(int index, E element)](https://docs.oracle.com/javase/8/docs/api/java/util/List.html#add-int-E-)
+* [List\<E\> subList(int fromIndex, int toIndex)](https://docs.oracle.com/javase/8/docs/api/java/util/List.html#subList-int-int-)
+
+[\<T\> T\[\] toArray(T\[\] a)](https://docs.oracle.com/javase/8/docs/api/java/util/List.html#toArray-T:A-)
+
+Convert String List to String array:
+{% highlight java %}
+List<String> list = new ArrayList<String>();
+list.add(0);
+String[] array = list.toArray(new String[0])
+{% endhighlight %}
+
 # Object
 * [protected Object clone() throws CloneNotSupportedException](https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone--)
+
+# Stream
+* [\<A\> A\[\] toArray(IntFunction\<A\[\]\> generator)](https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#toArray-java.util.function.IntFunction-)
 
 # String
 * [public String(char\[\]  value, int offset, int count)](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#String-char:A-int-int-)

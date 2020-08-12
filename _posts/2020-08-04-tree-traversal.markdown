@@ -3,6 +3,7 @@ layout: post
 title:  "Tree Traversal"
 tags: tree
 ---
+# Traversal
 ## Preorder
 [Binary Tree Preorder Traveral][binary-tree-preorder-traversal]
 
@@ -90,7 +91,7 @@ public List<Integer> inorderTraversal(TreeNode root) {
 
 ### Recursion
 {% highlight java %}
-public List<Integer> preorderTraversal(TreeNode root) {
+public List<Integer> postorderTraversal(TreeNode root) {
     List<Integer> list = new ArrayList<Integer>();
     traverse(root, list);
     return list;
@@ -98,9 +99,9 @@ public List<Integer> preorderTraversal(TreeNode root) {
 
 private void traverse(TreeNode root, List<Integer> list) {
     if (root != null) {
-        list.add(root.val);
         traverse(root.left, list);
         traverse(root.right, list);
+        list.add(root.val);
     }
 }
 {% endhighlight %}
@@ -125,6 +126,8 @@ public List<Integer> postorderTraversal(TreeNode root) {
     return list;
 }
 {% endhighlight %}
+
+# Complexity
 
 [binary-tree-preorder-traversal]: https://leetcode.com/problems/binary-tree-preorder-traversal
 [binary-tree-inorder-traversal]: https://leetcode.com/problems/binary-tree-inorder-traversal

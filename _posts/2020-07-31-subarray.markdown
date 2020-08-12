@@ -10,6 +10,10 @@ a[i], a[i + 1], ..., a[j]
 Where `0 <= i <= j <= a.length`
 
 # Algorithm
+## Sliding Window
+### Index Map
+[Longest Substring Without Repeating Characters][longest-substring-without-repeating-characters]
+
 ## Dynamic Programming
 
 [Path Crossing][path-crossing]
@@ -18,3 +22,4 @@ Where `0 <= i <= j <= a.length`
 {% endhighlight %}
 
 [path-crossing]: https://leetcode.com/problems/path-crossing/
+[longest-substring-without-repeating-characters]: https://leetcode.com/problems/longest-substring-without-repeating-characters/
