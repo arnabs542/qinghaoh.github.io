@@ -19,4 +19,7 @@ public int[] finalPrices(int[] prices) {
 }
 {% endhighlight %}
 
+[Next Greater Element II][next-greater-element-ii]
+
 [final-prices-with-a-special-discount-in-a-shop]: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/
+[next-greater-element-ii]: https://leetcode.com/problems/next-greater-element-ii/
