@@ -3,6 +3,44 @@ layout: post
 title:  "Sort"
 tags: sort
 ---
+[Sort an Array][sort-an-array]
+
+## Quick sort
+### Lumuto Partition Scheme
+{% highlight java %}
+public int[] sortArray(int[] nums) {
+    quickSort(nums, 0, nums.length - 1);
+    return nums;
+}
+    
+private void quickSort(int[] nums, int low, int high) {
+    if (low < high) {
+        int p = partition(nums, low, high);
+        quickSort(nums, low, p - 1);
+        quickSort(nums, p + 1, high);
+    }
+}
+    
+private int partition(int[] nums, int low, int high) {
+    int pivot = nums[high];
+    int i = low;
+    for (int j = low; j < high; j++) {
+        if (nums[j] < pivot) {
+            swap(nums, i, j);
+            i++;
+        }
+    }
+    swap(nums, i, high);
+    return i;
+}
+    
+private void swap(int[] nums, int i, int j) {
+    int tmp = nums[i];
+    nums[i] = nums[j];
+    nums[j] = tmp;
+}
+{% endhighlight %}
+
 ## Counting Sort
 [Counting sort](https://en.wikipedia.org/wiki/Counting_sort)
 [Find Lucky Integer in an Array][find-lucky-integer-in-an-array]
@@ -29,7 +67,7 @@ public int countingSort(int[] arr) {
 
     return result;
 }
-
 {% endhighlight %}
 
 [find-lucky-integer-in-an-array]: https://leetcode.com/problems/find-lucky-integer-in-an-array/
+[sort-an-array]: https://leetcode.com/problems/sort-an-array/

@@ -4,7 +4,7 @@ title:  "Java Cheatsheet"
 tags: java
 ---
 # Arrays
-* [public static \<T\> List\<T\> asList(T... a)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#asList-T...-): mutable
+* [public static \<T\> List\<T\> asList(T... a)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#asList-T...-): fixed-size, mutable
 * [public static \<T\> T\[\] copyOf(T\[\] original, int newLength)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#copyOf-T:A-int-)
 * [public static void fill(Objet\[\] a, Object val)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#fill-java.lang.Object:A-java.lang.Object-)
 * [static \<E\> List\<E\> of(E... elements)](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html#of%28E...%29): immutable
@@ -12,6 +12,7 @@ tags: java
 
 # Collection
 * [void clear()](https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html#clear--)
+* [boolean contains(Object o)](https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html#contains-java.lang.Object-)
 
 # Collections
 * [public static final \<T\> List\<T\> emptyList()](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#emptyList--): immutable
@@ -38,6 +39,8 @@ Comparator.comparing(String::length)
 * [static \<T extends Comparable\<? super T\>\> Comparator\<T\> naturalOrder()](https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html#naturalOrder--)
 
 # Integer
+* [MAX_VALUE](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#MAX_VALUE): 2^31-1 = 2147483647
+* [MIN_VALUE](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#MIN_VALUE): -2^31 = -2147483648
 * [public static int bitCount(int i)](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#bitCount-int-)
 * [public int intValue()](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#intValue--)
 
@@ -62,6 +65,7 @@ String[] array = list.toArray(new String[0])
 
 # Set
 * [boolean containsAll(Collection\<?\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Set.html#containsAll-java.util.Collection-)
+* [boolean retainAll(Collection\<?\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Set.html#retainAll-java.util.Collection-)
 
 # Stream
 * [\<A\> A\[\] toArray(IntFunction\<A\[\]\> generator)](https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#toArray-java.util.function.IntFunction-)

@@ -3,6 +3,7 @@ layout: post
 title:  "Stack"
 tags: stack
 ---
+## Push/Pop Array Index
 [Final Prices With a Special Discount in a Shop][final-prices-with-a-special-discount-in-a-shop]
 
 {% highlight java %}
@@ -21,5 +22,22 @@ public int[] finalPrices(int[] prices) {
 
 [Next Greater Element II][next-greater-element-ii]
 
+## Reduced to Counter
+[Remove Outermost Parentheses][remove-outermost-parentheses]
+
+{% highlight java %}
+public String removeOuterParentheses(String S) {
+    StringBuilder sb = new StringBuilder();
+    int open = 0;
+    for (char c : S.toCharArray()) {
+        if ((c == '(' && open++ > 0) || (c == ')' && --open > 0)) {
+            sb.append(c);
+        }
+    }
+    return sb.toString();
+}
+{% endhighlight %}
+
 [final-prices-with-a-special-discount-in-a-shop]: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/
 [next-greater-element-ii]: https://leetcode.com/problems/next-greater-element-ii/
+[remove-outermost-parentheses]: https://leetcode.com/problems/remove-outermost-parentheses/
