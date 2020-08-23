@@ -16,6 +16,7 @@ tags: java
 
 # Collections
 * [public static final \<T\> List\<T\> emptyList()](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#emptyList--): immutable
+* [public static \<T\> void fill(List\<? super T\> list, T obj)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#fill-java.util.List-T-)
 * [public static int frequency(Collection\<?\> c, Object o)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#frequency-java.util.Collection-java.lang.Object-)
 * [public static \<T\> T max(Collection\<? extends T\> coll, Comparator\<? super T\> comp)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#max-java.util.Collection-java.util.Comparator-)
 * [public static \<T\> List\<T\> nCopies(int n, T o)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#nCopies-int-T-): immutable
@@ -60,6 +61,9 @@ list.add(0);
 String[] array = list.toArray(new String[0])
 {% endhighlight %}
 
+# Map.Entry
+* [static \<K,V extends Comparable\<? super V\>\> Comparator\<Map.Entry\<K,V\>\> comparingByValue()](https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html#comparingByValue--)
+
 # Object
 * [protected Object clone() throws CloneNotSupportedException](https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone--)
 
@@ -74,6 +78,7 @@ String[] array = list.toArray(new String[0])
 * [public String(char\[\]  value, int offset, int count)](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#String-char:A-int-int-)
 * [public boolean contains(CharSequence s)](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#contains-java.lang.CharSequence-)
 * [public String repeat(int count)](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html#repeat(int))
+* [public String replaceAll(String regex, String replacement)](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#replaceAll-java.lang.String-java.lang.String-)
 * [public boolean startsWith(String prefix, int toffset)](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#startsWith-java.lang.String-int-)
 
 # StringBuilder

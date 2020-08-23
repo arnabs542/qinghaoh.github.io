@@ -82,5 +82,29 @@ private void backtrack(List<List<Integer>> list, List<Integer> tmpList, int[] nu
 }
 {% endhighlight %}
 
+[Subsets][subsets]
+
+{% highlight java %}
+public List<List<Integer>> subsets(int[] nums) {
+    List<List<Integer>> list = new ArrayList<>();
+    backtrack(list, new ArrayList<>(), nums, 0);
+    return list;
+}
+
+private void backtrack(List<List<Integer>> list, List<Integer> tmpList, int[] nums, int index) {
+    list.add(new ArrayList<>(tmpList));
+
+    for (int i = index; i < nums.length; i++) { 
+        tmpList.add(nums[i]);
+        backtrack(list, tmpList, nums, i + 1);
+        tmpList.remove(tmpList.size() - 1);
+    }
+}
+{% endhighlight %}
+
+[Beautiful Arrangement][beautiful-arrangement]
+
+[beautiful-arrangement]: https://leetcode.com/problems/beautiful-arrangement/
 [permutations]: https://leetcode.com/problems/permutations/
 [permutations-ii]: https://leetcode.com/problems/permutations-ii/
+[subsets]: https://leetcode.com/problems/subsets/

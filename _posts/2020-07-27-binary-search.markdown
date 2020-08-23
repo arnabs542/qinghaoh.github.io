@@ -23,11 +23,12 @@ public int search(int[] nums, int target) {
 }
 {% endhighlight %}
 
-There can be variants of this template. For example [First Bad Version][first-bad-version].
+There can be variants of this templatekest Rows in a Matrix. For example: [First Bad Version][first-bad-version], [The K Weakest Rows in a Matrix][the-k-weakest-rows-in-a-matrix]
+
 * `low <= high`, `low < high`, ...
 * `low = mid + 1`, `low = mid`, ...
 * `high = mid - 1`, `high = mid`, ...
-* `return -1`, `return low`, ...
+* `return -1`, `return low`, `return high`, ...
 
 Don't try to remember all these. The easiest way is to test your code with these examples: `[0]`, `[0, 1]` and `[0, 1, 2]`. Always make sure:
 * The range shrinks
@@ -35,6 +36,26 @@ Don't try to remember all these. The easiest way is to test your code with these
 * Returns the right thing
 
 # Variants
+[Search Insert Position][search-insert-position]
+
+{% highlight java %}
+public int searchInsert(int[] nums, int target) {
+    int low = 0, high = nums.length - 1;
+    while (low <= high) {
+        int mid = (high - low) / 2 + low;
+        if (nums[mid] == target) {
+            return mid;
+        }
+        if (nums[mid] < target) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return low;
+}
+{% endhighlight %}
+
 [Find K Closest Elements][find-k-closest-elements]
 
 # Java
@@ -49,3 +70,5 @@ The *insertion point* is defined as the point at which the key would be inserted
 [binary-search]: https://leetcode.com/problems/binary-search/
 [find-k-closest-elements]: https://leetcode.com/problems/find-k-closest-elements/
 [first-bad-version]: https://leetcode.com/problems/first-bad-version/
+[search-insert-position]: https://leetcode.com/problems/search-insert-position/
+[the-k-weakest-rows-in-a-matrix]: https://leetcode.com/problems/the-k-weakest-rows-in-a-matrix/

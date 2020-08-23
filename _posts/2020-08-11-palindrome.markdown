@@ -3,6 +3,20 @@ layout: post
 title:  "Palindrome"
 tags: string
 ---
+## IsPalindrome
+
+{% highlight java %}
+public boolean isPalindrome(String s) {
+    int left = 0, right = s.length() - 1;
+    while (left < right) {
+        if (s.charAt(left++) != s.charAt(right--)) {
+            return false;
+        }
+    }
+    return true;
+}
+{% endhighlight %}
+
 ## Expand Around Center
 
 [Longest Palindromic Substring][longest-palindromic-substring]

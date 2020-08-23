@@ -27,8 +27,8 @@ private void helper(TreeNode root, List<Integer> list) {
 ### Stack
 {% highlight java %}
 public List<Integer> preorderTraversal(TreeNode root) {
-    List<Integer> list = new ArrayList<Integer>();
-    Stack<TreeNode> stack = new Stack<TreeNode>();
+    List<Integer> list = new ArrayList<>();
+    Stack<TreeNode> stack = new Stack<>();
     TreeNode node = root;
     while (node != null) {
         list.add(node.val);  // preorder
@@ -112,18 +112,49 @@ public List<Integer> postorderTraversal(TreeNode root) {
     List<Integer> list = new ArrayList<>();
     Stack<TreeNode> stack = new Stack<>();
     TreeNode node = root;
-    while (node != null || !stack.isEmpty()) {
-        if (node != null) {
-            list.add(node.val);
-            stack.push(node);
-            node = node.right;  // right -> left
-        } else {
+    while (node != null) {
+        list.add(node.val);
+        if (node.left != null) {
+            stack.push(node.left);
+        }
+        node = node.right;  // right -> left
+        if (node == null && !stack.isEmpty()) {
             node = stack.pop();
-            node = node.left;
         }
     }
     Collections.reverse(list);  // reverse
     return list;
+}
+{% endhighlight %}
+
+## Depth First Search
+
+[Find Largest Value in Each Tree Row][find-largest-value-in-each-tree-row]
+
+{% highlight java %}
+public List<Integer> largestValues(TreeNode root) {
+    List<Integer> list = new ArrayList<>();
+    if (root == null) {
+        return list;
+    }
+
+    dps(root, list, 0);
+    return list;
+}
+
+private void dps(TreeNode node, List<Integer> list, int depth) {
+    if (node == null) {
+        return;
+    }
+
+    if (depth == list.size()) {
+        list.add(node.val);
+    } else {
+        list.set(depth, Math.max(list.get(depth), node.val));
+    }
+
+    dps(node.left, list, depth + 1);
+    dps(node.right, list, depth + 1);
 }
 {% endhighlight %}
 
@@ -132,3 +163,4 @@ public List<Integer> postorderTraversal(TreeNode root) {
 [binary-tree-preorder-traversal]: https://leetcode.com/problems/binary-tree-preorder-traversal
 [binary-tree-inorder-traversal]: https://leetcode.com/problems/binary-tree-inorder-traversal
 [binary-tree-postorder-traversal]: https://leetcode.com/problems/binary-tree-postorder-traversal
+[find-largest-value-in-each-tree-row]: https://leetcode.com/problems/find-largest-value-in-each-tree-row/

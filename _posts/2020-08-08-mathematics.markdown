@@ -18,8 +18,37 @@ $$ n=x^{2}+y^{2}+z^{2} $$
 
 if and only if $$ n $$ is not of the form $$ n = 4^a(8b + 7) $$ for nonnegative integers $$ a $$ and $$ b $$.
 
+[Sum of two squares theorem](https://en.wikipedia.org/wiki/Sum_of_two_squares_theorem)
+
+An integer greater than one can be written as a sum of two squares if and only if its prime decomposition contains no prime congruent to 3 modulo 4 raised to an odd power.
+
 [Zeller's congruence](https://en.wikipedia.org/wiki/Zeller%27s_congruence)
+
 Zeller's congruence is an algorithm devised by Christian Zeller to calculate the day of the week for any Julian or Gregorian calendar date.
 
 Gregorian calendar:
 $$ h=\left(q+\left\lfloor {\frac {13(m+1)}{5}}\right\rfloor +K+\left\lfloor {\frac {K}{4}}\right\rfloor +\left\lfloor {\frac {J}{4}}\right\rfloor -2J\right){\bmod {7}} $$
+
+[Triangle area using coordinates](https://en.wikipedia.org/wiki/Triangle#Using_coordinates)
+
+$$ T={\frac {1}{2}}{\big |}(x_{A}-x_{C})(y_{B}-y_{A})-(x_{A}-x_{B})(y_{C}-y_{A}) $$
+
+[Euclid-Euler theorem](https://en.wikipedia.org/wiki/Euclid%E2%80%93Euler_theorem)
+
+The Euclid–Euler theorem is a theorem in mathematics that relates perfect numbers to Mersenne primes. It states that an even number is perfect if and only if it has the form $$ 2p−1(2p − 1) $$, where $$ 2p − 1 $$ is a prime number. 
+
+[Rejection sampling](https://en.wikipedia.org/wiki/Rejection_sampling)
+
+[Implement Rand10() Using Rand7()][implement-rand10-using-rand7]
+
+{% highlight java %}
+public int rand10() {
+    int num = 0;
+    do {
+        num = (rand7() - 1) * 7 + rand7();
+    } while (num > 40);
+    return (num - 1) % 10 + 1;
+}
+{% endhighlight %}
+
+[implement-rand10-using-rand7]: https://leetcode.com/problems/implement-rand10-using-rand7/

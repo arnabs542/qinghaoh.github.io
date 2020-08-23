@@ -21,5 +21,53 @@ int[][] matrix = new int[r][c];
 // c == matrix[0].length
 {% endhighlight %}
 
+[Remainder Operator %][remainder-operator]
+
+In C and C++, the remainder operator accepts only integral operands, but in the Java programming language, it also accepts floating-point operands.
+
+### Integer
+
+1. The remainder operation can be negative only if the dividend is negative, and can be positive only if the dividend is positive.
+2. The magnitude of the result is always less than the magnitude of the divisor.
+
+{% highlight java %}
+(a / b) * b + (a % b) == a
+{% endhighlight %}
+
+{% highlight java %}
+int a = 5 % 3;  // 2
+int b = 5 / 3;  // 1
+
+int c = 5 % (-3);  // 2
+int d = 5 / (-3);  // -1
+
+int e = (-5) % 3;  // -2
+int f = (-5) / 3;  // -1
+
+int g = (-5) % (-3);  // -2
+int h = (-5) / (-3);  // 1
+{% endhighlight %}
+
+### Floating-point
+
+The Java programming language defines % on floating-point operations to behave in a manner analogous to that of the integer remainder operator.
+
+{% highlight java %}
+double a = 5.0 % 3.0;  // 2.0
+
+double b = 5.0 % (-3.0);  // 2.0
+
+double c = (-5.0) % 3.0;  // -2.0
+
+double d = (-5.0) % (-3.0);  // -2.0
+{% endhighlight %}
+
+## Queue
+[Queue][queue]
+
+Queue implementations generally do not allow insertion of ***null*** elements, although some implementations, such as **LinkedList**, do not prohibit insertion of null. Even in the implementations that permit it, null should not be inserted into a Queue, as null is also used as a special return value by the poll method to indicate that the queue contains no elements.
+
 [underscores-literals]: https://docs.oracle.com/javase/7/docs/technotes/guides/language/underscores-literals.html
 [for]: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/for.html
+[remainder-operator]: https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.17.3
+[queue]: https://docs.oracle.com/javase/8/docs/api/java/util/Queue.html

@@ -21,6 +21,12 @@ int[] a = {0, 1, 2};
 List<Integer> b = Arrays.stream(a).boxed().collect(Collectors.toList());
 {% endhighlight %}
 
+# int[] -> List\<Integer\>
+{% highlight java %}
+int[] a = {0, 1, 2};
+Set<Integer> b = Arrays.stream(a).boxed().collect(Collectors.toSet());
+
+{% endhighlight %}
 # Array -> Stream
 [public static \<T\> Stream\<T\> stream(T\[\] array, int startInclusive, int endExclusive)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#stream-T:A-int-int-)
 
@@ -28,3 +34,16 @@ List<Integer> b = Arrays.stream(a).boxed().collect(Collectors.toList());
 {% highlight java %}
 char c = (char)('a' + i);
 {% endhighlight %}
+
+# char number -> int
+{% highlight java %}
+char c = '9';
+int a = c - '0';
+{% endhighlight %}
+
+
+# Key with the max value in a map
+{% highlight java %}
+Collections.max(map.entrySet(), Map.Entry.comparingByValue()).getKey();
+{% endhighlight %}
+

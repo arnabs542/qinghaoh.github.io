@@ -105,4 +105,55 @@ public int minDistance(String word1, String word2) {
 }
 {% endhighlight %}
 
+[Min Cost Climbing Stairs][min-cost-climbing-stairs]
+
+{% highlight java %}
+public int minCostClimbingStairs(int[] cost) {
+    int[] dp = new int[cost.length];
+    dp[0] = cost[0];
+    dp[1] = cost[1];
+
+    for (int i = 2; i < cost.length; i++) {
+        dp[i] = Math.min(dp[i - 1], dp[i - 2]) + cost[i];
+    }
+    return Math.min(dp[cost.length - 1], dp[cost.length - 2]);
+}
+{% endhighlight %}
+
+{% highlight java %}
+public int minCostClimbingStairs(int[] cost) {
+    int dp0 = cost[0], dp1 = cost[1];
+
+    for (int i = 2; i < cost.length; i++) {
+        int tmp = Math.min(dp0, dp1) + cost[i];
+        dp0 = dp1;
+        dp1 = tmp;
+    }
+    return Math.min(dp0, dp1);
+}
+{% endhighlight %}
+
+[Greatest Sum Divisible by Three][greatest-sum-divisible-by-three]
+
+-> Divisible by K
+
+{% highlight java %}
+public int maxSumDivThree(int[] nums) {
+    int k = 3;
+    int[] dp = new int[k];
+    for (int num : nums) {
+        int[] tmp = Arrays.copyOf(dp, k);
+        for (int i = 0; i < k; i++) {
+            int r = (dp[i] + num) % k;
+            tmp[r] = Math.max(tmp[r], dp[i] + num);
+        }
+        dp = tmp;
+    }
+    return dp[0];
+}
+{% endhighlight %}
+
 [edit-distance]: https://leetcode.com/problems/edit-distance/
+[greatest-sum-divisible-by-three]: https://leetcode.com/problems/greatest-sum-divisible-by-three/
+[min-cost-climbing-stairs]: https://leetcode.com/problems/min-cost-climbing-stairs/
+
