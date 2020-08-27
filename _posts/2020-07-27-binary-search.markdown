@@ -9,7 +9,7 @@ title:  "Binary Search"
 public int search(int[] nums, int target) {
     int low = 0, high = nums.length - 1;
     while (low <= high) {
-        int mid = (high - low) / 2 + low;
+        int mid = (low + high) >>> 1;
         if (nums[mid] == target) {
             return mid;
         }
@@ -23,16 +23,19 @@ public int search(int[] nums, int target) {
 }
 {% endhighlight %}
 
-There can be variants of this templatekest Rows in a Matrix. For example: [First Bad Version][first-bad-version], [The K Weakest Rows in a Matrix][the-k-weakest-rows-in-a-matrix]
+There can be variants of this template. For example: [First Bad Version][first-bad-version], [The K Weakest Rows in a Matrix][the-k-weakest-rows-in-a-matrix]
 
 * `low <= high`, `low < high`, ...
 * `low = mid + 1`, `low = mid`, ...
 * `high = mid - 1`, `high = mid`, ...
 * `return -1`, `return low`, `return high`, ...
 
+## Boundary
+The initial boundary `[low, high]` should include ***all*** possible answers. When each loop begins, any value within the range `[low, high]` could be the answer.
+
 Don't try to remember all these. The easiest way is to test your code with these examples: `[0]`, `[0, 1]` and `[0, 1, 2]`. Always make sure:
 * The range shrinks
-* No dead loop
+* No infinite loop
 * Returns the right thing
 
 # Variants
@@ -42,7 +45,7 @@ Don't try to remember all these. The easiest way is to test your code with these
 public int searchInsert(int[] nums, int target) {
     int low = 0, high = nums.length - 1;
     while (low <= high) {
-        int mid = (high - low) / 2 + low;
+        int mid = (low + high) >>> 1;
         if (nums[mid] == target) {
             return mid;
         }
@@ -57,6 +60,23 @@ public int searchInsert(int[] nums, int target) {
 {% endhighlight %}
 
 [Find K Closest Elements][find-k-closest-elements]
+
+Search for the first index from which the `k`-element sliding window starts.
+
+{% highlight java %}
+public List<Integer> findClosestElements(int[] arr, int k, int x) {
+    int low = 0, high = arr.length - k;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (x - arr[mid] > arr[mid + k] - x) {
+            low = mid + 1;
+        } else {
+            high = mid;
+        }
+    }
+    return Arrays.stream(arr, low, low + k).boxed().collect(Collectors.toList());
+}
+{% endhighlight %}
 
 # Java
 ## Arrays

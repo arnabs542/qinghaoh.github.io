@@ -106,7 +106,134 @@ private int length(TreeNode node) {
 }
 {% endhighlight %}
 
+[Find Bottom Left Tree Value][find-bottom-left-tree-value]
+
+{% highlight java %}
+private int bottomLeft = 0;
+private int depth = -1;
+
+public int findBottomLeftValue(TreeNode root) {
+    dfs(root, 0);
+    return bottomLeft;
+}
+
+private void dfs(TreeNode node, int d) {
+    if (depth < d) {
+        bottomLeft = node.val;
+        depth = d;
+    }
+
+    if (node.left != null) {
+        dfs(node.left, d + 1);
+    }
+    if (node.right != null) {
+        dfs(node.right, d + 1);
+    }
+
+    return;
+}
+{% endhighlight %}
+
+Another solution is right-to-left-BFS.
+
+[Longest ZigZag Path in a Binary Tree][longest-zigzag-path-in-a-binary-tree]
+
+{% highlight java %}
+public int longestZigZag(TreeNode root) {
+    return dfs(root)[2];
+}
+
+private int[] dfs(TreeNode root) {
+    if (root == null) {
+        // max zigzag path at:
+        // [0]: left child node
+        // [1]: right child node
+        // [2]: this node
+        return new int[]{-1, -1, -1};
+    }
+
+    int[] left = dfs(root.left);
+    int[] right = dfs(root.right);
+
+    // left[1], right[0] makes the path zigzag
+    // leaves will have zigzag path == -1 + 1 == 0
+    int path = Math.max(Math.max(left[1], right[0]) + 1, Math.max(left[2], right[2]));
+
+    return new int[]{left[1] + 1, right[0] + 1, path};
+}
+{% endhighlight %}
+
+[Second Minimum Node in a Binary Tree][second-minimum-node-in-a-binary-tree]
+
+{% highlight java %}
+private int min;
+private long secondMin = Long.MAX_VALUE;
+
+public int findSecondMinimumValue(TreeNode root) {
+    // root has the minimum value
+    min = root.val;
+    dfs(root);
+    return secondMin < Long.MAX_VALUE ? (int)secondMin : -1;
+}
+
+private void dfs(TreeNode node) {
+    if (node == null) {
+        return;
+    }
+
+    if (min < node.val && node.val < secondMin) {
+        secondMin = node.val;
+    } else if (min == node.val) {
+        dfs(node.left);
+        dfs(node.right);
+    }
+}
+{% endhighlight %}
+
+{% highlight java %}
+public int findSecondMinimumValue(TreeNode root) {
+    // tree leaf
+    if (root.left == null) {
+        return -1;
+    }
+
+    // The second minimum value on left path including root
+    int left = root.left.val == root.val ? findSecondMinimumValue(root.left) : root.left.val;
+    // The second minimum value on right path including root
+    int right = root.right.val == root.val ? findSecondMinimumValue(root.right) : root.right.val;
+
+    // if left == -1 && right == -1, returns -1
+    // else left == -1 || right == -1, returns none -1
+    // else returns the lesser of the two second minimum values
+    return left == -1 || right == -1 ? Math.max(left, right) : Math.min(left, right);
+}
+{% endhighlight %}
+
+[Lowest Common Ancestor of Deepest Leaves][lowest-common-ancestor-of-deepest-leaves]
+
+{% highlight java %}
+public TreeNode lcaDeepestLeaves(TreeNode root) {
+    return dps(root).getValue();
+}
+
+// <depth, lowest_common_ancestor>
+private Pair<Integer, TreeNode> dps(TreeNode node) {
+    if (node == null) {
+        return new Pair(0, null);
+    }
+
+    Pair<Integer, TreeNode> l = dps(node.left), r = dps(node.right);
+
+    int d1 = l.getKey(), d2 = r.getKey();
+    return new Pair(Math.max(d1, d2) + 1, d1 == d2 ? node : d1 > d2 ? l.getValue() : r.getValue());
+}
+{% endhighlight %}
+
 [convert-bst-to-greater-tree]: https://leetcode.com/problems/convert-bst-to-greater-tree/
 [diameter-of-binary-tree]: https://leetcode.com/problems/diameter-of-binary-tree/
+[find-bottom-left-tree-value]: https://leetcode.com/problems/find-bottom-left-tree-value/
 [longest-univalue-path]: https://leetcode.com/problems/longest-univalue-path/solution/
+[longest-zigzag-path-in-a-binary-tree]: https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/
+[lowest-common-ancestor-of-deepest-leaves]: https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/
 [minimum-absolute-difference-in-bst]: https://leetcode.com/problems/minimum-absolute-difference-in-bst/
+[second-minimum-node-in-a-binary-tree]: https://leetcode.com/problems/second-minimum-node-in-a-binary-tree/

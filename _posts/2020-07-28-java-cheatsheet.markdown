@@ -15,11 +15,21 @@ tags: java
 * [boolean contains(Object o)](https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html#contains-java.lang.Object-)
 
 # Collections
+* [public static boolean disjoint(Collection\<?\> c1, Collection\<?\> c2)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#disjoint-java.util.Collection-java.util.Collection-)
 * [public static final \<T\> List\<T\> emptyList()](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#emptyList--): immutable
 * [public static \<T\> void fill(List\<? super T\> list, T obj)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#fill-java.util.List-T-)
 * [public static int frequency(Collection\<?\> c, Object o)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#frequency-java.util.Collection-java.lang.Object-)
 * [public static \<T\> T max(Collection\<? extends T\> coll, Comparator\<? super T\> comp)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#max-java.util.Collection-java.util.Comparator-)
 * [public static \<T\> List\<T\> nCopies(int n, T o)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#nCopies-int-T-): immutable
+* [public static \<T\> Comparator\<T\> reverseOrder()](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#reverseOrder--)
+
+{% highlight java %}
+Integer[] arr = {1, 2, 3};
+  
+// Sorts arr[] in descending order 
+Arrays.sort(arr, Collections.reverseOrder()); 
+{% endhighlight %}
+
 * [public static \<T\> void sort(List\<T\> list, Comparator\<? super T\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#sort-java.util.List-java.util.Comparator-): stable
 * [public static void swap(List\<?\> list, int i, int j)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#swap-java.util.List-int-int-)
 

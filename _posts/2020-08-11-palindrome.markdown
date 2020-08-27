@@ -3,7 +3,7 @@ layout: post
 title:  "Palindrome"
 tags: string
 ---
-## IsPalindrome
+## Palindrome String
 
 {% highlight java %}
 public boolean isPalindrome(String s) {
@@ -14,6 +14,26 @@ public boolean isPalindrome(String s) {
         }
     }
     return true;
+}
+{% endhighlight %}
+
+## Palindrome Number
+
+[Palindrome Number][palindrome-number]
+
+{% highlight java %}
+public boolean isPalindrome(int x) {
+    if (x < 0 || (x % 10 == 0 && x != 0)) {
+        return false;
+    }
+
+    // half revert x
+    int reverted = 0;
+    while (x > reverted) {
+        reverted = reverted * 10 + x % 10;
+        x /= 10;
+    }
+    return x == reverted || x == reverted / 10;
 }
 {% endhighlight %}
 
@@ -51,3 +71,4 @@ private int expand(String s, int left, int right) {
 ## Dynamic Programming
 
 [longest-palindromic-substring]: https://leetcode.com/problems/longest-palindromic-substring/
+[palindrome-numbre]: https://leetcode.com/problems/palindrome-number/

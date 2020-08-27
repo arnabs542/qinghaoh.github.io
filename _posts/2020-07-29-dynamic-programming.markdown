@@ -133,6 +133,43 @@ public int minCostClimbingStairs(int[] cost) {
 }
 {% endhighlight %}
 
+## 0-1 Knapsack Problem
+
+[Partition Equal Subset Sum][partition-equal-subset-sum]
+
+{% highlight java %}
+public boolean canPartition(int[] nums) {
+    int sum = 0;
+    for (int i = 0; i < nums.length; i++) {
+        sum += nums[i];
+    }
+
+    if (sum % 2 == 1) {
+        return false;
+    }
+
+    // dp[i][j]: sum(nums[0], nums[1], ..., nums[i - 1]) == j
+    boolean dp[][] = new boolean[nums.length + 1][sum / 2 + 1];
+    dp[0][0] = true;
+
+    for (int i = 0; i < nums.length; i++) {
+        for (int j = 0; j <= sum / 2; j++) {
+            if (j < nums[i]) {
+                dp[i + 1][j] = dp[i][j];
+            } else {
+                dp[i + 1][j] = dp[i][j] || dp[i][j - nums[i]];
+            }
+        }
+    }
+    return dp[nums.length][sum / 2];
+}
+{% endhighlight %}
+
+[Target Sum][target-sum]
+
+{% highlight java %}
+{% endhighlight %}
+
 [Greatest Sum Divisible by Three][greatest-sum-divisible-by-three]
 
 -> Divisible by K
@@ -156,4 +193,5 @@ public int maxSumDivThree(int[] nums) {
 [edit-distance]: https://leetcode.com/problems/edit-distance/
 [greatest-sum-divisible-by-three]: https://leetcode.com/problems/greatest-sum-divisible-by-three/
 [min-cost-climbing-stairs]: https://leetcode.com/problems/min-cost-climbing-stairs/
-
+[partition-equal-subset-sum]: https://leetcode.com/problems/partition-equal-subset-sum/
+[target-sum]: https://leetcode.com/problems/target-sum/
