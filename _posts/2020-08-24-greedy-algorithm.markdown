@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  " N-Repeated Element"
-tags: array
+title:  "Greedy Algorithm"
+tags: greedy
 ---
 [Flower Planting With No Adjacent][flower-planting-with-no-adjacent]
 

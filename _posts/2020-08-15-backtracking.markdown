@@ -181,6 +181,41 @@ private void backtrack(List<List<Integer>> list, List<Integer> tmpList, int[] nu
 }
 {% endhighlight %}
 
+[Palindrome Partitioning][palindrome-partitioning]
+
+{% highlight java %}
+public boolean canPartition(int[] nums) {
+    int sum = 0;
+    for (int i = 0; i < nums.length; i++) {
+        sum += nums[i];
+    }
+
+    if (sum % 2 == 1) {
+        return false;
+    }
+
+    Arrays.sort(nums);
+    return backtrack(nums, 0, sum / 2);
+}
+
+private boolean backtrack(int[] nums, int index, int target) {
+    if (target == 0) {
+        return true;
+    }
+
+    for (int i = index; i < nums.length; i++) {
+        if (i > index && nums[i] == nums[i - 1]) {
+            continue;
+        }
+
+        if (nums[i] <= target && backtrack(nums, i + 1, target - nums[i])) {
+            return true;
+        }
+    }
+    return false;
+}
+{% endhighlight %}
+
 [Partition Equal Subset Sum][partition-equal-subset-sum]
 
 {% highlight java %}
@@ -221,6 +256,7 @@ private boolean backtrack(int[] nums, int index, int target) {
 [beautiful-arrangement]: https://leetcode.com/problems/beautiful-arrangement/
 [combination-sum-ii]: https://leetcode.com/problems/combination-sum-ii/
 [combination-sum]: https://leetcode.com/problems/combination-sum/
+[palindrome-partitioning]: https://leetcode.com/problems/palindrome-partitioning/
 [partition-equal-subset-sum]: https://leetcode.com/problems/partition-equal-subset-sum/
 [permutations]: https://leetcode.com/problems/permutations/
 [permutations-ii]: https://leetcode.com/problems/permutations-ii/

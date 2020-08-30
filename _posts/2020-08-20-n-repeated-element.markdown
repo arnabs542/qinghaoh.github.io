@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  " N-Repeated Element"
+title:  "N-Repeated Element"
 tags: array
 ---
 [N-Repeated Element in Size 2N Array][n-repeated-element-in-size-2n-array]

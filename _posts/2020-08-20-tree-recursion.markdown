@@ -229,6 +229,47 @@ private Pair<Integer, TreeNode> dps(TreeNode node) {
 }
 {% endhighlight %}
 
+[N-ary Tree Level Order Traversal][n-ary-tree-level-order-traversal]
+
+{% highlight java %}
+private List<List<Integer>> list;
+
+public List<List<Integer>> levelOrder(Node root) {
+    list = new ArrayList<>();
+    dfs(root, 0);
+    return list;
+}
+
+private void dfs(Node node, int level) {
+    if (node == null) {
+        return;
+    }
+
+    if (list.size() == level) {
+        list.add(new ArrayList<>());
+    }
+    list.get(level).add(node.val);
+
+    for (Node child : node.children) {
+        dps(child, level + 1);
+    }
+}
+{% endhighlight %}
+
+Intuitively BFS also works for level order traversal. The condition to increment level is:
+
+{% highlight java %}
+int size = q.size();
+List<Integer> currLevel = new ArrayList<>();
+for (int i = 0; i < size; i++) {
+    Node node = q.poll();
+    currLevel.add(node.val);
+    for (Node child : node.children) {
+        q.offer(child);
+    }
+}
+{% endhighlight %}
+
 [convert-bst-to-greater-tree]: https://leetcode.com/problems/convert-bst-to-greater-tree/
 [diameter-of-binary-tree]: https://leetcode.com/problems/diameter-of-binary-tree/
 [find-bottom-left-tree-value]: https://leetcode.com/problems/find-bottom-left-tree-value/
@@ -236,4 +277,5 @@ private Pair<Integer, TreeNode> dps(TreeNode node) {
 [longest-zigzag-path-in-a-binary-tree]: https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/
 [lowest-common-ancestor-of-deepest-leaves]: https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/
 [minimum-absolute-difference-in-bst]: https://leetcode.com/problems/minimum-absolute-difference-in-bst/
+[n-ary-tree-level-order-traversal]: https://leetcode.com/problems/n-ary-tree-level-order-traversal/
 [second-minimum-node-in-a-binary-tree]: https://leetcode.com/problems/second-minimum-node-in-a-binary-tree/

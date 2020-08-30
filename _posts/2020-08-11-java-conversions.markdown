@@ -21,10 +21,10 @@ int[] a = {0, 1, 2};
 List<Integer> b = Arrays.stream(a).boxed().collect(Collectors.toList());
 {% endhighlight %}
 
-# int[] -> List\<Integer\>
+# Integer[] -> List\<Integer\>
 {% highlight java %}
-int[] a = {0, 1, 2};
-Set<Integer> b = Arrays.stream(a).boxed().collect(Collectors.toSet());
+Integer[] a = {0, 1, 2};
+Set<Integer> b = Arrays.stream(a).collect(Collectors.toSet());
 
 {% endhighlight %}
 # Array -> Stream

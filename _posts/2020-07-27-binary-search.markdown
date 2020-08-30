@@ -78,6 +78,74 @@ public List<Integer> findClosestElements(int[] arr, int k, int x) {
 }
 {% endhighlight %}
 
+[Kth Missing Positive Number][kth-missing-positive-number]
+
+{% highlight java %}
+public int findKthPositive(int[] arr, int k) {
+    int low = 0, high = arr.length;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        // If there's no missing positive integer in index range [0, i]
+        //  then arr[i] == i + 1
+        // Therefore, arr[i] - i - 1 is the number of missing positive integers
+        //
+        // Let b[i] = arr[i] - i - 1,
+        //  b[i + 1] - b[i] == arr[i + 1] - (i + 1) - 1 - (arr[i] - i - 1)
+        //                  == arr[i + 1] - arr[i] - 1
+        // Since arr[] is strictly increasing, arr[i + 1] - arr[i] >= 1
+        //  b[i + 1] - b[i] >= 1 - 1 = 0
+        // So b[i] is a sorted array. We can apply binary search to it. 
+        if (arr[mid] - mid - 1 < k) {
+            low = mid + 1;
+        } else {
+            high = mid;
+        }
+    }
+
+    // When the loop exits, low == high
+    // From the binary search process, we know for index i in range [0, low),
+    //  the number of missing positive integers is arr[i] - i - 1 < k
+    //  arr[i] < k + i + 1 <= k + low
+    //
+    // The possible value of low when binary search finishes is low <= arr.length
+    //  if low < arr.length, since low == high, we have arr[low] - low - 1 >= k
+    //  k + low <= arr[low] - 1 < arr[low]
+    //  so arr[low] is outside of the number range [1, low + k]
+    //
+    // Therefore, in the number range of [1, low + k],
+    //  only arr[0], arr[1], ..., arr[low - 1] are present, in total `low` positive integers
+    //  the number of missing positive integers is (low + k) - low == k
+    return low + k;
+}
+{% endhighlight %}
+
+[H-Index II][h-index-ii]
+
+{% highlight java %}
+public int hIndex(int[] citations) {
+    int low = 0, high = citations.length;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        // Find the first index i so that
+        //  citations[i] >= citations.length - i
+        //  where citations.length - i is the potential h
+        //
+        // Let b[i] = citations[i] + i
+        //  b[i + 1] - b[i] == citations[i + 1] + (i + 1) - (citations[i] + i)
+        //                  == citations[i + 1] - citations[i] + 1 > 0
+        // So b[i] is strictly increasing
+        if (citations[mid] >= citations.length - mid) {
+            high = mid;
+        } else {
+            // citations[i] < citations.length - i
+            //  so citations[i] < h, which contradicts "at least h citations EACH"
+            low = mid + 1;
+        }
+    }
+    return citations.length - low;
+}
+{% endhighlight %}
+
 # Java
 ## Arrays
 [public static \<T\> int binarySearch(T\[\] a, int fromIndex, int toIndex, T key, Comparator\<? super T\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#binarySearch-T:A-int-int-T-java.util.Comparator-)
@@ -90,5 +158,7 @@ The *insertion point* is defined as the point at which the key would be inserted
 [binary-search]: https://leetcode.com/problems/binary-search/
 [find-k-closest-elements]: https://leetcode.com/problems/find-k-closest-elements/
 [first-bad-version]: https://leetcode.com/problems/first-bad-version/
+[h-index-ii]: https://leetcode.com/problems/h-index-ii/
+[kth-missing-positive-number]: https://leetcode.com/problems/kth-missing-positive-number/
 [search-insert-position]: https://leetcode.com/problems/search-insert-position/
 [the-k-weakest-rows-in-a-matrix]: https://leetcode.com/problems/the-k-weakest-rows-in-a-matrix/

@@ -95,6 +95,9 @@ String[] array = list.toArray(new String[0])
 * [public StringBuilder replace(int start, int end, String str)](https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html#replace-int-int-java.lang.String-)
 * [public StringBuilder reverse()](https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html#reverse--)
 
+# System
+* [public static void arraycopy(Object src, int srcPos, Object dest, int destPos, int length)](https://docs.oracle.com/javase/8/docs/api/java/lang/System.html#arraycopy-java.lang.Object-int-java.lang.Object-int-int-)
+
 # TreeSet
 * [public NavigableSet\<E\> subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive)](https://docs.oracle.com/javase/8/docs/api/java/util/TreeSet.html#subSet-E-boolean-E-boolean-)
 * [public SortedSet\<E\> subSet(E fromElement, E toElement)](https://docs.oracle.com/javase/8/docs/api/java/util/TreeSet.html#subSet-E-E-)
