@@ -172,10 +172,42 @@ private void backtrack(List<List<Integer>> list, List<Integer> tmpList, int[] nu
         if (i > index && nums[i] == nums[i - 1]) {
             continue;
         }
+
         if (nums[i] <= target) {
             tmpList.add(nums[i]);
             backtrack(list, tmpList, nums, i + 1, target - nums[i]);
             tmpList.remove(tmpList.size() - 1);
+        } 
+    }
+}
+{% endhighlight %}
+
+[Combination Sum III][combination-sum-iii]
+
+{% highlight java %}
+private final int max = 9;
+
+public List<List<Integer>> combinationSum3(int k, int n) {
+    List<List<Integer>> list = new ArrayList<>();
+    backtrack(list, new ArrayList<>(), 1, k, n);
+    return list;
+}
+
+private void backtrack(List<List<Integer>> list, List<Integer> tmpList, int start, int k, int n) {
+    if (k == 0 && n == 0) {
+        list.add(new ArrayList<>(tmpList));
+        return;
+    }
+
+    if (k < 0 || n < 0) {
+        return;
+    }
+
+    for (int i = start; i <= max; i++) {
+        if (i <= n) {
+            tmpList.add(i);
+            backtrack(list, tmpList, i + 1, k - 1, n - i);
+            tmpList.remove(Integer.valueOf(i));
         } 
     }
 }
@@ -254,8 +286,9 @@ private boolean backtrack(int[] nums, int index, int target) {
 [Beautiful Arrangement][beautiful-arrangement]
 
 [beautiful-arrangement]: https://leetcode.com/problems/beautiful-arrangement/
-[combination-sum-ii]: https://leetcode.com/problems/combination-sum-ii/
 [combination-sum]: https://leetcode.com/problems/combination-sum/
+[combination-sum-ii]: https://leetcode.com/problems/combination-sum-ii/
+[combination-sum-iii]: https://leetcode.com/problems/combination-sum-iii/
 [palindrome-partitioning]: https://leetcode.com/problems/palindrome-partitioning/
 [partition-equal-subset-sum]: https://leetcode.com/problems/partition-equal-subset-sum/
 [permutations]: https://leetcode.com/problems/permutations/

@@ -1,22 +1,18 @@
 ---
 layout: post
 title:  "Proof"
+usemathjax: true
 ---
 ## Distance Barcodes
 [Distant Barcodes][distant-barcodes]
 
 ### Algorithm
 
-Let `n = barcodes.length`. Sort the unique elements by their occurences in descending order:
-```
-barcodes[i_0], barcodes[i_1], ..., barcodes[i_(n - 1)]
-```
-
-Assume an element `barcodes[i_k]` has occurences `m_k`. 
+Let `n = barcodes.length`. Find the elements `barcodes[i]` with the most occurrences $$ o_{max} $$. Assume an element `barcodes[k]` has occurences $$ o_k $$.
 
 Steps:
-1. Put `barcodes[i_0]` to the first `m_0` even positions
-1. Arbitrarily pick a remaining element `barcodes[i_j]` to to the next `m_j` even positions
+1. Put `barcodes[i]` to the first $$ o_{max} $$ even positions
+1. Arbitrarily pick another element `barcodes[j]` to the next $$ o_j $$ even positions
 1. Repeat Step 2 until all the even positions are filled. Wrap around the current element to the first few odd positions if it has remaining occurrences
 1. Fill odd positions with the remaining elements in any order
 
@@ -38,14 +34,10 @@ Steps:
 ```
 ### Proof
 It is guaranteed an answer exists, therefore:
-```
-1 <= m_0 <= (barcodes.length + 1) / 2
-```
 
-As per the rule, `barcodes[i_j]` can be adjacent to an equal value only if:
-```
-m_j > m_0
-```
+$$ 1 <= o_{max} <= (barcodes.length + 1) / 2 $$
+
+As per the rule, `barcodes[j]` can be adjacent to an equal value only if $$ o_j > o_{max} $$.
 
 This can be illustrated by the example above. In Step 2, if we pick the second most frequent element `2` to put at index 6:
 ```

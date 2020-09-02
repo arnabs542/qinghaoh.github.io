@@ -270,9 +270,62 @@ for (int i = 0; i < size; i++) {
 }
 {% endhighlight %}
 
+[Increasing Order Search Tree][increasing-order-search-tree]
+
+{% highlight java %}
+private TreeNode curr;  // current node of the list
+
+public TreeNode increasingBST(TreeNode root) {
+    TreeNode head = new TreeNode(0);
+    curr = head;
+    inorder(root);
+    return head.right;
+}
+
+private void inorder(TreeNode node) {
+    if (node == null) {
+        return;
+    }
+
+    inorder(node.left);
+    node.left = null;
+    curr.right = node;
+    curr = node;
+    inorder(node.right);
+}
+{% endhighlight %}
+
+{% highlight java %}
+public TreeNode increasingBST(TreeNode root) {
+    return inorder(root, null);
+}
+
+/**
+ * Inorder traverses and rearranges the tree.
+ * @param node current tree node
+ * @param next next ancestor node in inorder traversal
+ * @return head of the list after rearrangement
+ */
+public TreeNode inorder(TreeNode node, TreeNode next) {
+    // If the current node is a left child, next will be its parent
+    // else if the current node is a right child, next will be its "leftmost" parent's parent
+    if (node == null) {
+        return next;
+    }
+
+    TreeNode left = inorder(node.left, node);
+    node.left = null;
+    // If node.right == 0, it links the next ancesotr to the rearranged right list
+    // otherwise it links the rearranged right list to the current node
+    node.right = inorder(node.right, next);
+    return left;
+}
+{% endhighlight %}
+
 [convert-bst-to-greater-tree]: https://leetcode.com/problems/convert-bst-to-greater-tree/
 [diameter-of-binary-tree]: https://leetcode.com/problems/diameter-of-binary-tree/
 [find-bottom-left-tree-value]: https://leetcode.com/problems/find-bottom-left-tree-value/
+[increasing-order-search-tree]: https://leetcode.com/problems/increasing-order-search-tree/
 [longest-univalue-path]: https://leetcode.com/problems/longest-univalue-path/solution/
 [longest-zigzag-path-in-a-binary-tree]: https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/
 [lowest-common-ancestor-of-deepest-leaves]: https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/

@@ -21,7 +21,7 @@ int[] a = {0, 1, 2};
 List<Integer> b = Arrays.stream(a).boxed().collect(Collectors.toList());
 {% endhighlight %}
 
-# Integer[] -> List\<Integer\>
+# Integer[] -> Set\<Integer\>
 {% highlight java %}
 Integer[] a = {0, 1, 2};
 Set<Integer> b = Arrays.stream(a).collect(Collectors.toSet());

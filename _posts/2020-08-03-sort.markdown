@@ -83,8 +83,7 @@ private int[] counts;
 public List<Integer> countSmaller(int[] nums) {
     counts = new int[nums.length];
 
-    // index[i] == j means the element's original index was i,
-    //  but now it's updated to j
+    // index[i] == j means the element at index i is nums[j]
     int[] index = new int[nums.length];
     for (int i = 0; i < index.length; i++) {
         index[i] = i;

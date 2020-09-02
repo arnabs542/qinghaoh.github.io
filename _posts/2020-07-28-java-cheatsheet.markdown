@@ -21,6 +21,7 @@ tags: java
 * [public static int frequency(Collection\<?\> c, Object o)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#frequency-java.util.Collection-java.lang.Object-)
 * [public static \<T\> T max(Collection\<? extends T\> coll, Comparator\<? super T\> comp)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#max-java.util.Collection-java.util.Comparator-)
 * [public static \<T\> List\<T\> nCopies(int n, T o)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#nCopies-int-T-): immutable
+* [public static void reverse(List\<?\> list)](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collections.html#reverse(java.util.List))
 * [public static \<T\> Comparator\<T\> reverseOrder()](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#reverseOrder--)
 
 {% highlight java %}
@@ -49,6 +50,14 @@ Comparator.comparing(String::length)
 * [static \<T\> Comparator\<T\> comparingInt(ToIntFunction\<? super T\> keyExtractor)](https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html#comparingInt-java.util.function.ToIntFunction-)
 * [static \<T extends Comparable\<? super T\>\> Comparator\<T\> naturalOrder()](https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html#naturalOrder--)
 
+# Deque
+[Deque](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Deque.html)
+Deques can also be used as LIFO (Last-In-First-Out) stacks. This interface should be used in preference to the legacy `Stack` class. When a deque is used as a stack, elements are pushed and popped from the beginning of the deque.
+
+{% highlight java %}
+Deque<Integer> stack = new ArrayDeque<Integer>();
+{% endhighlight %}
+
 # Integer
 * [MAX_VALUE](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#MAX_VALUE): 2^31-1 = 2147483647
 * [MIN_VALUE](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#MIN_VALUE): -2^31 = -2147483648
@@ -57,6 +66,10 @@ Comparator.comparing(String::length)
 
 # IntStream
 * [int sum()](https://docs.oracle.com/javase/8/docs/api/java/util/stream/IntStream.html#sum--)
+
+# LinkedList
+* [LinkedList](https://docs.oracle.com/javase/8/docs/api/java/util/LinkedList.html)
+Doubly-linked list implementation of the `List` and `Deque` interfaces. Implements all optional list operations, and permits all elements (including `null`).
 
 # List
 * [void add(int index, E element)](https://docs.oracle.com/javase/8/docs/api/java/util/List.html#add-int-E-)
