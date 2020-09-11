@@ -22,6 +22,43 @@ public int[] finalPrices(int[] prices) {
 
 [Next Greater Element II][next-greater-element-ii]
 
+[Largest Rectangle in Histogram][largest-rectangle-in-histogram]
+
+{% highlight java %}
+public int largestRectangleArea(int[] heights) {
+    // index of non descending heights
+    Deque<Integer> st = new ArrayDeque<>();
+    int area = 0;
+    for (int i = 0; i <= heights.length; i++) {            
+        int height = (i == heights.length ? 0 : heights[i]);
+        while(!st.isEmpty() && height < heights[st.peek()]) {
+            int h = heights[st.pop()];
+            int w = st.isEmpty() ? i : (i - 1) - st.peek();
+            area = Math.max(area, h * w);
+        }
+        st.push(i);
+    }
+    return area;
+}
+{% endhighlight %}
+
+```
+[2,1,5,6,2,3]
+i = 0	[0]				area = 0
+i = 1	[]		h * w = 2	area = 2
+i = 1	[1]				area = 2
+i = 2	[2,1]				area = 2
+i = 3	[3,2,1]				area = 2
+i = 4	[2,1]		h * w = 6	area = 6
+i = 4	[1]		h * w = 10	area = 10
+i = 4	[4,1]				area = 10
+i = 5	[5,4,1]				area = 10
+i = 6	[4,1]		h * w = 3	area = 10
+i = 6	[1]		h * w = 8	area = 10
+i = 6	[]		h * w = 6	area = 10
+i = 6	[6]				area = 10
+```
+
 ## Reduced to Counter
 [Remove Outermost Parentheses][remove-outermost-parentheses]
 
@@ -39,5 +76,6 @@ public String removeOuterParentheses(String S) {
 {% endhighlight %}
 
 [final-prices-with-a-special-discount-in-a-shop]: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/
+[largest-rectangle-in-histogram]: https://leetcode.com/problems/largest-rectangle-in-histogram/
 [next-greater-element-ii]: https://leetcode.com/problems/next-greater-element-ii/
 [remove-outermost-parentheses]: https://leetcode.com/problems/remove-outermost-parentheses/

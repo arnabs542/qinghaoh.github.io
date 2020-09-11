@@ -51,4 +51,10 @@ public int rand10() {
 }
 {% endhighlight %}
 
+[Floor and celing functions](https://en.wikipedia.org/wiki/Floor_and_ceiling_functions)
+
+$$ \left\lceil {\frac {n}{m}}\right\rceil =\left\lfloor {\frac {n+m-1}{m}}\right\rfloor =\left\lfloor {\frac {n-1}{m}}\right\rfloor +1 $$
+
+$$ \left\lfloor {\frac {n}{m}}\right\rfloor =\left\lceil {\frac {n-m+1}{m}}\right\rceil =\left\lceil {\frac {n+1}{m}}\right\rceil -1 $$
+
 [implement-rand10-using-rand7]: https://leetcode.com/problems/implement-rand10-using-rand7/

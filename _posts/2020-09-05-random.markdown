@@ -1,0 +1,41 @@
+---
+layout: post
+title:  "Random"
+tag: random
+---
+[Fisher-Yates shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle)
+
+[Shuffle an Array][shuffle-an-array]
+
+{% highlight java %}
+private int[] arr;
+private int[] oldArr;
+
+private Random rand = new Random();
+
+public Solution(int[] nums) {
+    arr = nums;
+    oldArr = nums.clone();
+}
+
+/** Resets the array to its original configuration and return it. */
+public int[] reset() {
+    return oldArr;
+}
+
+/** Returns a random shuffling of the array. */
+public int[] shuffle() {
+    for (int i = 0; i < arr.length; i++) {
+        swap(i, i + rand.nextInt(arr.length - i));
+    }
+    return arr;
+}
+
+private void swap(int i, int j) {
+    int tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+}
+{% endhighlight %}
+
+[shuffle-an-array]: https://leetcode.com/problems/shuffle-an-array/

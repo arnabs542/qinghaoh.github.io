@@ -20,4 +20,22 @@ public int repeatedNTimes(int[] A) {
 }
 {% endhighlight %}
 
+## Sliding window
+
+[Detect Pattern of Length M Repeated K or More Times][detect-pattern-of-length-m-repeated-k-or-more-times]
+
+{% highlight java %}
+public boolean containsPattern(int[] arr, int m, int k) {
+    for (int i = 0, count = 0; i + m < arr.length; i++) {
+        if (arr[i] != arr[i + m]) {
+            count = 0;
+        } else if (++count == (k - 1) * m) {
+            return true;
+        }
+    }
+    return false;
+}
+{% endhighlight %}
+
+[detect-pattern-of-length-m-repeated-k-or-more-times]: https://leetcode.com/problems/detect-pattern-of-length-m-repeated-k-or-more-times/
 [n-repeated-element-in-size-2n-array]: https://leetcode.com/problems/n-repeated-element-in-size-2n-array/

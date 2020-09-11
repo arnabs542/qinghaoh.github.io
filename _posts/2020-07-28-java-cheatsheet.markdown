@@ -58,6 +58,8 @@ Deques can also be used as LIFO (Last-In-First-Out) stacks. This interface shoul
 Deque<Integer> stack = new ArrayDeque<Integer>();
 {% endhighlight %}
 
+* [Iterator\<E\> descendingIterator()](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Deque.html#descendingIterator())
+
 # Integer
 * [MAX_VALUE](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#MAX_VALUE): 2^31-1 = 2147483647
 * [MIN_VALUE](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#MIN_VALUE): -2^31 = -2147483648
@@ -66,6 +68,9 @@ Deque<Integer> stack = new ArrayDeque<Integer>();
 
 # IntStream
 * [int sum()](https://docs.oracle.com/javase/8/docs/api/java/util/stream/IntStream.html#sum--)
+
+# Iterator
+* [default void forEachRemaining(Consumer\<? super E\> action)](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html#forEachRemaining(java.util.function.Consumer))
 
 # LinkedList
 * [LinkedList](https://docs.oracle.com/javase/8/docs/api/java/util/LinkedList.html)

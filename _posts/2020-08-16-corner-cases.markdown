@@ -71,6 +71,46 @@ public List<Integer> mostVisited(int n, int[] rounds) {
 }
 {% endhighlight %}
 
+[Rabbits in Forest][rabbits-in-forest]
+
+{% highlight java %}
+public int numRabbits(int[] answers) {
+    int[] c = new int[1000];
+    int count = 0;
+    for (int a : answers) {
+        // If c[a] % (a + 1) == 0, there are c[a] / (a + 1) groups of (a + 1) rabbits
+        // If c[a] % (a + 1) != 0, there are c[a] / (a + 1) + 1 groups of (a + 1) rabbits
+        if (c[a]++ % (a + 1) == 0) {
+            count += a + 1;
+        }
+    }
+
+    return count;
+}
+{% endhighlight %}
+
+[Heaters][heaters]
+
+{% highlight java %}
+public int findRadius(int[] houses, int[] heaters) {
+    Arrays.sort(houses);
+    Arrays.sort(heaters);
+
+    int i = 0, radius = 0;
+    for (int house : houses) {
+        while (i < heaters.length - 1 && heaters[i] + heaters[i + 1] <= house * 2) {
+            i++;
+        }
+        radius = Math.max(radius, Math.abs(heaters[i] - house));
+    }
+    return radius;
+}
+{% endhighlight %}
+
+![Heaters](/assets/heaters.png)
+
+[heaters]: https://leetcode.com/problems/heaters/
 [minimum-time-difference]: https://leetcode.com/problems/minimum-time-difference/
 [most-visited-sector-in-a-circular-track]: https://leetcode.com/problems/most-visited-sector-in-a-circular-track/
+[rabbits-in-forest]: https://leetcode.com/problems/rabbits-in-forest/
 [reverse-integer]: https://leetcode.com/problems/reverse-integer/

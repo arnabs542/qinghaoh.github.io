@@ -201,6 +201,28 @@ In 2D, `dp[i + 1][j] = dp[i][j] + dp[i + 1][j - nums[i]]`. The natural iteration
 
 ![1D](/assets/knapsack_coin_change_2_1d.png)
 
+The below permutation sum (yes it's permutation, ignore the wrong problem name) is not a knapsack problem, but the only difference is the loop order:
+
+[Combination Sum IV][combination-sum-iv]
+
+{% highlight java %}
+public int combinationSum4(int[] nums, int target) {
+    int[] dp = new int[target + 1];
+    dp[0] = 1;
+
+    for (int i = 0; i <= target; i++) {
+        for (int num : nums) {
+            if (i >= num) {
+                dp[i] += dp[i - num];
+            }
+        }
+    }
+    return dp[target];
+}
+{% endhighlight %}
+
+In essence, it's recursion.
+
 ### Change-making Problem
 [Change-making problem](https://en.wikipedia.org/wiki/Change-making_problem)
 
@@ -250,5 +272,6 @@ public int coinChange(int[] coins, int amount) {
 {% endhighlight %}
 
 [coin-change-2]: https://leetcode.com/problems/coin-change-2/
+[combination-sum-iv]: https://leetcode.com/problems/combination-sum-iv/
 [partition-equal-subset-sum]: https://leetcode.com/problems/partition-equal-subset-sum/
 [target-sum]: https://leetcode.com/problems/target-sum/

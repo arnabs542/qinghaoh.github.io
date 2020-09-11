@@ -1,0 +1,36 @@
+---
+layout: post
+title:  "Set"
+tag: map 
+---
+[NavigableSet](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/NavigableSet.html)
+
+| Prefix | Suffix | Parameter | Comparison |
+|-------|--------|---------|---------|
+| ceiling | | e | >= |
+| floor | | e | <= |
+| higher | | e | > |
+| lower | | e | < |
+| head | set | toElement | < |
+| head | set | toElement, inclusive | < or <= |
+| tail | set | fromElement | >= |
+| tail | set | fromElement, inclusive | > or >= |
+| pollFirst | | | lowest |
+| pollLast | | | highest |
+| descending | iterator | | |
+| descending | set | | |
+| sub | set | fromElement, fromInclusive, toElement, toInclusive | |
+
+[SortedSet](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html)
+
+| Prefix | Suffix | Parameter | Comparison |
+|-------|--------|---------|---------|
+| head | set | toElement | < |
+| tail | set | fromElement | >= |
+| first | | | lowest |
+| last | | | highest |
+| sub | set | fromElement, toElement | [) |
+
+{% highlight java %}
+{% endhighlight %}
+

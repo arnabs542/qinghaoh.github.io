@@ -1,0 +1,37 @@
+---
+layout: post
+title:  "Map"
+tag: map 
+---
+[NavigableMap](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/NavigableMap.html)
+
+| Prefix | Suffix | Parameter | Comparison |
+|-------|--------|---------|---------|
+| ceiling | entry/key | key | >= |
+| floor | entry/key | key | <= |
+| higher | entry/key | key | > |
+| lower | entry/key | key | < |
+| head | map | toKey | < |
+| head | map | toKey, inclusive | < or <= |
+| tail | map | fromKey | >= |
+| tail | map | fromKey, inclusive | > or >= |
+| (poll)first | entry | | least |
+| (poll)last | entry | | greatest |
+| descending | map | | |
+| sub | map | fromKey, fromInclusive, toKey, toInclusive | |
+| descending | keySet | | |
+| navigable | keySet | | |
+
+[SortedMap](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedMap.html)
+
+| Prefix | Suffix | Parameter | Comparison |
+|-------|--------|---------|---------|
+| head | map | toKey | < |
+| tail | map | fromKey | >= |
+| first | key | | lowest |
+| last | key | | highest |
+| sub | map | fromKey, toKey | [) |
+
+{% highlight java %}
+{% endhighlight %}
+
