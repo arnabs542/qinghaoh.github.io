@@ -18,6 +18,8 @@ Backtracking takes `O(2^n)` time, so it's less preferred.
 ### Dynamic Programming
 [Partition Equal Subset Sum][partition-equal-subset-sum]
 
+With full dimensionality (no reduction), we can backtrace.
+
 {% highlight java %}
 public boolean canPartition(int[] nums) {
     int sum = 0;
@@ -144,9 +146,68 @@ private int subsetSum(int[] nums, int S) {
 }
 {% endhighlight %}
 
+[Ones and Zeroes][ones-and-zeroes]
+
+{% highlight java %}
+public int findMaxForm(String[] strs, int m, int n) {
+    int[][][] dp = new int[strs.length + 1][m + 1][n + 1];
+
+    for (int i = 0; i < strs.length; i++) {
+        int zeroes = 0, ones = 0;
+        for (char c : strs[i].toCharArray()) {
+            if (c == '0') {
+                zeroes++;
+            } else {
+                ones++;
+            }
+        }
+
+        for (int j = 0; j <= m; j++) {
+            for (int k = 0; k <= n; k++) {
+                if (j < zeroes || k < ones) {
+                    dp[i + 1][j][k] = dp[i][j][k];
+                } else {
+                    dp[i + 1][j][k] = Math.max(dp[i][j][k], dp[i][j - zeroes][k - ones] + 1);
+                }
+            }
+        }
+    }
+
+    return dp[strs.length][m][n];
+}
+{% endhighlight %}
+
+2D:
+
+{% highlight java %}
+public int findMaxForm(String[] strs, int m, int n) {
+    int[][] dp = new int[m + 1][n + 1];
+
+    for (String str : strs) {
+        int zeroes = 0, ones = 0;
+        for (char c : str.toCharArray()) {
+            if (c == '0') {
+                zeroes++;
+            } else {
+                ones++;
+            }
+        }
+
+        for (int i = m; i >= zeroes; i--) {
+            for (int j = n; j >= ones; j--) {
+                dp[i][j] = Math.max(dp[i][j], dp[i - zeroes][j - ones] + 1);
+            }
+        }
+    }
+
+    return dp[m][n];
+}
+{% endhighlight %}
+
 ## Unbounded Knapsack Problem (UKP)
 
 maximize $$ \sum _{i=1}^{n}v_{i}x_{i} $$
+
 subject to $$ \sum _{i=1}^{n}w_{i}x_{i}\leq W $$ and $$ x_{i}\geq 0,\ x_{i}\in \mathbb {Z} $$
 
 [Coin Change 2][coin-change-2]
@@ -273,5 +334,6 @@ public int coinChange(int[] coins, int amount) {
 
 [coin-change-2]: https://leetcode.com/problems/coin-change-2/
 [combination-sum-iv]: https://leetcode.com/problems/combination-sum-iv/
+[ones-and-zeroes]: https://leetcode.com/problems/ones-and-zeroes/
 [partition-equal-subset-sum]: https://leetcode.com/problems/partition-equal-subset-sum/
 [target-sum]: https://leetcode.com/problems/target-sum/

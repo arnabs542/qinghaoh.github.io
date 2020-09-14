@@ -3,73 +3,113 @@ layout: post
 title:  "Dynamic Programming II"
 tag: dynamic programming
 ---
-[Partition Array for Maximum Sum][partition-array-for-maximum-sum]
+[Largest Sum of Averages][largest-sum-of-averages]
 
-Top-down DP: divide and conquer + memorization
+### Top-down DP: divide and conquer + memorization
 
 {% highlight java %}
-private int[] memo;
+private double[][] memo;
+private double[] sum;
 
-public int maxSumAfterPartitioning(int[] arr, int k) {
-    memo = new int[arr.length];
-    Arrays.fill(memo, -1);
+public double largestSumOfAverages(int[] A, int K) {
+    memo = new double[A.length + 1][K + 1];
+    sum = new double[A.length + 1];
 
-    return maxSumAfterPartitioning(arr, 0, k);
+    for (int i = 0; i < A.length; i++) {
+        sum[i + 1] = sum[i] + A[i];
+    }
+    return largestSumOfAverages(A, A.length, K);
 }
 
-private int maxSumAfterPartitioning(int[] arr, int start, int k) {
-    if (start == arr.length) {
-        return 0;
+private double largestSumOfAverages(int[] A, int end, int K) {
+    if (memo[end][K] != 0) {
+        return memo[end][K];
     }
 
-    if (memo[start] >= 0) {
-        return memo[start];
+    if (K == 1) {
+        memo[end][1] = sum[end] / end;
+        return memo[end][1];
     }
 
-    int max = 0, sum = 0;
-    for (int i = 0; i < k && start + i < arr.length; i++) {
-        max = Math.max(arr[start + i], max);
-        sum = Math.max(sum, max * (i + 1) + maxSumAfterPartitioning(arr, start + i + 1, k));
+    double max = 0;
+    for (int i = end - 1; i >= K - 1; i--) {
+        max = Math.max(max, (sum[end] - sum[i]) / (end - i) + largestSumOfAverages(A, i, K - 1));
     }
-    memo[start] = sum;
-    return sum;
+    memo[end][K] = max;
+    return max;
 }
 {% endhighlight %}
 
-Bottom-up DP
+The result of each loop can be written to `memo` directly:
 
 {% highlight java %}
-public int maxSumAfterPartitioning(int[] arr, int k) {
-    int[] dp = new int[arr.length + 1];
+    for (int i = end - 1; i >= K - 1; i--) {
+        memo[end][K] = Math.max(memo[end][K], (sum[end] - sum[i]) / (end - i) + largestSumOfAverages(A, i, K - 1));
+    }
+    return memo[end][K];
+{% endhighlight %}
 
-    for (int i = arr.length - 1; i >= 0; i--) {
-        int max = 0;
-        for (int j = 0; j < k && i + j < arr.length; j++) {
-            max = Math.max(arr[i + j], max);
-            dp[i] = Math.max(dp[i], max * (j + 1) + dp[i + j + 1]);
+### Bottom-up DP
+
+{% highlight java %}
+public double largestSumOfAverages(int[] A, int K) {
+    double[][] dp = new double[A.length + 1][K + 1];
+
+    double[] sum = new double[A.length + 1];
+    for (int i = 0; i < A.length; i++) {
+        sum[i + 1] = sum[i] + A[i];
+    }
+
+    for (int i = 1; i < dp.length; i++) {
+        dp[i][1] = sum[i] / i;
+    }
+
+    for (int k = 2; k <= K; k++) {
+        for (int i = 1; i <= A.length; i++) {
+            for (int j = 0; j < i; j++) {
+                dp[i][k] = Math.max(dp[i][k], (sum[i] - sum[j]) / (i - j) + dp[j][k - 1]);
+            }
         }
     }
 
-    return dp[0];
+    return dp[A.length][K];
 }
 {% endhighlight %}
 
-Reverse `dp[]`
+```
+[0.0,0.0,0.0,0.0]
+[0.0,9.0,9.0,9.0]
+[0.0,5.0,10.0,10.0]
+[0.0,4.0,10.5,12.0]
+[0.0,3.75,11.0,13.5]
+[0.0,4.8,12.75,20.0]
+```
+
+1D:
 
 {% highlight java %}
-public int maxSumAfterPartitioning(int[] arr, int k) {
-    int[] dp = new int[arr.length + 1];
+public double largestSumOfAverages(int[] A, int K) {
+    double[] dp = new double[A.length + 1];
 
-    for (int i = 0; i < arr.length; i++) {
-        int max = 0;
-        for (int j = 0; j < k && i - j >= 0; j++) {
-            max = Math.max(arr[i - j], max);
-            dp[i + 1] = Math.max(dp[i + 1], max * (j + 1) + dp[i - j]);
+    double[] sum = new double[A.length + 1];
+    for (int i = 0; i < A.length; i++) {
+        sum[i + 1] = sum[i] + A[i];
+    }
+
+    for (int i = 1; i < dp.length; i++) {
+        dp[i] = sum[i] / i;
+    }
+
+    for (int k = 2; k <= K; k++) {
+        for (int i = A.length; i > 0; i--) {
+            for (int j = 0; j < i; j++) {
+                dp[i] = Math.max(dp[i], (sum[i] - sum[j]) / (i - j) + dp[j]);
+            }
         }
     }
 
-    return dp[arr.length];
+    return dp[A.length];
 }
 {% endhighlight %}
 
-[partition-array-for-maximum-sum]: https://leetcode.com/problems/partition-array-for-maximum-sum/
+[largest-sum-of-averages]: https://leetcode.com/problems/largest-sum-of-averages/

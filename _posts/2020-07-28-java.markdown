@@ -12,9 +12,10 @@ private static int MOD = 1_000_000_007
 {% endhighlight %}
 
 [Enhanced For][for]
+
 The for statement also has another form designed for iteration through *Collections* and *arrays* This form is sometimes referred to as the enhanced for statement, and can be used to make your loops more compact and easy to read.
 
-## Multidimensional Array
+### Multidimensional Array
 {% highlight java %}
 int[][] matrix = new int[r][c];
 // r == matrix.length

@@ -216,35 +216,35 @@ private void backtrack(List<List<Integer>> list, List<Integer> tmpList, int star
 [Palindrome Partitioning][palindrome-partitioning]
 
 {% highlight java %}
-public boolean canPartition(int[] nums) {
-    int sum = 0;
-    for (int i = 0; i < nums.length; i++) {
-        sum += nums[i];
-    }
-
-    if (sum % 2 == 1) {
-        return false;
-    }
-
-    Arrays.sort(nums);
-    return backtrack(nums, 0, sum / 2);
+public List<List<String>> partition(String s) {
+    List<List<String>> list = new ArrayList<>();
+    backtrack(list, new ArrayList<>(), s, 0);
+    return list;
 }
 
-private boolean backtrack(int[] nums, int index, int target) {
-    if (target == 0) {
-        return true;
+private void backtrack(List<List<String>> list, List<String> tmpList, String s, int index) {
+    if (index == s.length()) {
+        list.add(new ArrayList<>(tmpList));
     }
 
-    for (int i = index; i < nums.length; i++) {
-        if (i > index && nums[i] == nums[i - 1]) {
-            continue;
-        }
-
-        if (nums[i] <= target && backtrack(nums, i + 1, target - nums[i])) {
-            return true;
+    for (int i = index + 1; i <= s.length(); i++) {
+        String str = s.substring(index, i);
+        if (isPalindrome(str)) {
+            tmpList.add(str);
+            backtrack(list, tmpList, s, i);
+            tmpList.remove(tmpList.size() - 1);
         }
     }
-    return false;
+}
+
+private boolean isPalindrome(String s) {
+    int left = 0, right = s.length() - 1;
+    while (left < right) {
+        if (s.charAt(left++) != s.charAt(right--)) {
+            return false;
+        }
+    }
+    return true;
 }
 {% endhighlight %}
 
