@@ -322,7 +322,63 @@ public TreeNode inorder(TreeNode node, TreeNode next) {
 }
 {% endhighlight %}
 
+# Top-down Local State
+
+[Count Good Nodes in Binary Tree][count-good-nodes-in-binary-tree]
+
+{% highlight java %}
+public int goodNodes(TreeNode root) {
+    return dfs(root, root.val);
+}
+
+private int dfs(TreeNode node, int max) {
+    if (node == null) {
+        return 0;
+    }
+
+    int count = node.val >= max ? 1 : 0;
+
+    max = Math.max(max, node.val);
+    count += dfs(node.left, max);
+    count += dfs(node.right, max);
+
+    return count;
+}
+{% endhighlight %}
+
+[Pseudo-Palindromic Paths in a Binary Tree][pseudo-palindromic-paths-in-a-binary-tree]
+
+{% highlight java %}
+public int pseudoPalindromicPaths (TreeNode root) {
+    return dfs(root, 0);
+}
+
+/**
+ * Count pseudo palindromic paths by DFS.
+ * In a pseudo palindromic path, each digit appears at most once.
+ * @param node current node
+ * @param vector an integer whose i-th bit indicates the presence of digit i
+ * @return count of pseudo palinddromic paths
+ */
+private int dfs(TreeNode node, int vector) {
+    if (node == null) {
+        return 0;
+    }
+
+    vector ^= 1 << (node.val - 1);
+    int count = dfs(node.left, vector) + dfs(node.right, vector);
+
+    // leaf node
+    if (node.left == node.right && (vector & (vector - 1)) == 0) {
+        count++;
+    }
+
+    return count;
+}
+{% endhighlight %}
+
 [convert-bst-to-greater-tree]: https://leetcode.com/problems/convert-bst-to-greater-tree/
+[count-good-nodes-in-binary-tree]: https://leetcode.com/problems/count-good-nodes-in-binary-tree/
 [diameter-of-binary-tree]: https://leetcode.com/problems/diameter-of-binary-tree/
 [find-bottom-left-tree-value]: https://leetcode.com/problems/find-bottom-left-tree-value/
 [increasing-order-search-tree]: https://leetcode.com/problems/increasing-order-search-tree/
@@ -331,4 +387,5 @@ public TreeNode inorder(TreeNode node, TreeNode next) {
 [lowest-common-ancestor-of-deepest-leaves]: https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/
 [minimum-absolute-difference-in-bst]: https://leetcode.com/problems/minimum-absolute-difference-in-bst/
 [n-ary-tree-level-order-traversal]: https://leetcode.com/problems/n-ary-tree-level-order-traversal/
+[pseudo-palindromic-paths-in-a-binary-tree]: https://leetcode.com/problems/pseudo-palindromic-paths-in-a-binary-tree/
 [second-minimum-node-in-a-binary-tree]: https://leetcode.com/problems/second-minimum-node-in-a-binary-tree/

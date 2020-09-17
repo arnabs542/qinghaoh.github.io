@@ -59,23 +59,102 @@ i = 6	[]		h * w = 6	area = 10
 i = 6	[6]				area = 10
 ```
 
+[Reverse Substrings Between Each Pair of Parentheses][reverse-substrings-between-each-pair-of-parentheses]
+
+{% highlight java %}
+public String reverseParentheses(String s) {
+    Deque<Integer> st = new ArrayDeque<>();
+    int[] pairs = new int[s.length()];
+    for (int i = 0; i < s.length(); ++i) {
+        if (s.charAt(i) == '(')
+            st.push(i);
+        if (s.charAt(i) == ')') {
+            int j = st.pop();
+            pairs[i] = j;
+            pairs[j] = i;
+        }
+    }
+
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0, d = 1; i < s.length(); i += d) {
+        if (s.charAt(i) == '(' || s.charAt(i) == ')') {
+            i = pairs[i];
+            d = -d;  // changes direction
+        } else {
+            sb.append(s.charAt(i));
+        }
+    }
+
+    return sb.toString();
+}
+{% endhighlight %}
+
 ## Reduced to Counter
 [Remove Outermost Parentheses][remove-outermost-parentheses]
 
 {% highlight java %}
-public String removeOuterParentheses(String S) {
-    StringBuilder sb = new StringBuilder();
+public string removeouterparentheses(string s) {
+    stringbuilder sb = new stringbuilder();
     int open = 0;
-    for (char c : S.toCharArray()) {
+    for (char c : s.tochararray()) {
         if ((c == '(' && open++ > 0) || (c == ')' && --open > 0)) {
             sb.append(c);
         }
     }
-    return sb.toString();
+    return sb.tostring();
+}
+{% endhighlight %}
+
+[Minimum Add to Make Parentheses Valid][minimum-add-to-make-parentheses-valid]
+
+{% highlight java %}
+public int minAddToMakeValid(String S) {
+    int notOpened = 0;  // '(' needed to make the String balanced
+    int notClosed = 0;  // ')' needed to make the String balanced
+    for (char c : S.toCharArray()) {
+        if (c == '(') {
+            notClosed++;
+        } else if (notClosed == 0) {
+            notOpened++;
+        } else {
+            notClosed--;
+        }
+    }
+
+    return notOpened + notClosed;
+}
+{% endhighlight %}
+
+[Minimum Insertions to Balance a Parentheses String][minimum-insertions-to-balance-a-parentheses-string]
+
+{% highlight java %}
+public int minInsertions(String s) {
+    int count = 0;
+    int notClosed = 0;  // ')' needed to make the String balanced
+    for (char c : s.toCharArray()) {
+        if (c == '(') {
+            if (notClosed % 2 > 0) {
+                notClosed--;
+                count++;
+            }
+            notClosed += 2;
+        } else {
+            notClosed--;
+            if (notClosed < 0) {
+                notClosed += 2;
+                count++;
+            }
+        }
+    }
+
+    return count + notClosed;
 }
 {% endhighlight %}
 
 [final-prices-with-a-special-discount-in-a-shop]: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/
 [largest-rectangle-in-histogram]: https://leetcode.com/problems/largest-rectangle-in-histogram/
+[minimum-add-to-make-parentheses-valid]: https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/
+[minimum-insertions-to-balance-a-parentheses-string]: https://leetcode.com/problems/minimum-insertions-to-balance-a-parentheses-string/
 [next-greater-element-ii]: https://leetcode.com/problems/next-greater-element-ii/
 [remove-outermost-parentheses]: https://leetcode.com/problems/remove-outermost-parentheses/
+[reverse-substrings-between-each-pair-of-parentheses]: https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/

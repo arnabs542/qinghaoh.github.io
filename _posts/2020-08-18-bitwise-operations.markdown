@@ -75,5 +75,24 @@ private int xorEvenStart(int n, int start) {
 }
 {% endhighlight %}
 
+[Total Hamming Distance][total-hamming-distance]
+
+{% highlight java %}
+public int totalHammingDistance(int[] nums) {
+    int count = 0;
+    for (int i = 0; i < 31; i++) {
+        int ones = 0;
+        for (int num : nums) {
+            if ((num & (1 << i)) != 0) {
+                ones++;
+            }
+        }
+        count += ones * (nums.length - ones);
+    }
+    return count;
+}
+{% endhighlight %}
+
 [binary-number-with-alternating-bits]: https://leetcode.com/problems/binary-number-with-alternating-bits/
+[total-hamming-distance]: https://leetcode.com/problems/total-hamming-distance/
 [xor-operation-in-an-array]: https://leetcode.com/problems/xor-operation-in-an-array/

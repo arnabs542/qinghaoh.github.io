@@ -16,10 +16,42 @@ Where `0 <= i <= j <= a.length`
 
 ## Dynamic Programming
 
-[Path Crossing][path-crossing]
+[Find Two Non-overlapping Sub-arrays Each With Target Sum][find-two-non-overlapping-sub-arrays-each-with-target-sum]
+
+{% highlight java %}
+private final int MAX = 100_001;
+
+public int minSumOfLengths(int[] arr, int target) {
+    // minimum length of subarray whose sum equals target
+    int dp[] = new int[arr.length];
+    Arrays.fill(dp, MAX);
+
+    // sliding window
+    int sum = 0, start = 0, result = MAX, min = MAX;
+    for (int i = 0; i < arr.length; i++){
+        sum += arr[i];
+        while (sum > target) {
+            sum -= arr[start];
+            start++;
+        }
+
+        if (sum == target) {
+            if (start > 0 && dp[start - 1] != MAX) {
+                result = Math.min(result, dp[start - 1] + i - start + 1);
+            }
+            min = Math.min(min, i - start + 1);
+        }
+        dp[i] = min;
+    }
+
+    return result == MAX ? -1 : result;
+}
+{% endhighlight %}
+
+Generalization: `N` non-overlapping subarrays
 
 {% highlight java %}
 {% endhighlight %}
 
-[path-crossing]: https://leetcode.com/problems/path-crossing/
+[find-two-non-overlapping-sub-arrays-each-with-target-sum]: https://leetcode.com/problems/find-two-non-overlapping-sub-arrays-each-with-target-sum/
 [longest-substring-without-repeating-characters]: https://leetcode.com/problems/longest-substring-without-repeating-characters/

@@ -23,6 +23,36 @@ public int search(int[] nums, int target) {
 }
 {% endhighlight %}
 
+{% highlight java %}
+public int search(int[] nums, int target) {
+    int low = 0, high = nums.length - 1;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (nums[mid] < target) {
+            low = mid + 1;
+        } else {
+            high = mid;
+        }
+    }
+    return nums[low] == target ? low : -1;
+}
+{% endhighlight %}
+
+{% highlight java %}
+public int search(int[] nums, int target) {
+    int low = 0, high = nums.length - 1;
+    while (low < high) {
+        int mid = low + (high - low + 1) / 2;
+        if (nums[mid] > target) {
+            high = mid - 1;
+        } else {
+            low = mid;
+        }
+    }
+    return nums[low] == target ? low : -1;
+}
+{% endhighlight %}
+
 There can be variants of this template. For example: [First Bad Version][first-bad-version], [The K Weakest Rows in a Matrix][the-k-weakest-rows-in-a-matrix]
 
 * `low <= high`, `low < high`, ...
@@ -33,7 +63,16 @@ There can be variants of this template. For example: [First Bad Version][first-b
 ## Boundary
 The initial boundary `[low, high]` should include ***all*** possible answers. When each loop begins, any value within the range `[low, high]` could be the answer.
 
-Don't try to remember all these. The easiest way is to test your code with these examples: `[0]`, `[0, 1]` and `[0, 1, 2]`. Always make sure:
+## Mid
+
+{% highlight java %}
+mid = low + (high - low) / 2;  // lower mid
+mid = low + (high - low + 1) / 2;  // upper mid
+{% endhighlight %}
+
+Avoid infinite loop. Test your code with these examples: `[0]`, `[0, 1]`, `[0, 1, 2]` and `[0, 1, 2, 3]`. 
+
+Always make sure:
 * The range shrinks
 * No infinite loop
 * Returns the right thing
@@ -143,6 +182,34 @@ public int hIndex(int[] citations) {
         }
     }
     return citations.length - low;
+}
+{% endhighlight %}
+
+[Koko Eating Bananas][koko-eating-bananas]
+
+{% highlight java %}
+public int minEatingSpeed(int[] piles, int H) {
+    int target = H - piles.length;
+    int low = 1, high = 1_000_000_000;  // high can be max(piles)
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        int sum = 0;
+        for (int i = 0; i < piles.length; i++) {
+            // Math.ceil((double)x / n) == (x - 1) / n + 1
+            sum += (piles[i] - 1) / mid;
+            if (sum > target) {
+                break;
+            }
+        }
+
+        if (sum > target) {
+            low = mid + 1;
+        } else {
+            high = mid;
+        }
+    }
+
+    return low;
 }
 {% endhighlight %}
 

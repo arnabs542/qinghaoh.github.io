@@ -31,6 +31,10 @@ private double largestSumOfAverages(int[] A, int end, int K) {
         return memo[end][1];
     }
 
+    // "at most K groups" is equivalent to "exact K groups"
+    // so we don't need to consider largestSumOfAverages(A, end, K - 1)
+    //  
+    // see https://en.wikipedia.org/wiki/Mediant_(mathematics)#Properties
     double max = 0;
     for (int i = end - 1; i >= K - 1; i--) {
         max = Math.max(max, (sum[end] - sum[i]) / (end - i) + largestSumOfAverages(A, i, K - 1));
