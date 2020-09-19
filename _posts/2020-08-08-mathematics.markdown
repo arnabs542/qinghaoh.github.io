@@ -37,20 +37,6 @@ $$ T={\frac {1}{2}}{\big |}(x_{A}-x_{C})(y_{B}-y_{A})-(x_{A}-x_{B})(y_{C}-y_{A})
 
 The Euclid–Euler theorem is a theorem in mathematics that relates perfect numbers to Mersenne primes. It states that an even number is perfect if and only if it has the form $$ 2p−1(2p − 1) $$, where $$ 2p − 1 $$ is a prime number. 
 
-[Rejection sampling](https://en.wikipedia.org/wiki/Rejection_sampling)
-
-[Implement Rand10() Using Rand7()][implement-rand10-using-rand7]
-
-{% highlight java %}
-public int rand10() {
-    int num = 0;
-    do {
-        num = (rand7() - 1) * 7 + rand7();
-    } while (num > 40);
-    return (num - 1) % 10 + 1;
-}
-{% endhighlight %}
-
 [Floor and celing functions](https://en.wikipedia.org/wiki/Floor_and_ceiling_functions)
 
 $$ \left\lceil {\frac {n}{m}}\right\rceil =\left\lfloor {\frac {n+m-1}{m}}\right\rfloor =\left\lfloor {\frac {n-1}{m}}\right\rfloor +1 $$

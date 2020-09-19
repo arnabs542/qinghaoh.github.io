@@ -14,6 +14,30 @@ Where `0 <= i <= j <= a.length`
 ### Index Map
 [Longest Substring Without Repeating Characters][longest-substring-without-repeating-characters]
 
+[Max Consecutive Ones III][max-consecutive-ones-iii]
+
+{% highlight java %}
+public int longestOnes(int[] A, int K) {
+    // find the longest subarray with at most K zeros
+    int i = 0, j = 0;
+    while (j < A.length) {
+        if (A[j] == 0) {
+            K--;
+        }
+
+        // if K < 0, both i, j move forward together
+        if (K < 0 && A[i++] == 0) {
+            K++;
+        }
+        j++;
+    }
+
+    // i, j is a sliding window.
+    // its span memorizes the max range so far
+    return j - i;
+}
+{% endhighlight %}
+
 ## Dynamic Programming
 
 [Find Two Non-overlapping Sub-arrays Each With Target Sum][find-two-non-overlapping-sub-arrays-each-with-target-sum]
@@ -22,21 +46,20 @@ Where `0 <= i <= j <= a.length`
 private final int MAX = 100_001;
 
 public int minSumOfLengths(int[] arr, int target) {
-    // minimum length of subarray whose sum equals target
+    // minimum length sum of subarrays with target sum
     int dp[] = new int[arr.length];
-    Arrays.fill(dp, MAX);
 
     // sliding window
     int sum = 0, start = 0, result = MAX, min = MAX;
-    for (int i = 0; i < arr.length; i++){
+    for (int i = 0; i < arr.length; i++) {
         sum += arr[i];
-        while (sum > target) {
+        while (sum > target){
             sum -= arr[start];
             start++;
         }
 
         if (sum == target) {
-            if (start > 0 && dp[start - 1] != MAX) {
+            if (start > 0 && dp[start - 1] != 0) {
                 result = Math.min(result, dp[start - 1] + i - start + 1);
             }
             min = Math.min(min, i - start + 1);
@@ -55,3 +78,4 @@ Generalization: `N` non-overlapping subarrays
 
 [find-two-non-overlapping-sub-arrays-each-with-target-sum]: https://leetcode.com/problems/find-two-non-overlapping-sub-arrays-each-with-target-sum/
 [longest-substring-without-repeating-characters]: https://leetcode.com/problems/longest-substring-without-repeating-characters/
+[max-consecutive-ones-iii]: https://leetcode.com/problems/max-consecutive-ones-iii/

@@ -346,6 +346,30 @@ private int dfs(TreeNode node, int max) {
 }
 {% endhighlight %}
 
+[Maximum Difference Between Node and Ancestor][maximum-difference-between-node-and-ancestor]
+
+{% highlight java %}
+private int diff = 0;
+
+public int maxAncestorDiff(TreeNode root) {
+    dfs(root, root.val, root.val);
+    return diff;
+}
+
+private void dfs(TreeNode node, int min, int max) {
+    if (node == null) {
+        return;
+    }
+
+    min = Math.min(min, node.val);
+    max = Math.max(max, node.val);
+    diff = Math.max(diff, max - min);
+
+    dfs(node.left, min, max);
+    dfs(node.right, min, max);
+}
+{% endhighlight %}
+
 [Pseudo-Palindromic Paths in a Binary Tree][pseudo-palindromic-paths-in-a-binary-tree]
 
 {% highlight java %}
@@ -377,6 +401,62 @@ private int dfs(TreeNode node, int vector) {
 }
 {% endhighlight %}
 
+# Nested DFS
+
+[Path Sum III][path-sum-iii]
+
+{% highlight java %}
+public int pathSum(TreeNode root, int sum) {
+    if (root == null) {
+        return 0;
+    }
+
+    return pathSumFromNode(root, sum) + pathSum(root.left, sum) + pathSum(root.right, sum);
+}
+
+/**
+ * Counts paths with target sum which start from node.
+ * @param node the root of the subtree
+ * @param sum target sum
+ * @return the count of paths with target sum which start from node
+ */
+private int pathSumFromNode(TreeNode node, int sum) {
+    if (node == null) {
+        return 0;
+    }
+
+    return (sum == node.val ? 1 : 0) + pathSumFromNode(node.left, sum - node.val) + pathSumFromNode(node.right, sum - node.val);
+}
+{% endhighlight %}
+
+# Backtracking
+
+[Path Sum III][path-sum-iii]
+
+{% highlight java %}
+public int pathSum(TreeNode root, int sum) {
+    Map<Integer, Integer> prefixSum = new HashMap();
+    prefixSum.put(0,1);
+    return dfs(root, 0, sum, prefixSum);
+}
+
+public int dfs(TreeNode node, int currSum, int target, Map<Integer, Integer> prefixSum) {
+    if (node == null) {
+        return 0;
+    }
+
+    currSum += node.val;
+    int count = prefixSum.getOrDefault(currSum - target, 0);
+
+    // backtracking
+    prefixSum.compute(currSum, (k, v) -> v == null ? 1 : v + 1);
+    count += dfs(node.left, currSum, target, prefixSum) + dfs(node.right, currSum, target, prefixSum);
+    prefixSum.compute(currSum, (k, v) -> v - 1);
+
+    return count;
+}
+{% endhighlight %}
+
 [convert-bst-to-greater-tree]: https://leetcode.com/problems/convert-bst-to-greater-tree/
 [count-good-nodes-in-binary-tree]: https://leetcode.com/problems/count-good-nodes-in-binary-tree/
 [diameter-of-binary-tree]: https://leetcode.com/problems/diameter-of-binary-tree/
@@ -385,7 +465,9 @@ private int dfs(TreeNode node, int vector) {
 [longest-univalue-path]: https://leetcode.com/problems/longest-univalue-path/solution/
 [longest-zigzag-path-in-a-binary-tree]: https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/
 [lowest-common-ancestor-of-deepest-leaves]: https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/
+[maximum-difference-between-node-and-ancestor]: https://leetcode.com/problems/maximum-difference-between-node-and-ancestor/
 [minimum-absolute-difference-in-bst]: https://leetcode.com/problems/minimum-absolute-difference-in-bst/
 [n-ary-tree-level-order-traversal]: https://leetcode.com/problems/n-ary-tree-level-order-traversal/
+[path-sum-iii]: https://leetcode.com/problems/path-sum-iii/
 [pseudo-palindromic-paths-in-a-binary-tree]: https://leetcode.com/problems/pseudo-palindromic-paths-in-a-binary-tree/
 [second-minimum-node-in-a-binary-tree]: https://leetcode.com/problems/second-minimum-node-in-a-binary-tree/

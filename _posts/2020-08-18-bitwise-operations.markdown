@@ -93,6 +93,32 @@ public int totalHammingDistance(int[] nums) {
 }
 {% endhighlight %}
 
+[K-th Symbol in Grammar][k-th-symbol-in-grammar]
+
+{% highlight java %}
+public int kthGrammar(int N, int K) {
+    // K is in [1, 2 ^ (N - 1)], so we can ignore N
+    //
+    // if k is 0 indexed
+    // if f(k) == 0
+    //   then f(2 * k) == 0, f(2 * k + 1) == 1
+    // else if f(k) == 1
+    //   then f(2 * k) == 1, f(2 * k + 1) == 0
+    //
+    // so f(2 * k) == f(k) ^ 0, f(2 * k + 1) == f(k) ^ 1
+    //
+    // f(10110)
+    //   = f(1011) ^ 0
+    //   = f(101) ^ 1 ^ 0
+    //   = f(10) ^ 1 ^ 1 ^ 0
+    //   = f(1) ^ 0 ^ 1 ^ 1 ^ 0
+    //   = f(0) ^ 1 ^ 0 ^ 1 ^ 1 ^ 0
+    //   = 1 ^ 0 ^ 1 ^ 1 ^ 0
+    return Integer.bitCount(K - 1) & 1;
+}
+{% endhighlight %}
+
 [binary-number-with-alternating-bits]: https://leetcode.com/problems/binary-number-with-alternating-bits/
+[k-th-symbol-in-grammar]: https://leetcode.com/problems/k-th-symbol-in-grammar/
 [total-hamming-distance]: https://leetcode.com/problems/total-hamming-distance/
 [xor-operation-in-an-array]: https://leetcode.com/problems/xor-operation-in-an-array/
