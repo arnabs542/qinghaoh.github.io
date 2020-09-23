@@ -10,6 +10,31 @@ a[i], a[i + 1], ..., a[j]
 Where `0 <= i <= j <= a.length`
 
 # Algorithm
+
+## Prefix Sum
+
+[Subarray Sum Equals K][subarray-sum-equals-k]
+
+{% highlight java %}
+public int subarraySum(int[] nums, int k) {
+    int sum = 0, count = 0;
+    Map<Integer, Integer> map = new HashMap<>();  // prefix sum : count
+    for (int num : nums) {
+        sum += num;
+        if (sum == k) {
+            count++;
+        }
+
+        if (map.containsKey(sum - k)) {
+            count += map.get(sum - k);
+        }
+
+        map.put(sum, map.getOrDefault(sum, 0) + 1);
+    }
+    return count;
+}
+{% endhighlight %}
+
 ## Sliding Window
 ### Index Map
 [Longest Substring Without Repeating Characters][longest-substring-without-repeating-characters]
@@ -18,7 +43,29 @@ Where `0 <= i <= j <= a.length`
 
 {% highlight java %}
 public int longestOnes(int[] A, int K) {
-    // find the longest subarray with at most K zeros
+    int i = 0, j = 0;
+    int zero = 0, max = 0;
+    while (j < A.length) {
+        if (A[j] == 0) {
+            zero++;
+        }
+        while (zero > K) {
+            if (A[i++] == 0) {
+                zero--;
+            }
+        }
+        max = Math.max(max, j - i + 1);
+        j++;
+    }
+    return max;
+}
+{% endhighlight %}
+
+From @lee215:
+
+{% highlight java %}
+public int longestOnes(int[] A, int K) {
+    // finds the longest subarray with at most K zeros
     int i = 0, j = 0;
     while (j < A.length) {
         if (A[j] == 0) {
@@ -37,6 +84,34 @@ public int longestOnes(int[] A, int K) {
     return j - i;
 }
 {% endhighlight %}
+
+[Longest Repeating Character Replacement][longest-repeating-character-replacement]
+
+{% highlight java %}
+public int characterReplacement(String s, int k) {
+    int[] count = new int[26];
+    int i = 0, j = 0;
+    int max = 0, length = 0;
+    while (j < s.length()) {
+        // the sliding window never shrinks, even if it covers an invalid substring
+        // grows the window when the count of the new char exceeds the historical max count
+        max = Math.max(max, ++count[s.charAt(j) - 'A']);
+        // window size is j - i + 1
+        // right shifts the whole window by one
+        if (j - i + 1 - max > k) {
+            count[s.charAt(i) - 'A']--;
+            i++;
+        }
+        length = Math.max(length, j - i + 1);
+        j++;
+    }
+    return length;
+}
+{% endhighlight %}
+
+[Count Number of Nice Subarrays][count-number-of-nice-subarrays]
+
+If we apply `nums[i] -> nums[i] % 2`, the problem becomes [Subarray Sum Equals K][subarray-sum-equals-k]
 
 ## Dynamic Programming
 
@@ -76,6 +151,9 @@ Generalization: `N` non-overlapping subarrays
 {% highlight java %}
 {% endhighlight %}
 
+[count-number-of-nice-subarrays]: https://leetcode.com/problems/count-number-of-nice-subarrays/
 [find-two-non-overlapping-sub-arrays-each-with-target-sum]: https://leetcode.com/problems/find-two-non-overlapping-sub-arrays-each-with-target-sum/
+[longest-repeating-character-replacement]: https://leetcode.com/problems/longest-repeating-character-replacement/
 [longest-substring-without-repeating-characters]: https://leetcode.com/problems/longest-substring-without-repeating-characters/
 [max-consecutive-ones-iii]: https://leetcode.com/problems/max-consecutive-ones-iii/
+[subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/

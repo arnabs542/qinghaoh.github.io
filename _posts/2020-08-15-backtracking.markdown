@@ -271,6 +271,7 @@ private boolean backtrack(int[] nums, int index, int target) {
     }
 
     for (int i = index; i < nums.length; i++) {
+        // skips duplicates
         if (i > index && nums[i] == nums[i - 1]) {
             continue;
         }
@@ -285,12 +286,102 @@ private boolean backtrack(int[] nums, int index, int target) {
 
 [Beautiful Arrangement][beautiful-arrangement]
 
+[Partition to K Equal Sum Subsets][partition-to-k-equal-sum-subsets]
+
+[Subset sum problem](https://en.wikipedia.org/wiki/Subset_sum_problem): NP-complete
+
+{% highlight java %}
+public boolean canPartitionKSubsets(int[] nums, int k) {
+    int sum = 0, max = 0;
+    for (int num : nums) {
+        sum += num;
+        max = Math.max(max, num);
+    }
+
+    if (sum % k != 0 || max > sum / k) {
+        return false;
+    }
+
+    Arrays.sort(nums);
+    // searches in reverse order, so that subset sizes decrease faster
+    return backtrack(nums, sum / k, nums.length - 1, new int[k]);
+}
+
+private boolean backtrack(int[] nums, int target, int index, int[] subsets) {
+    // all elements are placed into subsets
+    if (index < 0) {
+        return true;
+    }
+
+    for (int i = 0; i < subsets.length; i++) {
+        if (subsets[i] + nums[index] <= target) {
+            subsets[i] += nums[index];
+            // no need to clone subsets
+            if (backtrack(nums, target, index - 1, subsets)) {
+                return true;
+            }
+            subsets[i] -= nums[index];
+        }
+
+        // after unwinding, if current subset is empty,
+        // we know nums[index] can't be placed in any empty subset.
+        // all the subsets following current subset are empty,
+        // so we skip all of them.
+        if (subsets[i] == 0) {
+            break;
+        }
+    }
+    return false;
+}
+{% endhighlight %}
+
+{% highlight java %}
+public boolean canPartitionKSubsets(int[] nums, int k) {
+    int sum = 0, max = 0;
+    for (int num : nums) {
+        sum += num;
+        max = Math.max(max, num);
+    }
+
+    if (sum % k != 0 || max > sum / k) {
+        return false;
+    }
+
+    Arrays.sort(nums);
+    // searches in reverse order, so that subset sizes decrease faster
+    return backtrack(nums, nums.length - 1, new boolean[nums.length], k, 0, sum / k);
+}
+
+boolean backtrack(int[] nums, int index, boolean[] visited, int k, int sum, int target) {
+    if (k == 1) {
+        return true;
+    }
+
+    if (sum == target) {
+        return backtrack(nums, nums.length - 1, visited, k - 1, 0, target);
+    }
+
+    for (int i = index; i >= 0; i--) {
+        if (!visited[i] && sum + nums[i] <= target) {
+            visited[i] = true;
+            if (backtrack(nums, i - 1, visited, k, sum + nums[i], target)) {
+                return true;
+            }  
+            visited[i] = false;
+        }
+    }
+
+    return false;
+}
+{% endhighlight %}
+
 [beautiful-arrangement]: https://leetcode.com/problems/beautiful-arrangement/
 [combination-sum]: https://leetcode.com/problems/combination-sum/
 [combination-sum-ii]: https://leetcode.com/problems/combination-sum-ii/
 [combination-sum-iii]: https://leetcode.com/problems/combination-sum-iii/
 [palindrome-partitioning]: https://leetcode.com/problems/palindrome-partitioning/
 [partition-equal-subset-sum]: https://leetcode.com/problems/partition-equal-subset-sum/
+[partition-to-k-equal-sum-subsets]: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
 [permutations]: https://leetcode.com/problems/permutations/
 [permutations-ii]: https://leetcode.com/problems/permutations-ii/
 [subsets]: https://leetcode.com/problems/subsets/

@@ -67,7 +67,7 @@ private String find(String u) {
     String p = parent.get(u);
     String gp = find(p);
     parent.put(u, gp);
-    ratio.put(u, ratio.get(u) * ratio.get(p));  // gp = p * ratio(p) = ratio(u) * ratio(p)
+    ratio.put(u, ratio.get(u) * ratio.get(p));  // gp = p * ratio(p) = u * ratio(u) * ratio(p)
     return gp;
 }
 

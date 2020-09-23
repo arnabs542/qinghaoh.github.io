@@ -3,6 +3,8 @@ layout: post
 title:  "Directed Graph"
 tags: graph
 ---
+[Directed graph](https://en.wikipedia.org/wiki/Directed_graph)
+
 ## Degree
 [Find the Town Judge][find-the-town-judge]
 
@@ -26,62 +28,55 @@ public int findJudge(int N, int[][] trust) {
 [Evaluate Division][evaluate-division]
 
 {% highlight java %}
-Map<String, String> parent = new HashMap<>();
-Map<String, Double> ratio = new HashMap<>();  // parent / node
+private Map<String, Map<String, Double>> graph = new HashMap<>();
 
 public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
-    for (int i = 0; i < values.length; i++) {
-        List<String> e = equations.get(i);
-        union(e.get(0), e.get(1), values[i]);
-    }
+    buildGraph(equations, values);
 
     double[] result = new double[queries.size()];
     for (int i = 0; i < queries.size(); i++) {
         List<String> q = queries.get(i);
-        result[i] = query(q.get(0), q.get(1));
+        result[i] = getPathWeight(q.get(0), q.get(1), new HashSet<>());
     }
     return result;
 }
 
-private String find(String u) {
-    if (!parent.containsKey(u)) {
-        ratio.put(u, 1.0);
-        return u;
-    }
-
-    // path compression
-    String p = parent.get(u);
-    String gp = find(p);
-    parent.put(u, gp);
-    ratio.put(u, ratio.get(u) * ratio.get(p));  // gp = p * ratio(p) = ratio(u) * ratio(p)
-    return gp;
-}
-
-// u / v = value
-private void union(String u, String v, double value) {
-    String uset = find(u);
-    String vset = find(v);
-
-    parent.put(vset, uset);
-    // ratio = uset / vset
-    //   = u * ratio(u) / (v * ratio(v))
-    //   = value * ratio(u) / ratio(v)
-    ratio.put(vset, value * ratio.get(u) / ratio.get(v));
-}
-
-private double query(String s1, String s2) {
-    if (!ratio.containsKey(s1) || !ratio.containsKey(s2)) {
+private double getPathWeight(String start, String end, Set<String> visited) {
+    if (!graph.containsKey(start)) {
         return -1.0;
     }
 
-    String p1 = find(s1), p2 = find(s2);
-    if (!p1.equals(p2)) {
-        return -1.0;
+    if (graph.get(start).containsKey(end)) {
+        return graph.get(start).get(end);
     }
 
-    // s1 / s2 = p / ratio(s1) / (p / ratio(s2))
-    //   = ratio(s2) / ratio(s1)
-    return ratio.get(s2) / ratio.get(s1);
+    // dfs
+    visited.add(start);
+    for (Map.Entry<String, Double> neighbour : graph.get(start).entrySet()) {
+        if (!visited.contains(neighbour.getKey())) {
+            double productWeight = getPathWeight(neighbour.getKey(), end, visited);
+            if (productWeight != -1.0) {
+                return neighbour.getValue() * productWeight;
+            }
+        }
+    }
+
+    return -1.0;
+}
+
+// A / B = k
+// A : (B : k)
+// B : (A : 1 / k)
+private void buildGraph(List<List<String>> equations, double[] values) {
+    for (int i = 0; i < equations.size(); i++) {
+        List<String> e = equations.get(i);
+
+        graph.putIfAbsent(e.get(0), new HashMap<>());
+        graph.get(e.get(0)).put(e.get(1), values[i]);
+
+        graph.putIfAbsent(e.get(1), new HashMap<>());
+        graph.get(e.get(1)).put(e.get(0), 1 / values[i]);
+    }
 }
 {% endhighlight %}
 

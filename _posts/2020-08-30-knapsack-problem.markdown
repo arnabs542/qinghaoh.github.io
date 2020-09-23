@@ -291,6 +291,8 @@ minimize $$ f(W)=\sum _{j=1}^{n}x_{j} $$
 
 subject to $$ \sum _{j=1}^{n}w_{j}x_{j}=W $$
 
+[Coin Change][coin-change]
+
 {% highlight java %}
 public int coinChange(int[] coins, int amount) {
     int[][] dp = new int[coins.length + 1][amount + 1];
@@ -332,6 +334,7 @@ public int coinChange(int[] coins, int amount) {
 }
 {% endhighlight %}
 
+[coin-change]: https://leetcode.com/problems/coin-change/
 [coin-change-2]: https://leetcode.com/problems/coin-change-2/
 [combination-sum-iv]: https://leetcode.com/problems/combination-sum-iv/
 [ones-and-zeroes]: https://leetcode.com/problems/ones-and-zeroes/
