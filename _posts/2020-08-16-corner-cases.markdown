@@ -109,8 +109,24 @@ public int findRadius(int[] houses, int[] heaters) {
 
 ![Heaters](/assets/heaters.png)
 
+[Sum of All Odd Length Subarrays][sum-of-all-odd-length-subarrays]
+
+{% highlight java %}
+public int sumOddLengthSubarrays(int[] arr) {
+    int sum = 0;
+    for (int i = 0; i < arr.length; i++) {
+        // number of subarrays containing A[i]:
+        // left: i + 1
+        // right: n - i
+        sum += ((i + 1) * (n - i) + 1) / 2 * A[i];
+    }
+    return sum;
+}
+{% endhighlight %}
+
 [heaters]: https://leetcode.com/problems/heaters/
 [minimum-time-difference]: https://leetcode.com/problems/minimum-time-difference/
 [most-visited-sector-in-a-circular-track]: https://leetcode.com/problems/most-visited-sector-in-a-circular-track/
 [rabbits-in-forest]: https://leetcode.com/problems/rabbits-in-forest/
 [reverse-integer]: https://leetcode.com/problems/reverse-integer/
+[sum-of-all-odd-length-subarrays]: https://leetcode.com/problems/sum-of-all-odd-length-subarrays/

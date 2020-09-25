@@ -1,0 +1,92 @@
+---
+layout: post
+title:  "Dijkstra"
+tags: graph
+---
+[Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
+
+[Path with Maximum Probability][path-with-maximum-probability]
+
+{% highlight java %}
+public double maxProbability(int n, int[][] edges, double[] succProb, int start, int end) {
+    // builds graph
+    Map<Integer, List<int[]>> graph = new HashMap<>();  // node : (neighbor : prob index)
+    for (int i = 0; i < edges.length; i++) {
+        int[] edge = edges[i];
+        graph.computeIfAbsent(edge[0], k -> new ArrayList<>()).add(new int[]{edge[1], i});
+        graph.computeIfAbsent(edge[1], k -> new ArrayList<>()).add(new int[]{edge[0], i});
+    }
+
+    // Dijkstra
+    double[] p = new double[n];
+    p[start] = 1;
+
+    // max heap
+    Queue<Integer> pq = new PriorityQueue<>(Comparator.comparingDouble(i -> -p[i]));
+    int node = start;
+    pq.offer(node);
+
+    while (!pq.isEmpty() && node != end) {
+        node = pq.poll();
+
+        if (!graph.containsKey(node)) {
+            continue;
+        }
+
+        for (int[] pair : graph.get(node)) {
+            int neighbor = pair[0], index = pair[1];
+            if (p[node] * succProb[index] > p[neighbor]) {
+                p[neighbor] = p[node] * succProb[index];
+                pq.offer(neighbor);
+            }
+        }
+    }
+
+    return p[end];
+}
+{% endhighlight %}
+
+DFS will underflow or LTE.
+
+## Within K Steps
+
+[Cheapest Flights Within K Stops][cheapest-flights-within-k-stops]
+
+{% highlight java %}
+public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
+    // buils graph
+    Map<Integer, List<int[]>> graph = new HashMap<>();
+    for (int[] f : flights) {
+        graph.computeIfAbsent(f[0], k -> new ArrayList<>()).add(new int[]{f[1], f[2]});
+    }
+
+    // Dijkstra
+    int[] node = new int[]{src, 0, K};  // city, price, stops
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+    pq.add(node);
+
+    while (!pq.isEmpty()) {
+        node = pq.poll();
+
+        if (node[0] == dst) {
+            return node[1];
+        }
+
+        if (node[2] >= 0) {
+            if (!graph.containsKey(node[0])) {
+                continue;
+            }
+
+            for (int[] pair : graph.get(node[0])) {
+                // some nodes may have the same city due to different paths
+                pq.offer(new int[]{pair[0], node[1] + pair[1], node[2] - 1});
+            }
+        }
+    }
+
+    return -1;
+}
+{% endhighlight %}
+
+[cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
+[path-with-maximum-probability]: https://leetcode.com/problems/path-with-maximum-probability/

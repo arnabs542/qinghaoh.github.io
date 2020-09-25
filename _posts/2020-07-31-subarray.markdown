@@ -36,7 +36,9 @@ public int subarraySum(int[] nums, int k) {
 {% endhighlight %}
 
 ## Sliding Window
+
 ### Index Map
+
 [Longest Substring Without Repeating Characters][longest-substring-without-repeating-characters]
 
 [Max Consecutive Ones III][max-consecutive-ones-iii]
@@ -113,6 +115,109 @@ public int characterReplacement(String s, int k) {
 
 If we apply `nums[i] -> nums[i] % 2`, the problem becomes [Subarray Sum Equals K][subarray-sum-equals-k]
 
+Another solution is by "three" pointers:
+
+{% highlight java %}
+public int numberOfSubarrays(int[] nums, int k) {
+    int i = 0, j = 0, count = 0, result = 0;
+    while (j < nums.length) {
+        if (nums[j] % 2 == 1) {
+            k--;
+            count = 0;
+        }
+
+        while (k == 0) {
+            k += nums[i++] % 2;
+            count++;
+        }
+
+        // i moves forward by `count` steps in the last move
+        result += count;
+        j++;
+    }
+
+    return result;
+}
+{% endhighlight %}
+
+### Minimum Length
+
+[Minimum Size Subarray Sum][minimum-size-subarray-sum]
+
+{% highlight java %}
+public int minSubArrayLen(int s, int[] nums) {
+    int i = 0, j = 0, sum = 0, min = nums.length + 1;
+    while (j < nums.length) {
+        s -= nums[j++];
+
+        while (s <= 0) {
+            min = Math.min(min, j - i);
+            s += nums[i++];
+        }
+    }
+
+    return min == nums.length + 1 ? 0 : min;
+}
+{% endhighlight %}
+
+### At Most K Different Elements
+
+[Subarrays with K Different Integers][subarrays-with-k-different-integers]
+
+{% highlight java %}
+public int subarraysWithKDistinct(int[] A, int K) {
+    return atMost(A, K) - atMost(A, K - 1);
+}
+
+private int atMost(int[] A, int K) {
+    int[] count = new int[A.length + 1];
+    int i = 0, j = 0, result = 0;
+    while (j < A.length) {
+        if (count[A[j]] == 0) {
+            K--;
+        }
+        count[A[j]]++;
+
+        while (K < 0) {
+            if (--count[A[i++]] == 0) {
+                K++;
+            }
+        }
+
+        // (j - i + 1) is the length of each valid contiguous subarray with at most K different integers
+        // Fomula: given an array of length n, it will produce (n * (n + 1)) / 2 total contiguous subarrays
+        result += j - i + 1;
+        j++;
+    }
+
+    return result;
+}
+{% endhighlight %}
+
+[Count Number of Nice Subarrays][count-number-of-nice-subarrays]
+
+{% highlight java %}
+public int numberOfSubarrays(int[] nums, int k) {
+    return atMost(nums, k) - atMost(nums, k - 1);
+}
+
+private int atMost(int[] nums, int k) {
+    int i = 0, j = 0, result = 0;
+    while (j < nums.length) {
+        k -= nums[j] % 2;
+
+        while (k < 0) {
+            k += nums[i++] % 2;
+        }
+
+        result += j - i + 1;
+        j++;
+    }
+
+    return result;
+}
+{% endhighlight %}
+
 ## Dynamic Programming
 
 [Find Two Non-overlapping Sub-arrays Each With Target Sum][find-two-non-overlapping-sub-arrays-each-with-target-sum]
@@ -156,4 +261,6 @@ Generalization: `N` non-overlapping subarrays
 [longest-repeating-character-replacement]: https://leetcode.com/problems/longest-repeating-character-replacement/
 [longest-substring-without-repeating-characters]: https://leetcode.com/problems/longest-substring-without-repeating-characters/
 [max-consecutive-ones-iii]: https://leetcode.com/problems/max-consecutive-ones-iii/
+[minimum-size-subarray-sum]: https://leetcode.com/problems/minimum-size-subarray-sum/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/
+[subarrays-with-k-different-integers]: https://leetcode.com/problems/subarrays-with-k-different-integers/

@@ -35,3 +35,4 @@ tag: map
 {% highlight java %}
 {% endhighlight %}
 
+* [default V computeIfAbsent(K key, Function\<? super K, ? extends V\> mappingFunction)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html#computeIfAbsent(K,java.util.function.Function))

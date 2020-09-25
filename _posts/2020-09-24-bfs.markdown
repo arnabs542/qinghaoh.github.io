@@ -1,0 +1,62 @@
+---
+layout: post
+title:  "BFS"
+tags: bfs
+---
+## Template
+
+### Queue
+
+[Cheapest Flights Within K Stops][cheapest-flights-within-k-stops]
+
+{% highlight java %}
+private int MAX = 100 * (100 - 1) / 2 * 10000 + 1;
+
+public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
+    // buils graph
+    Map<Integer, List<int[]>> graph = new HashMap<>();
+    for (int[] f : flights) {
+        graph.computeIfAbsent(f[0], k -> new ArrayList<>()).add(new int[]{f[1], f[2]});
+    }
+
+    // BFS
+    Queue<int[]> q = new LinkedList<>();
+    int[] node = new int[]{src, 0};  // city, price
+    q.offer(node);
+
+    int stop = -1, min = MAX;
+    while (!q.isEmpty() && stop <= K) {
+        int size = q.size();
+        for (int i = 0; i < size; i++) {
+            node = q.poll();
+
+            if (node[0] == dst) {
+                min = Math.min(min, node[1]);
+            }
+
+            if (stop == K || !graph.containsKey(node[0])) {
+                continue;
+            }
+
+            for (int[] pair : graph.get(node[0])) {
+                int neighbor = pair[0], price = pair[1];
+
+                // pruning
+                if (node[1] + price > min) {
+                    continue;
+                }
+
+                // adds city:price pair.
+                // some pairs may have the same city due to different paths
+                q.offer(new int[]{neighbor, node[1] + price});
+            }
+        }
+
+        stop++;
+    }
+
+    return min == MAX ? -1 : min;
+}
+{% endhighlight %}
+
+[cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/

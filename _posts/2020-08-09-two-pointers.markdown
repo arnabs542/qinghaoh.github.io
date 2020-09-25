@@ -35,5 +35,29 @@ public boolean backspaceCompare(String S, String T) {
 }
 {% endhighlight %}
 
-[remove-all-adjacent-duplicates-in-string]: https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/
+[Trapping Rain Water][trapping-rain-water]
+
+{% highlight java %}
+public int trap(int[] height) {
+    int water = 0, leftMax = 0, rightMax = 0;
+    int left = 0, right = height.length - 1;
+    while (left < right) {
+        // moves pointer of one side if its height is lower
+        // this ensures left and right meet at max height
+        // in this way, we avoid one pass to find the max height
+        if (height[left] < height[right]) {
+            leftMax = Math.max(leftMax, height[left]);
+            water += leftMax - height[left++];
+        } else {
+            rightMax = Math.max(rightMax, height[right]);
+            water += rightMax - height[right--];
+        }
+    }
+
+    return water;
+}
+{% endhighlight %}
+
 [backspace-string-compare]: https://leetcode.com/problems/backspace-string-compare/
+[remove-all-adjacent-duplicates-in-string]: https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/
+[trapping-rain-water]: https://leetcode.com/problems/trapping-rain-water/
