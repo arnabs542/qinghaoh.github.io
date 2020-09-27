@@ -1,0 +1,82 @@
+---
+layout: post
+title:  "MST"
+tags: mst
+---
+## Algorithms
+
+### Prim's
+
+[Prim's algorithm](https://en.wikipedia.org/wiki/Prim%27s_algorithm)
+
+[Min Cost to Connect All Points][min-cost-to-connect-all-points]
+
+{% highlight java %}
+// Prim's
+public int minCostConnectPoints(int[][] points) {
+    boolean[] mst = new boolean[points.length];
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));  // point, distance
+
+    int node = 0, count = 1, cost = 0;
+    while (count < points.length) {
+        mst[node] = true;
+
+        // adds edges of the current node to the heap
+        for (int i = 0; i < points.length; i++) {
+            if (!mst[i]) {
+                pq.offer(new int[]{i, Math.abs(points[node][0] - points[i][0]) + Math.abs(points[node][1] - points[i][1])});
+            }
+        }
+
+        // finds the tree nearest to the forest
+        while (mst[pq.peek()[0]]) {
+            pq.poll();
+        }
+
+        int[] pair = pq.poll();
+        node = pair[0];
+        cost += pair[1];
+        count++;
+    }
+
+    return cost;
+}
+{% endhighlight %}
+
+For complete graph, the number edges is much more than point. Therefore, we can keep track of min distance of each point instead.
+
+{% highlight java %}
+private int MAX = 4_000_001;
+
+// Prim's (complete graph)
+public int minCostConnectPoints(int[][] points) {
+    int[] d = new int[points.length];  // min distance to the current point
+    Arrays.fill(d, MAX);
+
+    int node = 0, count = 1, cost = 0;
+    while (count < points.length) {
+        // marks the current point as in the forest
+        d[node] = Integer.MAX_VALUE;
+
+        // finds the nearest point and updates min distances
+        int minNode = node;
+        for (int i = 0; i < points.length; i++) {
+            if (d[i] != Integer.MAX_VALUE) {
+                d[i] = Math.min(d[i], Math.abs(points[node][0] - points[i][0]) + Math.abs(points[node][1] - points[i][1]));
+
+                if (d[i] < d[minNode]) {
+                    minNode = i;
+                }
+            }
+        }
+
+        cost += d[minNode];
+        node = minNode;
+        count++;
+    }
+
+    return cost;
+}
+{% endhighlight %}
+
+[min-cost-to-connect-all-points]: https://leetcode.com/problems/min-cost-to-connect-all-points/

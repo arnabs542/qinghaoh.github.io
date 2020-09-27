@@ -44,3 +44,7 @@ $$ \left\lceil {\frac {n}{m}}\right\rceil =\left\lfloor {\frac {n+m-1}{m}}\right
 $$ \left\lfloor {\frac {n}{m}}\right\rfloor =\left\lceil {\frac {n-m+1}{m}}\right\rceil =\left\lceil {\frac {n+1}{m}}\right\rceil -1 $$
 
 [implement-rand10-using-rand7]: https://leetcode.com/problems/implement-rand10-using-rand7/
+
+[Inclusion–exclusion principle](https://en.wikipedia.org/wiki/Inclusion%E2%80%93exclusion_principle)
+
+$$ |A\cup B|=|A|+|B|-|A\cap B| $$

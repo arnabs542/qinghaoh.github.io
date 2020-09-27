@@ -1,9 +1,11 @@
 ---
 layout: post
-title:  "Greatest Common Divisor"
+title:  "GCD/LCM"
 tags: math
 usemathjax: true
 ---
+# Greatest Common Divisor
+
 [Euclidean algorithm](https://en.wikipedia.org/wiki/Euclidean_algorithm)
 
 {% highlight java %}
@@ -42,6 +44,10 @@ public String gcdOfStrings(String str1, String str2) {
 {% endhighlight %}
 
 [X of a Kind in a Deck of Cards][x-of-a-kind-in-a-deck-of-cards]
+
+# Least Common Multiple
+
+$$ {lcm} (a,b)={\frac {|a\cdot b|}{\gcd(a,b)}} $$
 
 [greatest-common-divisor-of-strings]: https://leetcode.com/problems/greatest-common-divisor-of-strings/
 [x-of-a-kind-in-a-deck-of-cards]: https://leetcode.com/problems/x-of-a-kind-in-a-deck-of-cards/

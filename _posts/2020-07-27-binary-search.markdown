@@ -60,7 +60,12 @@ There can be variants of this template. For example: [First Bad Version][first-b
 * `high = mid - 1`, `high = mid`, ...
 * `return -1`, `return low`, `return high`, ...
 
+## While Condition
+
+`while (low < high)` is a better choice. The while loop only exits when `low == high`, which means there's only one element left.
+
 ## Boundary
+
 The initial boundary `[low, high]` should include ***all*** possible answers. When each loop begins, any value within the range `[low, high]` could be the answer.
 
 ## Mid
@@ -70,12 +75,32 @@ mid = low + (high - low) / 2;  // lower mid
 mid = low + (high - low + 1) / 2;  // upper mid
 {% endhighlight %}
 
-Avoid infinite loop. Test your code with these examples: `[0]`, `[0, 1]`, `[0, 1, 2]` and `[0, 1, 2, 3]`. 
+To avoid infinite loop, here's a rule of thumb:
 
-Always make sure:
-* The range shrinks
-* No infinite loop
-* Returns the right thing
+* lower mid: `low = mid + 1` and `high = mid`
+* upper mid: `low = mid` and `high = mid - 1`
+
+## Boundary Update
+
+Rule of thumb: always use a logic that you can exclude `mid`.
+
+{% highlight java %}
+if (nums[mid] > target) {
+    high = mid - 1;
+} else {
+    low = mid;
+}
+{% endhighlight %}
+
+{% highlight java %}
+if (nums[mid] < target) {
+    low = mid + 1;
+} else {
+    high = mid;
+}
+{% endhighlight %}
+
+To understand the corner cases, test your code with these examples: `[0]`, `[0, 1]`, `[0, 1, 2]` and `[0, 1, 2, 3]`.
 
 # Variants
 [Search Insert Position][search-insert-position]
@@ -213,6 +238,179 @@ public int minEatingSpeed(int[] piles, int H) {
 }
 {% endhighlight %}
 
+
+# Generalization
+
+@zhijun_liao
+
+Minimize `k`, s.t. `condition(k) == true`
+
+{% highlight java %}
+public int binarySearch(int[] arr) {
+    int low = min(searchSpace), high = max(searchSpace);
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (condition(mid)) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return low;
+}
+
+private boolean condition(int value) {
+}
+{% endhighlight %}
+
+[Minimum Number of Days to Make m Bouquets][minimum-number-of-days-to-make-m-bouquets]
+
+{% highlight java %}
+public int minDays(int[] bloomDay, int m, int k) {
+    int max = 0;
+    for (int d : bloomDay) {
+        max = Math.max(max, d);
+    }
+
+    if (bloomDay.length < m * k) {
+        return -1;
+    }
+
+    int low = 1, high = max;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (condition(bloomDay, m, k, mid)) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    return low;
+}
+
+private boolean condition(int[] bloomDay, int m, int k, int day) {
+    int bouquet = 0, flower = 0;
+    for (int d : bloomDay) {
+        if (d <= day) {
+            if (++flower % k == 0) {
+                bouquet++;
+            }
+        } else {
+            flower = 0;
+        }
+    }
+    return bouquet >= m;
+}
+{% endhighlight %}
+
+[Split Array Largest Sum][split-array-largest-sum]
+
+{% highlight java %}
+public int splitArray(int[] nums, int m) {
+    int sum = 0, max = 0;
+    for (int num : nums) {
+        sum += num;
+        max = Math.max(max, num);
+    }
+
+    int low = max, high = sum;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (condition(nums, mid, m)) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }        
+    return low;
+}
+
+/**
+ * Check whether with the given largest subarray sum, the array can be split into m subrrays.
+ * @param nums original array
+ * @param s largest subarray sum
+ * @param m number of subarrays
+ * @return true if the array can be split into m subarrays, otherwise false
+ */
+private boolean condition(int[] nums, int s, int m) {
+    int count = 1, sum = 0;
+    for (int num : nums) {
+        if (sum + num > s) {
+            count++;
+            sum = 0;
+        }
+        sum += num;
+    }
+
+    // count is the min number of subarrays that nums can be split into
+    // and the sum of each subarray is no more than s
+    return count <= m;
+}
+{% endhighlight %}
+
+Similarly,
+
+Maximize `k`, s.t. `condition(k) == true`
+
+{% highlight java %}
+public int binarySearch(int[] arr) {
+    int low = min(searchSpace), high = max(searchSpace);
+    while (low < high) {
+        int mid = low + (high - low + 1) / 2;
+        if (condition(mid)) {
+            low = mid;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return low;
+}
+
+private boolean condition(int value) {
+}
+{% endhighlight %}
+[Magnetic Force Between Two Balls][magnetic-force-between-two-balls]
+
+{% highlight java %}
+public int maxDistance(int[] position, int m) {
+    Arrays.sort(position);
+
+    int low = 0, high = position[position.length - 1] - position[0];
+    while (low < high) {
+        int mid = low + (high - low + 1) / 2;
+        if (condition(position, mid, m)) {
+            low = mid;
+        } else {
+            high = mid - 1;
+        }
+    }
+
+    return low;
+}
+
+/**
+ * Counts the max number of balls can be placed into baskets with the given minimum distance.
+ * This function is monotonically decreasing with respect to d.
+ * @param position basket postitions
+ * @param d minimum distance between any two balls
+ * @return true if number of balls can be places into baskets is no less than m, otherwise false
+ */
+private boolean condition(int[] position, int d, int m) {
+    // Always place first object at position[0]
+    // This ensures we can place the most balls
+    int count = 1, curr = position[0];
+    for (int i = 1; i < position.length; i++) {
+        if (position[i] - curr >= d) {
+            count++;
+            curr = position[i];
+        }
+    }
+
+    return count >= m;
+}
+{% endhighlight %}
+
 # Java
 ## Arrays
 [public static \<T\> int binarySearch(T\[\] a, int fromIndex, int toIndex, T key, Comparator\<? super T\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#binarySearch-T:A-int-int-T-java.util.Comparator-)
@@ -226,6 +424,10 @@ The *insertion point* is defined as the point at which the key would be inserted
 [find-k-closest-elements]: https://leetcode.com/problems/find-k-closest-elements/
 [first-bad-version]: https://leetcode.com/problems/first-bad-version/
 [h-index-ii]: https://leetcode.com/problems/h-index-ii/
+[koko-eating-bananas]: https://leetcode.com/problems/koko-eating-bananas/
 [kth-missing-positive-number]: https://leetcode.com/problems/kth-missing-positive-number/
+[magnetic-force-between-two-balls]: https://leetcode.com/problems/magnetic-force-between-two-balls/
+[minimum-number-of-days-to-make-m-bouquets]: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/
+[split-array-largest-sum]: https://leetcode.com/problems/split-array-largest-sum/
 [search-insert-position]: https://leetcode.com/problems/search-insert-position/
 [the-k-weakest-rows-in-a-matrix]: https://leetcode.com/problems/the-k-weakest-rows-in-a-matrix/
