@@ -58,6 +58,24 @@ public int trap(int[] height) {
 }
 {% endhighlight %}
 
+[Container With Most Water][container-with-most-water]
+
+{% highlight java %}
+public int maxArea(int[] height) {
+    int area = 0, left = 0, right = height.length - 1;
+    while (left < right) {
+        area = Math.max(area, Math.min(height[left], height[right]) * (right - left));
+        if (height[left] < height[right]) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    return area;
+}
+{% endhighlight %}
+
 [backspace-string-compare]: https://leetcode.com/problems/backspace-string-compare/
+[container-with-most-water]: https://leetcode.com/problems/container-with-most-water/
 [remove-all-adjacent-duplicates-in-string]: https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/
 [trapping-rain-water]: https://leetcode.com/problems/trapping-rain-water/

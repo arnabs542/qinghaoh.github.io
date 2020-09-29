@@ -103,20 +103,52 @@ if (nums[mid] < target) {
 To understand the corner cases, test your code with these examples: `[0]`, `[0, 1]`, `[0, 1, 2]` and `[0, 1, 2, 3]`.
 
 # Variants
-[Search Insert Position][search-insert-position]
+[Find Minimum in Rotated Sorted Array][find-minimum-in-rotated-sorted-array]
 
 {% highlight java %}
-public int searchInsert(int[] nums, int target) {
-    int low = 0, high = nums.length - 1;
-    while (low <= high) {
+public int findMin(int[] num) {
+    int low = 0, high = num.length - 1;
+    while (low < high) {
         int mid = (low + high) >>> 1;
-        if (nums[mid] == target) {
-            return mid;
-        }
-        if (nums[mid] < target) {
-            low = mid + 1;
+        if (num[mid] < num[high]) {
+            high = mid;
         } else {
-            high = mid - 1;
+            low = mid + 1;
+        }
+    }
+    return num[low];
+}
+{% endhighlight %}
+
+[Search in Rotated Sorted Array][search-in-rotated-sorted-array]
+
+{% highlight java %}
+public int search(int[] nums, int target) {
+    int minIndex = findMinIndex(nums);
+    if (target == nums[minIndex]) {
+        return minIndex;
+    }
+
+    int low = minIndex, high = minIndex - 1 + nums.length;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (nums[mid % nums.length] >= target) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return nums[low % nums.length] == target ? low % nums.length : -1;
+}
+
+private int findMinIndex(int[] num) {
+    int low = 0, high = num.length - 1;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (num[mid] < num[high]) {
+            high = mid;
+        } else {
+            low = mid + 1;
         }
     }
     return low;
@@ -183,30 +215,45 @@ public int findKthPositive(int[] arr, int k) {
 }
 {% endhighlight %}
 
-[H-Index II][h-index-ii]
+# Generalization
+
+@zhijun_liao
+
+Minimize `k`, s.t. `condition(k) == true`
 
 {% highlight java %}
-public int hIndex(int[] citations) {
-    int low = 0, high = citations.length;
+public int binarySearch(int[] arr) {
+    int low = min(searchSpace), high = max(searchSpace);
     while (low < high) {
         int mid = (low + high) >>> 1;
-        // Find the first index i so that
-        //  citations[i] >= citations.length - i
-        //  where citations.length - i is the potential h
-        //
-        // Let b[i] = citations[i] + i
-        //  b[i + 1] - b[i] == citations[i + 1] + (i + 1) - (citations[i] + i)
-        //                  == citations[i + 1] - citations[i] + 1 > 0
-        // So b[i] is strictly increasing
-        if (citations[mid] >= citations.length - mid) {
+        if (condition(mid)) {
             high = mid;
         } else {
-            // citations[i] < citations.length - i
-            //  so citations[i] < h, which contradicts "at least h citations EACH"
             low = mid + 1;
         }
     }
-    return citations.length - low;
+    return low;
+}
+
+// monotonically increasing
+private boolean condition(int value) {
+}
+{% endhighlight %}
+
+[Search Insert Position][search-insert-position]
+
+{% highlight java %}
+public int searchInsert(int[] nums, int target) {
+    int low = 0, high = nums.length;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (nums[mid] >= target) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return low;
 }
 {% endhighlight %}
 
@@ -238,19 +285,15 @@ public int minEatingSpeed(int[] piles, int H) {
 }
 {% endhighlight %}
 
-
-# Generalization
-
-@zhijun_liao
-
-Minimize `k`, s.t. `condition(k) == true`
+[Kth Smallest Element in a Sorted Matrix][kth-smallest-element-in-a-sorted-matrix]
 
 {% highlight java %}
-public int binarySearch(int[] arr) {
-    int low = min(searchSpace), high = max(searchSpace);
+// O(n * log(max - min))
+public int kthSmallest(int[][] matrix, int k) {
+    int low = matrix[0][0], high = matrix[matrix.length - 1][matrix[0].length - 1];
     while (low < high) {
         int mid = (low + high) >>> 1;
-        if (condition(mid)) {
+        if (condition(matrix, mid, k)) {
             high = mid;
         } else {
             low = mid + 1;
@@ -259,7 +302,59 @@ public int binarySearch(int[] arr) {
     return low;
 }
 
-private boolean condition(int value) {
+private boolean condition(int[][] matrix, int value, int k) {
+    // starts from top-right
+    int count = 0, i = 0, j = matrix[0].length - 1;
+    while (i < matrix.length && j >= 0) {
+        if (matrix[i][j] > value) {
+            j--;
+        } else {
+            count += j + 1;
+            i++;
+        }
+    }
+    return count >= k;
+}
+{% endhighlight %}
+
+[H-Index II][h-index-ii]
+
+{% highlight java %}
+public int hIndex(int[] citations) {
+    int low = 0, high = citations.length;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (condition(citations, mid)) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return citations.length - low;
+}
+
+/**
+ * Checks if the author has (N - lower) papers that have at least (N - lower) citations each.
+ * @param lower number of papers with lower citations. When h is valid, lower == N - h
+ * @return true if the condition is met, otherwise false
+ */
+private boolean condition(int[] citations, int lower) {
+    // a[i] = citations[i] + i
+    // a[i + 1] - a[i] == citations[i + 1] + (i + 1) - (citations[i] + i)
+    //                 == citations[i + 1] - citations[i] + 1 > 0
+    // so a[i] is strictly increasing
+    //
+    // 1. citations[N - h] >= h: h of his/her N papers have at least h citations each
+    // 2. citations[N - h - 1] <= h: the other N - h papers have no more than h citations each
+    //
+    // Now we will prove we only need to finds the minimum value of lower that satisfies #1.
+    // If #1 is true, we have:
+    //  h == citations.length - lower
+    //  citations[lower] == h
+    //
+    // Then #2 is true, too:
+    //  citations[N - h - 1] = citations[lower - 1] <= citations[lower] == h
+    return citations[lower] >= citations.length - lower;
 }
 {% endhighlight %}
 
@@ -367,9 +462,11 @@ public int binarySearch(int[] arr) {
     return low;
 }
 
+// monotonically decreasing
 private boolean condition(int value) {
 }
 {% endhighlight %}
+
 [Magnetic Force Between Two Balls][magnetic-force-between-two-balls]
 
 {% highlight java %}
@@ -422,12 +519,15 @@ The *insertion point* is defined as the point at which the key would be inserted
 
 [binary-search]: https://leetcode.com/problems/binary-search/
 [find-k-closest-elements]: https://leetcode.com/problems/find-k-closest-elements/
+[find-minimum-in-rotated-sorted-array]: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
 [first-bad-version]: https://leetcode.com/problems/first-bad-version/
 [h-index-ii]: https://leetcode.com/problems/h-index-ii/
 [koko-eating-bananas]: https://leetcode.com/problems/koko-eating-bananas/
 [kth-missing-positive-number]: https://leetcode.com/problems/kth-missing-positive-number/
+[kth-smallest-element-in-a-sorted-matrix]: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
 [magnetic-force-between-two-balls]: https://leetcode.com/problems/magnetic-force-between-two-balls/
 [minimum-number-of-days-to-make-m-bouquets]: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/
 [split-array-largest-sum]: https://leetcode.com/problems/split-array-largest-sum/
 [search-insert-position]: https://leetcode.com/problems/search-insert-position/
+[search-in-rotated-sorted-array]: https://leetcode.com/problems/search-in-rotated-sorted-array/
 [the-k-weakest-rows-in-a-matrix]: https://leetcode.com/problems/the-k-weakest-rows-in-a-matrix/

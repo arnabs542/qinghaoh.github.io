@@ -3,6 +3,12 @@ layout: post
 title:  "Multi-dimension"
 tags: array
 ---
+# Search
+
+## Reduce to One-dimension
+[Search a 2D Matrix][search-a-2d-matrix]
+
+## Monotonic in Each Dimenstion
 [Find Positive Integer Solution for a Given Equation][find-positive-integer-solution-for-a-given-equation]
 
 {% highlight java %}
@@ -25,3 +31,4 @@ public List<List<Integer>> findSolution(CustomFunction customfunction, int z) {
 {% endhighlight %}
 
 [find-positive-integer-solution-for-a-given-equation]: https://leetcode.com/problems/find-positive-integer-solution-for-a-given-equation/
+[search-a-2d-matrix]: https://leetcode.com/problems/search-a-2d-matrix/
