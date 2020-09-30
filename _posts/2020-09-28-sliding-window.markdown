@@ -17,10 +17,9 @@ public int longestOnes(int[] A, int K) {
         if (A[j] == 0) {
             zero++;
         }
-        while (zero > K) {
-            if (A[i++] == 0) {
-                zero--;
-            }
+
+        if (zero > K && A[i++] == 0) {
+            zero--;
         }
         max = Math.max(max, j - i + 1);
         j++;
@@ -49,6 +48,27 @@ public int longestOnes(int[] A, int K) {
 
     // i, j is a sliding window.
     // its span memorizes the max range so far
+    return j - i;
+}
+{% endhighlight %}
+
+[Fruit Into Baskets][fruit-into-baskets]
+
+{% highlight java %}
+public int totalFruit(int[] tree) {
+    int[] type = new int[tree.length];
+    int k = 2;
+    int i = 0, j = 0, result = 0;
+    while (j < tree.length) {
+        if (type[tree[j]]++ == 0) {
+            k--;
+        }
+
+        if (k < 0 && --type[tree[i++]] == 0) {
+            k++;
+        }
+        j++;
+    }
     return j - i;
 }
 {% endhighlight %}
@@ -126,6 +146,31 @@ public int minSubArrayLen(int s, int[] nums) {
 }
 {% endhighlight %}
 
+## At Least
+
+[Number of Substrings Containing All Three Characters][number-of-substrings-containing-all-three-characters]
+
+{% highlight java %}
+public int numberOfSubstrings(String s) {
+    int k = 3;
+    int[] count = new int[k];
+    int i = 0, j = 0, result = 0;
+    while (j < s.length()) {
+        if (count[s.charAt(j++) - 'a']++ == 0) {
+            k--;
+        }
+
+        while (k == 0) {
+            if (--count[s.charAt(i++) - 'a'] == 0) {
+                k++;
+            }
+        }
+        result += i;
+    }
+    return result;
+}
+{% endhighlight %}
+
 ## At Most K Different Elements
 
 [Subarrays with K Different Integers][subarrays-with-k-different-integers]
@@ -184,7 +229,7 @@ private int atMost(int[] nums, int k) {
 }
 {% endhighlight %}
 
-[Find K-th Smallest Pair Distance]find-k-th-smallest-pair-distance]
+[Find K-th Smallest Pair Distance][find-k-th-smallest-pair-distance]
 
 {% highlight java %}
 public int smallestDistancePair(int[] nums, int k) {
@@ -217,9 +262,11 @@ private boolean condition(int[] nums, int distance, int k) {
 
 [count-number-of-nice-subarrays]: https://leetcode.com/problems/count-number-of-nice-subarrays/
 [find-k-th-smallest-pair-distance]: https://leetcode.com/problems/find-k-th-smallest-pair-distance/
+[fruit-into-baskets]: https://leetcode.com/problems/fruit-into-baskets/
 [longest-repeating-character-replacement]: https://leetcode.com/problems/longest-repeating-character-replacement/
 [longest-substring-without-repeating-characters]: https://leetcode.com/problems/longest-substring-without-repeating-characters/
 [max-consecutive-ones-iii]: https://leetcode.com/problems/max-consecutive-ones-iii/
 [minimum-size-subarray-sum]: https://leetcode.com/problems/minimum-size-subarray-sum/
+[number-of-substrings-containing-all-three-characters]: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/
 [subarrays-with-k-different-integers]: https://leetcode.com/problems/subarrays-with-k-different-integers/
