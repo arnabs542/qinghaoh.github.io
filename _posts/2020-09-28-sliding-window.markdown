@@ -11,20 +11,17 @@ tags: array
 
 {% highlight java %}
 public int longestOnes(int[] A, int K) {
-    int i = 0, j = 0;
-    int zero = 0, max = 0;
+    int i = 0, j = 0, zero = 0;
     while (j < A.length) {
-        if (A[j] == 0) {
+        if (A[j++] == 0) {
             zero++;
         }
 
         if (zero > K && A[i++] == 0) {
             zero--;
         }
-        max = Math.max(max, j - i + 1);
-        j++;
     }
-    return max;
+    return j - i;
 }
 {% endhighlight %}
 
@@ -78,22 +75,18 @@ public int totalFruit(int[] tree) {
 {% highlight java %}
 public int characterReplacement(String s, int k) {
     int[] count = new int[26];
-    int i = 0, j = 0;
-    int max = 0, length = 0;
+    int i = 0, j = 0, max = 0;
     while (j < s.length()) {
         // the sliding window never shrinks, even if it covers an invalid substring
         // grows the window when the count of the new char exceeds the historical max count
-        max = Math.max(max, ++count[s.charAt(j) - 'A']);
+        max = Math.max(max, ++count[s.charAt(j++) - 'A']);
         // window size is j - i + 1
         // right shifts the whole window by one
-        if (j - i + 1 - max > k) {
-            count[s.charAt(i) - 'A']--;
-            i++;
+        if (j - i - max > k) {
+            count[s.charAt(i++) - 'A']--;
         }
-        length = Math.max(length, j - i + 1);
-        j++;
     }
-    return length;
+    return j - i;
 }
 {% endhighlight %}
 
@@ -132,7 +125,7 @@ public int numberOfSubarrays(int[] nums, int k) {
 
 {% highlight java %}
 public int minSubArrayLen(int s, int[] nums) {
-    int i = 0, j = 0, sum = 0, min = nums.length + 1;
+    int i = 0, j = 0, min = nums.length + 1;
     while (j < nums.length) {
         s -= nums[j++];
 
@@ -143,6 +136,37 @@ public int minSubArrayLen(int s, int[] nums) {
     }
 
     return min == nums.length + 1 ? 0 : min;
+}
+{% endhighlight %}
+
+[Replace the Substring for Balanced String][replace-the-substring-for-balanced-string]
+
+{% highlight java %}
+public int balancedString(String s) {
+    int[] count = new int[26];
+    for (char c : s.toCharArray()) {
+        count[c - 'A']++;
+    }
+
+    int i = 0, j = 0, min = s.length(), k = s.length() / 4;
+    while (j < s.length()) {
+        count[s.charAt(j++) - 'A']--;
+
+        while (i < s.length() && condition(count, k)) {
+            min = Math.min(min, j - i);
+            count[s.charAt(i++) - 'A']++;
+        }
+    }
+    return min;
+}
+
+private boolean condition(int[] count, int k) {
+    for (char c : "QWER".toCharArray()) {
+        if (count[c - 'A'] > k) {
+            return false;
+        }
+    }
+    return true;
 }
 {% endhighlight %}
 
@@ -268,5 +292,6 @@ private boolean condition(int[] nums, int distance, int k) {
 [max-consecutive-ones-iii]: https://leetcode.com/problems/max-consecutive-ones-iii/
 [minimum-size-subarray-sum]: https://leetcode.com/problems/minimum-size-subarray-sum/
 [number-of-substrings-containing-all-three-characters]: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
+[replace-the-substring-for-balanced-string]: https://leetcode.com/problems/replace-the-substring-for-balanced-string/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/
 [subarrays-with-k-different-integers]: https://leetcode.com/problems/subarrays-with-k-different-integers/

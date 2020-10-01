@@ -106,17 +106,41 @@ To understand the corner cases, test your code with these examples: `[0]`, `[0, 
 [Find Minimum in Rotated Sorted Array][find-minimum-in-rotated-sorted-array]
 
 {% highlight java %}
-public int findMin(int[] num) {
-    int low = 0, high = num.length - 1;
+public int findMin(int[] nums) {
+    int low = 0, high = nums.length - 1;
     while (low < high) {
         int mid = (low + high) >>> 1;
-        if (num[mid] < num[high]) {
+        if (nums[mid] < nums[high]) {
             high = mid;
         } else {
             low = mid + 1;
         }
     }
-    return num[low];
+    return nums[low];
+}
+{% endhighlight %}
+
+[Find Minimum in Rotated Sorted Array II][find-minimum-in-rotated-sorted-array-ii]
+
+{% highlight java %}
+public int findMin(int[] nums) {
+    int low = 0, high = nums.length - 1;
+    while (low < high) {
+        int mid = (low + high) / 2;
+        if (nums[mid] > nums[high]) {
+            low = mid + 1;
+        } else if (nums[mid] < nums[high]) {
+            high = mid;
+        } else {
+            // finds the pivot index
+            if (nums[high - 1] > nums[high]) {
+                low = high;
+                break;
+            }
+            high--;
+        }
+    }
+    return nums[low];
 }
 {% endhighlight %}
 
@@ -141,11 +165,11 @@ public int search(int[] nums, int target) {
     return nums[low % nums.length] == target ? low % nums.length : -1;
 }
 
-private int findMinIndex(int[] num) {
-    int low = 0, high = num.length - 1;
+private int findMinIndex(int[] nums) {
+    int low = 0, high = nums.length - 1;
     while (low < high) {
         int mid = (low + high) >>> 1;
-        if (num[mid] < num[high]) {
+        if (nums[mid] < nums[high]) {
             high = mid;
         } else {
             low = mid + 1;
@@ -154,6 +178,8 @@ private int findMinIndex(int[] num) {
     return low;
 }
 {% endhighlight %}
+
+[Search in Rotated Sorted Array II][search-in-rotated-sorted-array-ii]
 
 [Find K Closest Elements][find-k-closest-elements]
 
@@ -315,6 +341,11 @@ private boolean condition(int[][] matrix, int value, int k) {
     }
     return count >= k;
 }
+{% endhighlight %}
+
+[Kth Smallest Prime Fraction][k-th-smallest-prime-fraction]
+
+{% highlight java %}
 {% endhighlight %}
 
 [H-Index II][h-index-ii]
@@ -520,14 +551,17 @@ The *insertion point* is defined as the point at which the key would be inserted
 [binary-search]: https://leetcode.com/problems/binary-search/
 [find-k-closest-elements]: https://leetcode.com/problems/find-k-closest-elements/
 [find-minimum-in-rotated-sorted-array]: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+[find-minimum-in-rotated-sorted-array-ii]: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/
 [first-bad-version]: https://leetcode.com/problems/first-bad-version/
 [h-index-ii]: https://leetcode.com/problems/h-index-ii/
 [koko-eating-bananas]: https://leetcode.com/problems/koko-eating-bananas/
 [kth-missing-positive-number]: https://leetcode.com/problems/kth-missing-positive-number/
 [kth-smallest-element-in-a-sorted-matrix]: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
+[k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
 [magnetic-force-between-two-balls]: https://leetcode.com/problems/magnetic-force-between-two-balls/
 [minimum-number-of-days-to-make-m-bouquets]: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/
 [split-array-largest-sum]: https://leetcode.com/problems/split-array-largest-sum/
 [search-insert-position]: https://leetcode.com/problems/search-insert-position/
 [search-in-rotated-sorted-array]: https://leetcode.com/problems/search-in-rotated-sorted-array/
+[search-in-rotated-sorted-array-ii]: https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
 [the-k-weakest-rows-in-a-matrix]: https://leetcode.com/problems/the-k-weakest-rows-in-a-matrix/
