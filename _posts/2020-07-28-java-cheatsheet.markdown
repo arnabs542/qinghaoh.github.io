@@ -49,6 +49,8 @@ Comparator.comparing(String::length)
 
 * [static \<T\> Comparator\<T\> comparingInt(ToIntFunction\<? super T\> keyExtractor)](https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html#comparingInt-java.util.function.ToIntFunction-)
 * [static \<T extends Comparable\<? super T\>\> Comparator\<T\> naturalOrder()](https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html#naturalOrder--)
+* [default Comparator\<T\> reversed()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html#reversed())
+* [static \<T extends Comparable\<? super T\>\> Comparator\<T\> reverseOrder()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html#reverseOrder())
 
 # Deque
 [Deque](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Deque.html)
@@ -65,6 +67,10 @@ Deque<Integer> stack = new ArrayDeque<Integer>();
 * [MIN_VALUE](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#MIN_VALUE): -2^31 = -2147483648
 * [public static int bitCount(int i)](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#bitCount-int-)
 * [public int intValue()](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#intValue--)
+
+{% highlight java %}
+MAX_VALUE + 1 == MIN_VALUE
+{% endhighlight %}
 
 # IntStream
 * [int sum()](https://docs.oracle.com/javase/8/docs/api/java/util/stream/IntStream.html#sum--)

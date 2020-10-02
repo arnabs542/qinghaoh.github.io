@@ -32,7 +32,31 @@ tag: map
 | last | key | | highest |
 | sub | map | fromKey, toKey | [) |
 
+## Sort Map By Values
+
+### Ascending
+
 {% highlight java %}
+Map<String, Integer> unSortedMap = getUnSortedMap();
+LinkedHashMap<String, Integer> sortedMap = new LinkedHashMap<>();
+ 
+unSortedMap.entrySet()
+    .stream()
+    .sorted(Map.Entry.comparingByValue())
+    .forEachOrdered(e -> sortedMap.put(e.getKey(), e.getValue()));
+{% endhighlight %}
+
+## Descending
+
+{% highlight java %}
+Map<String, Integer> unSortedMap = getUnSortedMap();
+LinkedHashMap<String, Integer> sortedMap = new LinkedHashMap<>();
+ 
+unSortedMap.entrySet()
+    .stream()
+    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+    .forEachOrdered(e -> sortedMap.put(e.getKey(), e.getValue()));
 {% endhighlight %}
 
 * [default V computeIfAbsent(K key, Function\<? super K, ? extends V\> mappingFunction)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html#computeIfAbsent(K,java.util.function.Function))
+* [default boolean remove(Object key, Object value)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html#remove(java.lang.Object,java.lang.Object))

@@ -21,7 +21,7 @@ public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
 
     // BFS
     Queue<int[]> q = new LinkedList<>();
-    int[] node = new int[]{src, 0};  // city, price
+    int[] node = {src, 0};  // city, price
     q.offer(node);
 
     int stop = -1, min = MAX;

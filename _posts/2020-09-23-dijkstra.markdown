@@ -61,7 +61,7 @@ public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
     }
 
     // Dijkstra
-    int[] node = new int[]{src, 0, K};  // city, price, stops
+    int[] node = {src, 0, K};  // city, price, stops
     Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
     pq.add(node);
 

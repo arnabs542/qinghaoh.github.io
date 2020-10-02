@@ -22,6 +22,8 @@ public int[] finalPrices(int[] prices) {
 
 [Next Greater Element II][next-greater-element-ii]
 
+[Next Greater Node in Linked List][next-greater-node-in-linked-list]
+
 [Largest Rectangle in Histogram][largest-rectangle-in-histogram]
 
 {% highlight java %}
@@ -179,5 +181,6 @@ public int[] maxDepthAfterSplit(String seq) {
 [minimum-add-to-make-parentheses-valid]: https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/
 [minimum-insertions-to-balance-a-parentheses-string]: https://leetcode.com/problems/minimum-insertions-to-balance-a-parentheses-string/
 [next-greater-element-ii]: https://leetcode.com/problems/next-greater-element-ii/
+[next-greater-node-in-linked-list]: https://leetcode.com/problems/next-greater-node-in-linked-list/
 [remove-outermost-parentheses]: https://leetcode.com/problems/remove-outermost-parentheses/
 [reverse-substrings-between-each-pair-of-parentheses]: https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/

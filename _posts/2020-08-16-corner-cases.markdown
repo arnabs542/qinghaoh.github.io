@@ -124,9 +124,41 @@ public int sumOddLengthSubarrays(int[] arr) {
 }
 {% endhighlight %}
 
+[Sum of Mutated Array Closest to Target][sum-of-mutated-array-closest-to-target]
+
+{% highlight java %}
+public int findBestValue(int[] arr, int target) {
+    Arrays.sort(arr);
+
+    // after the loop, value is in (arr[i - 1], arr[i]]
+    // arr.length - i is the number of remaining elements in the array
+    int i = 0;
+    while (i < arr.length && target > arr[i] * (arr.length - i)) {
+        target -= arr[i++];
+    }
+
+    // value > arr[arr.length - 1]
+    // i.e. target > sum(arr)
+    if (i == arr.length) {
+        return arr[arr.length - 1];
+    }
+
+    // ceiling function
+    int value = target / (arr.length - i);
+    // 3 * 5 < 19 < 4 * 5
+    // 3 * 5 <= 15 < 4 * 5
+    if (target - value * (arr.length - i) > (value + 1) * (arr.length - i) - target) {
+        value++;
+    }
+
+    return value;
+}
+{% endhighlight %}
+
 [heaters]: https://leetcode.com/problems/heaters/
 [minimum-time-difference]: https://leetcode.com/problems/minimum-time-difference/
 [most-visited-sector-in-a-circular-track]: https://leetcode.com/problems/most-visited-sector-in-a-circular-track/
 [rabbits-in-forest]: https://leetcode.com/problems/rabbits-in-forest/
 [reverse-integer]: https://leetcode.com/problems/reverse-integer/
 [sum-of-all-odd-length-subarrays]: https://leetcode.com/problems/sum-of-all-odd-length-subarrays/
+[sum-of-mutated-array-closest-to-target]: https://leetcode.com/problems/sum-of-mutated-array-closest-to-target/

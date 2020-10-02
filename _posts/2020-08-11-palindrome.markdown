@@ -71,4 +71,4 @@ private int expand(String s, int left, int right) {
 ## Dynamic Programming
 
 [longest-palindromic-substring]: https://leetcode.com/problems/longest-palindromic-substring/
-[palindrome-numbre]: https://leetcode.com/problems/palindrome-number/
+[palindrome-number]: https://leetcode.com/problems/palindrome-number/

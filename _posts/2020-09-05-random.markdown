@@ -17,6 +17,8 @@ public int rand10() {
 }
 {% endhighlight %}
 
+## Shuffle
+
 [Fisher-Yates shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle)
 
 [Shuffle an Array][shuffle-an-array]
@@ -52,4 +54,38 @@ private void swap(int i, int j) {
 }
 {% endhighlight %}
 
+[Random Flip Matrix][random-flip-matrix]
+
+{% highlight java %}
+private Map<Integer, Integer> map;  // index : real index
+private Random rand;
+private int rows, cols, count;
+
+public Solution(int n_rows, int n_cols) {
+    map = new HashMap<>();
+    rand = new Random();
+    rows = n_rows;
+    cols = n_cols;
+    reset();
+}
+
+public int[] flip() {
+    int index = rand.nextInt(count--);
+
+    // swaps the real index at index and count
+    int tmp = map.getOrDefault(index, index);        
+    map.put(index, map.getOrDefault(count, count));
+    map.put(count, tmp);
+
+    return new int[]{tmp / cols, tmp % cols};
+}
+
+public void reset() {
+    // no need to clear the map
+    count = rows * cols;
+}
+{% endhighlight %}
+
+[implement-rand10-using-rand7]: https://leetcode.com/problems/implement-rand10-using-rand7/
+[random-flip-matrix]: https://leetcode.com/problems/random-flip-matrix/
 [shuffle-an-array]: https://leetcode.com/problems/shuffle-an-array/
