@@ -7,6 +7,8 @@ tags: array
 
 [Longest Substring Without Repeating Characters][longest-substring-without-repeating-characters]
 
+## Max Length
+
 [Max Consecutive Ones III][max-consecutive-ones-iii]
 
 {% highlight java %}
@@ -48,6 +50,8 @@ public int longestOnes(int[] A, int K) {
     return j - i;
 }
 {% endhighlight %}
+
+[Get Equal Substrings Within Budget][get-equal-substrings-within-budget]
 
 [Fruit Into Baskets][fruit-into-baskets]
 
@@ -287,6 +291,7 @@ private boolean condition(int[] nums, int distance, int k) {
 [count-number-of-nice-subarrays]: https://leetcode.com/problems/count-number-of-nice-subarrays/
 [find-k-th-smallest-pair-distance]: https://leetcode.com/problems/find-k-th-smallest-pair-distance/
 [fruit-into-baskets]: https://leetcode.com/problems/fruit-into-baskets/
+[get-equal-substrings-within-budget]: https://leetcode.com/problems/get-equal-substrings-within-budget/
 [longest-repeating-character-replacement]: https://leetcode.com/problems/longest-repeating-character-replacement/
 [longest-substring-without-repeating-characters]: https://leetcode.com/problems/longest-substring-without-repeating-characters/
 [max-consecutive-ones-iii]: https://leetcode.com/problems/max-consecutive-ones-iii/

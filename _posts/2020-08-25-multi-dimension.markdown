@@ -14,7 +14,7 @@ tags: array
 {% highlight java %}
 public List<List<Integer>> findSolution(CustomFunction customfunction, int z) {
     List<List<Integer>> result = new ArrayList<>();
-    // starts from bottom-right corner
+    // starts from bottom-right
     int x = 1, y = 1000;
     while (x <= 1000 && y > 0) {
         int v = customfunction.f(x, y);

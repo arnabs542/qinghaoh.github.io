@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Prioirty Queue"
+title:  "Priority Queue"
 tags: queue
 ---
 [Maximize Sum Of Array After K Negations][maximize-sum-of-array-after-k-negations]

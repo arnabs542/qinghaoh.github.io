@@ -15,6 +15,11 @@ Integer[] a = {0, 1, 2};
 int[] b = Arrays.stream(a).mapToInt(Integer::intValue).toArray();
 {% endhighlight %}
 
+# List\<Integer\> -> int[]
+{% highlight java %}
+list.stream().mapToInt(Integer::valueOf).toArray();
+{% endhighlight %}
+
 # int[] -> List\<Integer\>
 {% highlight java %}
 int[] a = {0, 1, 2};
@@ -40,7 +45,6 @@ char c = (char)('a' + i);
 char c = '9';
 int a = c - '0';
 {% endhighlight %}
-
 
 # Key with the max value in a map
 {% highlight java %}

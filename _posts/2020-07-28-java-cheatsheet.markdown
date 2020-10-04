@@ -62,6 +62,13 @@ Deque<Integer> stack = new ArrayDeque<Integer>();
 
 * [Iterator\<E\> descendingIterator()](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Deque.html#descendingIterator())
 
+# Enum
+[Class Enum\<E extends Enum\<E\>\>](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Enum.html)
+
+* ordinal()
+* toString()
+* valueOf()
+
 # Integer
 * [MAX_VALUE](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#MAX_VALUE): 2^31-1 = 2147483647
 * [MIN_VALUE](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#MIN_VALUE): -2^31 = -2147483648

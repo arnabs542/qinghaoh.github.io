@@ -1,0 +1,48 @@
+---
+layout: post
+title:  "Deque"
+tags: queue
+---
+[Deque](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Deque.html)
+
+## Monoqueue: Push/Pop Array Index
+
+[Final Prices With a Special Discount in a Shop][shortest-subarray-with-sum-at-least-k]
+
+{% highlight java %}
+public int shortestSubarray(int[] A, int K) {
+    // prefix sum
+    // finds the smallest j - i so that j > i and p[j] - p[i] >= K
+    int[] p = new int[A.length + 1];
+    for (int i = 0; i < A.length; i++) {
+        p[i + 1] = p[i] + A[i];   
+    }
+
+    int min = A.length + 1;
+    Deque<Integer> d = new ArrayDeque<>();  // monoqueue of p indices
+    for (int i = 0; i < p.length; i++) {
+        while (!d.isEmpty() && p[i] - p[d.peekFirst()] >= K) {
+            // if i is the best candidate, we don't need to consider it again
+            // proof:
+            //   for k > j > i, if p[j] - p[i] >= K and p[k] - p[i] >= K
+            //   we know k - i > j - i, so the length would be larger (worse)
+            min = Math.min(min, i - d.pollFirst());
+        }
+
+        // if j > i and p[j] <= p[i], j is a better candidate
+        // proof:
+        //   for any k > j > i, p[k] - p[j] >= p[k] - p[i]
+        //   if p[k] - p[i] >= K, then p[j] - p[i] >= K
+        //   and k - j < k - i
+        while (!d.isEmpty() && p[i] <= p[d.peekLast()]) {
+            d.pollLast();
+        }
+
+        d.offerLast(i);
+    }
+
+    return min <= A.length ? min : -1;
+}
+{% endhighlight %}
+
+[shortest-subarray-with-sum-at-least-k]: https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/
