@@ -60,3 +60,7 @@ unSortedMap.entrySet()
 
 * [default V computeIfAbsent(K key, Function\<? super K, ? extends V\> mappingFunction)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html#computeIfAbsent(K,java.util.function.Function))
 * [default boolean remove(Object key, Object value)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html#remove(java.lang.Object,java.lang.Object))
+
+# Map.Entry
+* [static \<K,V extends Comparable\<? super V\>\> Comparator\<Map.Entry\<K,V\>\> comparingByValue()](https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html#comparingByValue--)
+

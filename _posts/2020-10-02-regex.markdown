@@ -4,7 +4,22 @@ title:  "Regex"
 tags: regex
 ---
 
+# String
+* [public boolean matches(String regex)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#matches(java.lang.String))
+
+[Validate IP Address][validate-ip-address]
+
 {% highlight java %}
+public String validIPAddress(String IP) {
+    if (IP.matches("^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$")) {
+        return "IPv4";
+    }
+
+    if (IP.matches("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$")) {
+        return "IPv6";
+    }
+    return "Neither";
+}
 {% endhighlight %}
 
-[shortest-subarray-with-sum-at-least-k]: https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/
+[validate-ip-address]: https://leetcode.com/problems/validate-ip-address/

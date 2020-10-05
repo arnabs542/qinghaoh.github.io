@@ -105,6 +105,16 @@ public int minDistance(String word1, String word2) {
 }
 {% endhighlight %}
 
+[Delete Operation for Two Strings][delete-operation-for-two-strings]
+
+{% highlight java %}
+if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+    dp[i][j] = dp[i - 1][j - 1];
+} else {
+    dp[i][j] = Math.min(dp[i][j - 1], dp[i - 1][j]) + 1;
+}
+{% endhighlight %}
+
 [Min Cost Climbing Stairs][min-cost-climbing-stairs]
 
 {% highlight java %}
@@ -186,6 +196,7 @@ public int calculateMinimumHP(int[][] dungeon) {
 }
 {% endhighlight %}
 
+[delete-operation-for-two-strings]: https://leetcode.com/problems/delete-operation-for-two-strings/
 [dungeon-game]: https://leetcode.com/problems/dungeon-game/
 [edit-distance]: https://leetcode.com/problems/edit-distance/
 [greatest-sum-divisible-by-three]: https://leetcode.com/problems/greatest-sum-divisible-by-three/

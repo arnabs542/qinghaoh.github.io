@@ -6,10 +6,10 @@ tag: array
 [Best Time to Buy and Sell Stock II][best-time-to-buy-and-sell-stock-ii]
 
 ```
-[7,1,5,3,6,4]
+[1,7,2,3,6,7,6,7]
 ```
 
-![array](best_time_to_buy_and_sell_stock_2.png)
+![array](/assets/best_time_to_buy_and_sell_stock_2.png)
 
 {% highlight java %}
 public int maxProfit(int[] prices) {

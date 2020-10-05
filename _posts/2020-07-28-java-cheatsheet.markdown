@@ -102,8 +102,8 @@ list.add(0);
 String[] array = list.toArray(new String[0])
 {% endhighlight %}
 
-# Map.Entry
-* [static \<K,V extends Comparable\<? super V\>\> Comparator\<Map.Entry\<K,V\>\> comparingByValue()](https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html#comparingByValue--)
+# Math
+* [public static double random()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html#random())
 
 # Object
 * [protected Object clone() throws CloneNotSupportedException](https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone--)

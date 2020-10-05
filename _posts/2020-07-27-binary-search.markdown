@@ -343,9 +343,47 @@ private boolean condition(int[][] matrix, int value, int k) {
 }
 {% endhighlight %}
 
+Variant:
+
 [Kth Smallest Prime Fraction][k-th-smallest-prime-fraction]
 
 {% highlight java %}
+public int[] kthSmallestPrimeFraction(int[] A, int K) {
+    double low = 0, high = 1;
+    int p = 0, q = 1;
+
+    int count = 0;
+    while (count != K) {
+        double mid = (low + high) / 2;
+
+        // starts from top-right
+        int i = 0, j = A.length - 1;
+        count = 0;  // count of fractions less than mid
+        p = 0;
+        while (i < A.length && j >= 0) {
+            if (A[i] > mid * A[A.length - 1 - j]) {
+                j--;
+            } else {
+                // p / q < curr
+                // finds the largest fraction less than mid
+                if (p * A[A.length - 1 - j] < q * A[i]) {
+                    p = A[i];
+                    q = A[A.length - 1 - j];
+                }
+                count += j + 1;
+                i++;
+            }
+        }
+
+        if (count < K) {
+            low = mid;
+        } else if (count > K) {
+            high = mid;
+        }
+    }
+
+    return new int[]{p, q};
+}
 {% endhighlight %}
 
 [H-Index II][h-index-ii]

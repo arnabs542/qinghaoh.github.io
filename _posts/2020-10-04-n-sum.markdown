@@ -1,0 +1,14 @@
+---
+layout: post
+title:  "N Sum"
+tag: array
+---
+
+[Two Sum][two-sum]
+
+One pass, Set
+
+{% highlight java %}
+{% endhighlight %}
+
+[two-sum]: https://leetcode.com/problems/two-sum/

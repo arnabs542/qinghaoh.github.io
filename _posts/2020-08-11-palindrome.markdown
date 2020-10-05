@@ -37,38 +37,82 @@ public boolean isPalindrome(int x) {
 }
 {% endhighlight %}
 
-## Expand Around Center
+
+## Dynamic Programming
+
+### Expand Around Center
+
+[Palindromic Substring][palindromic-substring]
+
+{% highlight java %}
+public int countSubstrings(String s) {
+    int count = 0;
+    for (int center = 0; center <= 2 * s.length() - 1; center++) {
+        int left = center / 2;
+        int right = left + center % 2;
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            count++;
+            left--;
+            right++;
+        }
+    }
+    return count;
+}
+{% endhighlight %}
 
 [Longest Palindromic Substring][longest-palindromic-substring]
 
 {% highlight java %}
 public String longestPalindrome(String s) {
-    int longest = 0;
-    String res = "";
-    for (int i = 0; i < s.length(); i++) {
-        int length1 = expand(s, i, i);
-        int length2 = expand(s, i, i + 1);
-        int length = Math.max(length1, length2);
-        if (longest < length) {
-            longest = length;
-            res = s.substring(i - (length - 1) / 2, i + length / 2 + 1);
+    String result = "";
+    int max = 0;
+    for (int center = 0; center <= 2 * s.length() - 1; center++) {
+        int left = center / 2;
+        int right = left + center % 2;
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        if (right - left - 1 > max) {
+            max = right - left - 1;
+            result = s.substring(left + 1, right);
         }
     }
-    return res;
-}
-
-private int expand(String s, int left, int right) {
-    while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
-        left--;
-        right++;
-    }
-    return right - left - 1;
+    return result;
 }
 {% endhighlight %}
 
 [Manacher's algorithm](https://en.wikipedia.org/wiki/Longest_palindromic_substring#Manacher's_algorithm)
 
-## Dynamic Programming
+[Longest Palindromic Subsequence][longest-palindromic-subsequence]
 
+{% highlight java %}
+public int longestPalindromeSubseq(String s) {
+    // dp[i][j]: s.substring(i, j + 1)
+    int[][] dp = new int[s.length()][s.length()];
+
+    for (int i = s.length() - 1; i >= 0; i--) {
+        dp[i][i] = 1;
+        for (int j = i + 1; j < s.length(); j++) {
+            if (s.charAt(i) == s.charAt(j)) {
+                dp[i][j] = dp[i + 1][j - 1] + 2;
+            } else {
+                dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+
+    return dp[0][s.length() - 1];
+}
+{% endhighlight %}
+
+[Count Different Palindromic Subsequences][count-different-palindromic-subsequences]
+
+{% highlight java %}
+{% endhighlight %}
+
+[count-different-palindromic-subsequences]: https://leetcode.com/problems/count-different-palindromic-subsequences/
+[longest-palindromic-subsequence]: https://leetcode.com/problems/longest-palindromic-subsequence/
 [longest-palindromic-substring]: https://leetcode.com/problems/longest-palindromic-substring/
 [palindrome-number]: https://leetcode.com/problems/palindrome-number/
+[palindromic-substring]: https://leetcode.com/problems/palindromic-substring/

@@ -3,20 +3,6 @@ layout: post
 title:  "Random"
 tag: random
 ---
-[Rejection sampling](https://en.wikipedia.org/wiki/Rejection_sampling)
-
-[Implement Rand10() Using Rand7()][implement-rand10-using-rand7]
-
-{% highlight java %}
-public int rand10() {
-    int num = 0;
-    do {
-        num = (rand7() - 1) * 7 + rand7();
-    } while (num > 40);
-    return (num - 1) % 10 + 1;
-}
-{% endhighlight %}
-
 ## Shuffle
 
 [Fisher-Yates shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle)
@@ -86,6 +72,106 @@ public void reset() {
 }
 {% endhighlight %}
 
+## Cumulative Probability
+
+[Random Pick with Weight][random-pick-with-weight]
+
+{% highlight java %}
+private int[] p;  // prefix sum
+private Random rand;
+
+public Solution(int[] w) {
+    p = new int[w.length];
+    p[0] = w[0];
+    for (int i = 1; i < p.length; i++) {
+        p[i] = p[i - 1] + w[i];
+    }
+
+    rand = new Random();
+}
+
+public int pickIndex() {
+    int index = Arrays.binarySearch(p, rand.nextInt(p[p.length - 1]) + 1);
+    return index < 0 ? -index - 1 : index;
+}
+{% endhighlight %}
+
+## Rejection Sampling
+
+[Rejection sampling](https://en.wikipedia.org/wiki/Rejection_sampling)
+
+[Implement Rand10() Using Rand7()][implement-rand10-using-rand7]
+
+{% highlight java %}
+public int rand10() {
+    int num = 0;
+    do {
+        num = (rand7() - 1) * 7 + rand7();
+    } while (num > 40);
+    return (num - 1) % 10 + 1;
+}
+{% endhighlight %}
+
+## Reservoir Sampling
+
+[Reservoir sampling](https://en.wikipedia.org/wiki/Reservoir_sampling)
+
+Choosing a simple random sample, without replacement, of `k` items from a population of *unknown* size `n` in a single pass over the items.
+
+Algorithm R:
+
+{% highlight java %}
+/**
+ * Reservoir sampling with Algorithm R.
+ * @param nums input array
+ * @param k reservoir size
+ * @return output reservoir array with randomly chosen items
+ */
+public int[] reservoirSample(int[] nums, int k) {
+    // fills the reservoir array
+    for (int i = 0; i < k; i++) {
+        r[i] = nums[i];
+    }
+
+    // replaces elements with gradually decreasing probability
+    for (int i = k; i < nums.length; i++) {
+        int j = rand.nextInt(i + 1);
+        if (j < k) {
+            r[j] = nums[i];
+        }
+    }
+}
+{% endhighlight %}
+
+[Random Pick Index][random-pick-index]
+
+{% highlight java %}
+private int[] nums;
+private Random rand;
+
+public Solution(int[] nums) {
+    this.nums = nums;
+    this.rand = new Random();
+}
+
+public int pick(int target) {
+    int index = -1, count = 0;
+    // reservoir size == 1
+    for (int i = 0; i < nums.length; i++) {
+        if (nums[i] == target && rand.nextInt(++count) == 0) {
+            index = i;
+        }     
+    }
+
+    return index;
+}
+{% endhighlight %}
+
+[Linked List Random Node][linked-list-random-node]
+
 [implement-rand10-using-rand7]: https://leetcode.com/problems/implement-rand10-using-rand7/
+[linked-list-random-node]: https://leetcode.com/problems/linked-list-random-node/
 [random-flip-matrix]: https://leetcode.com/problems/random-flip-matrix/
+[random-pick-index]: https://leetcode.com/problems/random-pick-index/
+[random-pick-with-weight]: https://leetcode.com/problems/random-pick-with-weight/
 [shuffle-an-array]: https://leetcode.com/problems/shuffle-an-array/
