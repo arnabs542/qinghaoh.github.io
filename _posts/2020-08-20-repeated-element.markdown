@@ -1,11 +1,15 @@
 ---
 layout: post
-title:  "N-Repeated Element"
+title:  "Repeated Element"
 tags: array
 ---
 [N-Repeated Element in Size 2N Array][n-repeated-element-in-size-2n-array]
 
-Find the minimum size of a subarray which must have a repeated element. In this example, the size is `4`.
+`k` repeated element in size `n` array:
+
+Find the minimum size `m`, so that there exists at least one subarray with size `m`, and it is guaranteed to contain more than one repeated element.
+
+In this example, the size is `2N / N + 1 = 3`.
 
 {% highlight java %}
 public int repeatedNTimes(int[] A) {
@@ -19,6 +23,21 @@ public int repeatedNTimes(int[] A) {
     return 0;
 }
 {% endhighlight %}
+
+Or equivalently,
+
+{% highlight java %}
+public int repeatedNTimes(int[] A) {
+    for (int i = 2; i < A.length; ++i) {
+        if (A[i] == A[i - 1] || A[i] == A[i - 2]) {
+            return A[i];
+        }  
+    }
+    return A[0];
+}
+{% endhighlight %}
+
+We can of course expand this subarray window to, for example, 4.
 
 ## Sliding window
 

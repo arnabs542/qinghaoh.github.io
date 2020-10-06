@@ -581,7 +581,15 @@ private boolean condition(int[] position, int d, int m) {
 ## Arrays
 [public static \<T\> int binarySearch(T\[\] a, int fromIndex, int toIndex, T key, Comparator\<? super T\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#binarySearch-T:A-int-int-T-java.util.Comparator-)
 
-The *insertion point* is defined as the point at which the key would be inserted into the array: the index of the first element in the range **greater** than the key, or toIndex if all elements in the range are less than the specified key.
+**Returns:**
+
+index of the search key, if it is contained in the array within the specified range; otherwise, (-(insertion point) - 1). The *insertion point* is defined as the point at which the key would be inserted into the array: the index of the first element in the range **greater** than the key, or toIndex if all elements in the range are less than the specified key.
+
+{% highlight java %}
+if (insertionPoint < 0) {
+    insertionPoint = ~insertionPoint;
+}
+{% endhighlight %}
 
 ## Collections
 [public static \<T\> int binarySearch(List\<? extends T\> list, T key, Comparator\<? super T\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#binarySearch-java.util.List-T-java.util.Comparator-)

@@ -46,7 +46,7 @@ unSortedMap.entrySet()
     .forEachOrdered(e -> sortedMap.put(e.getKey(), e.getValue()));
 {% endhighlight %}
 
-## Descending
+### Descending
 
 {% highlight java %}
 Map<String, Integer> unSortedMap = getUnSortedMap();
@@ -56,6 +56,11 @@ unSortedMap.entrySet()
     .stream()
     .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
     .forEachOrdered(e -> sortedMap.put(e.getKey(), e.getValue()));
+{% endhighlight %}
+
+## Key with the max value in a map
+{% highlight java %}
+Collections.max(map.entrySet(), Map.Entry.comparingByValue()).getKey();
 {% endhighlight %}
 
 * [default V computeIfAbsent(K key, Function\<? super K, ? extends V\> mappingFunction)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html#computeIfAbsent(K,java.util.function.Function))

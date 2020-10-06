@@ -26,8 +26,7 @@ public int minDistance(String word1, String word2) {
                 dp[i][j] = dp[i - 1][j - 1];
             } else {
                 // replace: dp[i - 1][j - 1] + 1
-                // delete: dp[i - 1][j] + 1
-                // insert: dp[i][j - 1] + 1
+                // delete/insert: dp[i - 1][j] + 1, dp[i][j - 1] + 1
                 dp[i][j] = Math.min(dp[i - 1][j - 1], Math.min(dp[i - 1][j], dp[i][j - 1])) + 1;
             }
         }
@@ -46,6 +45,8 @@ For example, `word1 = "newton", word2 = "einstein"`, then `dp` is:
 [5,4,4,4,4,5,5,6,7]
 [6,5,5,4,5,5,6,6,6]
 ```
+
+Notice `dp[i - 1][j - 1] <= dp[i][j - 1] + 1` and `dp[i - 1][j - 1] <= dp[i - 1][j] + 1`
 
 Rolling array optimization:
 * `dp[i - 1][j] -> pre[j]`
@@ -105,7 +106,7 @@ public int minDistance(String word1, String word2) {
 }
 {% endhighlight %}
 
-[Delete Operation for Two Strings][delete-operation-for-two-strings]
+[Minimum ASCII Delete Sum for Two Strings][minimum-ascii-delete-sum-for-two-strings]
 
 {% highlight java %}
 if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
@@ -114,6 +115,37 @@ if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
     dp[i][j] = Math.min(dp[i][j - 1], dp[i - 1][j]) + 1;
 }
 {% endhighlight %}
+
+{% highlight java %}
+char c1 = s1.charAt(i - 1), c2 = s2.charAt(j - 1);
+if (c1 == c2) {
+    dp[i][j] = dp[i - 1][j - 1];
+} else {
+    dp[i][j] = Math.min(dp[i][j - 1] + c2, dp[i - 1][j] + c1);
+}
+{% endhighlight %}
+
+[Longest Common Subsequence][longest-common-subsequence]
+
+{% highlight java %}
+if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+    dp[i][j] = dp[i - 1][j - 1] + 1;
+} else {
+    dp[i][j] = Math.max(dp[i][j - 1], dp[i - 1][j]);
+}
+{% endhighlight %}
+
+[Uncrossed Lines][uncrossed-lines]
+
+{% highlight java %}
+if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+    dp[i][j] = dp[i - 1][j - 1] + 1;
+} else {
+    dp[i][j] = Math.max(dp[i][j - 1], dp[i - 1][j]);
+}
+{% endhighlight %}
+
+Look how it's transformed to [Longest Common Subsequence][longest-common-subsequence]!
 
 [Min Cost Climbing Stairs][min-cost-climbing-stairs]
 
@@ -200,4 +232,7 @@ public int calculateMinimumHP(int[][] dungeon) {
 [dungeon-game]: https://leetcode.com/problems/dungeon-game/
 [edit-distance]: https://leetcode.com/problems/edit-distance/
 [greatest-sum-divisible-by-three]: https://leetcode.com/problems/greatest-sum-divisible-by-three/
+[longest-common-subsequence]: https://leetcode.com/problems/longest-common-subsequence/
 [min-cost-climbing-stairs]: https://leetcode.com/problems/min-cost-climbing-stairs/
+[minimum-ascii-delete-sum-for-two-strings]: https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/
+[uncrossed-lines]: https://leetcode.com/problems/uncrossed-lines/

@@ -46,8 +46,3 @@ char c = '9';
 int a = c - '0';
 {% endhighlight %}
 
-# Key with the max value in a map
-{% highlight java %}
-Collections.max(map.entrySet(), Map.Entry.comparingByValue()).getKey();
-{% endhighlight %}
-
