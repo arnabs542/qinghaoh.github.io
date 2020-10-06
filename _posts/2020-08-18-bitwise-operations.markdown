@@ -118,7 +118,20 @@ public int kthGrammar(int N, int K) {
 }
 {% endhighlight %}
 
+[Single Number][single-number]
+
+{% highlight java %}
+public int singleNumber(int[] nums) {
+    int a = 0;
+    for (int num : nums) {
+      a ^= num;
+    }
+    return a;
+}
+{% endhighlight %}
+
 [binary-number-with-alternating-bits]: https://leetcode.com/problems/binary-number-with-alternating-bits/
 [k-th-symbol-in-grammar]: https://leetcode.com/problems/k-th-symbol-in-grammar/
+[single-number]: https://leetcode.com/problems/single-number/
 [total-hamming-distance]: https://leetcode.com/problems/total-hamming-distance/
 [xor-operation-in-an-array]: https://leetcode.com/problems/xor-operation-in-an-array/
