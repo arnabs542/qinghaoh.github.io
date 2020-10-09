@@ -119,6 +119,20 @@ public int lengthOfLIS(int[] nums) {
 [Longest Arithmetic Subsequence][longest-arithmetic-subsequence]
 
 {% highlight java %}
+public int longestArithSeqLength(int[] A) {
+    // diff : max length
+    List<Map<Integer, Integer>> dp = new ArrayList<>();
+    int max = 2;
+    for (int j = 0; j < A.length; j++) {
+        dp.add(new HashMap<>());
+        for (int i = 0; i < j; i++) {
+            int d = A[j] - A[i];
+            dp.get(j).put(d, dp.get(i).getOrDefault(d, 1) + 1);
+            max = Math.max(max, dp.get(j).get(d));
+        }
+    }
+    return max;
+}
 {% endhighlight %}
 
 [longest-arithmetic-subsequence]: https://leetcode.com/problems/longest-arithmetic-subsequence/

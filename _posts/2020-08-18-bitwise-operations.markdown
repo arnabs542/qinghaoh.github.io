@@ -130,8 +130,41 @@ public int singleNumber(int[] nums) {
 }
 {% endhighlight %}
 
+[Maximum XOR of Two Numbers in an Array][maximum-xor-of-two-numbers-in-an-array]
+
+{% highlight java %}
+public int findMaximumXOR(int[] nums) {
+    int max = 0, mask = 0;
+    for (int i = 0; i < 32; i++) {
+        // most significant (i + 1) bits
+        mask = mask | (1 << (31 - i));
+
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            set.add(num & mask);
+        }
+
+        // so far, max contains the most significant i bits
+        // tpm stands for the potential max we can get if we consider the current bit 
+        int tmp = max | (1 << (31 - i));
+        // finds a and b in the set so that a ^ b == tmp
+        // a ^ b == tmp => a ^ b ^ b == tmp ^ b => a == tmp ^ b
+        for (int prefix : set) {
+            if (set.contains(tmp ^ prefix)) {
+                max = tmp;
+                break;
+            }
+        }
+    }
+    return max;
+}
+{% endhighlight %}
+
+Another solution is by Trie.
+
 [binary-number-with-alternating-bits]: https://leetcode.com/problems/binary-number-with-alternating-bits/
 [k-th-symbol-in-grammar]: https://leetcode.com/problems/k-th-symbol-in-grammar/
+[maximum-xor-of-two-numbers-in-an-array]: https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/
 [single-number]: https://leetcode.com/problems/single-number/
 [total-hamming-distance]: https://leetcode.com/problems/total-hamming-distance/
 [xor-operation-in-an-array]: https://leetcode.com/problems/xor-operation-in-an-array/

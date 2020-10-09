@@ -92,7 +92,41 @@ public Solution(int[] w) {
 
 public int pickIndex() {
     int index = Arrays.binarySearch(p, rand.nextInt(p[p.length - 1]) + 1);
-    return index < 0 ? -index - 1 : index;
+    return index < 0 ? ~index : index;
+}
+{% endhighlight %}
+
+[Random Point in Non-overlapping Rectangles][random-point-in-non-overlapping-rectangles]
+
+{% highlight java %}
+private int[][] rects;
+private TreeMap<Integer, Integer> map;  // sum of points : array index
+private Random rand;
+private int sum = 0;
+
+public Solution(int[][] rects) {
+    this.rects = rects;
+    map = new TreeMap<>();
+    rand = new Random();
+
+    for (int i = 0; i < rects.length; i++) {
+        int[] rect = rects[i];
+        // number of points
+        sum += (rect[2] - rect[0] + 1) * (rect[3] - rect[1] + 1);
+        map.put(sum, i);
+    }
+}
+
+public int[] pick() {
+    int r = rand.nextInt(sum) + 1;
+    int key = map.ceilingKey(r);
+    int[] rect = rects[map.get(key)];
+
+    int index = key - r;
+    int left = rect[0], bottom = rect[1], right = rect[2], top = rect[3];
+    int x = left + index % (right - left + 1);
+    int y = bottom + index / (right - left + 1);
+    return new int[]{x, y};
 }
 {% endhighlight %}
 
@@ -174,4 +208,5 @@ public int pick(int target) {
 [random-flip-matrix]: https://leetcode.com/problems/random-flip-matrix/
 [random-pick-index]: https://leetcode.com/problems/random-pick-index/
 [random-pick-with-weight]: https://leetcode.com/problems/random-pick-with-weight/
+[random-point-in-non-overlapping-rectangles]: https://leetcode.com/problems/random-point-in-non-overlapping-rectangles/
 [shuffle-an-array]: https://leetcode.com/problems/shuffle-an-array/

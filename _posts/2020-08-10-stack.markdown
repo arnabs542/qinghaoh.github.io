@@ -28,12 +28,12 @@ public int[] finalPrices(int[] prices) {
 
 {% highlight java %}
 public int largestRectangleArea(int[] heights) {
-    // index of non descending heights
+    // index of non-descending heights
     Deque<Integer> st = new ArrayDeque<>();
     int area = 0;
     for (int i = 0; i <= heights.length; i++) {            
         int height = (i == heights.length ? 0 : heights[i]);
-        while(!st.isEmpty() && height < heights[st.peek()]) {
+        while (!st.isEmpty() && height < heights[st.peek()]) {
             int h = heights[st.pop()];
             int w = st.isEmpty() ? i : (i - 1) - st.peek();
             area = Math.max(area, h * w);
@@ -60,6 +60,40 @@ i = 6	[1]		h * w = 8	area = 10
 i = 6	[]		h * w = 6	area = 10
 i = 6	[6]				area = 10
 ```
+
+[Maximal Rectangle][maximal-rectangle]
+
+{% highlight java %}
+public int maximalRectangle(char[][] matrix) {
+    if (matrix.length == 0) {
+        return 0;
+    }
+
+    int m = matrix.length, n = matrix[0].length;
+    int area = 0;
+    int[] height = new int[n + 1];
+
+    for (int row = 0; row < m; row++) {
+        Deque<Integer> st = new ArrayDeque<>();
+        for (int i = 0; i <= n; i++) {
+            if (i < n && matrix[row][i] == '1') {
+                height[i] += 1;
+            } else {
+                height[i] = 0;
+            }
+
+            while (!st.isEmpty() && height[i] < height[st.peek()]) {
+                int h = height[st.pop()];
+                int w = st.isEmpty() ? i : (i - 1) - st.peek();
+                area = Math.max(area, h * w);
+            }
+            st.push(i);
+        }
+    }
+
+    return area;
+}
+{% endhighlight %}
 
 [Reverse Substrings Between Each Pair of Parentheses][reverse-substrings-between-each-pair-of-parentheses]
 
@@ -177,6 +211,7 @@ public int[] maxDepthAfterSplit(String seq) {
 
 [final-prices-with-a-special-discount-in-a-shop]: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/
 [largest-rectangle-in-histogram]: https://leetcode.com/problems/largest-rectangle-in-histogram/
+[maximal-rectangle]: https://leetcode.com/problems/maximal-rectangle/
 [maximum-nesting-depth-of-two-valid-parentheses-strings]: https://leetcode.com/problems/maximum-nesting-depth-of-two-valid-parentheses-strings/
 [minimum-add-to-make-parentheses-valid]: https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/
 [minimum-insertions-to-balance-a-parentheses-string]: https://leetcode.com/problems/minimum-insertions-to-balance-a-parentheses-string/
