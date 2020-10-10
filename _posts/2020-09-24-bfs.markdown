@@ -59,4 +59,72 @@ public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
 }
 {% endhighlight %}
 
+[Jump Game II][jump-game-ii]
+
+{% highlight java %}
+public int jump(int[] nums) {
+    // implicit BFS
+    int jump = 0, reach = 0, currEnd = 0;
+    for (int i = 0; i < nums.length - 1; i++) {
+        reach = Math.max(reach, i + nums[i]);
+
+        // all the nodes on the current level are visited
+        if (i == currEnd) {
+            // increments level
+            // nodes on the next level can be reached with this number of jumps
+            jump++;
+            // gets next level size
+            currEnd = reach;
+        }
+    }
+    return jump;
+}
+{% endhighlight %}
+
+{% highlight java %}
+If it's not guaranteed to reach the last index:
+
+public int jump(int[] nums) {
+    // implicit BFS
+    int jumps = 0, reach = 0, currEnd = 0;
+    for (int i = 0; i < nums.length; i++) {
+        if (i > reach) {
+            return -1;
+        }
+
+        reach = Math.max(reach, i + nums[i]);
+
+        // all the nodes on the current level are visited
+        if (i < nums.length - 1 && i == currEnd) {
+            // increments level
+            // nodes on the next level can be reached with this number of jumps
+            jumps++;
+            // gets next level size
+            currEnd = reach;
+        }
+    }
+    return jumps;
+}
+{% endhighlight %}
+
+[Video Stitching][video-stitching]
+
+{% highlight java %}
+public int videoStitching(int[][] clips, int T) {
+    int[] nums = new int[T + 1];
+    for (int[] clip : clips) {
+        if (clip[0] <= T) {
+            nums[clip[0]] = Math.max(nums[clip[0]], clip[1] - clip[0]);
+        }
+    }
+    return jump(nums);
+}
+
+// 45. Jump Game II
+private int jump(int[] nums) {
+}
+{% endhighlight %}
+
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
+[jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
+[video-stitching]: https://leetcode.com/problems/video-stitching/

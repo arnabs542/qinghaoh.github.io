@@ -100,32 +100,32 @@ public int pickIndex() {
 
 {% highlight java %}
 private int[][] rects;
-private TreeMap<Integer, Integer> map;  // sum of points : array index
+private int[] p;
 private Random rand;
-private int sum = 0;
 
 public Solution(int[][] rects) {
     this.rects = rects;
-    map = new TreeMap<>();
-    rand = new Random();
+    p = new int[rects.length];
+    // number of points
+    p[0] = (rects[0][2] - rects[0][0] + 1) * (rects[0][3] - rects[0][1] + 1);
 
-    for (int i = 0; i < rects.length; i++) {
+    for (int i = 1; i < rects.length; i++) {
         int[] rect = rects[i];
-        // number of points
-        sum += (rect[2] - rect[0] + 1) * (rect[3] - rect[1] + 1);
-        map.put(sum, i);
+        p[i] = p[i - 1] + (rect[2] - rect[0] + 1) * (rect[3] - rect[1] + 1);
     }
+
+    rand = new Random();
 }
 
 public int[] pick() {
-    int r = rand.nextInt(sum) + 1;
-    int key = map.ceilingKey(r);
-    int[] rect = rects[map.get(key)];
+    int points = rand.nextInt(p[p.length - 1]) + 1;
+    int i = Arrays.binarySearch(p, points);
+    int index = i < 0 ? ~i : i;
 
-    int index = key - r;
+    int[] rect = rects[index];
     int left = rect[0], bottom = rect[1], right = rect[2], top = rect[3];
-    int x = left + index % (right - left + 1);
-    int y = bottom + index / (right - left + 1);
+    int x = left + (p[index] - points) % (right - left + 1);
+    int y = bottom + (p[index] - points) / (right - left + 1);
     return new int[]{x, y};
 }
 {% endhighlight %}
