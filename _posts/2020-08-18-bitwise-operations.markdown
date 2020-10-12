@@ -130,6 +130,31 @@ public int singleNumber(int[] nums) {
 }
 {% endhighlight %}
 
+[Single Number II][single-number-ii]
+
+{% highlight java %}
+public int singleNumber(int[] nums) {
+    int result = 0;
+    // counts 1's in each bit
+    for (int i = 0; i < 32; i++) {
+        int sum = 0;
+        for (int num: nums) {
+            sum += (num >> i) & 1;
+        }
+        sum %= 3;
+        result |= sum << i;
+    }
+    return result;
+}
+{% endhighlight %}
+
+The above solution can be generalized to: every element appears `k (k > 1)` times except for one.
+
+Another generalization is:
+
+{% highlight java %}
+{% endhighlight %}
+
 [Maximum XOR of Two Numbers in an Array][maximum-xor-of-two-numbers-in-an-array]
 
 {% highlight java %}
@@ -166,5 +191,6 @@ Another solution is by Trie.
 [k-th-symbol-in-grammar]: https://leetcode.com/problems/k-th-symbol-in-grammar/
 [maximum-xor-of-two-numbers-in-an-array]: https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/
 [single-number]: https://leetcode.com/problems/single-number/
+[single-number-ii]: https://leetcode.com/problems/single-number-ii/
 [total-hamming-distance]: https://leetcode.com/problems/total-hamming-distance/
 [xor-operation-in-an-array]: https://leetcode.com/problems/xor-operation-in-an-array/

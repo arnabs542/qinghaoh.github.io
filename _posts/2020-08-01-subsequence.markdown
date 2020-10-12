@@ -116,6 +116,52 @@ public int lengthOfLIS(int[] nums) {
 }
 {% endhighlight %}
 
+[Shortest Common Supersequence][shortest-common-supersequence]
+
+{% highlight java %}
+public String shortestCommonSupersequence(String str1, String str2) {
+    // longest common subsequence
+    int[][] dp = new int[str1.length() + 1][str2.length() + 1];
+
+    for (int i = 1; i < dp.length; i++) {
+        for (int j = 1; j < dp[i].length; j++) {
+            if (str1.charAt(i - 1) == str2.charAt(j - 1)) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = Math.max(dp[i][j - 1], dp[i - 1][j]);
+            }
+        }
+    }
+
+    StringBuilder sb = new StringBuilder();
+    int len = dp[str1.length()][str2.length()];
+    int i = str1.length(), j = str2.length(), pi = str1.length(), pj = str2.length();
+    while (i > 0 || j > 0) {
+        while (j > 0 && dp[i][j - 1] == dp[i][j]) {
+            j--;
+        }
+        if (j < pj) {
+            sb.insert(0, str2.substring(j, pj));
+        }
+
+        while (i > 0 && dp[i - 1][j] == dp[i][j]) {
+            i--;
+        }
+        if (i < pi) {
+            sb.insert(0, str1.substring(i, pi));
+        }
+
+        pi = --i;
+        pj = --j;
+        if (pj >= 0) {
+            sb.insert(0, str2.charAt(pj));
+        }
+    }
+
+    return sb.toString();
+}
+{% endhighlight %}
+
 [Longest Arithmetic Subsequence][longest-arithmetic-subsequence]
 
 {% highlight java %}
@@ -138,3 +184,4 @@ public int longestArithSeqLength(int[] A) {
 [longest-arithmetic-subsequence]: https://leetcode.com/problems/longest-arithmetic-subsequence/
 [longest-increasing-subsequence]: https://leetcode.com/problems/longest-increasing-subsequence/
 [is-subsequence]: https://leetcode.com/problems/is-subsequence/
+[shortest-common-subsequence]: https://leetcode.com/problems/shortest-common-subsequence/

@@ -72,6 +72,44 @@ public void reset() {
 }
 {% endhighlight %}
 
+## Remapping
+
+[Random Pick with Blacklist][random-pick-with-blacklist]
+
+{% highlight java %}
+private Map<Integer,Integer> map;
+private Random rand;
+private int size;  // whitelist size
+
+public Solution(int N, int[] blacklist) {
+    map = new HashMap<>();
+    rand = new Random();
+    size = N - blacklist.length;
+
+    for (int b : blacklist) {
+        if (b >= size) {
+            map.put(b, -1);
+        }  
+    }
+
+    // re-maps blacklist to [size, N)
+    int count = N - 1;
+    for (int b : blacklist){
+        if (b < size) {
+            while (map.containsKey(count)) {
+                count--;
+            }
+            map.put(b, count--);
+        }
+    }
+}
+
+public int pick() {        
+    int num = rand.nextInt(size);
+    return map.getOrDefault(num, num);
+}
+{% endhighlight %}
+
 ## Cumulative Probability
 
 [Random Pick with Weight][random-pick-with-weight]
@@ -208,5 +246,6 @@ public int pick(int target) {
 [random-flip-matrix]: https://leetcode.com/problems/random-flip-matrix/
 [random-pick-index]: https://leetcode.com/problems/random-pick-index/
 [random-pick-with-weight]: https://leetcode.com/problems/random-pick-with-weight/
+[random-pick-with-blacklist]: https://leetcode.com/problems/random-pick-with-blacklist/
 [random-point-in-non-overlapping-rectangles]: https://leetcode.com/problems/random-point-in-non-overlapping-rectangles/
 [shuffle-an-array]: https://leetcode.com/problems/shuffle-an-array/

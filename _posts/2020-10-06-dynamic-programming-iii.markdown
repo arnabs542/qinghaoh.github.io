@@ -128,36 +128,6 @@ for (int i = 1; i < prices.length; i++) {
 return curr;
 {% endhighlight %}
 
-[Best Time to Buy and Sell Stock with Transaction Fee][best-time-to-buy-and-sell-stock-with-transaction-fee]
-
-{% highlight java %}
-public int maxProfit(int[] prices, int fee) {
-    int hold = -prices[0], cash = 0;
-    for (int price : prices) {
-        cash = Math.max(cash, hold + price - fee);
-        // We can transform cash first without using temporary variables
-        // because selling and buying on the same day can't be better than
-        // just continuing to hold the stock.
-        // hold2 = Math.max(hold1, cash2 - prices[i]);
-        //       = Math.max(hold1, Math.max(cash1, hold1 + prices[i] - fee) - prices[i])
-        //       = Math.max(hold1, Math.max(cash1 - prices[i], hold1 - fee))
-        //       = Math.max(hold1, cash1 - prices[i], hold1 -fee)
-        //       = Math.max(hold1, cash1 - prices[i])
-        hold = Math.max(hold, cash - price);
-    }
-
-    // Math.max(hold2, cash2)
-    //   = Math.max(hold1, cash1 - prices[i], cash1, hold1 + prices[i] - fee)
-    //   = Math.max(hold1, cash1, hold1 + prices[i] - fee)
-    //   = Math.max(hold1, cash2)
-    //   ...
-    //   = Math.max(-prices[0], cash2)
-    // -prices[0] < 0 = cash0 <= cash2
-    return cash;
-}
-{% endhighlight %}
-
 [best-time-to-buy-and-sell-stock-iii]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/
 [best-time-to-buy-and-sell-stock-iv]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/
 [best-time-to-buy-and-sell-stock-with-cooldown]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
-[best-time-to-buy-and-sell-stock-with-transaction-fee]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/

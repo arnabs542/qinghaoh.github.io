@@ -30,5 +30,9 @@ public List<List<Integer>> findSolution(CustomFunction customfunction, int z) {
 }
 {% endhighlight %}
 
+# Dimension Reduction
+
+![Example](/assets/rotate_array.png)
+
 [find-positive-integer-solution-for-a-given-equation]: https://leetcode.com/problems/find-positive-integer-solution-for-a-given-equation/
 [search-a-2d-matrix]: https://leetcode.com/problems/search-a-2d-matrix/

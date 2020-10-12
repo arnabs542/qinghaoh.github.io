@@ -9,6 +9,7 @@ tags: java
 * [public static void fill(Objet\[\] a, Object val)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#fill-java.lang.Object:A-java.lang.Object-)
 * [static \<E\> List\<E\> of(E... elements)](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html#of%28E...%29): immutable
 * [public static \<T\> void sort(T\[\] a, int fromIndex, int toIndex, Comparator\<? super T\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#sort-T:A-int-int-java.util.Comparator-): stable
+* [public static String toString(Object\[\] a)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#toString(java.lang.Object%5B%5D))
 
 # Collection
 * [void clear()](https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html#clear--)
@@ -74,6 +75,7 @@ Deque<Integer> stack = new ArrayDeque<Integer>();
 * [MIN_VALUE](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#MIN_VALUE): -2^31 = -2147483648
 * [public static int bitCount(int i)](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#bitCount-int-)
 * [public int intValue()](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#intValue--)
+* [public static String toBinaryString(int i)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html#toBinaryString(int))
 
 {% highlight java %}
 MAX_VALUE + 1 == MIN_VALUE
