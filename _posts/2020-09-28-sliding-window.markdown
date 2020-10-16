@@ -9,6 +9,39 @@ tags: array
 
 ## Max Length
 
+### Template
+
+{% highlight java %}
+/**
+ * Finds the length of the longest subarray that contains at most k elements
+ * that match a given condition.
+ */
+public int maxLength(int[] nums, int k) {
+    int i = 0, j = 0, count = 0;
+    
+    // the sliding window never shrinks
+    // even if it doesn't meet the requirement at a certain moment
+    while (j < nums.length) {
+        if (update(nums, j++)) {
+            count++;
+        }
+
+        // if count > k, both i, j move forward together
+        // right shifts
+        if (count > k && update(nums, i++)) {
+            count--;
+        }
+    }
+
+    // [i, j) is a sliding window.
+    // its span memorizes the max range so far
+    return j - i;
+}
+
+private boolean update(int[] nums, int index) {
+}
+{% endhighlight %}
+
 [Max Consecutive Ones III][max-consecutive-ones-iii]
 
 {% highlight java %}
@@ -27,30 +60,6 @@ public int longestOnes(int[] A, int K) {
 }
 {% endhighlight %}
 
-From @lee215:
-
-{% highlight java %}
-public int longestOnes(int[] A, int K) {
-    // finds the longest subarray with at most K zeros
-    int i = 0, j = 0;
-    while (j < A.length) {
-        if (A[j] == 0) {
-            K--;
-        }
-
-        // if K < 0, both i, j move forward together
-        if (K < 0 && A[i++] == 0) {
-            K++;
-        }
-        j++;
-    }
-
-    // i, j is a sliding window.
-    // its span memorizes the max range so far
-    return j - i;
-}
-{% endhighlight %}
-
 [Get Equal Substrings Within Budget][get-equal-substrings-within-budget]
 
 [Fruit Into Baskets][fruit-into-baskets]
@@ -59,16 +68,15 @@ public int longestOnes(int[] A, int K) {
 public int totalFruit(int[] tree) {
     int[] type = new int[tree.length];
     int k = 2;
-    int i = 0, j = 0, result = 0;
+    int i = 0, j = 0, count = 0;
     while (j < tree.length) {
-        if (type[tree[j]]++ == 0) {
-            k--;
+        if (type[tree[j++]]++ == 0) {
+            count++;
         }
 
-        if (k < 0 && --type[tree[i++]] == 0) {
-            k++;
+        if (count > k && --type[tree[i++]] == 0) {
+            count--;
         }
-        j++;
     }
     return j - i;
 }
@@ -81,11 +89,10 @@ public int characterReplacement(String s, int k) {
     int[] count = new int[26];
     int i = 0, j = 0, max = 0;
     while (j < s.length()) {
-        // the sliding window never shrinks, even if it covers an invalid substring
         // grows the window when the count of the new char exceeds the historical max count
         max = Math.max(max, ++count[s.charAt(j++) - 'A']);
-        // window size is j - i + 1
-        // right shifts the whole window by one
+
+        // count of other chars == j - i - max
         if (j - i - max > k) {
             count[s.charAt(i++) - 'A']--;
         }

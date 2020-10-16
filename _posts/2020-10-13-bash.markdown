@@ -1,0 +1,33 @@
+---
+layout: post
+title:  "Bash"
+tag: bash
+---
+[Tenth Line][tenth-line]
+
+{% highlight bash %}
+i=0
+while (( i++ < 10 ))
+do
+  read line
+done < file.txt
+echo $line
+{% endhighlight %}
+
+{% highlight bash %}
+tail -n +10 file.txt | head -1
+{% endhighlight %}
+
+{% highlight bash %}
+awk 'NR == 10 {print; exit}' file.txt
+{% endhighlight %}
+
+{% highlight bash %}
+awk 'FNR == 10 {print; exit}' file.txt
+{% endhighlight %}
+
+{% highlight bash %}
+sed -n 10p file.txt
+{% endhighlight %}
+
+[tenth-line]: https://leetcode.com/problems/tenth-line/

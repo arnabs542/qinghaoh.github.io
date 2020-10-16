@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Bitwise Operations"
+title:  "Bit Manipulation"
 tags: bit
 ---
 ## Properties
@@ -151,6 +151,8 @@ public int singleNumber(int[] nums) {
 The above solution can be generalized to: every element appears `k (k > 1)` times except for one.
 
 Another generalization is:
+
+[Karnaugh map](https://en.wikipedia.org/wiki/Karnaugh_map)
 
 {% highlight java %}
 {% endhighlight %}

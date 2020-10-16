@@ -1,0 +1,93 @@
+---
+layout: post
+title:  "SQL"
+tag: sql
+---
+[Swap Salary][swap-salary]
+
+{% highlight sql %}
+UPDATE salary
+SET
+    sex = CASE sex
+        WHEN 'm' THEN 'f'
+        ELSE 'm'
+    END;
+{% endhighlight %}
+
+{% highlight sql %}
+UPDATE salary
+SET sex = IF(sex='m', 'f', 'm');
+{% endhighlight %}
+
+{% highlight sql %}
+UPDATE salary
+SET sex = CHAR(ASCII('f') ^ ASCII('m') ^ ASCII(sex));
+{% endhighlight %}
+
+[Classes More Than 5 Students][classes-more-than-5-students]
+
+{% highlight sql %}
+SELECT
+    class
+FROM
+    (SELECT
+        class, COUNT(DISTINCT student) AS num
+    FROM
+        courses
+    GROUP BY class) AS temp_table
+WHERE
+    num >= 5
+;
+{% endhighlight %}
+
+[Rising Temprature][rising-temperature]
+
+{% highlight sql %}
+SELECT
+    weather.id AS 'Id'
+FROM
+    weather
+        JOIN
+    weather w ON DATEDIFF(weather.recordDate, w.recordDate) = 1
+        AND weather.Temperature > w.Temperature
+;
+{% endhighlight %}
+
+[Second Highest Salary][second-highest-salary]
+
+{% highlight sql %}
+SELECT
+    (SELECT DISTINCT
+            Salary
+        FROM
+            Employee
+        ORDER BY Salary DESC
+        LIMIT 1 OFFSET 1) AS SecondHighestSalary
+;
+{% endhighlight %}
+
+{% highlight sql %}
+SELECT
+    IFNULL(
+      (SELECT DISTINCT Salary
+       FROM Employee
+       ORDER BY Salary DESC
+        LIMIT 1 OFFSET 1),
+    NULL) AS SecondHighestSalary
+;
+{% endhighlight %}
+
+{% highlight sql %}
+SELECT
+    MAX(Salary) AS SecondHighestSalary
+FROM
+    Employee
+WHERE
+    Salary < (SELECT MAX(Salary) FROM Employee)
+;
+{% endhighlight %}
+
+[classes-more-than-5-students]: https://leetcode.com/problems/classes-more-than-5-students/
+[rising-temperature]: https://leetcode.com/problems/rising-temperature/
+[second-highest-salary]: https://leetcode.com/problems/second-highest-salary/
+[swap-salary]: https://leetcode.com/problems/swap-salary/
