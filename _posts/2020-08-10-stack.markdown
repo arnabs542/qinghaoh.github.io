@@ -3,13 +3,50 @@ layout: post
 title:  "Stack"
 tags: stack
 ---
-## Push/Pop Array Index
+## Monotonic Stack
+
+### Templates
+
+#### Increasing
+
+##### Previous Less Element
+
+{% highlight java %}
+int[] prev = new int[nums.length];
+Deque<Integer> st = new ArrayDeque<>();
+for (int i = 0; i < nums.length; i++) {
+    // non-strict
+    while (!st.isEmpty() && num[st.peek()] > nums[i]) {
+        st.pop();
+    }
+    prev[i] = st.isEmpty() ? -1 : st.peek();
+    st.push(i);
+}
+{% endhighlight %}
+
+##### Next Less Element
+
+{% highlight java %}
+int[] next = new int[nums.length];
+Arrays.fill(next, -1);
+Deque<Integer> st = new ArrayDeque<>();
+for (int i = 0; i < nums.length; i++) {
+    // strict
+    while (!st.isEmpty() && num[st.peek()] > nums[i]) {
+        next[st.pop()] = i;
+    }
+    st.push(i);
+}
+{% endhighlight %}
+
 [Final Prices With a Special Discount in a Shop][final-prices-with-a-special-discount-in-a-shop]
 
 {% highlight java %}
 public int[] finalPrices(int[] prices) {
     int[] result = Arrays.copyOf(prices, prices.length);
-    Stack<Integer> st = new Stack<>();
+
+    // next less element
+    Deque<Integer> st = new ArrayDeque<>();
     for (int i = 0; i < result.length; i++) {
         while (!st.isEmpty() && result[st.peek()] >= result[i]) {
             result[st.pop()] -= result[i];
@@ -23,6 +60,83 @@ public int[] finalPrices(int[] prices) {
 [Next Greater Element II][next-greater-element-ii]
 
 [Next Greater Node in Linked List][next-greater-node-in-linked-list]
+
+[Online Stock Span][online-stock-span]
+
+{% highlight java %}
+private Deque<int[]> st;
+
+public StockSpanner() {
+    st = new ArrayDeque<>();
+}
+
+public int next(int price) {
+    int count = 1;
+    while (!st.isEmpty() && st.peek()[0] <= price) {
+        count += st.pop()[1];
+    }    
+    st.push(new int[]{price, count});
+    return count;
+}
+{% endhighlight %}
+
+[Sum of Subarray Minimums][sum-of-subarray-minimums]
+
+{% highlight java %}
+private int MOD = (int)1e9 + 7;
+
+public int sumSubarrayMins(int[] A) {
+    // left[i]:  distance between A[i] and its previous less element (prev, A[i]]
+    // right[i]: distance between A[i] and its next less element [A[i], next)
+    int[] left = new int[A.length], right = new int[A.length];
+    for (int i = 0; i < A.length; i++) {
+        right[i] = A.length - i;
+    }
+
+    // element : index
+    Deque<int[]> st1 = new ArrayDeque<>(), st2 = new ArrayDeque<>();
+    int result = 0;
+
+    for (int i = 0; i < A.length; i++) {
+        // previous less element
+        while (!st1.isEmpty() && st1.peek()[0] > A[i]) {
+            st1.pop();
+        }
+        left[i] = i - (st1.isEmpty() ? -1: st1.peek()[1]);
+        st1.push(new int[]{A[i], i});
+
+        // next less element (strict)
+        while (!st2.isEmpty() && st2.peek()[0] > A[i]) {
+            int index = st2.pop()[1];
+            right[index] = i - index;
+        }
+        st2.push(new int[]{A[i], i});
+    }
+
+    for (int i = 0; i < A.length; i++) {
+        result = (result + A[i] * left[i] * right[i]) % MOD;
+    }
+    return result;
+}
+{% endhighlight %}
+
+{% highlight java %}
+private int MOD = (int)1e9 + 7;
+
+public int sumSubarrayMins(int[] A) {
+    Deque<Integer> st = new ArrayDeque<>();
+    int result = 0;
+    for (int i = 0; i <= A.length; i++) {
+        while (!st.isEmpty() && A[st.peek()] > (i == A.length ? 0 : A[i])) {
+            int j = st.pop();
+            int k = st.isEmpty() ? -1 : st.peek();
+            result = (result + A[j] * (i - j) * (j - k)) % MOD;
+        }
+        st.push(i);
+    }
+    return result;
+}
+{% endhighlight %}
 
 [Largest Rectangle in Histogram][largest-rectangle-in-histogram]
 
@@ -209,6 +323,42 @@ public int[] maxDepthAfterSplit(String seq) {
 }
 {% endhighlight %}
 
+[Score of Parentheses][score-of-parentheses]
+
+{% highlight java %}
+public int scoreOfParentheses(String S) {
+    Deque<Integer> st = new ArrayDeque<>();
+    int curr = 0;
+    for (char c : S.toCharArray()) {
+        if (c == '(') {
+            st.push(curr);
+            curr = 0;
+        } else {
+            curr = st.pop() + Math.max(curr * 2, 1);
+        }
+    }
+    return curr;
+}
+{% endhighlight %}
+
+{% highlight java %}
+public int scoreOfParentheses(String S) {
+    int score = 0, opened = 0;
+    for (int i = 0; i < S.length(); i++) {
+        if (S.charAt(i) == '(') {
+            opened++;
+        } else {
+            opened--;
+            if (S.charAt(i - 1) == '(') {
+                // number of exterior sets of parentheses that contains this core
+                score += 1 << opened;
+            }
+        }
+    }
+    return score;
+}
+{% endhighlight %}
+
 [final-prices-with-a-special-discount-in-a-shop]: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/
 [largest-rectangle-in-histogram]: https://leetcode.com/problems/largest-rectangle-in-histogram/
 [maximal-rectangle]: https://leetcode.com/problems/maximal-rectangle/
@@ -217,5 +367,8 @@ public int[] maxDepthAfterSplit(String seq) {
 [minimum-insertions-to-balance-a-parentheses-string]: https://leetcode.com/problems/minimum-insertions-to-balance-a-parentheses-string/
 [next-greater-element-ii]: https://leetcode.com/problems/next-greater-element-ii/
 [next-greater-node-in-linked-list]: https://leetcode.com/problems/next-greater-node-in-linked-list/
+[online-stock-span]: https://leetcode.com/problems/online-stock-span/
+[score-of-parentheses]: https://leetcode.com/problems/score-of-parentheses/
+[sum-of-subarray-minimums]: https://leetcode.com/problems/sum-of-subarray-minimums/
 [remove-outermost-parentheses]: https://leetcode.com/problems/remove-outermost-parentheses/
 [reverse-substrings-between-each-pair-of-parentheses]: https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/

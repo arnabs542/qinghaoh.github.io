@@ -8,6 +8,7 @@ tags: bit
 n ^ 0 = n
 n ^ n = 0
 2k ^ (2k + 1) = 1
+n &= -n  // clears all but lsb
 ```
 
 [Binary Number with Alternating Bits][binary-number-with-alternating-bits]
@@ -150,11 +151,76 @@ public int singleNumber(int[] nums) {
 
 The above solution can be generalized to: every element appears `k (k > 1)` times except for one.
 
-Another generalization is:
+Generalization II:
+
+{% highlight java %}
+public int singleNumber(int[] nums) {
+    // sets of numbers that appear once and twice respectively
+    int ones = 0, twos = 0;
+    for (int num : nums) {
+        // if ones doesn't contain num, adds num to ones iff it's not in twos
+        // otherwise removes num from ones
+        ones = (ones ^ num) & ~twos;
+        // if twos doesn't contain num, adds num to twos iff it's not in ones
+        // othwerwise removes it from twos
+        twos = (twos ^ num) & ~ones;
+
+        // Effectively, any number that appears:
+        // once: is added to ones but not to twos
+        // twice: is removed from ones and added twos
+        // thrice: is removed from twos and not in either set
+    }
+    return ones;
+}
+{% endhighlight %}
+
+Another perspective is:
+
+Since bitwise operations on each of the 32 bits are independent of each other, we can group, say the i-th bit of all counters, into one 32-bit number. All bits in this 32-bit number will follow the same bitwise operations. 
+
+To cover `k` counts, we require `2 ^ n >= k`, where `n` is the total number of bits. Therefore, `n >= log(k)`. In this problem, `k == 3`, so the complete transition loop of the counter is `00 -> 01 -> 10 -> 00 -> ...`.
 
 [Karnaugh map](https://en.wikipedia.org/wiki/Karnaugh_map)
 
+![Karnaugh map](/assets/karnaugh_map.png)
+
+[Karnaugh map tool](https://www.charlie-coleman.com/experiments/kmap/)
+
 {% highlight java %}
+public int singleNumber(int[] nums) {
+    int n0 = 0, n1 = 0;
+    for (int num : nums) {
+        int tmp = n0;
+        n0 = (n0 & ~num) | (~n0 & ~n1 & num);
+        n1 = (tmp & num) | (n1 & ~num);
+    }
+    return n0;
+}
+{% endhighlight %}
+
+[Single Number III][single-number-iii]
+
+{% highlight java %}
+public int[] singleNumber(int[] nums) {
+    int lsb = 0;
+    for (int num : nums) {
+        lsb ^= num;
+    }
+
+    // the two elements are distinct, so lsb != 0
+    lsb &= -lsb;
+
+    // partitions the numbers based on lsb
+    int[] result = {0, 0};
+    for (int num : nums) {
+        if ((num & lsb) == 0) {
+            result[0] ^= num;
+        } else {
+            result[1] ^= num;
+        }
+    }
+    return result;
+}
 {% endhighlight %}
 
 [Maximum XOR of Two Numbers in an Array][maximum-xor-of-two-numbers-in-an-array]
@@ -194,5 +260,6 @@ Another solution is by Trie.
 [maximum-xor-of-two-numbers-in-an-array]: https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/
 [single-number]: https://leetcode.com/problems/single-number/
 [single-number-ii]: https://leetcode.com/problems/single-number-ii/
+[single-number-iii]: https://leetcode.com/problems/single-number-iii/
 [total-hamming-distance]: https://leetcode.com/problems/total-hamming-distance/
 [xor-operation-in-an-array]: https://leetcode.com/problems/xor-operation-in-an-array/

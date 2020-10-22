@@ -43,8 +43,27 @@ $$ \left\lceil {\frac {n}{m}}\right\rceil =\left\lfloor {\frac {n+m-1}{m}}\right
 
 $$ \left\lfloor {\frac {n}{m}}\right\rfloor =\left\lceil {\frac {n-m+1}{m}}\right\rceil =\left\lceil {\frac {n+1}{m}}\right\rceil -1 $$
 
-[implement-rand10-using-rand7]: https://leetcode.com/problems/implement-rand10-using-rand7/
-
 [Inclusion–exclusion principle](https://en.wikipedia.org/wiki/Inclusion%E2%80%93exclusion_principle)
 
 $$ |A\cup B|=|A|+|B|-|A\cap B| $$
+
+[2 Keys Keyboard][2-keys-keyboard]
+
+Prime Factorization
+
+{% highlight java %}
+public int minSteps(int n) {
+    int s = 0;
+    for (int d = 2; d <= n; d++) {
+        while (n % d == 0) {
+            s += d;
+            n /= d;
+        }
+    }
+    return s;
+}
+{% endhighlight %}
+
+[implement-rand10-using-rand7]: https://leetcode.com/problems/implement-rand10-using-rand7/
+[2-keys-keyboard]: https://leetcode.com/problems/2-keys-keyboard/
+
