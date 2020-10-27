@@ -7,14 +7,13 @@ tags: stack
 
 ### Templates
 
-#### Increasing
-
-##### Previous Less Element
+#### Previous Less Element
 
 {% highlight java %}
 int[] prev = new int[nums.length];
 Deque<Integer> st = new ArrayDeque<>();
 for (int i = 0; i < nums.length; i++) {
+    // monotonically increasing stack
     // non-strict
     while (!st.isEmpty() && num[st.peek()] > nums[i]) {
         st.pop();
@@ -24,13 +23,14 @@ for (int i = 0; i < nums.length; i++) {
 }
 {% endhighlight %}
 
-##### Next Less Element
+#### Next Less Element
 
 {% highlight java %}
 int[] next = new int[nums.length];
 Arrays.fill(next, -1);
 Deque<Integer> st = new ArrayDeque<>();
 for (int i = 0; i < nums.length; i++) {
+    // monotonically increasing stack
     // strict
     while (!st.isEmpty() && num[st.peek()] > nums[i]) {
         next[st.pop()] = i;
@@ -209,6 +209,64 @@ public int maximalRectangle(char[][] matrix) {
 }
 {% endhighlight %}
 
+[Remove Duplicate Letters][remove-duplicate-letters]
+
+{% highlight java %}
+public String removeDuplicateLetters(String s) {
+    // last index
+    int[] last = new int[26];
+    for (int i = 0; i < s.length(); ++i) {
+        last[s.charAt(i) - 'a'] = i;
+    }
+
+    Deque<Integer> st = new ArrayDeque<>();
+    // if visited is true, it's already in the stack
+    boolean[] visited = new boolean[26];
+    for (int i = 0; i < s.length(); i++) {
+        int c = s.charAt(i) - 'a';
+        if (!visited[c]) {
+            // if c is greater than stack top, and the top appears later,
+            // pops the top
+            while (!st.isEmpty() && st.peek() > c && i < last[st.peek()]) {
+                visited[st.pop()] = false;
+            }
+            st.push(c);
+            visited[c] = true;
+        }
+    }
+
+    StringBuilder sb = new StringBuilder();
+    for (int i : st) {
+        sb.append((char)('a' + i));
+    }
+    return sb.reverse().toString();
+}
+{% endhighlight %}
+
+[132 Pattern][132-pattern]
+
+{% highlight java %}
+private int MIN = (int)(-1e9);
+
+public boolean find132pattern(int[] nums) {
+    Deque<Integer> st = new ArrayDeque<>();
+    int mid = MIN;
+    for (int i = nums.length - 1; i >= 0; i--) {
+        if (nums[i] < mid) {
+            return true;
+        }
+
+        // monotonically decreasing stack
+        // finds the largest mid for the current high (nums[i])
+        while (!st.isEmpty() && nums[i] > st.peek()) {
+            mid = st.pop(); 
+        }
+        st.push(nums[i]);
+    }
+    return false;
+}
+{% endhighlight %}
+
 [Reverse Substrings Between Each Pair of Parentheses][reverse-substrings-between-each-pair-of-parentheses]
 
 {% highlight java %}
@@ -359,6 +417,7 @@ public int scoreOfParentheses(String S) {
 }
 {% endhighlight %}
 
+[132-pattern]: https://leetcode.com/problems/132-pattern/
 [final-prices-with-a-special-discount-in-a-shop]: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/
 [largest-rectangle-in-histogram]: https://leetcode.com/problems/largest-rectangle-in-histogram/
 [maximal-rectangle]: https://leetcode.com/problems/maximal-rectangle/
@@ -370,5 +429,6 @@ public int scoreOfParentheses(String S) {
 [online-stock-span]: https://leetcode.com/problems/online-stock-span/
 [score-of-parentheses]: https://leetcode.com/problems/score-of-parentheses/
 [sum-of-subarray-minimums]: https://leetcode.com/problems/sum-of-subarray-minimums/
+[remove-duplicate-letters]: https://leetcode.com/problems/remove-duplicate-letters/
 [remove-outermost-parentheses]: https://leetcode.com/problems/remove-outermost-parentheses/
 [reverse-substrings-between-each-pair-of-parentheses]: https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/

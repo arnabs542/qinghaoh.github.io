@@ -101,7 +101,59 @@ public int jump(int[] nums) {
 }
 {% endhighlight %}
 
+[Broken Calculator][broken-calculator]
+
+{% highlight java %}
+public int brokenCalc(int X, int Y) {
+    int s = 0;
+    while (Y > X) {
+        Y = Y % 2 == 0 ? Y / 2 : Y + 1;
+        s++;
+    }
+    return s + X - Y;
+}
+{% endhighlight %}
+
+[Maximum Number of Events That Can Be Attended][maximum-number-of-events-that-can-be-attended]
+
+{% highlight java %}
+public int maxEvents(int[][] events) {
+    // sorts events by start day
+    Arrays.sort(events, (a, b) -> Integer.compare(a[0], b[0]));
+
+    // keeps the current open events
+    Queue<Integer> pq = new PriorityQueue<>();
+    int i = 0, count = 0, day = 0;
+    while (!pq.isEmpty() || i < events.length) {
+        // if no events are open on this day,
+        // flies time to the start day of the next open event
+        if (pq.isEmpty()) {
+            day = events[i][0];
+        }
+
+        // adds new events that can be attended on this day
+        while (i < events.length && events[i][0] <= day) {
+            pq.offer(events[i++][1]);
+        }
+
+        // attends the event that will end the earliest
+        pq.poll();
+        count++;
+        day++;
+
+        // removes closed events
+        while (!pq.isEmpty() && pq.peek() < day) {
+            pq.poll();
+        }   
+    }
+
+    return count;
+}
+{% endhighlight %}
+
+[broken-calculator]: https://leetcode.com/problems/broken-calculator/
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [jump-game]: https://leetcode.com/problems/jump-game/
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
+[maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
 [video-stitching]: https://leetcode.com/problems/video-stitching/
