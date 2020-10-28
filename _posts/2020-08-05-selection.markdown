@@ -1,17 +1,9 @@
 ---
 layout: post
-title:  "Stream"
+title:  "Selection"
 tags: array
 ---
-
-Maintain a min priority queue with max size `k`. When the queue is full, new element is offered only if it's greater than the head of the queue.
-
-{% highlight java %}
-{% endhighlight %}
-
 [Selection algorithm](https://en.wikipedia.org/wiki/Selection_algorithm)
-
-Time complexity: `O(n)`
 
 [Kth Largest Element in an Array][kth-largest-element-in-an-array]
 
@@ -35,6 +27,10 @@ public int findKthLargest(int[] nums, int k) {
 ## Quickselect
 
 [Quickselect](https://en.wikipedia.org/wiki/Quickselect)
+
+Time complexity: 
+* Average: `O(n)`
+* Worst: `O(n^2)`
 
 {% highlight java %}
 public int findKthLargest(int[] nums, int k) {

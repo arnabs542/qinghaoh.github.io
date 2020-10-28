@@ -5,6 +5,31 @@ tags: stack
 ---
 ## Monotonic Stack
 
+[Remove K Digits][remove-k-digits]
+
+{% highlight java %}
+public String removeKdigits(String num, int k) {
+    StringBuilder sb = new StringBuilder();
+    int count = 0;
+    for (char c : num.toCharArray()) {
+        while (sb.length() > 0 && sb.charAt(sb.length()-1) > c && count < k){
+            sb.deleteCharAt(sb.length() - 1);
+            count++;
+        }
+        if (sb.length() == 0 && c == '0') {
+            continue;
+        }
+        sb.append(c);
+    }
+
+    while (count < k && sb.length() > 0) {
+        sb.deleteCharAt(sb.length() - 1);
+        count++;
+    }
+    return sb.length() == 0 ? "0" : sb.toString();
+}
+{% endhighlight %}
+
 ### Templates
 
 #### Previous Less Element
@@ -429,6 +454,7 @@ public int scoreOfParentheses(String S) {
 [online-stock-span]: https://leetcode.com/problems/online-stock-span/
 [score-of-parentheses]: https://leetcode.com/problems/score-of-parentheses/
 [sum-of-subarray-minimums]: https://leetcode.com/problems/sum-of-subarray-minimums/
+[remove-k-digits]: https://leetcode.com/problems/remove-k-digits/
 [remove-duplicate-letters]: https://leetcode.com/problems/remove-duplicate-letters/
 [remove-outermost-parentheses]: https://leetcode.com/problems/remove-outermost-parentheses/
 [reverse-substrings-between-each-pair-of-parentheses]: https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/

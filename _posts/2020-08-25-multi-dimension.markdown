@@ -63,6 +63,8 @@ Rolling array optimization:
 * `dp[i - 1][j] -> pre[j]`
 * `dp[i][j] -> cur[j]`
 
+![Rolling Array](/assets/dp_dimension_reduction_1.png)
+
 {% highlight java %}
 public int minDistance(String word1, String word2) {
     int[] pre = new int[word2.length() + 1];

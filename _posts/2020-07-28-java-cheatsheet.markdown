@@ -125,6 +125,7 @@ String[] array = list.toArray(new String[0])
 * [public boolean startsWith(String prefix, int toffset)](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#startsWith-java.lang.String-int-)
 
 # StringBuilder
+* [public StringBuilder deleteCharAt(int index)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/StringBuilder.html#deleteCharAt(int))
 * [public StringBuilder replace(int start, int end, String str)](https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html#replace-int-int-java.lang.String-)
 * [public StringBuilder reverse()](https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html#reverse--)
 
