@@ -155,6 +155,58 @@ public int findBestValue(int[] arr, int target) {
 }
 {% endhighlight %}
 
+[Circle and Rectangle Overlapping][circle-and-rectangle-overlapping]
+
+{% highlight java %}
+public boolean checkOverlap(int radius, int x_center, int y_center, int x1, int y1, int x2, int y2) {
+    // finds the closest point of the rectangle to the center.
+    // if the center is in the rectangle, the center itself is the point
+    int x = closest(x_center, x1, x2);
+    int y = closest(y_center, y1, y2);
+
+    int dx = x_center - x;
+    int dy = y_center - y;
+
+    return dx * dx + dy * dy <= radius * radius;
+}
+
+private int closest(int value, int min, int max) {
+    return Math.max(min, Math.min(max, value));
+}
+{% endhighlight %}
+
+[][swap-for-longest-repeated-character-substring]
+
+{% highlight java %}
+public int maxRepOpt1(String text) {
+    // char : list of indexes
+    Map<Character, List<Integer>> map = new HashMap<>();
+    for (int i = 0; i < text.length(); i++) {
+        map.computeIfAbsent(text.charAt(i), v -> new ArrayList<>()).add(i);
+    }
+
+    int result = 0;
+    for (List<Integer> list : map.values()) {
+        // count of chars in previous and current block
+        int prev = 0, curr = 1, sum = 1;
+        for (int i = 1; i < list.size(); i++) {
+            if (list.get(i) == list.get(i - 1) + 1) {
+                curr++;
+            } else {
+                // if previous block is more than 1 char away, clears it
+                prev = list.get(i) == list.get(i - 1) + 2 ? curr : 0;
+                curr = 1;
+            }
+            sum = Math.max(sum, curr + prev);
+        }
+        // if sum < list.size(), there are more of that char somewhere in the string 
+        result = Math.max(result, sum + (sum < list.size() ? 1 : 0));
+    }
+    return result;
+}
+{% endhighlight %}
+
+[circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
 [heaters]: https://leetcode.com/problems/heaters/
 [minimum-time-difference]: https://leetcode.com/problems/minimum-time-difference/
 [most-visited-sector-in-a-circular-track]: https://leetcode.com/problems/most-visited-sector-in-a-circular-track/
@@ -162,3 +214,4 @@ public int findBestValue(int[] arr, int target) {
 [reverse-integer]: https://leetcode.com/problems/reverse-integer/
 [sum-of-all-odd-length-subarrays]: https://leetcode.com/problems/sum-of-all-odd-length-subarrays/
 [sum-of-mutated-array-closest-to-target]: https://leetcode.com/problems/sum-of-mutated-array-closest-to-target/
+[swap-for-longest-repeated-character-substring]: https://leetcode.com/problems/swap-for-longest-repeated-character-substring/

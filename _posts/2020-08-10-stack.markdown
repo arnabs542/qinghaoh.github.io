@@ -7,6 +7,8 @@ tags: stack
 
 [Remove K Digits][remove-k-digits]
 
+Use StringBuilder as a stack.
+
 {% highlight java %}
 public String removeKdigits(String num, int k) {
     StringBuilder sb = new StringBuilder();
@@ -119,23 +121,23 @@ public int sumSubarrayMins(int[] A) {
     }
 
     // element : index
-    Deque<int[]> st1 = new ArrayDeque<>(), st2 = new ArrayDeque<>();
+    Deque<Integer> st1 = new ArrayDeque<>(), st2 = new ArrayDeque<>();
     int result = 0;
 
     for (int i = 0; i < A.length; i++) {
-        // previous less element
-        while (!st1.isEmpty() && st1.peek()[0] > A[i]) {
+        // previous less element (non-strict)
+        while (!st1.isEmpty() && A[st1.peek()] > A[i]) {
             st1.pop();
         }
-        left[i] = i - (st1.isEmpty() ? -1: st1.peek()[1]);
-        st1.push(new int[]{A[i], i});
+        left[i] = i - (st1.isEmpty()? -1 : st1.peek());
+        st1.push(i);
 
         // next less element (strict)
-        while (!st2.isEmpty() && st2.peek()[0] > A[i]) {
-            int index = st2.pop()[1];
+        while (!st2.isEmpty() && A[st2.peek()] > A[i]) {
+            int index = st2.pop();
             right[index] = i - index;
         }
-        st2.push(new int[]{A[i], i});
+        st2.push(i);
     }
 
     for (int i = 0; i < A.length; i++) {
@@ -160,6 +162,33 @@ public int sumSubarrayMins(int[] A) {
         st.push(i);
     }
     return result;
+}
+{% endhighlight %}
+
+Similarly, with Monotonically Increasing Stack, we can get Previous Greater Element or Next Greater Element.
+
+[Minimum Cost Tree From Leaf Values][minimum-cost-tree-from-leaf-values]
+
+{% highlight java %}
+public int mctFromLeafValues(int[] arr) {
+    Deque<Integer> st = new ArrayDeque<>();
+    st.push(Integer.MAX_VALUE);
+
+    int sum = 0;
+    for (int a : arr) {
+        // previous and next greater element
+        while (st.peek() <= a) {
+            int top = st.pop();
+            sum += top * Math.min(st.peek(), a);
+        }
+        st.push(a);
+    }
+
+    while (st.size() > 2) {
+        sum += st.pop() * st.peek();
+    }
+
+    return sum;
 }
 {% endhighlight %}
 
@@ -448,6 +477,7 @@ public int scoreOfParentheses(String S) {
 [maximal-rectangle]: https://leetcode.com/problems/maximal-rectangle/
 [maximum-nesting-depth-of-two-valid-parentheses-strings]: https://leetcode.com/problems/maximum-nesting-depth-of-two-valid-parentheses-strings/
 [minimum-add-to-make-parentheses-valid]: https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/
+[minimum-cost-tree-from-leaf-values]: https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/
 [minimum-insertions-to-balance-a-parentheses-string]: https://leetcode.com/problems/minimum-insertions-to-balance-a-parentheses-string/
 [next-greater-element-ii]: https://leetcode.com/problems/next-greater-element-ii/
 [next-greater-node-in-linked-list]: https://leetcode.com/problems/next-greater-node-in-linked-list/

@@ -7,7 +7,7 @@ tags: queue
 
 ## Monoqueue: Push/Pop Array Index
 
-[Final Prices With a Special Discount in a Shop][shortest-subarray-with-sum-at-least-k]
+[Shortest Subarray with Sum at Least K][shortest-subarray-with-sum-at-least-k]
 
 {% highlight java %}
 public int shortestSubarray(int[] A, int K) {
@@ -22,18 +22,14 @@ public int shortestSubarray(int[] A, int K) {
     Deque<Integer> d = new ArrayDeque<>();  // monoqueue of p indices
     for (int i = 0; i < p.length; i++) {
         while (!d.isEmpty() && p[i] - p[d.peekFirst()] >= K) {
-            // if i is the best candidate, we don't need to consider it again
+            // if d.peekFirst() is the best candidate start, we don't need to consider it again
             // proof:
             //   for k > j > i, if p[j] - p[i] >= K and p[k] - p[i] >= K
             //   we know k - i > j - i, so the length would be larger (worse)
             min = Math.min(min, i - d.pollFirst());
         }
 
-        // if j > i and p[j] <= p[i], j is a better candidate
-        // proof:
-        //   for any k > j > i, p[k] - p[j] >= p[k] - p[i]
-        //   if p[k] - p[i] >= K, then p[j] - p[i] >= K
-        //   and k - j < k - i
+        // if j > i and p[j] <= p[i], j is a better candidate start
         while (!d.isEmpty() && p[i] <= p[d.peekLast()]) {
             d.pollLast();
         }

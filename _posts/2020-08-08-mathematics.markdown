@@ -64,6 +64,32 @@ public int minSteps(int n) {
 }
 {% endhighlight %}
 
+[Taxicab geometry](https://en.wikipedia.org/wiki/Taxicab_geometry)
+
+Taxicab metric = $$l_1$$ distance = $$l_1$$ norm = $Manhattan distance
+
+[Triangle inequality](https://en.wikipedia.org/wiki/Triangle_inequality#Normed_vector_space)
+
+In a normed vector space $$ V $$, one of the defining properties of the norm is the triangle inequality:
+
+$$ \|x+y\|\leq \|x\|+\|y\|\quad \forall \,x,y\in V $$
+
+[Escape The Ghosts][escape-the-ghosts]
+
+{% highlight java %}
+public boolean escapeGhosts(int[][] ghosts, int[] target) {
+    // Manhattan distance
+    int d = Math.abs(target[0]) + Math.abs(target[1]);
+    for (int[] g : ghosts) {
+        if (Math.abs(g[0] - target[0]) + Math.abs(g[1] - target[1]) <= d) {
+            return false;
+        }
+    }
+    return true;
+}
+{% endhighlight %}
+
+[escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/
 [implement-rand10-using-rand7]: https://leetcode.com/problems/implement-rand10-using-rand7/
 [2-keys-keyboard]: https://leetcode.com/problems/2-keys-keyboard/
 
