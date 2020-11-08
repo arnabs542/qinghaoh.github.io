@@ -3,6 +3,10 @@ layout: post
 title:  "Java Cheatsheet"
 tags: java
 ---
+# ArrayDeque
+
+Null elements are prohibited.
+
 # Arrays
 * [public static \<T\> List\<T\> asList(T... a)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#asList-T...-): fixed-size, mutable
 * [public static \<T\> T\[\] copyOf(T\[\] original, int newLength)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#copyOf-T:A-int-)
@@ -110,6 +114,38 @@ String[] array = list.toArray(new String[0])
 # Object
 * [protected Object clone() throws CloneNotSupportedException](https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone--)
 
+# Scanner
+
+https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Scanner.html
+
+[Fraction Addition and Subtraction][fraction-addition-and-subtraction]
+
+{% highlight java %}
+public String fractionAddition(String expression) {
+    Scanner sc = new Scanner(expression).useDelimiter("/|(?=[-+])");
+    int num = 0, den = 1;
+    while (sc.hasNext()) {
+        int a = sc.nextInt(), b = sc.nextInt();
+        num = num * b + a * den;
+        den *= b;
+        int g = gcd(num, den);
+        num /= g;
+        den /= g;
+    }
+    return num + "/" + den;
+}
+
+private int gcd(int a, int b) {
+    a = Math.abs(a);
+    while (b != 0) {
+        int tmp = b;
+        b = a % b;
+        a = tmp;
+    }
+    return a;
+}
+{% endhighlight %}
+
 # Set
 * [boolean containsAll(Collection\<?\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Set.html#containsAll-java.util.Collection-)
 * [boolean retainAll(Collection\<?\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Set.html#retainAll-java.util.Collection-)
@@ -136,3 +172,5 @@ String[] array = list.toArray(new String[0])
 # TreeSet
 * [public NavigableSet\<E\> subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive)](https://docs.oracle.com/javase/8/docs/api/java/util/TreeSet.html#subSet-E-boolean-E-boolean-)
 * [public SortedSet\<E\> subSet(E fromElement, E toElement)](https://docs.oracle.com/javase/8/docs/api/java/util/TreeSet.html#subSet-E-E-)
+
+[fraction-addition-and-subtraction]: https://leetcode.com/problems/fraction-addition-and-subtraction/

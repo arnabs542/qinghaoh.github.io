@@ -101,6 +101,39 @@ public int characterReplacement(String s, int k) {
 }
 {% endhighlight %}
 
+[Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit][longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit]
+
+{% highlight java %}
+public int longestSubarray(int[] nums, int limit) {
+    Deque<Integer> maxd = new ArrayDeque<>(), mind = new ArrayDeque<>();
+    int i = 0, j = 0;
+    while (j < nums.length) {
+        while (!maxd.isEmpty() && maxd.peekLast() < nums[j]) {
+            maxd.pollLast();
+        }
+        maxd.add(nums[j]);
+
+        while (!mind.isEmpty() && mind.peekLast() > nums[j]) {
+            mind.pollLast();
+        }
+        mind.add(nums[j]);
+
+        j++;
+
+        if (maxd.peek() - mind.peek() > limit) {
+            if (maxd.peek() == nums[i]) {
+                maxd.poll();
+            }
+            if (mind.peek() == nums[i]) {
+                mind.poll();
+            }
+            i++;
+        }
+    }
+    return j - i;
+}
+{% endhighlight %}
+
 [Count Number of Nice Subarrays][count-number-of-nice-subarrays]
 
 If we apply `nums[i] -> nums[i] % 2`, the problem becomes [Subarray Sum Equals K][subarray-sum-equals-k]
@@ -219,10 +252,9 @@ private int atMost(int[] A, int K) {
     int[] count = new int[A.length + 1];
     int i = 0, j = 0, result = 0;
     while (j < A.length) {
-        if (count[A[j]] == 0) {
+        if (count[A[j++]]++ == 0) {
             K--;
         }
-        count[A[j]]++;
 
         while (K < 0) {
             if (--count[A[i++]] == 0) {
@@ -230,12 +262,10 @@ private int atMost(int[] A, int K) {
             }
         }
 
-        // (j - i + 1) is the length of each valid contiguous subarray with at most K different integers
+        // (j - i) is the length of each valid contiguous subarray with at most K different integers
         // Fomula: given an array of length n, it will produce (n * (n + 1)) / 2 total contiguous subarrays
-        result += j - i + 1;
-        j++;
+        result += j - i;
     }
-
     return result;
 }
 {% endhighlight %}
@@ -299,6 +329,7 @@ private boolean condition(int[] nums, int distance, int k) {
 [find-k-th-smallest-pair-distance]: https://leetcode.com/problems/find-k-th-smallest-pair-distance/
 [fruit-into-baskets]: https://leetcode.com/problems/fruit-into-baskets/
 [get-equal-substrings-within-budget]: https://leetcode.com/problems/get-equal-substrings-within-budget/
+[longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit]: https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/
 [longest-repeating-character-replacement]: https://leetcode.com/problems/longest-repeating-character-replacement/
 [longest-substring-without-repeating-characters]: https://leetcode.com/problems/longest-substring-without-repeating-characters/
 [max-consecutive-ones-iii]: https://leetcode.com/problems/max-consecutive-ones-iii/

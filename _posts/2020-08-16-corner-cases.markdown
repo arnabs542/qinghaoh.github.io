@@ -182,7 +182,7 @@ public int maxRepOpt1(String text) {
     // char : list of indexes
     Map<Character, List<Integer>> map = new HashMap<>();
     for (int i = 0; i < text.length(); i++) {
-        map.computeIfAbsent(text.charAt(i), v -> new ArrayList<>()).add(i);
+        map.computeIfAbsent(text.charAt(i), k -> new ArrayList<>()).add(i);
     }
 
     int result = 0;

@@ -35,6 +35,8 @@ public int subarraySum(int[] nums, int k) {
 }
 {% endhighlight %}
 
+[Count Triplets That Can Form Two Arrays of Equal XOR][count-triplets-that-can-form-two-arrays-of-equal-xor]
+
 ## Sliding Window
 
 [Maximum Number of Occurrences of a Substring][maximum-number-of-occurrences-of-a-substring]
@@ -78,6 +80,7 @@ Generalization: `N` non-overlapping subarrays
 {% highlight java %}
 {% endhighlight %}
 
+[count-triplets-that-can-form-two-arrays-of-equal-xor]: https://leetcode.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/
 [find-two-non-overlapping-sub-arrays-each-with-target-sum]: https://leetcode.com/problems/find-two-non-overlapping-sub-arrays-each-with-target-sum/
 [maximum-number-of-occurrences-of-a-substring]: https://leetcode.com/problems/maximum-number-of-occurrences-of-a-substring/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/

@@ -166,6 +166,27 @@ public int hIndex(int[] citations) {
 }
 {% endhighlight %}
 
+[Car Pooling][car-pooling]
+
+{% highlight java %}
+public boolean carPooling(int[][] trips, int capacity) {
+    Map<Integer, Integer> map = new TreeMap<>();
+    for (int[] t : trips) {
+        map.put(t[1], map.getOrDefault(t[1], 0) + t[0]);
+        map.put(t[2], map.getOrDefault(t[2], 0) - t[0]);
+    }
+
+    for (int v : map.values()) {
+        capacity -= v;
+        if (capacity < 0) {
+            return false;
+        }
+    }
+
+    return true;
+}
+{% endhighlight %}
+
 ## Counting Sort
 [Counting sort](https://en.wikipedia.org/wiki/Counting_sort)
 
@@ -343,6 +364,7 @@ private void swap(int[] A, int i, int j) {
 }
 {% endhighlight %}
 
+[car-pooling]: https://leetcode.com/problems/car-pooling/
 [count-of-smaller-numbers-after-self]: https://leetcode.com/problems/count-of-smaller-numbers-after-self/
 [find-lucky-integer-in-an-array]: https://leetcode.com/problems/find-lucky-integer-in-an-array/
 [h-index]: https://leetcode.com/problems/h-index/

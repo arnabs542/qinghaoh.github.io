@@ -1,9 +1,11 @@
 ---
 layout: post
-title:  "Fenwick Tree"
+title:  "Tree"
 tags: tree
 ---
-[Fenwick Tree](https://en.wikipedia.org/wiki/Fenwick_tree)
+# Fenwick Tree
+
+[Fenwick tree](https://en.wikipedia.org/wiki/Fenwick_tree)
 
 A Fenwick tree or binary indexed tree is a data structure that can efficiently update elements and calculate prefix sums in a table of numbers.
 
@@ -46,4 +48,32 @@ public class FenwickTree {
 
 [Range Sum Query - Mutable][range-sum-query-mutable]
 
+# Cartesian Tree
+
+[Cartesian tree](https://en.wikipedia.org/wiki/Cartesian_tree)
+
+Cartesian tree is a binary tree derived from a sequence of numbers; it can be uniquely defined from the properties that it is heap-ordered and that a symmetric (in-order) traversal of the tree returns the original sequence. 
+
+[Maximum Binary Tree][maximum-binary-tree]
+
+{% highlight java %}
+public TreeNode constructMaximumBinaryTree(int[] nums) {
+    Deque<TreeNode> st = new ArrayDeque<>();
+    for (int num : nums) {
+        TreeNode node = new TreeNode(num);
+        // monotonically decreasing
+        while (!st.isEmpty() && st.peek().val < num) {
+            node.left = st.pop();
+        }
+        if (!st.isEmpty()) {
+            st.peek().right = node;
+        }
+        st.push(node);
+    }
+
+    return st.isEmpty() ? null : st.removeLast();
+}
+{% endhighlight %}
+
+[maximum-binary-tree]: https://leetcode.com/problems/maximum-binary-tree/
 [range-sum-query-mutable]: https://leetcode.com/problems/range-sum-query-mutable/

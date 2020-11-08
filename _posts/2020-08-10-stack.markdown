@@ -129,7 +129,7 @@ public int sumSubarrayMins(int[] A) {
         while (!st1.isEmpty() && A[st1.peek()] > A[i]) {
             st1.pop();
         }
-        left[i] = i - (st1.isEmpty()? -1 : st1.peek());
+        left[i] = i - (st1.isEmpty() ? -1 : st1.peek());
         st1.push(i);
 
         // next less element (strict)
@@ -154,6 +154,7 @@ public int sumSubarrayMins(int[] A) {
     Deque<Integer> st = new ArrayDeque<>();
     int result = 0;
     for (int i = 0; i <= A.length; i++) {
+        // when A is at the end, set i as 0 so that all stack elements are popped
         while (!st.isEmpty() && A[st.peek()] > (i == A.length ? 0 : A[i])) {
             int j = st.pop();
             int k = st.isEmpty() ? -1 : st.peek();

@@ -52,4 +52,41 @@ public boolean canVisitAllRooms(List<List<Integer>> rooms) {
 }
 {% endhighlight %}
 
+[Pyramid Transition Matrix][pyramid-transition-matrix]
+
+{% highlight java %}
+private Map<String, Set<Character>> map;
+
+public boolean pyramidTransition(String bottom, List<String> allowed) {
+    map = new HashMap<>();
+    for (String s : allowed) {
+        map.computeIfAbsent(s.substring(0, 2), k -> new HashSet<>()).add(s.charAt(2));
+    }
+
+    return dfs(bottom, "", 1);
+}
+
+private boolean dfs(String row, String nextRow, int index) {
+    if (row.length() == 1) {
+        return true;
+    }
+
+    if (nextRow.length() + 1 == row.length()) {
+        return dfs(nextRow, "", 1);
+    }
+
+    String key = row.substring(index - 1, index + 1);
+    if (map.containsKey(key)) {
+        for (Character c : map.get(key)) {
+            if (dfs(row, nextRow + c, index + 1)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+{% endhighlight %}
+
 [keys-and-rooms]: https://leetcode.com/problems/keys-and-rooms/
+[pyramid-transition-matrix]: https://leetcode.com/problems/pyramid-transition-matrix/

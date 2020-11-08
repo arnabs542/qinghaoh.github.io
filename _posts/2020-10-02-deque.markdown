@@ -19,26 +19,81 @@ public int shortestSubarray(int[] A, int K) {
     }
 
     int min = A.length + 1;
-    Deque<Integer> d = new ArrayDeque<>();  // monoqueue of p indices
+    Deque<Integer> dq = new ArrayDeque<>();  // monoqueue of p indices
     for (int i = 0; i < p.length; i++) {
-        while (!d.isEmpty() && p[i] - p[d.peekFirst()] >= K) {
-            // if d.peekFirst() is the best candidate start, we don't need to consider it again
+        while (!dq.isEmpty() && p[i] - p[dq.peekFirst()] >= K) {
+            // if dq.peekFirst() is the best candidate start, we don't need to consider it again
             // proof:
             //   for k > j > i, if p[j] - p[i] >= K and p[k] - p[i] >= K
             //   we know k - i > j - i, so the length would be larger (worse)
-            min = Math.min(min, i - d.pollFirst());
+            min = Math.min(min, i - dq.pollFirst());
         }
 
         // if j > i and p[j] <= p[i], j is a better candidate start
-        while (!d.isEmpty() && p[i] <= p[d.peekLast()]) {
-            d.pollLast();
+        while (!dq.isEmpty() && p[i] <= p[dq.peekLast()]) {
+            dq.pollLast();
         }
 
-        d.offerLast(i);
+        dq.offerLast(i);
     }
 
     return min <= A.length ? min : -1;
 }
 {% endhighlight %}
 
+# Max/Min in a Fixed Size Window
+
+[Sliding Window Maximum][sliding-window-maximum]
+
+{% highlight java %}
+public int[] maxSlidingWindow(int[] nums, int k) {
+    int[] result = new int[nums.length - k + 1];
+    Deque<Integer> dq = new ArrayDeque<>();
+    for (int i = 0; i < nums.length; i++) {
+        // removes the out-of-window number
+        if (!dq.isEmpty() && dq.peek() == i - k) {
+            dq.poll();
+        }
+
+        // if i < j && nums[i] < nums[j], nums[j] is always the better candidate
+        while (!dq.isEmpty() && nums[dq.peekLast()] < nums[i]) {
+            dq.pollLast();
+        }
+
+        dq.offer(i);
+        if (i >= k - 1) {
+            result[i - k + 1] = nums[dq.peek()];
+        }
+    }
+    return result;
+}
+{% endhighlight %}
+
+[Constrained Subsequence Sum][constrained-subsequence-sum]
+
+{% highlight java %}
+public int constrainedSubsetSum(int[] nums, int k) {
+    int max = nums[0];
+    int[] dp = new int[nums.length];
+    Deque<Integer> dq = new ArrayDeque<>();
+    for (int i = 0; i < nums.length; i++) {
+        if (!dq.isEmpty() && dq.peek() == i - k - 1) {
+            dq.poll();
+        }
+
+        // dp[i] = nums[i] + max(0, dp[i - k], dp[i - k + 1], ..., dp[i - 1])
+        dp[i] = nums[i] + Math.max(0, dq.isEmpty() ? 0 : dp[dq.peek()]);
+        max = Math.max(max, dp[i]);
+
+        while (!dq.isEmpty() && dp[dq.peekLast()] < dp[i]) {
+            dq.pollLast();
+        }
+        dq.offer(i);
+    }
+    return max;
+}
+{% endhighlight %}
+
+[constrained-subsequence-sum]: https://leetcode.com/problems/constrained-subsequence-sum/
 [shortest-subarray-with-sum-at-least-k]: https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/
+[sliding-window-maximum]: https://leetcode.com/problems/sliding-window-maximum/

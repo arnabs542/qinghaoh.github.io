@@ -27,6 +27,7 @@ public int findKthLargest(int[] nums, int k) {
 ## Quickselect
 
 [Quickselect](https://en.wikipedia.org/wiki/Quickselect)
+[Partial sorting](https://en.wikipedia.org/wiki/Partial_sorting)
 
 Time complexity: 
 * Average: `O(n)`
@@ -46,11 +47,7 @@ private int quickSelect(int[] nums, int low, int high, int k) {
         return nums[p];
     }
 
-    if (count > k) {
-        return quickSelect(nums, p + 1, high, k);
-    }
-
-    return quickSelect(nums, low, p - 1, k - count);
+    return count > k ? quickSelect(nums, p + 1, high, k) : quickSelect(nums, low, p - 1, k - count);
 }
 
 private int partition(int[] nums, int low, int high) {

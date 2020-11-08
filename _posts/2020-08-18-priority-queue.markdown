@@ -3,6 +3,9 @@ layout: post
 title:  "Priority Queue"
 tags: queue
 ---
+Time complexity:
+* Build: `O(n)`
+
 [Maximize Sum Of Array After K Negations][maximize-sum-of-array-after-k-negations]
 
 {% highlight java %}

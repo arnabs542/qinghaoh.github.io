@@ -68,6 +68,10 @@ double d = (-5.0) % (-3.0);  // -2.0
 
 Queue implementations generally do not allow insertion of ***null*** elements, although some implementations, such as **LinkedList**, do not prohibit insertion of null. Even in the implementations that permit it, null should not be inserted into a Queue, as null is also used as a special return value by the poll method to indicate that the queue contains no elements.
 
+## Local Variable Type Interface
+
+https://docs.oracle.com/en/java/javase/13/language/local-variable-type-inference.html
+
 [underscores-literals]: https://docs.oracle.com/javase/7/docs/technotes/guides/language/underscores-literals.html
 [for]: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/for.html
 [remainder-operator]: https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.17.3
