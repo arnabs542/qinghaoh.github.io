@@ -26,7 +26,7 @@ Null elements are prohibited.
 * [public static int frequency(Collection\<?\> c, Object o)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#frequency-java.util.Collection-java.lang.Object-)
 * [public static \<T\> T max(Collection\<? extends T\> coll, Comparator\<? super T\> comp)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#max-java.util.Collection-java.util.Comparator-)
 * [public static \<T\> List\<T\> nCopies(int n, T o)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#nCopies-int-T-): immutable
-* [public static void reverse(List\<?\> list)](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collections.html#reverse(java.util.List))
+* [public static void reverse(List\<?\> list)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collections.html#reverse(java.util.List))
 * [public static \<T\> Comparator\<T\> reverseOrder()](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#reverseOrder--)
 
 {% highlight java %}
@@ -158,6 +158,7 @@ private int gcd(int a, int b) {
 * [public boolean contains(CharSequence s)](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#contains-java.lang.CharSequence-)
 * [public static String join(CharSequence delimiter, CharSequence... elements)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#join(java.lang.CharSequence,java.lang.CharSequence...))
 * [public String repeat(int count)](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html#repeat(int))
+* [public String replace(char oldChar, char newChar)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#replace(char,char))
 * [public String replaceAll(String regex, String replacement)](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#replaceAll-java.lang.String-java.lang.String-)
 * [public boolean startsWith(String prefix, int toffset)](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#startsWith-java.lang.String-int-)
 

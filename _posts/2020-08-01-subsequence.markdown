@@ -11,6 +11,24 @@ Where `0 <= i_0 < i_1 < ... < i_k <= a.length`
 
 # Algorithm
 
+## Sort
+
+[Smallest Range II][smallest-range-ii]
+
+{% highlight java %}
+public int smallestRangeII(int[] A, int K) {
+    Arrays.sort(A);
+
+    int max = A[A.length - 1], min = A[0], diff = max - min;
+    for (int i = 0; i < A.length - 1; i++) {
+        max = Math.max(A[A.length - 1], A[i] + 2 * K);
+        min = Math.min(A[0] + 2 * K, A[i + 1]);
+        diff = Math.min(diff, max - min);
+    }
+    return diff;
+}
+{% endhighlight %}
+
 ## Binary Search
 
 [Is Subsequence][is-subsequence]
@@ -72,6 +90,8 @@ public int lengthOfLIS(int[] nums) {
     return max;
 }
 {% endhighlight %}
+
+Similar problem: [Largest Divisible Subset][largest-divisible-subset]
 
 A quicker solution is [Patience sorting](https://en.wikipedia.org/wiki/Patience_sorting). [This](https://www.cs.princeton.edu/courses/archive/spring13/cos423/lectures/LongestIncreasingSubsequence.pdf) is a Princeton lecture for it.
 
@@ -181,7 +201,9 @@ public int longestArithSeqLength(int[] A) {
 }
 {% endhighlight %}
 
+[largest-divisible-subset]: https://leetcode.com/problems/largest-divisible-subset/
 [longest-arithmetic-subsequence]: https://leetcode.com/problems/longest-arithmetic-subsequence/
 [longest-increasing-subsequence]: https://leetcode.com/problems/longest-increasing-subsequence/
 [is-subsequence]: https://leetcode.com/problems/is-subsequence/
 [shortest-common-subsequence]: https://leetcode.com/problems/shortest-common-subsequence/
+[smallest-range-ii]: https://leetcode.com/problems/smallest-range-ii/

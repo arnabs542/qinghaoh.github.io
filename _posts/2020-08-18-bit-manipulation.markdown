@@ -255,7 +255,22 @@ public int findMaximumXOR(int[] nums) {
 
 Another solution is by Trie.
 
+# Gray Code
+
+[Circular Permutation in Binary Representation][circular-permutation-in-binary-representation]
+
+{% highlight java %}
+public List<Integer> circularPermutation(int n, int start) {
+    List<Integer> result = new ArrayList<>();
+    for (int i = 0; i < (1 << n); ++i) {
+        result.add(start ^ i ^ (i >> 1));
+    }
+    return result;
+}
+{% endhighlight %}
+
 [binary-number-with-alternating-bits]: https://leetcode.com/problems/binary-number-with-alternating-bits/
+[circular-permutation-in-binary-representation]: https://leetcode.com/problems/circular-permutation-in-binary-representation/
 [k-th-symbol-in-grammar]: https://leetcode.com/problems/k-th-symbol-in-grammar/
 [maximum-xor-of-two-numbers-in-an-array]: https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/
 [single-number]: https://leetcode.com/problems/single-number/
