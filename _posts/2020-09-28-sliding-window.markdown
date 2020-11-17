@@ -325,6 +325,10 @@ private boolean condition(int[] nums, int distance, int k) {
 }
 {% endhighlight %}
 
+# Fixed Size
+
+[Maximum Points You Can Obtain from Cards][maximum-points-you-can-obtain-from-cards]
+
 [count-number-of-nice-subarrays]: https://leetcode.com/problems/count-number-of-nice-subarrays/
 [find-k-th-smallest-pair-distance]: https://leetcode.com/problems/find-k-th-smallest-pair-distance/
 [fruit-into-baskets]: https://leetcode.com/problems/fruit-into-baskets/
@@ -333,6 +337,7 @@ private boolean condition(int[] nums, int distance, int k) {
 [longest-repeating-character-replacement]: https://leetcode.com/problems/longest-repeating-character-replacement/
 [longest-substring-without-repeating-characters]: https://leetcode.com/problems/longest-substring-without-repeating-characters/
 [max-consecutive-ones-iii]: https://leetcode.com/problems/max-consecutive-ones-iii/
+[maximum-points-you-can-obtain-from-cards]: https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
 [minimum-size-subarray-sum]: https://leetcode.com/problems/minimum-size-subarray-sum/
 [number-of-substrings-containing-all-three-characters]: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
 [replace-the-substring-for-balanced-string]: https://leetcode.com/problems/replace-the-substring-for-balanced-string/

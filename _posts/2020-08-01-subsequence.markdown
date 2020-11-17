@@ -29,6 +29,25 @@ public int smallestRangeII(int[] A, int K) {
 }
 {% endhighlight %}
 
+[Sum of Subsequence Widths][sum-of-subsequence-widths]
+
+{% highlight java %}
+private final int MOD = (int)1e9 + 7;
+
+public int sumSubseqWidths(int[] A) {
+    Arrays.sort(A);
+
+    long sum = 0, c = 1;
+    for (int i = 0; i < A.length; i++, c = c * 2 % MOD) {
+        // 2 ^ i subsequences where A[i] is max
+        // 2 ^ (n - i - 1) subsequences where A[i] is min
+        // sum_i (2 ^ (n - i - 1) * A[i]) == sum_i (2 ^ i * A[n - i - 1])
+        sum = (sum + c * (A[i] - A[A.length - i - 1])) % MOD;
+    }
+    return (int)((sum + MOD) % MOD);
+}
+{% endhighlight %}
+
 ## Binary Search
 
 [Is Subsequence][is-subsequence]
@@ -207,3 +226,4 @@ public int longestArithSeqLength(int[] A) {
 [is-subsequence]: https://leetcode.com/problems/is-subsequence/
 [shortest-common-subsequence]: https://leetcode.com/problems/shortest-common-subsequence/
 [smallest-range-ii]: https://leetcode.com/problems/smallest-range-ii/
+[sum-of-subsequence-widths]: https://leetcode.com/problems/sum-of-subsequence-widths/

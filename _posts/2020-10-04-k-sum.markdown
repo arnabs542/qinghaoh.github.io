@@ -1,0 +1,54 @@
+---
+layout: post
+title:  "K Sum"
+tag: array
+---
+
+[K-SUM](https://en.wikipedia.org/wiki/3SUM)
+
+[Two Sum][two-sum]
+
+One pass, Set (Map): `O(n)`
+
+[Two Sum II - Input array is sorted][two-sum-ii-input-array-is-sorted]
+
+Two pointers: `O(n)`
+
+[3Sum][3sum]
+
+Sort + O(n) * Two pointers: `O(n ^ 2)`
+
+**k-sum**:
+
+`O(n ^ (k - 1))`
+
+* Sort + O(n ^ (k - 2)) * Two pointers
+* O(n ^ (k - 2)) * Set/Map
+
+[4Sum II][4sum-ii]
+
+`O(n^2)`
+
+{% highlight java %}
+public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+    Map<Integer, Integer> map = new HashMap<>();
+    for (int c : C) {
+        for (int d : D) {
+            map.compute(c + d, (k, v) -> v == null ? 1 : v + 1);
+        }
+    }
+
+    int count = 0;
+    for (int a : A) {
+        for (int b : B) {
+            count += map.getOrDefault(-a - b, 0);
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
+[3sum]: https://leetcode.com/problems/3sum/
+[4sum-ii]: https://leetcode.com/problems/4sum-ii/
+[two-sum]: https://leetcode.com/problems/two-sum/
+[two-sum-ii-input-array-is-sorted]: https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/

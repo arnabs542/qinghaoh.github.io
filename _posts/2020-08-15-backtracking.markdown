@@ -286,9 +286,11 @@ private boolean backtrack(int[] nums, int index, int target) {
 
 [Beautiful Arrangement][beautiful-arrangement]
 
-[Partition to K Equal Sum Subsets][partition-to-k-equal-sum-subsets]
+# Subset Sum Problem
 
 [Subset sum problem](https://en.wikipedia.org/wiki/Subset_sum_problem): NP-complete
+
+[Partition to K Equal Sum Subsets][partition-to-k-equal-sum-subsets]
 
 {% highlight java %}
 public boolean canPartitionKSubsets(int[] nums, int k) {
@@ -352,7 +354,7 @@ public boolean canPartitionKSubsets(int[] nums, int k) {
     return backtrack(nums, nums.length - 1, new boolean[nums.length], k, 0, sum / k);
 }
 
-boolean backtrack(int[] nums, int index, boolean[] visited, int k, int sum, int target) {
+private boolean backtrack(int[] nums, int index, boolean[] visited, int k, int sum, int target) {
     if (k == 1) {
         return true;
     }
@@ -375,10 +377,13 @@ boolean backtrack(int[] nums, int index, boolean[] visited, int k, int sum, int 
 }
 {% endhighlight %}
 
+[Matchsticks to Square][matchsticks-to-square]
+
 [beautiful-arrangement]: https://leetcode.com/problems/beautiful-arrangement/
 [combination-sum]: https://leetcode.com/problems/combination-sum/
 [combination-sum-ii]: https://leetcode.com/problems/combination-sum-ii/
 [combination-sum-iii]: https://leetcode.com/problems/combination-sum-iii/
+[matchsticks-to-square]: https://leetcode.com/problems/matchsticks-to-square/
 [palindrome-partitioning]: https://leetcode.com/problems/palindrome-partitioning/
 [partition-equal-subset-sum]: https://leetcode.com/problems/partition-equal-subset-sum/
 [partition-to-k-equal-sum-subsets]: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
