@@ -269,8 +269,30 @@ public List<Integer> circularPermutation(int n, int start) {
 }
 {% endhighlight %}
 
+[Flip Columns For Maximum Number of Equal Rows][flip-columns-for-maximum-number-of-equal-rows]
+
+{% highlight java %}
+public int maxEqualRowsAfterFlips(int[][] matrix) {
+    Map<String, Integer> map = new HashMap<>();
+    for (int[] row : matrix) {
+        // Flipping a subset of columns is like doing a bitwise XOR of some number k onto each row
+        // if row ^ k == 0 or row ^ k == 1
+        // then k == row or k == row ^ 1
+        StringBuilder sb1 = new StringBuilder(), sb2 = new StringBuilder();
+        for (int e : row) {
+            sb1.append(e);
+            sb2.append(e ^ 1);
+        }
+        map.compute(sb1.toString(), (k, v) -> v == null ? 1 : v + 1);
+        map.compute(sb2.toString(), (k, v) -> v == null ? 1 : v + 1);
+    }
+    return Collections.max(map.values());
+}
+{% endhighlight %}
+
 [binary-number-with-alternating-bits]: https://leetcode.com/problems/binary-number-with-alternating-bits/
 [circular-permutation-in-binary-representation]: https://leetcode.com/problems/circular-permutation-in-binary-representation/
+[flip-columns-for-maximum-number-of-equal-rows]: https://leetcode.com/problems/flip-columns-for-maximum-number-of-equal-rows/
 [k-th-symbol-in-grammar]: https://leetcode.com/problems/k-th-symbol-in-grammar/
 [maximum-xor-of-two-numbers-in-an-array]: https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/
 [single-number]: https://leetcode.com/problems/single-number/

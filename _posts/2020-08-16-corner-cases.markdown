@@ -206,10 +206,62 @@ public int maxRepOpt1(String text) {
 }
 {% endhighlight %}
 
+[Number of Steps to Reduce a Number in Binary Representation to One][number-of-steps-to-reduce-a-number-in-binary-representation-to-one]
+
+{% highlight java %}
+public int numSteps(String s) {
+    int step = 0, carry = 0;
+    for (int i = s.length() - 1; i > 0; i--) {
+        step++;
+        // additional step:
+        // first encounter of '1'
+        // or, encounter of '0' after the first '1' is encountered
+        if (s.charAt(i) - '0' + carry == 1) {
+            // carry is always 1 after the first '1' is encountered
+            carry = 1;
+            step++;
+        }
+    }
+    return step + carry;
+}
+{% endhighlight %}
+
+[Maximum Length of a Concatenated String with Unique Characters][maximum-length-of-a-concatenated-string-with-unique-characters]
+
+{% highlight java %}
+public int maxLength(List<String> arr) {
+    List<Integer> list = new ArrayList<>();
+    list.add(0);
+
+    int max = 0;
+    for (String s : arr) {
+        int num = 0, hasDup = 0;
+        for (char c : s.toCharArray()) {
+            int mask = 1 << (c - 'a');
+            hasDup |= num & mask;
+            num |= mask;
+        }
+
+        if (hasDup == 0) {
+            for (int i = list.size() - 1; i >= 0; i--) {
+                if ((list.get(i) & num) == 0) {
+                    int concat = list.get(i) | num;
+                    list.add(concat);
+                    max = Math.max(max, Integer.bitCount(concat));
+                }
+            }
+        }
+    }
+    return max;
+}
+{% endhighlight %}
+
 [circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
 [heaters]: https://leetcode.com/problems/heaters/
+[maximum-length-of-a-concatenated-string-with-unique-characters]: https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/
 [minimum-time-difference]: https://leetcode.com/problems/minimum-time-difference/
 [most-visited-sector-in-a-circular-track]: https://leetcode.com/problems/most-visited-sector-in-a-circular-track/
+[number-of-steps-to-reduce-a-number-in-binary-representation-to-one]: https://leetcode.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one/
 [rabbits-in-forest]: https://leetcode.com/problems/rabbits-in-forest/
 [reverse-integer]: https://leetcode.com/problems/reverse-integer/
 [sum-of-all-odd-length-subarrays]: https://leetcode.com/problems/sum-of-all-odd-length-subarrays/

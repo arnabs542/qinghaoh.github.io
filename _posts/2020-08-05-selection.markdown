@@ -5,9 +5,9 @@ tags: array
 ---
 [Selection algorithm](https://en.wikipedia.org/wiki/Selection_algorithm)
 
-[Kth Largest Element in an Array][kth-largest-element-in-an-array]
-
 ## Heap Sort
+
+[Kth Largest Element in an Array][kth-largest-element-in-an-array]
 
 {% highlight java %}
 public int findKthLargest(int[] nums, int k) {
@@ -24,6 +24,41 @@ public int findKthLargest(int[] nums, int k) {
 }
 {% endhighlight %}
 
+## Bucket Sort
+
+[Top K Frequent Elements][top-k-frequent-elements]
+
+{% highlight java %}
+public int[] topKFrequent(int[] nums, int k) {
+    Map<Integer, Integer> count = new HashMap<>();
+    for (int num : nums) {
+        count.put(num, count.getOrDefault(num, 0) + 1);
+    }
+
+    List<Integer>[] bucket = new List[nums.length + 1];
+    for (var e : count.entrySet()) {
+        if (bucket[e.getValue()] == null) {
+            bucket[e.getValue()] = new ArrayList<>();
+        }
+        bucket[e.getValue()].add(e.getKey());
+    }
+
+    int[] result = new int[k];
+    int index = 0;
+    for (int i = bucket.length - 1; i >= 0; i--) {
+        if (bucket[i] != null) {
+            for (int num : bucket[i]) {
+                result[index++] = num;
+            }
+            if (index == k) {
+                break;
+            }
+        }
+    }
+    return result;
+}
+{% endhighlight %}
+
 ## Quickselect
 
 [Quickselect](https://en.wikipedia.org/wiki/Quickselect)
@@ -32,6 +67,8 @@ public int findKthLargest(int[] nums, int k) {
 Time complexity: 
 * Average: `O(n)`
 * Worst: `O(n^2)`
+
+[Kth Largest Element in an Array][kth-largest-element-in-an-array]
 
 {% highlight java %}
 public int findKthLargest(int[] nums, int k) {
@@ -72,5 +109,14 @@ private void swap(int[] nums, int i, int j) {
 
 [Kth Largest Element in a Stream][kth-largest-element-in-a-stream]
 
+## Median of Medians
+
+[Median of medians](https://en.wikipedia.org/wiki/Median_of_medians)
+
+Time complexity:
+* Best: `O(n)`
+* Worst: `O(n)`
+
 [kth-largest-element-in-a-stream]: https://leetcode.com/problems/kth-largest-element-in-a-stream/
 [kth-largest-element-in-an-array]: https://leetcode.com/problems/kth-largest-element-in-an-array/
+[top-k-frequent-elements]: https://leetcode.com/problems/top-k-frequent-elements/

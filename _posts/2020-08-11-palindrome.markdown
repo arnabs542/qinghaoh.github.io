@@ -37,6 +37,19 @@ public boolean isPalindrome(int x) {
 }
 {% endhighlight %}
 
+## Greedy
+
+[Construct K Palindrome Strings][construct-k-palindrome-strings]
+
+{% highlight java %}
+public boolean canConstruct(String s, int k) {
+    int odd = 0;
+    for (char c : s.toCharArray()) {
+        odd ^= 1 << (c - 'a');
+    }
+    return s.length() >= k && Integer.bitCount(odd) <= k;
+}
+{% endhighlight %}
 
 ## Dynamic Programming
 
@@ -111,6 +124,7 @@ public int longestPalindromeSubseq(String s) {
 {% highlight java %}
 {% endhighlight %}
 
+[construct-k-palindrome-strings]: https://leetcode.com/problems/construct-k-palindrome-strings/
 [count-different-palindromic-subsequences]: https://leetcode.com/problems/count-different-palindromic-subsequences/
 [longest-palindromic-subsequence]: https://leetcode.com/problems/longest-palindromic-subsequence/
 [longest-palindromic-substring]: https://leetcode.com/problems/longest-palindromic-substring/

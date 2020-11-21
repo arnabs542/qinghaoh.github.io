@@ -89,6 +89,12 @@ public boolean escapeGhosts(int[][] ghosts, int[] target) {
 }
 {% endhighlight %}
 
+[Fibonacci number](https://en.wikipedia.org/wiki/Fibonacci_number#Sequence_properties)
+
+$$\sum _{i=0}^{n-1}F_{2i+1}=F_{2n}$$
+
+$$\sum _{i=1}^{n}F_{2i}=F_{2n+1}-1$$
+
 [escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/
 [implement-rand10-using-rand7]: https://leetcode.com/problems/implement-rand10-using-rand7/
 [2-keys-keyboard]: https://leetcode.com/problems/2-keys-keyboard/
