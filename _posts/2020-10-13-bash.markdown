@@ -30,4 +30,11 @@ awk 'FNR == 10 {print; exit}' file.txt
 sed -n 10p file.txt
 {% endhighlight %}
 
+[Word Frequency][word-frequency]
+
+{% highlight bash %}
+cat words.txt | tr -s ' ' '\n' | sort | uniq -c | sort -r | awk '{ print $2, $1 }'
+{% endhighlight %}
+
 [tenth-line]: https://leetcode.com/problems/tenth-line/
+[word-frequency]: https://leetcode.com/problems/word-frequency/

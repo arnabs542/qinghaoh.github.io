@@ -60,66 +60,34 @@ public int minDistance(String word1, String word2) {
 {% endhighlight %}
 
 Rolling array optimization:
-* `dp[i - 1][j] -> pre[j]`
-* `dp[i][j] -> cur[j]`
 
 ![Rolling Array](/assets/dp_dimension_reduction_1.png)
 
 {% highlight java %}
 public int minDistance(String word1, String word2) {
-    int[] pre = new int[word2.length() + 1];
-    int[] cur = new int[word2.length() + 1];
+    int prev = 0;
+    int[] dp = new int[word2.length() + 1];
 
     for (int j = 1; j <= word2.length(); j++) {
-        pre[j] = j;
+        dp[j] = j;
     }
 
     for (int i = 1; i <= word1.length(); i++) {
-        cur[0] = i;
+        prev = dp[0];
+        dp[0] = i;
         for (int j = 1; j <= word2.length(); j++) {
+            int tmp = dp[j];
             if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
-                cur[j] = pre[j - 1];
+                dp[j] = prev;
             } else {
-                cur[j] = Math.min(pre[j - 1], Math.min(pre[j], cur[j - 1])) + 1;
+                dp[j] = Math.min(prev, Math.min(dp[j], dp[j - 1])) + 1;
             }
-        }
-        int[] tmp = pre;
-        pre = cur;
-        cur = tmp;
-    }
-    return pre[word2.length()];
-}
-{% endhighlight %}
-
-* `pre[j - 1] -> pre`
-* `pre[j] -> cur[j]`
-{% highlight java %}
-public int minDistance(String word1, String word2) {
-    int pre = 0;
-    int[] cur = new int[word2.length() + 1];
-
-    for (int j = 1; j <= word2.length(); j++) {
-        cur[j] = j;
-    }
-
-    for (int i = 1; i <= word1.length(); i++) {
-        pre = cur[0];
-        cur[0] = i;
-        for (int j = 1; j <= word2.length(); j++) {
-            int tmp = cur[j];
-            if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
-                cur[j] = pre;
-            } else {
-                cur[j] = Math.min(pre, Math.min(cur[j], cur[j - 1])) + 1;
-            }
-            pre = tmp;
+            prev = tmp;
         }
     }
     return cur[word2.length()];
 }
 {% endhighlight %}
-
-![Example](/assets/rotate_array.png)
 
 # Block Sum
 [Matrix Block Sum][matrix-block-sum]
