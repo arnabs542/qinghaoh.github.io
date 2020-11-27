@@ -68,12 +68,42 @@ private int height(TreeNode node) {
 }
 {% endhighlight %}
 
+[Binary Tree Maximum Path Sum][binary-tree-maximum-path-sum]
+
+{% highlight java %}
+private int sum;
+
+public int maxPathSum(TreeNode root) {
+    sum = Integer.MIN_VALUE;
+    dfs(root);
+    return sum;
+}
+
+/**
+ * Max sum of paths which start from node.
+ * @param node the root of the subtree
+ * @return the max sum of paths starting from node
+ */
+private int dfs(TreeNode node) {
+    if (node == null) {
+        return 0;
+    }
+
+    int left = Math.max(0, dfs(node.left));
+    int right = Math.max(0, dfs(node.right));
+
+    sum = Math.max(sum, node.val + left + right);
+    return node.val + Math.max(left, right);
+}
+{% endhighlight %}
+
 [Longest Univalue Path][longest-univalue-path]
 
 {% highlight java %}
-private int path = 0;
+private int path;
 
 public int longestUnivaluePath(TreeNode root) {
+    path = 0;
     length(root);
     return path;
 }
@@ -143,8 +173,8 @@ public int longestZigZag(TreeNode root) {
     return dfs(root)[2];
 }
 
-private int[] dfs(TreeNode root) {
-    if (root == null) {
+private int[] dfs(TreeNode node) {
+    if (node == null) {
         // max zigzag path at:
         // [0]: left child node
         // [1]: right child node
@@ -152,8 +182,8 @@ private int[] dfs(TreeNode root) {
         return new int[]{-1, -1, -1};
     }
 
-    int[] left = dfs(root.left);
-    int[] right = dfs(root.right);
+    int[] left = dfs(node.left);
+    int[] right = dfs(node.right);
 
     // left[1], right[0] makes the path zigzag
     // leaves will have zigzag path == -1 + 1 == 0
@@ -457,12 +487,13 @@ public int dfs(TreeNode node, int currSum, int target, Map<Integer, Integer> pre
 }
 {% endhighlight %}
 
+[binary-tree-maximum-path-sum]: https://leetcode.com/problems/binary-tree-maximum-path-sum/
 [convert-bst-to-greater-tree]: https://leetcode.com/problems/convert-bst-to-greater-tree/
 [count-good-nodes-in-binary-tree]: https://leetcode.com/problems/count-good-nodes-in-binary-tree/
 [diameter-of-binary-tree]: https://leetcode.com/problems/diameter-of-binary-tree/
 [find-bottom-left-tree-value]: https://leetcode.com/problems/find-bottom-left-tree-value/
 [increasing-order-search-tree]: https://leetcode.com/problems/increasing-order-search-tree/
-[longest-univalue-path]: https://leetcode.com/problems/longest-univalue-path/solution/
+[longest-univalue-path]: https://leetcode.com/problems/longest-univalue-path/
 [longest-zigzag-path-in-a-binary-tree]: https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/
 [lowest-common-ancestor-of-deepest-leaves]: https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/
 [maximum-difference-between-node-and-ancestor]: https://leetcode.com/problems/maximum-difference-between-node-and-ancestor/

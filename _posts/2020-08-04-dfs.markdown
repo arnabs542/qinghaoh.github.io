@@ -88,5 +88,30 @@ private boolean dfs(String row, String nextRow, int index) {
 }
 {% endhighlight %}
 
+### Bottom-up
+
+[Time Needed to Inform All Employees][time-needed-to-inform-all-employees]
+
+{% highlight java %}
+public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
+    int minutes = 0;
+    for (int i = 0; i < n; i++) {
+        minutes = Math.max(minutes, dfs(i, manager, informTime));
+    }
+    return minutes;
+}
+
+// bottom-up
+public int dfs(int i, int[] manager, int[] informTime) {
+    if (manager[i] != -1) {
+        informTime[i] += dfs(manager[i], manager, informTime);
+        // don't visit his manager twice
+        manager[i] = -1;
+    }
+    return informTime[i];
+}
+{% endhighlight %}
+
 [keys-and-rooms]: https://leetcode.com/problems/keys-and-rooms/
 [pyramid-transition-matrix]: https://leetcode.com/problems/pyramid-transition-matrix/
+[time-needed-to-inform-all-employees]: https://leetcode.com/problems/time-needed-to-inform-all-employees/

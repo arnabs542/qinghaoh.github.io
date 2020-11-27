@@ -5,7 +5,7 @@ tags: tree
 ---
 # Fenwick Tree
 
-[Fenwick tree](https://en.wikipedia.org/wiki/Fenwick_tree)
+[Fenwick tree (Binary indexed tree)](https://en.wikipedia.org/wiki/Fenwick_tree)
 
 A Fenwick tree or binary indexed tree is a data structure that can efficiently update elements and calculate prefix sums in a table of numbers.
 
@@ -16,7 +16,7 @@ public class FenwickTree {
 
     public FenwickTree(int size) {
         this.size = size;
-        // one based indexing is assumed
+        // one-based indexing is assumed
         A = new int[size + 1];
     }
 
@@ -48,6 +48,65 @@ public class FenwickTree {
 
 [Range Sum Query - Mutable][range-sum-query-mutable]
 
+[Count Number of Teams][count-number-of-teams]
+
+{% highlight java %}
+private int MAX_RATING = (int)1e5;
+
+public int numTeams(int[] rating) {
+    FenwickTree left = new FenwickTree(MAX_RATING), right = new FenwickTree(MAX_RATING);
+
+    // bucket counting
+    // in the beginning, the middle soldier is at -1
+    for (int r : rating) {
+        right.add(r, 1);
+    }
+
+    int count = 0;
+    for (int r : rating) {
+        right.add(r, -1);
+        count += left.sum(r - 1) * (right.sum(MAX_RATING) - right.sum(r));  // ascending
+        count += (left.sum(MAX_RATING) - left.sum(r)) * right.sum(r - 1);  // descending
+        left.add(r, 1);
+    }
+
+    return count;
+}
+{% endhighlight %}
+
+[Queries on a Permutation With Key][queries-on-a-permutation-with-key]
+
+{% highlight java %}
+public int[] processQueries(int[] queries, int m) {
+    int n = queries.length;
+    FenwickTree ft = new FenwickTree(n + m);
+    int[] index = new int[m];
+
+    // fills the last m positions with 1
+    // [1...n] is default to 0
+    for (int i = 1; i <= m; i++) {
+        ft.add(n + i, 1);
+        // memorizes index of the current element
+        index[i - 1] = n + i;
+    }
+
+    int[] result = new int[n];
+    for (int i = 0; i < queries.length; i++) {
+        int curr = index[queries[i] - 1];
+        result[i] = ft.sum(curr) - 1;
+
+        // relocates queries[i] to a position in [1...n] in reverse order
+        int next = n - i;
+        ft.add(curr, -1);
+        ft.add(next, 1);
+
+        // updates the index of queries[i]
+        index[queries[i] - 1] = next;
+    }
+    return result;
+}
+{% endhighlight %}
+
 # Cartesian Tree
 
 [Cartesian tree](https://en.wikipedia.org/wiki/Cartesian_tree)
@@ -75,5 +134,7 @@ public TreeNode constructMaximumBinaryTree(int[] nums) {
 }
 {% endhighlight %}
 
+[count-number-of-teams]: https://leetcode.com/problems/count-number-of-teams/
 [maximum-binary-tree]: https://leetcode.com/problems/maximum-binary-tree/
+[queries-on-a-permutation-with-key]: https://leetcode.com/problems/queries-on-a-permutation-with-key/
 [range-sum-query-mutable]: https://leetcode.com/problems/range-sum-query-mutable/

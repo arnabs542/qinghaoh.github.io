@@ -328,6 +328,7 @@ private boolean condition(int[] nums, int distance, int k) {
 # Fixed Size
 
 [Maximum Points You Can Obtain from Cards][maximum-points-you-can-obtain-from-cards]
+[Minimum Difference Between Largest and Smallest Value in Three Moves][minimum-difference-between-largest-and-smallest-value-in-three-moves]
 
 [count-number-of-nice-subarrays]: https://leetcode.com/problems/count-number-of-nice-subarrays/
 [find-k-th-smallest-pair-distance]: https://leetcode.com/problems/find-k-th-smallest-pair-distance/
@@ -339,6 +340,7 @@ private boolean condition(int[] nums, int distance, int k) {
 [max-consecutive-ones-iii]: https://leetcode.com/problems/max-consecutive-ones-iii/
 [maximum-points-you-can-obtain-from-cards]: https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
 [minimum-size-subarray-sum]: https://leetcode.com/problems/minimum-size-subarray-sum/
+[minimum-difference-between-largest-and-smallest-value-in-three-moves]: https://leetcode.com/problems/minimum-difference-between-largest-and-smallest-value-in-three-moves/
 [number-of-substrings-containing-all-three-characters]: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
 [replace-the-substring-for-balanced-string]: https://leetcode.com/problems/replace-the-substring-for-balanced-string/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/

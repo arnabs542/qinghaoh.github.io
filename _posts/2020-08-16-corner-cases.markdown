@@ -256,7 +256,32 @@ public int maxLength(List<String> arr) {
 }
 {% endhighlight %}
 
+[Count Number of Teams][count-number-of-teams]
+
+{% highlight java %}
+public int numTeams(int[] rating) {
+    int count = 0;
+    // i is the middle soldier
+    for (int i = 1; i < rating.length - 1; i++) {
+        int[] less = new int[2], greater = new int[2];
+        for (int j = 0; j < rating.length; j++) {
+            // 0: left, 1: right
+            int index = j > i ? 1 : 0;
+            if (rating[i] < rating[j]) {
+                less[index]++;
+            }
+            if (rating[i] > rating[j]) {
+                greater[index]++;
+            }
+        }
+        count += less[0] * greater[1] + greater[0] * less[1];
+    }
+    return count;
+}
+{% endhighlight %}
+
 [circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
+[count-number-of-teams]: https://leetcode.com/problems/count-number-of-teams/
 [heaters]: https://leetcode.com/problems/heaters/
 [maximum-length-of-a-concatenated-string-with-unique-characters]: https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/
 [minimum-time-difference]: https://leetcode.com/problems/minimum-time-difference/
