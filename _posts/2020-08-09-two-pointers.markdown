@@ -93,7 +93,38 @@ public int maxArea(int[] height) {
 }
 {% endhighlight %}
 
+[Number of Subsequences That Satisfy the Given Sum Condition][number-of-subsequences-that-satisfy-the-given-sum-condition]
+
+[Modular arithmetic properties](https://en.wikipedia.org/wiki/Modular_arithmetic#Properties)
+
+{% highlight java %}
+private int MOD = (int)1e9 + 7;
+
+public int numSubseq(int[] nums, int target) {
+    Arrays.sort(nums);
+
+    // (A * B) mod C = (A mod C * B mod C) mod C
+    int[] pows = new int[nums.length];
+    pows[0] = 1;
+    for (int k = 1; k < nums.length; k++) {
+        pows[k] = pows[k - 1] * 2 % MOD;
+    }
+
+    int i = 0, j = nums.length - 1, count = 0;
+    while (i <= j) {
+        if (nums[i] + nums[j] > target) {
+            j--;
+        } else {
+            count = (count + pows[j - i]) % MOD;
+            i++;
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
 [backspace-string-compare]: https://leetcode.com/problems/backspace-string-compare/
 [container-with-most-water]: https://leetcode.com/problems/container-with-most-water/
+[number-of-subsequences-that-satisfy-the-given-sum-condition]: https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/
 [remove-all-adjacent-duplicates-in-string-ii]: https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string-ii/
 [trapping-rain-water]: https://leetcode.com/problems/trapping-rain-water/

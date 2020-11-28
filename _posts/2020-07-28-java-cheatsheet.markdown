@@ -161,6 +161,8 @@ private int gcd(int a, int b) {
 * [public String replace(char oldChar, char newChar)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#replace(char,char))
 * [public String replaceAll(String regex, String replacement)](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#replaceAll-java.lang.String-java.lang.String-)
 * [public boolean startsWith(String prefix, int toffset)](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#startsWith-java.lang.String-int-)
+* [public String strip()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#strip())
+* [public String stripLeading()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#stripLeading())
 
 # StringBuilder
 * [public StringBuilder deleteCharAt(int index)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/StringBuilder.html#deleteCharAt(int))

@@ -28,7 +28,7 @@ private void helper(TreeNode root, List<Integer> list) {
 {% highlight java %}
 public List<Integer> preorderTraversal(TreeNode root) {
     List<Integer> list = new ArrayList<>();
-    Stack<TreeNode> stack = new Stack<>();
+    Deque<TreeNode> stack = new ArrayDeque<>();
     TreeNode node = root;
     while (node != null) {
         list.add(node.val);  // preorder
@@ -70,7 +70,7 @@ private void helper(TreeNode root, List<Integer> list) {
 {% highlight java %}
 public List<Integer> inorderTraversal(TreeNode root) {
     List<Integer> list = new ArrayList<>();
-    Stack<TreeNode> stack = new Stack<>();
+    Deque<TreeNode> stack = new ArrayDeque<>();
     TreeNode node = root;
     while (node != null || !stack.isEmpty()) {
         if (node != null) {
@@ -110,7 +110,7 @@ private void traverse(TreeNode root, List<Integer> list) {
 {% highlight java %}
 public List<Integer> postorderTraversal(TreeNode root) {
     List<Integer> list = new ArrayList<>();
-    Stack<TreeNode> stack = new Stack<>();
+    Deque<TreeNode> stack = new ArrayDeque<>();
     TreeNode node = root;
     while (node != null) {
         list.add(node.val);
@@ -160,6 +160,70 @@ private void dps(TreeNode node, List<Integer> list, int depth) {
 
 # Complexity
 
+# Binary Search Tree
+
+[Binary Search Tree Iterator][binary-search-tree-iterator]
+
+{% highlight java %}
+private Deque<TreeNode> stack;
+
+public BSTIterator(TreeNode root) {
+    this.stack = new ArrayDeque<>();
+    leftmostInorder(root);
+}
+
+/** @return the next smallest number */
+public int next() {
+    TreeNode tmpNode = stack.pop();
+    leftmostInorder(tmpNode.right);
+    return tmpNode.val;
+}
+
+/** @return whether we have a next smallest number */
+public boolean hasNext() {
+    return !stack.isEmpty();
+}
+
+private void leftmostInorder(TreeNode node) {
+    while (node != null) {
+        stack.push(node);
+        node = node.left;
+    }
+}
+{% endhighlight %}
+
+[All Elements in Two Binary Search Trees][all-elements-in-two-binary-search-trees/submissions]
+
+{% highlight java %}
+public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
+    List<Integer> list = new ArrayList<>();
+    Deque<TreeNode> st1 = new ArrayDeque<>(), st2 = new ArrayDeque<>();
+    TreeNode node1 = root1, node2 = root2;
+    while (node1 != null || node2 != null || !st1.isEmpty() || !st2.isEmpty()) {
+        while (node1 != null) {
+            st1.push(node1);
+            node1 = node1.left;
+        }
+        while (node2 != null) {
+            st2.push(node2);
+            node2 = node2.left;
+        }
+        if (st2.isEmpty() || (!st1.isEmpty() && st1.peek().val <= st2.peek().val)) {
+            node1 = st1.pop();
+            list.add(node1.val);
+            node1 = node1.right;
+        } else {
+            node2 = st2.pop();
+            list.add(node2.val);
+            node2 = node2.right;
+        }
+    }
+    return list;
+}
+{% endhighlight %}
+
+[all-elements-in-two-binary-search-trees/submissions]: https://leetcode.com/problems/all-elements-in-two-binary-search-trees/submissions/
+[binary-search-tree-iterator]: https://leetcode.com/problems/binary-search-tree-iterator/
 [binary-tree-preorder-traversal]: https://leetcode.com/problems/binary-tree-preorder-traversal
 [binary-tree-inorder-traversal]: https://leetcode.com/problems/binary-tree-inorder-traversal
 [binary-tree-postorder-traversal]: https://leetcode.com/problems/binary-tree-postorder-traversal

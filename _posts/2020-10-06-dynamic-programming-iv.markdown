@@ -12,7 +12,7 @@ public int maximalSquare(char[][] matrix) {
     }
 
     int m = matrix.length, n = matrix[0].length;
-    // dp[i][j]: side length of the max square whose bottom-right is at (i, j)
+    // dp[i][j]: side length of the max square whose bottom-right is at (i - 1, j - 1)
     int[][] dp = new int[m + 1][n + 1];
     int maxLen = 0;
     for (int i = 1; i <= m; i++) {
@@ -46,33 +46,6 @@ dp[][]:
 0 1 2 3 2
 0 0 1 2 3
 ```
-
-Reduced to 1D:
-
-{% highlight java %}
-public int maximalSquare(char[][] matrix) {
-    if (matrix.length == 0) {
-        return 0;
-    }
-
-    int m = matrix.length, n = matrix[0].length;
-    int[] dp = new int[n + 1];
-    int maxLen = 0, prev = 0;
-    for (int i = 1; i <= m; i++) {
-        for (int j = 1; j <= n; j++) {
-            int tmp = dp[j];
-            if (matrix[i - 1][j - 1] == '1') {
-                dp[j] = Math.min(Math.min(dp[j - 1], prev), dp[j]) + 1;
-                maxLen = Math.max(maxLen, dp[j]);
-            } else {
-                dp[j] = 0;
-            }
-            prev = tmp;
-        }
-    }
-    return maxLen * maxLen;
-}
-{% endhighlight %}
 
 [Maximal Rectangle][maximal-rectangle]
 

@@ -26,6 +26,7 @@ public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
 
     int stop = -1, min = MAX;
     while (!q.isEmpty() && stop <= K) {
+        // level traversal
         int size = q.size();
         for (int i = 0; i < size; i++) {
             node = q.poll();
@@ -81,9 +82,9 @@ public int jump(int[] nums) {
 }
 {% endhighlight %}
 
-{% highlight java %}
 If it's not guaranteed to reach the last index:
 
+{% highlight java %}
 public int jump(int[] nums) {
     // implicit BFS
     int jumps = 0, reach = 0, currEnd = 0;
