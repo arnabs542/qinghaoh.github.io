@@ -164,49 +164,5 @@ public boolean canPartitionKSubsets(int[] nums, int k) {
 }
 {% endhighlight %}
 
-[Video Stitching][video-stitching]
-
-{% highlight java %}
-private int MAX_LENGTH = 100;
-
-public int videoStitching(int[][] clips, int T) {
-    Arrays.sort(clips, (a, b) -> a[0] - b[0]);
-
-    int[] dp = new int[MAX_LENGTH + 1];
-    Arrays.fill(dp, MAX_LENGTH + 1);
-    dp[0] = 0;
-
-    for (int[] c : clips) {
-        for (int i = c[0] + 1; i <= c[1]; i++) {
-            dp[i] = Math.min(dp[i], dp[c[0]] + 1);
-        }
-    }
-
-    return dp[T] == MAX_LENGTH + 1 ? -1 : dp[T];
-}
-{% endhighlight %}
-
-{% highlight java %}
-public int videoStitching(int[][] clips, int T) {
-    int[] dp = new int[T + 1];
-    Arrays.fill(dp, T + 1);
-    dp[0] = 0;
-
-    // If dp[i - 1] >= T, we need at least T clips to cover the time (i - 1)
-    // then to cover time i, we need at least T + 1 clips
-    // The minimum length of each clip is 1, so it contradicts pigeonhole principle
-    for (int i = 1; i <= T && dp[i - 1] < T; i++) {
-        for (int[] c : clips) {
-            if (c[0] <= i && i <= c[1]) {
-                dp[i] = Math.min(dp[i], dp[c[0]] + 1);
-            }
-        }
-    }
-
-    return dp[T] == T + 1 ? -1 : dp[T];
-}
-{% endhighlight %}
-
 [largest-sum-of-averages]: https://leetcode.com/problems/largest-sum-of-averages/
 [partition-to-k-equal-sum-subsets]: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
-[video-stitching]: https://leetcode.com/problems/video-stitching/

@@ -1,0 +1,160 @@
+---
+layout: post
+title:  "Interval"
+---
+
+[Video Stitching][video-stitching]
+
+{% highlight java %}
+public int videoStitching(int[][] clips, int T) {
+    Arrays.sort(clips, (a, b) -> a[0] - b[0]);
+
+    int i = 0, start = 0, end = 0, result = 0;
+    while (start < T) {
+        while (i < clips.length && clips[i][0] <= start) {
+            end = Math.max(end, clips[i++][1]);
+        }
+
+        if (start == end) {
+            return -1;
+        }
+
+        start = end;
+        result++;
+    }
+
+    return result;
+}
+{% endhighlight %}
+
+# Greedy
+
+[Meeting Rooms II][meeting-rooms-ii]
+
+{% highlight java %}
+public int videoStitching(int[][] clips, int T) {
+    Arrays.sort(clips, (a, b) -> a[0] - b[0]);
+
+    int i = 0, start = 0, end = 0, result = 0;
+    while (start < T) {
+        while (i < clips.length && clips[i][0] <= start) {
+            end = Math.max(end, clips[i++][1]);
+        }
+
+        if (start == end) {
+            return -1;
+        }
+
+        start = end;
+        result++;
+    }
+
+    return result;
+}
+{% endhighlight %}
+
+[Maximum Number of Events That Can Be Attended][maximum-number-of-events-that-can-be-attended]
+
+{% highlight java %}
+public int maxEvents(int[][] events) {
+    // sorts events by start day
+    Arrays.sort(events, (a, b) -> Integer.compare(a[0], b[0]));
+
+    // stores the end day of the current open events
+    Queue<Integer> pq = new PriorityQueue<>();
+    int i = 0, count = 0, day = 0;
+    while (!pq.isEmpty() || i < events.length) {
+        // if no events are open on this day,
+        // flies time to the start day of the next open event
+        if (pq.isEmpty()) {
+            day = events[i][0];
+        }
+
+        // adds new events that can be attended on this day
+        while (i < events.length && events[i][0] <= day) {
+            pq.offer(events[i++][1]);
+        }
+
+        // attends the event that will end the earliest
+        pq.poll();
+        count++;
+        day++;
+
+        // removes closed events
+        while (!pq.isEmpty() && pq.peek() < day) {
+            pq.poll();
+        }   
+    }
+
+    return count;
+}
+{% endhighlight %}
+
+# Dynamic Programming
+
+[Video Stitching][video-stitching]
+
+{% highlight java %}
+private int MAX_LENGTH = 100;
+
+public int videoStitching(int[][] clips, int T) {
+    Arrays.sort(clips, (a, b) -> a[0] - b[0]);
+
+    int[] dp = new int[MAX_LENGTH + 1];
+    Arrays.fill(dp, MAX_LENGTH + 1);
+    dp[0] = 0;
+
+    for (int[] c : clips) {
+        for (int i = c[0] + 1; i <= c[1]; i++) {
+            dp[i] = Math.min(dp[i], dp[c[0]] + 1);
+        }
+    }
+
+    return dp[T] == MAX_LENGTH + 1 ? -1 : dp[T];
+}
+{% endhighlight %}
+
+{% highlight java %}
+public int videoStitching(int[][] clips, int T) {
+    int[] dp = new int[T + 1];
+    Arrays.fill(dp, T + 1);
+    dp[0] = 0;
+
+    // If dp[i - 1] >= T, we need at least T clips to cover the time (i - 1)
+    // then to cover time i, we need at least T + 1 clips
+    // The minimum length of each clip is 1, so it contradicts pigeonhole principle
+    for (int i = 1; i <= T && dp[i - 1] < T; i++) {
+        for (int[] c : clips) {
+            if (c[0] <= i && i <= c[1]) {
+                dp[i] = Math.min(dp[i], dp[c[0]] + 1);
+            }
+        }
+    }
+
+    return dp[T] == T + 1 ? -1 : dp[T];
+}
+{% endhighlight %}
+
+# BFS
+
+[Video Stitching][video-stitching]
+
+{% highlight java %}
+public int videoStitching(int[][] clips, int T) {
+    int[] nums = new int[T + 1];
+    for (int[] clip : clips) {
+        if (clip[0] <= T) {
+            nums[clip[0]] = Math.max(nums[clip[0]], clip[1] - clip[0]);
+        }
+    }
+    return jump(nums);
+}
+
+// 45. Jump Game II
+private int jump(int[] nums) {
+}
+{% endhighlight %}
+
+[maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
+[meeting-rooms-ii]: https://leetcode.com/problems/meeting-rooms-ii/
+[video-stitching]: https://leetcode.com/problems/video-stitching/

@@ -79,4 +79,55 @@ public int minCostConnectPoints(int[][] points) {
 }
 {% endhighlight %}
 
+### Kruskal's
+
+[Kruskal's algorithm](https://en.wikipedia.org/wiki/Kruskal%27s_algorithm)
+
+{% highlight java %}
+private int[] forest;
+
+// Kruskal's
+public int minCostConnectPoints(int[][] points) {
+    forest = new int[points.length];
+    Arrays.fill(forest, -1);
+
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[2]));  // i, j, distance
+    for (int i = 0; i < points.length; i++) {
+        for (int j = i + 1; j < points.length; j++) {
+            pq.offer(new int[]{i, j, Math.abs(points[i][0] - points[j][0]) + Math.abs(points[i][1] - points[j][1])});
+        }
+    }
+
+    int cost = 0;
+    while (!pq.isEmpty()) {
+        int[] tuple = pq.poll();
+        if (union(tuple[1], tuple[0])) {
+            cost += tuple[2];
+            // tree is already spanning
+            if (forest[tuple[0]] == -points.length) {
+                break;
+            }
+        }
+    }
+    return cost;
+}
+
+private int find(int u) {
+    return forest[u] < 0 ? u : find(forest[u]);
+}
+
+private boolean union(int u, int v) {
+    int uset = find(u);
+    int vset = find(v);
+
+    if (uset == vset) {
+        return false;
+    }
+
+    forest[vset] += forest[uset];  // records the number of points in the forest
+    forest[uset] = vset;
+    return true;
+}
+{% endhighlight %}
+
 [min-cost-to-connect-all-points]: https://leetcode.com/problems/min-cost-to-connect-all-points/

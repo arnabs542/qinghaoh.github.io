@@ -167,4 +167,5 @@ public int[][] matrixBlockSum(int[][] mat, int K) {
 [edit-distance]: https://leetcode.com/problems/edit-distance/
 [find-positive-integer-solution-for-a-given-equation]: https://leetcode.com/problems/find-positive-integer-solution-for-a-given-equation/
 [matrix-block-sum]: https://leetcode.com/problems/matrix-block-sum/
+[maximal-square]: https://leetcode.com/problems/maximal-square/
 [search-a-2d-matrix]: https://leetcode.com/problems/search-a-2d-matrix/

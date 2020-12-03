@@ -188,10 +188,65 @@ public boolean isPossible(int[] nums) {
 }
 {% endhighlight %}
 
+[Minimum Swaps to Make Strings Equal][minimum-swaps-to-make-strings-equal]
+
+{% highlight java %}
+public int minimumSwap(String s1, String s2) {
+    int[] count = new int[2];
+    for (int i = 0; i < s1.length(); i++) {
+        // ignores matched positions
+        if (s1.charAt(i) != s2.charAt(i)) {
+            count[s1.charAt(i) - 'x']++;
+        }
+    }
+
+    // case 3: "xx" "xy"
+    if ((count[0] + count[1]) % 2 == 1) {
+        return -1;
+    }
+
+    // case1: "xx" "yy"
+    // case2: "xy" "yx"
+    return count[0] / 2 + count[1] / 2 + count[0] % 2 * 2;
+}
+{% endhighlight %}
+
+[Longest Happy String][longest-happy-string]
+
+{% highlight java %}
+public String longestDiverseString(int a, int b, int c) {
+    return helper(a, b, c, "a", "b", "c");
+}
+
+private String helper(int a, int b, int c, String sa, String sb, String sc) {
+    // preprocess, so that a >= b >= c
+    if (a < b) {
+        return helper(b, a, c, sb, sa, sc);
+    }
+
+    if (b < c) {
+        return helper(a, c, b, sa, sc, sb);
+    }
+
+    if (b == 0) {
+        return sa.repeat(Math.min(a, 2));
+    }
+
+    // greedy
+    int aUsed = Math.min(a, 2), bUsed = a - aUsed >= b ? 1 : 0; 
+    return sa.repeat(aUsed) + sb.repeat(bUsed) + helper(a - aUsed, b - bUsed, c, sa, sb, sc);
+}
+{% endhighlight %}
+
+[String Without AAA or BBB][string-without-aaa-or-bbb]
+
 [broken-calculator]: https://leetcode.com/problems/broken-calculator/
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [jump-game]: https://leetcode.com/problems/jump-game/
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
+[longest-happy-string]: https://leetcode.com/problems/longest-happy-string/
 [maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
+[minimum-swaps-to-make-strings-equal]: https://leetcode.com/problems/minimum-swaps-to-make-strings-equal/
 [split-array-into-consecutive-subsequences]: https://leetcode.com/problems/split-array-into-consecutive-subsequences/
+[string-without-aaa-or-bbb]: https://leetcode.com/problems/string-without-aaa-or-bbb/
 [video-stitching]: https://leetcode.com/problems/video-stitching/

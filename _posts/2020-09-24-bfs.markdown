@@ -108,24 +108,5 @@ public int jump(int[] nums) {
 }
 {% endhighlight %}
 
-[Video Stitching][video-stitching]
-
-{% highlight java %}
-public int videoStitching(int[][] clips, int T) {
-    int[] nums = new int[T + 1];
-    for (int[] clip : clips) {
-        if (clip[0] <= T) {
-            nums[clip[0]] = Math.max(nums[clip[0]], clip[1] - clip[0]);
-        }
-    }
-    return jump(nums);
-}
-
-// 45. Jump Game II
-private int jump(int[] nums) {
-}
-{% endhighlight %}
-
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
-[video-stitching]: https://leetcode.com/problems/video-stitching/

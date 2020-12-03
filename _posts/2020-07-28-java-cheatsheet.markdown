@@ -10,6 +10,7 @@ Null elements are prohibited.
 # Arrays
 * [public static \<T\> List\<T\> asList(T... a)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#asList-T...-): fixed-size, mutable
 * [public static \<T\> T\[\] copyOf(T\[\] original, int newLength)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#copyOf-T:A-int-)
+* [public static boolean equals(Object\[\] a, Objecti\[\] a2)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#equals(java.lang.Object%5B%5D,java.lang.Object%5B%5D))
 * [public static void fill(Object\[\] a, int fromIndex, int toIndex, Object val)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#fill(java.lang.Object%5B%5D,int,int,java.lang.Object))
 * [static \<E\> List\<E\> of(E... elements)](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html#of%28E...%29): immutable
 * [public static \<T\> void sort(T\[\] a, int fromIndex, int toIndex, Comparator\<? super T\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#sort-T:A-int-int-java.util.Comparator-): stable
