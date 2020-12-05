@@ -32,24 +32,24 @@ public int videoStitching(int[][] clips, int T) {
 [Meeting Rooms II][meeting-rooms-ii]
 
 {% highlight java %}
-public int videoStitching(int[][] clips, int T) {
-    Arrays.sort(clips, (a, b) -> a[0] - b[0]);
+public int minMeetingRooms(int[][] intervals) {
+    // sorts invervals by start time
+    Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
 
-    int i = 0, start = 0, end = 0, result = 0;
-    while (start < T) {
-        while (i < clips.length && clips[i][0] <= start) {
-            end = Math.max(end, clips[i++][1]);
+    // stores the end time of current open meetings
+    Queue<Integer> pq = new PriorityQueue<>();
+    for (int[] interval : intervals) {
+        // frees up old room for the new meeting to occupy
+        if (!pq.isEmpty() && interval[0] >= pq.peek()) {
+            pq.poll();
         }
 
-        if (start == end) {
-            return -1;
-        }
-
-        start = end;
-        result++;
+        // occupies the old room or a new room
+        pq.add(interval[1]);
     }
 
-    return result;
+    // queue size is monotonically increasing
+    return pq.size();
 }
 {% endhighlight %}
 

@@ -164,6 +164,8 @@ private int gcd(int a, int b) {
 * [public boolean startsWith(String prefix, int toffset)](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#startsWith-java.lang.String-int-)
 * [public String strip()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#strip())
 * [public String stripLeading()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#stripLeading())
+* substring(int beginIndex): `0 <= beginIndex <= s.length()`
+* substring(int beginIndex, int endIndex): `0 <= beginIndex <= endIndex <= s.length()`
 
 # StringBuilder
 * [public StringBuilder deleteCharAt(int index)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/StringBuilder.html#deleteCharAt(int))

@@ -199,7 +199,7 @@ public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
     List<Integer> list = new ArrayList<>();
     Deque<TreeNode> st1 = new ArrayDeque<>(), st2 = new ArrayDeque<>();
     TreeNode node1 = root1, node2 = root2;
-    while (node1 != null || node2 != null || !st1.isEmpty() || !st2.isEmpty()) {
+    while (true) {
         while (node1 != null) {
             st1.push(node1);
             node1 = node1.left;
@@ -208,6 +208,11 @@ public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
             st2.push(node2);
             node2 = node2.left;
         }
+
+        if (st1.isEmpty() && st2.isEmpty()) {
+            return list;
+        }
+
         if (st2.isEmpty() || (!st1.isEmpty() && st1.peek().val <= st2.peek().val)) {
             node1 = st1.pop();
             list.add(node1.val);

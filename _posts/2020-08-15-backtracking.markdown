@@ -82,6 +82,8 @@ private void backtrack(List<List<Integer>> list, List<Integer> tmpList, int[] nu
 }
 {% endhighlight %}
 
+[Palindrome Permutation II][palindrome-permutation-ii]
+
 [Subsets][subsets]
 
 {% highlight java %}
@@ -385,6 +387,7 @@ private boolean backtrack(int[] nums, int index, boolean[] visited, int k, int s
 [combination-sum-iii]: https://leetcode.com/problems/combination-sum-iii/
 [matchsticks-to-square]: https://leetcode.com/problems/matchsticks-to-square/
 [palindrome-partitioning]: https://leetcode.com/problems/palindrome-partitioning/
+[palindrome-permutation-ii]: https://leetcode.com/problems/palindrome-permutation-ii/
 [partition-equal-subset-sum]: https://leetcode.com/problems/partition-equal-subset-sum/
 [partition-to-k-equal-sum-subsets]: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
 [permutations]: https://leetcode.com/problems/permutations/

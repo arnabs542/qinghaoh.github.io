@@ -108,5 +108,28 @@ public int jump(int[] nums) {
 }
 {% endhighlight %}
 
+[Nested List Weight Sum II][nested-list-weight-sum-ii]
+
+{% highlight java %}
+public int depthSumInverse(List<NestedInteger> nestedList) {
+    Queue<NestedInteger> q = new LinkedList(nestedList);
+    int runningSum = 0, sum = 0;
+    while (!q.isEmpty()) {
+       int size = q.size();
+       for (int i = 0; i < size; i++) {
+           NestedInteger ni = q.poll();
+           if (ni.isInteger()) {
+               runningSum += ni.getInteger();
+           } else {
+               q.addAll(ni.getList());
+           }
+       }
+       sum += runningSum;
+    }
+    return sum;
+}
+{% endhighlight %}
+
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
+[nested-list-weight-sum-ii]: https://leetcode.com/problems/nested-list-weight-sum-ii/

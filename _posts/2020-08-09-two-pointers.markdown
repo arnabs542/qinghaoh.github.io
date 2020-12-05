@@ -123,8 +123,37 @@ public int numSubseq(int[] nums, int target) {
 }
 {% endhighlight %}
 
+[Shortest Word Distance II][shortest-word-distance-ii]
+
+{% highlight java %}
+private Map<String, List<Integer>> map;
+
+public WordDistance(String[] words) {
+    map = new HashMap<>();
+    for (int i = 0; i < words.length; i++) {
+        map.computeIfAbsent(words[i], k -> new ArrayList<>()).add(i);
+    }
+}
+
+public int shortest(String word1, String word2) {
+    int i = 0, j = 0, min = Integer.MAX_VALUE;
+    List<Integer> list1 = map.get(word1), list2 = map.get(word2);
+    while (i < list1.size() && j < list2.size()) {
+        int index1 = list1.get(i), index2 = list2.get(j);
+        min = Math.min(min, Math.abs(index1 - index2));
+        if (index1 < index2) {
+            i++;
+        } else {
+            j++;
+        }
+    }
+    return min;
+}
+{% endhighlight %}
+
 [backspace-string-compare]: https://leetcode.com/problems/backspace-string-compare/
 [container-with-most-water]: https://leetcode.com/problems/container-with-most-water/
 [number-of-subsequences-that-satisfy-the-given-sum-condition]: https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/
 [remove-all-adjacent-duplicates-in-string-ii]: https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string-ii/
+[shortest-word-distance-ii]: https://leetcode.com/problems/shortest-word-distance-ii/
 [trapping-rain-water]: https://leetcode.com/problems/trapping-rain-water/
