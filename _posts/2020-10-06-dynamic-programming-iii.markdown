@@ -128,6 +128,56 @@ for (int i = 1; i < prices.length; i++) {
 return curr;
 {% endhighlight %}
 
+[House Robber][house-robber]
+
+{% highlight java %}
+public int rob(int[] nums) {
+    int[] dp = new int[nums.length + 1];
+    dp[1] = nums[0];
+    for (int i = 1; i < nums.length; i++) {
+        dp[i + 1] = Math.max(dp[i], dp[i - 1] + nums[i]);
+    }       
+    return dp[nums.length];
+}
+{% endhighlight %}
+
+Reduced to 0D:
+
+{% highlight java %}
+public int rob(int[] nums) {
+    int prev = 0, curr = 0;
+    for (int num : nums) {
+        int tmp = curr;
+        curr = Math.max(curr, prev + num);
+        prev = tmp;
+    }
+    return curr;
+}
+{% endhighlight %}
+
+[House Robber II][house-robber-ii]
+
+{% highlight java %}
+public int rob(int[] nums) {
+    if (nums.length == 1) {
+        return nums[0];
+    }
+    return Math.max(rob(nums, 0, nums.length - 1), rob(nums, 1, nums.length));
+}
+
+private int rob(int[] nums, int start, int end) {
+    int prev = 0, curr = 0;
+    for (int i = start; i < end; i++) {
+        int tmp = curr;
+        curr = Math.max(curr, prev + nums[i]);
+        prev = tmp;
+    }
+    return curr;
+}
+{% endhighlight %}
+
 [best-time-to-buy-and-sell-stock-iii]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/
 [best-time-to-buy-and-sell-stock-iv]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/
 [best-time-to-buy-and-sell-stock-with-cooldown]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+[house-robber]: https://leetcode.com/problems/house-robber/
+[house-robber-ii]: https://leetcode.com/problems/house-robber-ii/

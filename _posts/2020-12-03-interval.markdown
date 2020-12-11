@@ -29,6 +29,28 @@ public int videoStitching(int[][] clips, int T) {
 
 # Greedy
 
+[Minimum Number of Arrows to Burst Balloons][minimum-number-of-arrows-to-burst-balloons]
+
+{% highlight java %}
+public int findMinArrowShots(int[][] points) {
+    if (points.length == 0) {
+        return 0;
+    }
+
+    // sorts points by end coordinate
+    Arrays.sort(points, (a, b) -> Integer.compare(a[1], b[1]));
+
+    int arrow = points[0][1], count = 1;
+    for (int[] point : points) {
+        if (arrow < point[0]) {
+            count++;
+            arrow = point[1];
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
 [Meeting Rooms II][meeting-rooms-ii]
 
 {% highlight java %}
@@ -45,7 +67,7 @@ public int minMeetingRooms(int[][] intervals) {
         }
 
         // occupies the old room or a new room
-        pq.add(interval[1]);
+        pq.offer(interval[1]);
     }
 
     // queue size is monotonically increasing
@@ -157,4 +179,5 @@ private int jump(int[] nums) {
 
 [maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
 [meeting-rooms-ii]: https://leetcode.com/problems/meeting-rooms-ii/
+[minimum-number-of-arrows-to-burst-balloons]: https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/
 [video-stitching]: https://leetcode.com/problems/video-stitching/

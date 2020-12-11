@@ -151,6 +151,35 @@ public int shortest(String word1, String word2) {
 }
 {% endhighlight %}
 
+[][]
+
+{% highlight java %}
+private final int MOD = (int)1e9 + 7;
+
+public int uniqueLetterString(String s) {
+    int[][] index = new int[26][2];  // last two indexes of each character
+    for (int i = 0; i < index.length; i++) {
+        Arrays.fill(index[i], -1);
+    }
+
+    int sum = 0;
+    for (int i = 0; i < s.length(); i++) {
+        int c = s.charAt(i) - 'A';
+        // e.g. AxxAxxxA: 2 * 3
+        // index[c][0] --> index[c][1] --> i
+        sum = (sum + (i - index[c][1]) * (index[c][1] - index[c][0]) % MOD) % MOD;
+        index[c][0] = index[c][1];
+        index[c][1] = i;
+    }
+
+    // calculates index[c][1] --> s.length()
+    for (int c = 0; c < index.length; c++) {
+        sum = (sum + (s.length() - index[c][1]) * (index[c][1] - index[c][0]) % MOD) % MOD;
+    }
+    return sum;
+}
+{% endhighlight %}
+
 [backspace-string-compare]: https://leetcode.com/problems/backspace-string-compare/
 [container-with-most-water]: https://leetcode.com/problems/container-with-most-water/
 [number-of-subsequences-that-satisfy-the-given-sum-condition]: https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/
