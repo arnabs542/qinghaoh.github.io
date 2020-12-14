@@ -280,8 +280,18 @@ public int numTeams(int[] rating) {
 }
 {% endhighlight %}
 
+[Count of Matches in Tournaments][count-of-matches-in-tournament]
+
+{% highlight java %}
+public int numberOfMatches(int n) {
+    // one champion; each of the other teams lost one game
+    return n - 1;
+}
+{% endhighlight %}
+
 [circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
 [count-number-of-teams]: https://leetcode.com/problems/count-number-of-teams/
+[count-of-matches-in-tournament]: https://leetcode.com/problems/count-of-matches-in-tournament/
 [heaters]: https://leetcode.com/problems/heaters/
 [maximum-length-of-a-concatenated-string-with-unique-characters]: https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/
 [minimum-time-difference]: https://leetcode.com/problems/minimum-time-difference/

@@ -120,8 +120,35 @@ ORDER BY id
 ;
 {% endhighlight %}
 
+[Game Play Analysis I][game-play-analysis-i]
+
+{% highlight sql %}
+SELECT player_id,
+    MIN(event_date) AS first_login
+FROM Activity
+GROUP BY player_id
+;
+{% endhighlight %}
+
+[Game Play Analysis I][game-play-analysis-i]
+
+{% highlight sql %}
+SELECT player_id,
+    device_id
+FROM Activity
+WHERE (player_id, event_date) IN
+    (
+        SELECT player_id,
+        MIN(event_date)
+        FROM Activity
+        GROUP BY player_id
+    )
+;
+{% endhighlight %}
+
 [classes-more-than-5-students]: https://leetcode.com/problems/classes-more-than-5-students/
 [employees-earning-more-than-their-managers]: https://leetcode.com/problems/employees-earning-more-than-their-managers/
+[game-play-analysis-i]: https://leetcode.com/problems/game-play-analysis-i/
 [reformat-department-table]: https://leetcode.com/problems/reformat-department-table/
 [rising-temperature]: https://leetcode.com/problems/rising-temperature/
 [second-highest-salary]: https://leetcode.com/problems/second-highest-salary/

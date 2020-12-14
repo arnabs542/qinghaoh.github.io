@@ -65,6 +65,8 @@ Collections.max(map.entrySet(), Map.Entry.comparingByValue()).getKey();
 
 * [default V computeIfAbsent(K key, Function\<? super K, ? extends V\> mappingFunction)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html#computeIfAbsent(K,java.util.function.Function))
 * [default boolean remove(Object key, Object value)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html#remove(java.lang.Object,java.lang.Object))
+* [V put(K key, V value)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html#put(K,V))
+  * Returns the previous value associated with key, or null if there was no mapping for key.
 
 # Map.Entry
 * [static \<K,V extends Comparable\<? super V\>\> Comparator\<Map.Entry\<K,V\>\> comparingByValue()](https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html#comparingByValue--)

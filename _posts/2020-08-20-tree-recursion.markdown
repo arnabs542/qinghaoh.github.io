@@ -68,6 +68,8 @@ private int height(TreeNode node) {
 }
 {% endhighlight %}
 
+[Diameter of N-Ary Tree][diameter-of-n-ary-tree]
+
 [Binary Tree Maximum Path Sum][binary-tree-maximum-path-sum]
 
 {% highlight java %}
@@ -491,6 +493,7 @@ public int dfs(TreeNode node, int currSum, int target, Map<Integer, Integer> pre
 [convert-bst-to-greater-tree]: https://leetcode.com/problems/convert-bst-to-greater-tree/
 [count-good-nodes-in-binary-tree]: https://leetcode.com/problems/count-good-nodes-in-binary-tree/
 [diameter-of-binary-tree]: https://leetcode.com/problems/diameter-of-binary-tree/
+[diameter-of-n-ary-tree]: https://leetcode.com/problems/diameter-of-n-ary-tree/
 [find-bottom-left-tree-value]: https://leetcode.com/problems/find-bottom-left-tree-value/
 [increasing-order-search-tree]: https://leetcode.com/problems/increasing-order-search-tree/
 [longest-univalue-path]: https://leetcode.com/problems/longest-univalue-path/
