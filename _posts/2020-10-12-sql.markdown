@@ -130,7 +130,7 @@ GROUP BY player_id
 ;
 {% endhighlight %}
 
-[Game Play Analysis I][game-play-analysis-i]
+[Game Play Analysis II][game-play-analysis-ii]
 
 {% highlight sql %}
 SELECT player_id,
@@ -146,9 +146,44 @@ WHERE (player_id, event_date) IN
 ;
 {% endhighlight %}
 
+[Game Play Analysis III][game-play-analysis-iii]
+
+{% highlight sql %}
+SELECT a1.player_id,
+    a1.event_date,
+    SUM(a2.games_played) AS games_played_so_far
+FROM Activity a1
+JOIN Activity a2
+    ON a1.event_date >= a2.event_date
+    AND a1.player_id = a2.player_id
+GROUP BY a1.player_id, a1.event_date
+;
+{% endhighlight %}
+
+MySQL uses three-valued logic -- RUE, FALSE and UNKNOWN. Anything compared to NULL evaluates to the third value: UNKNOWN. That “anything” includes NULL itself! That’s why MySQL provides the IS NULL and IS NOT NULL operators to specifically check for NULL.
+
+[Customer Placing the Largest Number of Orders][customer-placing-the-largest-number-of-orders]
+
+{% highlight sql %}
+SELECT customer_number
+FROM orders
+GROUP BY customer_number
+HAVING COUNT(order_number) = (
+    SELECT COUNT(order_number) AS order_count
+    FROM orders
+    GROUP BY customer_number
+    ORDER BY order_count DESC
+    LIMIT 1
+)
+;
+{% endhighlight %}
+
 [classes-more-than-5-students]: https://leetcode.com/problems/classes-more-than-5-students/
+[customer-placing-the-largest-number-of-orders]: https://leetcode.com/problems/customer-placing-the-largest-number-of-orders/
 [employees-earning-more-than-their-managers]: https://leetcode.com/problems/employees-earning-more-than-their-managers/
 [game-play-analysis-i]: https://leetcode.com/problems/game-play-analysis-i/
+[game-play-analysis-ii]: https://leetcode.com/problems/game-play-analysis-ii/
+[game-play-analysis-iii]: https://leetcode.com/problems/game-play-analysis-iii/
 [reformat-department-table]: https://leetcode.com/problems/reformat-department-table/
 [rising-temperature]: https://leetcode.com/problems/rising-temperature/
 [second-highest-salary]: https://leetcode.com/problems/second-highest-salary/

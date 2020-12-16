@@ -132,42 +132,6 @@ public int minSwap(int[] A, int[] B) {
 }
 {% endhighlight %}
 
-[Dice Roll Simulation][dice-roll-simulation]
-
-{% highlight java %}
-private final int MOD = (int)1e9 + 7;
-private final int SIDES = 6;
-
-public int dieSimulator(int n, int[] rollMax) {
-    // dp[i][j]: number of distinct sequences at i-th roll and the last number is j
-    // if j == SIDES, it's the total number of distinct sequences at i-th roll
-    int[][] dp = new int[n + 1][SIDES + 1];
-
-    // initialization
-    dp[0][SIDES] = 1;
-
-    for (int i = 1; i <= n; i++) {
-        for (int j = 0; j < SIDES; j++) {
-            // if there's no constraint
-            dp[i][j] = dp[i - 1][SIDES];
-
-            if (i - rollMax[j] > 0) {
-                // e.g. rollMax[1] = 2, and the rolls so far are: a, x, x, b
-                // if b == 1, then we should exclude all possible cases of a, 1, 1
-                // where a != 1
-                int reduction = dp[i - rollMax[j] - 1][SIDES] - dp[i - rollMax[j] - 1][j];
-                dp[i][j] = ((dp[i][j] - reduction) % MOD + MOD) % MOD;
-            }
-
-            dp[i][SIDES] = (dp[i][SIDES] + dp[i][j]) % MOD;              
-        }
-    }
-
-    return dp[n][SIDES];
-}
-{% endhighlight %}
-
 [best-time-to-buy-and-sell-stock-with-cooldown]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
 [best-time-to-buy-and-sell-stock-with-transaction-fee]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/
-[dice-roll-simulation]: https://leetcode.com/problems/dice-roll-simulation/
 [minimum-swaps-to-make-sequences-increasing]: https://leetcode.com/problems/minimum-swaps-to-make-sequences-increasing/

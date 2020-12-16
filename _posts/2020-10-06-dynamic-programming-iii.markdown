@@ -165,6 +165,7 @@ public int rob(int[] nums) {
     return Math.max(rob(nums, 0, nums.length - 1), rob(nums, 1, nums.length));
 }
 
+// 198. House Robber
 private int rob(int[] nums, int start, int end) {
     int prev = 0, curr = 0;
     for (int i = start; i < end; i++) {

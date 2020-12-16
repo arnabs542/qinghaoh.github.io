@@ -240,6 +240,29 @@ private String helper(int a, int b, int c, String sa, String sb, String sc) {
 
 [String Without AAA or BBB][string-without-aaa-or-bbb]
 
+[Task Scheduler][task-scheduler]
+
+![Schedule](/assets/task_scheduler.png)
+
+{% highlight java %}
+public int leastInterval(char[] tasks, int n) {
+    int[] count = new int[26];
+    int maxFreq = 0, maxFreqCount = 0;  // count of the most frequent tasks
+    for (char c : tasks) {
+        count[c - 'A']++;
+        if (maxFreq == count[c - 'A']) {
+            maxFreqCount++;
+        } else if (maxFreq < count[c - 'A']) {
+            maxFreq = count[c - 'A'];
+            maxFreqCount = 1;
+        }
+    }
+
+    // no idle vs has idle
+    return Math.max(tasks.length, (maxFreq - 1) * (n + 1) + maxFreqCount);
+}
+{% endhighlight %}
+
 [broken-calculator]: https://leetcode.com/problems/broken-calculator/
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [jump-game]: https://leetcode.com/problems/jump-game/
@@ -249,4 +272,5 @@ private String helper(int a, int b, int c, String sa, String sb, String sc) {
 [minimum-swaps-to-make-strings-equal]: https://leetcode.com/problems/minimum-swaps-to-make-strings-equal/
 [split-array-into-consecutive-subsequences]: https://leetcode.com/problems/split-array-into-consecutive-subsequences/
 [string-without-aaa-or-bbb]: https://leetcode.com/problems/string-without-aaa-or-bbb/
+[task-scheduler]: https://leetcode.com/problems/task-scheduler/
 [video-stitching]: https://leetcode.com/problems/video-stitching/
