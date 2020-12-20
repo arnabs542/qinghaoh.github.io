@@ -158,6 +158,171 @@ private void dps(TreeNode node, List<Integer> list, int depth) {
 }
 {% endhighlight %}
 
+# Construction
+
+[Construct Binary Tree from Preorder and Inorder Traversal][construct-binary-tree-from-preorder-and-inorder-traversal]
+
+The key is to find the root in inorder. We can iterate to find it, or keep track of it in a map. Or optimally:
+
+{% highlight java %}
+private int pre = 0, in = 0;
+
+public TreeNode buildTree(int[] preorder, int[] inorder) {
+    // min int is a virtual parent of root
+    return build(preorder, inorder, Integer.MIN_VALUE);
+}
+
+private TreeNode build(int[] preorder, int[] inorder, int prevRoot) {
+    if (pre >= preorder.length) {
+        return null;
+    }
+
+    // stops at previous root in inorder
+    if (inorder[in] == prevRoot) {
+        in++;
+        return null;
+    }
+
+    TreeNode node = new TreeNode(preorder[pre++]);
+    node.left = build(preorder, inorder, node.val);
+    node.right = build(preorder, inorder, prevRoot);
+    return node;
+}
+{% endhighlight %}
+
+For example:
+
+```
+preorder = [3,9,20,15,7]
+inorder = [9,3,15,20,7]
+```
+```
+pre	in	prevRoot
+0	0	-2147483648
+1	0	3
+2	0	9
+2	1	3
+2	2	-2147483648
+3	2	20
+4	2	15
+4	3	20
+4	4	-2147483648
+5	4	7
+5	4	-2147483648
+```
+
+[Construct Binary Tree from Inorder and Postorder Traversal][construct-binary-tree-from-inorder-and-postorder-traversal]
+
+{% highlight java %}
+private int in, post;
+
+public TreeNode buildTree(int[] inorder, int[] postorder) {
+    this.in = inorder.length - 1;
+    this.post = postorder.length - 1;
+
+    // min int is a virtual parent of root
+    return build(inorder, postorder, Integer.MIN_VALUE);
+}
+
+private TreeNode build(int[] inorder, int[] postorder, int prevRoot) {
+    if (post < 0) {
+        return null;
+    }
+
+    // stops at previous root in inorder
+    if (inorder[in] == prevRoot) {
+        in--;
+        return null;
+    }
+
+    TreeNode node = new TreeNode(postorder[post--]);
+    node.right = build(inorder, postorder, node.val);
+    node.left = build(inorder, postorder, prevRoot);
+    return node;
+}
+{% endhighlight %}
+
+[Construct Binary Tree from Preorder and Postorder Traversal][construct-binary-tree-from-preorder-and-postorder-traversal]
+
+{% highlight java %}
+private int preIndex = 0, postIndex = 0;
+
+public TreeNode constructFromPrePost(int[] pre, int[] post) {
+    TreeNode root = new TreeNode(pre[preIndex++]);
+
+    // if root.val == post[postIndex]
+    // the entire (sub)tree at root is constructed
+    if (root.val != post[postIndex]) {
+        root.left = constructFromPrePost(pre, post);
+    }
+
+    if (root.val != post[postIndex]) {
+        root.right = constructFromPrePost(pre, post);
+    }
+
+    postIndex++;
+    return root;
+}
+{% endhighlight %}
+
+For example:
+
+```
+pre = [1,2,4,5,3,6,7]
+post = [4,5,2,6,7,3,1]
+```
+```
+preIndex	postIndex
+0		0
+1		0
+2		0
+3		1
+4		3
+5		3
+6		4
+```
+
+{% highlight java %}
+public TreeNode constructFromPrePost(int[] pre, int[] post) {
+    Deque<TreeNode> dq = new ArrayDeque<>();
+    dq.offer(new TreeNode(pre[0]));
+    for (int i = 1, j = 0; i < pre.length; i++) {
+        TreeNode node = new TreeNode(pre[i]);
+        while (dq.getLast().val == post[j]) {
+            dq.pollLast();
+            j++;
+        }
+        if (dq.getLast().left == null) {
+            dq.getLast().left = node;
+        } else {
+            dq.getLast().right = node;
+        }
+        dq.offer(node);
+    }
+    return dq.getFirst();
+}
+{% endhighlight %}
+
+[][construct-binary-search-tree-from-preorder-traversal]
+
+{% highlight java %}
+private int i = 0;
+
+public TreeNode bstFromPreorder(int[] preorder) {
+    return build(preorder, Integer.MAX_VALUE);
+}
+
+public TreeNode build(int[] preorder, int bound) {
+    if (i == preorder.length || preorder[i] > bound) {
+        return null;
+    }
+    TreeNode root = new TreeNode(preorder[i++]);
+    root.left = build(preorder, root.val);
+    root.right = build(preorder, bound);
+    return root;
+}
+{% endhighlight %}
+
 # Complexity
 
 # Binary Search Tree
@@ -232,4 +397,8 @@ public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
 [binary-tree-preorder-traversal]: https://leetcode.com/problems/binary-tree-preorder-traversal
 [binary-tree-inorder-traversal]: https://leetcode.com/problems/binary-tree-inorder-traversal
 [binary-tree-postorder-traversal]: https://leetcode.com/problems/binary-tree-postorder-traversal
+[construct-binary-search-tree-from-preorder-traversal]: https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/
+[construct-binary-tree-from-inorder-and-postorder-traversal]: https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/
+[construct-binary-tree-from-preorder-and-inorder-traversal]: https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
+[construct-binary-tree-from-preorder-and-postorder-traversal]: https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/
 [find-largest-value-in-each-tree-row]: https://leetcode.com/problems/find-largest-value-in-each-tree-row/

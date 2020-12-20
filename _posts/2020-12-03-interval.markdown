@@ -29,6 +29,52 @@ public int videoStitching(int[][] clips, int T) {
 
 # Greedy
 
+## Interval Scheduling
+
+### Interval Scheduling Maximization Problem (ISMP)
+
+[ISMP](https://en.wikipedia.org/wiki/Interval_scheduling#Interval_Scheduling_Maximization): to find a largest compatible set - a set of non-overlapping intervals of maximum size. The goal here is to execute as many tasks as possible.
+
+[Non-overlapping Intervals][non-overlapping-intervals]
+
+{% highlight java %}
+public int eraseOverlapIntervals(int[][] intervals) {
+    if (intervals.length == 0) {
+        return 0;
+    }
+
+    Arrays.sort(intervals, (a, b) -> Integer.compare(a[1], b[1]));
+
+    int end = intervals[0][1], count = 1;
+    for (int[] i : intervals) {
+        if (i[0] >= end) {
+            end = i[1];
+            count++;
+        }
+    }
+    return intervals.length - count;
+}
+{% endhighlight %}
+
+[Merge Intervals][merge-intervals]
+
+{% highlight java %}
+public int[][] merge(int[][] intervals) {
+    Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+
+    List<int[]> list = new ArrayList<>();
+    for (int[] i : intervals) {
+        if (list.isEmpty() || list.get(list.size() - 1)[1] < i[0]) {
+            list.add(i);
+        } else {
+            list.get(list.size() - 1)[1] = Math.max(list.get(list.size() - 1)[1], i[1]);
+        }
+    }
+
+    return list.toArray(new int[list.size()][]);
+}
+{% endhighlight %}
+
 [Minimum Number of Arrows to Burst Balloons][minimum-number-of-arrows-to-burst-balloons]
 
 {% highlight java %}
@@ -179,5 +225,7 @@ private int jump(int[] nums) {
 
 [maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
 [meeting-rooms-ii]: https://leetcode.com/problems/meeting-rooms-ii/
+[merge-intervals]: https://leetcode.com/problems/merge-intervals/
 [minimum-number-of-arrows-to-burst-balloons]: https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/
+[non-overlapping-intervals]: https://leetcode.com/problems/non-overlapping-intervals/
 [video-stitching]: https://leetcode.com/problems/video-stitching/

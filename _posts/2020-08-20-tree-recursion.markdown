@@ -195,6 +195,31 @@ private int[] dfs(TreeNode node) {
 }
 {% endhighlight %}
 
+[House Robber III][house-robber-iii]
+
+{% highlight java %}
+public int rob(TreeNode root) {
+    int[] dp = dfs(root);
+    return Math.max(dp[0], dp[1]);
+}
+
+private int[] dfs(TreeNode root) {
+    // {not robbed, robbed}
+    int[] dp = new int[2];
+    if (root == null) {
+        return dp;
+    }
+
+    int[] left = dfs(root.left);
+    int[] right = dfs(root.right);
+
+    dp[0] = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
+    dp[1] = root.val + left[0] + right[0];
+
+    return dp;
+}
+{% endhighlight %}
+
 [Second Minimum Node in a Binary Tree][second-minimum-node-in-a-binary-tree]
 
 {% highlight java %}
@@ -495,6 +520,7 @@ public int dfs(TreeNode node, int currSum, int target, Map<Integer, Integer> pre
 [diameter-of-binary-tree]: https://leetcode.com/problems/diameter-of-binary-tree/
 [diameter-of-n-ary-tree]: https://leetcode.com/problems/diameter-of-n-ary-tree/
 [find-bottom-left-tree-value]: https://leetcode.com/problems/find-bottom-left-tree-value/
+[house-robber-iii]: https://leetcode.com/problems/house-robber-iii/
 [increasing-order-search-tree]: https://leetcode.com/problems/increasing-order-search-tree/
 [longest-univalue-path]: https://leetcode.com/problems/longest-univalue-path/
 [longest-zigzag-path-in-a-binary-tree]: https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/

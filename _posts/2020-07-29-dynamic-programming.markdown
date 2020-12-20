@@ -195,6 +195,51 @@ public int maxSumDivThree(int[] nums) {
 }
 {% endhighlight %}
 
+[Paint House II][paint-house-ii]
+
+{% highlight java %}
+public int minCostII(int[][] costs) {
+    if (costs == null || costs.length == 0) {
+        return 0;
+    }
+
+    int n = costs.length, k = costs[0].length;
+    // min1: 1st smallest cost
+    // min2: 2nd smallest cost
+    int min1 = Integer.MAX_VALUE, min2 = Integer.MAX_VALUE;
+    // index of min1
+    int minIndex = -1;
+
+    // O(nk)
+    for (int i = 0; i < n; i++) {
+        int tmp1 = min1, tmp2 = min2, tmpIndex = minIndex;
+        min1 = Integer.MAX_VALUE;
+        min2 = Integer.MAX_VALUE;
+        for (int j = 0; j < k; j++) {
+            int curr = 0;
+            if (j != tmpIndex) {
+                // current color j is different from previous min1
+                // tmpIndex < 0 means i == 0
+                curr = (tmpIndex < 0 ? 0 : tmp1) + costs[i][j];
+            } else {
+                curr = tmp2 + costs[i][j];
+            }
+
+            // updates the 1st and 2nd smallest cost of painting current house i
+            if (curr < min1) {
+                minIndex = j;
+                min2 = min1;
+                min1 = curr;
+            } else if (curr < min2) {
+                min2 = curr;
+            }
+        }
+    }
+
+    return min1;
+}
+{% endhighlight %}
+
 [Dungeon Game][dungeon-game]
 
 {% highlight java %}
@@ -235,4 +280,5 @@ public int calculateMinimumHP(int[][] dungeon) {
 [longest-common-subsequence]: https://leetcode.com/problems/longest-common-subsequence/
 [min-cost-climbing-stairs]: https://leetcode.com/problems/min-cost-climbing-stairs/
 [minimum-ascii-delete-sum-for-two-strings]: https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/
+[paint-house-ii]: https://leetcode.com/problems/paint-house-ii/
 [uncrossed-lines]: https://leetcode.com/problems/uncrossed-lines/

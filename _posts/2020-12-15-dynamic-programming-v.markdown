@@ -3,6 +3,7 @@ layout: post
 title:  "Dynamic Programming V"
 tag: dynamic programming
 ---
+![Paint Fence](/assets/paint_fence.png)
 
 [Paint Fence][paint-fence]
 

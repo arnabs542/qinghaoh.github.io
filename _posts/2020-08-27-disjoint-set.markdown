@@ -3,6 +3,14 @@ layout: post
 title:  "Disjoint Set"
 tags: union
 ---
+
+Time Complexity:
+
+* find: `O(α(n))`
+* union: `O(α(n))`
+
+where α(n) is the extremely slow-growing [inverse Ackermann function](https://en.wikipedia.org/wiki/Ackermann_function#Inverse).
+
 [Redundante Connection][redundant-connection]
 
 {% highlight java %}

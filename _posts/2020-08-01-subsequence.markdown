@@ -227,3 +227,4 @@ public int longestArithSeqLength(int[] A) {
 [shortest-common-subsequence]: https://leetcode.com/problems/shortest-common-subsequence/
 [smallest-range-ii]: https://leetcode.com/problems/smallest-range-ii/
 [sum-of-subsequence-widths]: https://leetcode.com/problems/sum-of-subsequence-widths/
+[shortest-common-supersequence]: https://leetcode.com/problems/shortest-common-supersequence/
