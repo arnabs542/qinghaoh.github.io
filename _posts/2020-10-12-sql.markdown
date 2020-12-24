@@ -228,6 +228,18 @@ WHERE o.sales_id IS NULL
 ;
 {% endhighlight %}
 
+[Actors and Directors Who Cooperated At Least Three Times][actors-and-directors-who-cooperated-at-least-three-times]
+
+{% highlight sql %}
+SELECT actor_id,
+    director_id
+FROM ActorDirector
+GROUP BY actor_id, director_id
+HAVING COUNT(actor_id) >= 3
+;
+{% endhighlight %}
+
+[actors-and-directors-who-cooperated-at-least-three-times]: https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
 [classes-more-than-5-students]: https://leetcode.com/problems/classes-more-than-5-students/
 [consecutive-available-seats]: https://leetcode.com/problems/consecutive-available-seats/
 [customer-placing-the-largest-number-of-orders]: https://leetcode.com/problems/customer-placing-the-largest-number-of-orders/

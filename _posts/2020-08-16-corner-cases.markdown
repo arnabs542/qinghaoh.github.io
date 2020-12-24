@@ -289,6 +289,23 @@ public int numberOfMatches(int n) {
 }
 {% endhighlight %}
 
+[Similar RGB Color][similar-rgb-color]
+
+{% highlight java %}
+public String similarRGB(String color) {
+    return "#" + getClosest(color.substring(1, 3)) + getClosest(color.substring(3, 5)) + getClosest(color.substring(5));
+}
+
+private String getClosest(String s) {
+    int q = Integer.parseInt(s, 16);
+    // #AB -> #CC
+    // 16 * A + B = 16 * C + C = 17 * C
+    // C = q / 17.0
+    q = q / 17 + (q % 17 > 8 ? 1 : 0);
+    return String.format("%02x", 17 * q);
+}
+{% endhighlight %}
+
 [circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
 [count-number-of-teams]: https://leetcode.com/problems/count-number-of-teams/
 [count-of-matches-in-tournament]: https://leetcode.com/problems/count-of-matches-in-tournament/
@@ -299,6 +316,7 @@ public int numberOfMatches(int n) {
 [number-of-steps-to-reduce-a-number-in-binary-representation-to-one]: https://leetcode.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one/
 [rabbits-in-forest]: https://leetcode.com/problems/rabbits-in-forest/
 [reverse-integer]: https://leetcode.com/problems/reverse-integer/
+[similar-rgb-color]: https://leetcode.com/problems/similar-rgb-color/
 [sum-of-all-odd-length-subarrays]: https://leetcode.com/problems/sum-of-all-odd-length-subarrays/
 [sum-of-mutated-array-closest-to-target]: https://leetcode.com/problems/sum-of-mutated-array-closest-to-target/
 [swap-for-longest-repeated-character-substring]: https://leetcode.com/problems/swap-for-longest-repeated-character-substring/

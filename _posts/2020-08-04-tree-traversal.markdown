@@ -303,20 +303,21 @@ public TreeNode constructFromPrePost(int[] pre, int[] post) {
 }
 {% endhighlight %}
 
-[][construct-binary-search-tree-from-preorder-traversal]
+[Construct Binary Search Tree from Preorder Traversal][construct-binary-search-tree-from-preorder-traversal]
 
 {% highlight java %}
-private int i = 0;
+private int index = 0;
 
 public TreeNode bstFromPreorder(int[] preorder) {
     return build(preorder, Integer.MAX_VALUE);
 }
 
 public TreeNode build(int[] preorder, int bound) {
-    if (i == preorder.length || preorder[i] > bound) {
+    if (index == preorder.length || preorder[index] > bound) {
         return null;
     }
-    TreeNode root = new TreeNode(preorder[i++]);
+
+    TreeNode root = new TreeNode(preorder[index++]);
     root.left = build(preorder, root.val);
     root.right = build(preorder, bound);
     return root;

@@ -32,6 +32,7 @@ Integer[] a = {0, 1, 2};
 Set<Integer> b = Arrays.stream(a).collect(Collectors.toSet());
 
 {% endhighlight %}
+
 # Array -> Stream
 [public static \<T\> Stream\<T\> stream(T\[\] array, int startInclusive, int endExclusive)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#stream-T:A-int-int-)
 
@@ -46,3 +47,6 @@ char c = '9';
 int a = c - '0';
 {% endhighlight %}
 
+# String -> int
+
+[public static int parseInt(String s, int radix) throws NumberFormatException](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html#parseInt(java.lang.String,int))
