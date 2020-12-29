@@ -402,6 +402,28 @@ public boolean verifyPreorder(int[] preorder) {
 }
 {% endhighlight %}
 
+# Predecessor/Successor
+
+[Inorder Successor in BST][inorder-successor-in-bst]
+
+{% highlight java %}
+public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
+    TreeNode node = root, candidate = null;
+    // binary search
+    while (node != null) {
+        if (node.val > p.val) {
+            candidate = node;
+            node = node.left;
+        } else {
+            node = node.right;
+        }
+    }
+    return candidate;
+}
+{% endhighlight %}
+
+[Inorder Successor in BST II][inorder-successor-in-bst-ii]
+
 # Complexity
 
 # Binary Search Tree
@@ -481,4 +503,6 @@ public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
 [construct-binary-tree-from-preorder-and-inorder-traversal]: https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
 [construct-binary-tree-from-preorder-and-postorder-traversal]: https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/
 [find-largest-value-in-each-tree-row]: https://leetcode.com/problems/find-largest-value-in-each-tree-row/
+[inorder-successor-in-bst]: https://leetcode.com/problems/inorder-successor-in-bst/
+[inorder-successor-in-bst-ii]: https://leetcode.com/problems/inorder-successor-in-bst-ii/
 [verify-preorder-sequence-in-binary-search-tree]: https://leetcode.com/problems/verify-preorder-sequence-in-binary-search-tree/

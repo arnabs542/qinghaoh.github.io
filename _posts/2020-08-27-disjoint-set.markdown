@@ -107,5 +107,23 @@ private double query(String s1, String s2) {
 }
 {% endhighlight %}
 
+[Number of Connected Components in an Undirected Graph][number-of-connected-components-in-an-undirected-graph]
+
+{% highlight java %}
+public int countComponents(int n, int[][] edges) {
+    this.parent = new int[n];
+    Arrays.fill(this.parent, -1);
+
+    for (int[] e : edges) {
+        if (union(e[0], e[1])) {
+            n--;
+        }
+    }
+
+    return n;
+}
+{% endhighlight %}
+
 [evaluate-division]: https://leetcode.com/problems/evaluate-division/
+[number-of-connected-components-in-an-undirected-graph]: https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
 [redundant-connection]: https://leetcode.com/problems/redundant-connection/

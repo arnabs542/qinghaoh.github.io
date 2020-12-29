@@ -95,7 +95,29 @@ $$\sum _{i=0}^{n-1}F_{2i+1}=F_{2n}$$
 
 $$\sum _{i=1}^{n}F_{2i}=F_{2n+1}-1$$
 
+[Sparse Matrix Multiplication][sparse-matrix-multiplication]
+
+{% highlight java %}
+public int[][] multiply(int[][] A, int[][] B) {
+    int m = A.length, n = B[0].length;
+    int[][] result = new int[m][n];
+    for (int i = 0; i < m; i++) {
+        for (int k = 0; k < B.length; k++) {
+            if (A[i][k] != 0) {
+                for (int j = 0; j < n; j++) {
+                    if (B[k][j] != 0) {
+                        result[i][j] += A[i][k] * B[k][j];
+                    }
+                }
+            }
+        }
+    }
+    return result;
+}
+{% endhighlight %}
+
+[2-keys-keyboard]: https://leetcode.com/problems/2-keys-keyboard/
 [escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/
 [implement-rand10-using-rand7]: https://leetcode.com/problems/implement-rand10-using-rand7/
-[2-keys-keyboard]: https://leetcode.com/problems/2-keys-keyboard/
+[sparse-matrix-multiplication]: https://leetcode.com/problems/sparse-matrix-multiplication/
 

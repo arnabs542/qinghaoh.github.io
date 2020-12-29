@@ -168,9 +168,11 @@ private int gcd(int a, int b) {
 * substring(int beginIndex, int endIndex): `0 <= beginIndex <= endIndex <= s.length()`
 
 # StringBuilder
+* [public StringBuilder delete(int start, int end)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/StringBuilder.html#delete(int,int))
 * [public StringBuilder deleteCharAt(int index)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/StringBuilder.html#deleteCharAt(int))
-* [public StringBuilder replace(int start, int end, String str)](https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html#replace-int-int-java.lang.String-)
-* [public StringBuilder reverse()](https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html#reverse--)
+* [public StringBuilder replace(int start, int end, String str)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/StringBuilder.html#replace(int,int,java.lang.String))
+* [public StringBuilder reverse()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/StringBuilder.html#reverse())
+* [public void setLength​(int newLength)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/StringBuilder.html#setLength(int))
 
 # System
 * [public static void arraycopy(Object src, int srcPos, Object dest, int destPos, int length)](https://docs.oracle.com/javase/8/docs/api/java/lang/System.html#arraycopy-java.lang.Object-int-java.lang.Object-int-int-)

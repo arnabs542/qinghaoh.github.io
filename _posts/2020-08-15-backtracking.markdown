@@ -313,6 +313,46 @@ private boolean backtrack(int[] nums, int index, int target) {
 }
 {% endhighlight %}
 
+[Generalized Abbreviation][generalized-abbreviation]
+
+{% highlight java %}
+private String word;
+
+public List<String> generateAbbreviations(String word) {
+    this.word = word;
+    List<String> list = new ArrayList<>();
+    backtrack(list, new StringBuilder(), 0, 0);
+    return list;
+}
+
+// k is the count of consecutive abbreviated characters
+private void backtrack(List<String> list, StringBuilder sb, int index, int k) {
+    int length = sb.length();
+    if (index == word.length()) {
+        // abbreviates the last k letters
+        if (k > 0) {
+            sb.append(k);
+        }
+        list.add(sb.toString());
+        sb.setLength(length);
+        return;
+    }
+
+    // the branch that word.charAt(index) is abbreviated
+    backtrack(list, sb, index + 1, k + 1);
+
+    // the branch that word.charAt(index) is kept
+    // abbreviates the last k letters
+    if (k > 0) {
+        sb.append(k);
+    }
+    // appends word.charAt(index)
+    sb.append(word.charAt(index));
+    backtrack(list, sb, index + 1, 0);
+    sb.setLength(length);
+}
+{% endhighlight %}
+
 [Beautiful Arrangement][beautiful-arrangement]
 
 # Subset Sum Problem
@@ -413,6 +453,7 @@ private boolean backtrack(int[] nums, int index, boolean[] visited, int k, int s
 [combination-sum-ii]: https://leetcode.com/problems/combination-sum-ii/
 [combination-sum-iii]: https://leetcode.com/problems/combination-sum-iii/
 [factor-combinations]: https://leetcode.com/problems/factor-combinations/
+[generalized-abbreviation]: https://leetcode.com/problems/generalized-abbreviation/
 [matchsticks-to-square]: https://leetcode.com/problems/matchsticks-to-square/
 [palindrome-partitioning]: https://leetcode.com/problems/palindrome-partitioning/
 [palindrome-permutation-ii]: https://leetcode.com/problems/palindrome-permutation-ii/

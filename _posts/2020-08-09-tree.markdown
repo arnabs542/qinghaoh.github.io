@@ -3,6 +3,74 @@ layout: post
 title:  "Tree"
 tags: tree
 ---
+
+# Terminology
+
+[Terminology](https://en.wikipedia.org/wiki/Tree_(data_structure))
+
+*height*
+  * the length of the longest downward path to a leaf from the node
+  * the height of the root is the height of the tree
+  * the root node has depth zero
+
+*depth*
+  * the length of the path from the node to its root (i.e., its root path)
+  * leaf nodes have height zero
+
+# Complete Tree
+
+[Count Complete Tree Nodes][count-complete-tree-nodes]
+
+{% highlight java %}
+public int countNodes(TreeNode root) {
+    if (root == null) {
+        return 0;
+    }
+
+    TreeNode left = root, right = root;
+    int height = 0;
+    // computes height, and moves the right pointer under the rightmost leaf
+    while (right != null) {
+        left = left.left;
+        right = right.right;
+        height++;
+    }
+
+    // if left pointer is also null, then it's a complete tree
+    if (left == null) {
+        return (1 << height) - 1;
+    }
+
+    return 1 + countNodes(root.left) + countNodes(root.right);
+}
+{% endhighlight %}
+
+Iterative, no recomputation of `h`:
+
+{% highlight java %}
+public int countNodes(TreeNode root) {
+    int count = 0, h = height(root);
+    TreeNode node = root;
+    while (node != null) {
+        // left subtree is complete, and its height is (h - 1)
+        if (height(node.right) == h - 1) {
+            count += 1 << h;  // left subtree: 2 ^ h - 1, root: 1
+            node = node.right;
+        } else {  // right subtree is complete, and its height is (h - 2)
+            count += 1 << h - 1;  // right subtree: 2 ^ (h - 1) - 1, root: 1
+            node = node.left;
+        }
+        h--;
+    }
+    return count;
+}
+
+private int height(TreeNode node) {
+    // left subtree determines the height
+    return node == null ? -1 : 1 + height(node.left);
+}
+{% endhighlight %}
+
 # Fenwick Tree
 
 [Fenwick tree (Binary indexed tree)](https://en.wikipedia.org/wiki/Fenwick_tree)
@@ -134,6 +202,7 @@ public TreeNode constructMaximumBinaryTree(int[] nums) {
 }
 {% endhighlight %}
 
+[count-complete-tree-nodes]: https://leetcode.com/problems/count-complete-tree-nodes/
 [count-number-of-teams]: https://leetcode.com/problems/count-number-of-teams/
 [maximum-binary-tree]: https://leetcode.com/problems/maximum-binary-tree/
 [queries-on-a-permutation-with-key]: https://leetcode.com/problems/queries-on-a-permutation-with-key/

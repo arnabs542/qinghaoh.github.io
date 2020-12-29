@@ -163,7 +163,60 @@ public void wallsAndGates(int[][] rooms) {
 }
 {% endhighlight %}
 
+# In-place BFS
+
+[Rotting Oranges][rotting-oranges]
+
+{% highlight java %}
+{% raw %}
+private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+{% endraw %}
+public int orangesRotting(int[][] grid) {
+    int fresh = 0, time = 0;
+    for (int i = 0; i < grid.length; i++) {
+        for (int j = 0; j < grid[i].length; j++) {
+            if (grid[i][j] == 1) {
+                fresh++;
+            }
+        }
+    }
+
+    int prev = fresh;
+    while (fresh > 0) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                // oranges that got rotten yesterday
+                if (grid[i][j] == time + 2) {
+                    for (int[] d : DIRECTIONS) {
+                        fresh -= rot(grid, i + d[0], j + d[1], time);
+                    }
+                }
+            }
+        }
+
+        if (fresh == prev) {
+            return -1;
+        }
+
+        time++;
+        prev = fresh;
+    }
+
+    return time;
+}
+
+private int rot(int[][] grid, int i, int j, int time) {
+    if (i < 0 || i >= grid.length || j < 0 || j >= grid[i].length || grid[i][j] != 1) {
+        return 0;
+    }
+
+    grid[i][j] = time + 3;
+    return 1;
+}
+{% endhighlight %}
+
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
 [nested-list-weight-sum-ii]: https://leetcode.com/problems/nested-list-weight-sum-ii/
+[rotting-oranges]: https://leetcode.com/problems/rotting-oranges/
 [walls-and-gates]: https://leetcode.com/problems/walls-and-gates/
