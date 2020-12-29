@@ -263,6 +263,24 @@ public int leastInterval(char[] tasks, int n) {
 }
 {% endhighlight %}
 
+[Wiggle Sort][wiggle-sort]
+
+{% highlight java %}
+public void wiggleSort(int[] nums) {
+    for (int i = 0; i < nums.length - 1; i++) {
+        if ((i % 2 == 0) == (nums[i] > nums[i + 1])) {
+            swap(nums, i, i + 1);
+        }
+    }
+}
+
+private void swap(int[] A, int i, int j) {
+    int tmp = A[i];
+    A[i] = A[j];
+    A[j] = tmp;
+}
+{% endhighlight %}
+
 [broken-calculator]: https://leetcode.com/problems/broken-calculator/
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [jump-game]: https://leetcode.com/problems/jump-game/
@@ -274,3 +292,4 @@ public int leastInterval(char[] tasks, int n) {
 [string-without-aaa-or-bbb]: https://leetcode.com/problems/string-without-aaa-or-bbb/
 [task-scheduler]: https://leetcode.com/problems/task-scheduler/
 [video-stitching]: https://leetcode.com/problems/video-stitching/
+[wiggle-sort]: https://leetcode.com/problems/wiggle-sort/

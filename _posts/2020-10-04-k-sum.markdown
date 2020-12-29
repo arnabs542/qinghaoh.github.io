@@ -18,6 +18,12 @@ Two pointers: `O(n)`
 
 Sort + O(n) * Two pointers: `O(n ^ 2)`
 
+[3Sum Smaller][3sum-smaller]
+
+[3Sum Closest][3sum-closest]
+
+Two pointers
+
 **k-sum**:
 
 `O(n ^ (k - 1))`
@@ -49,6 +55,8 @@ public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
 {% endhighlight %}
 
 [3sum]: https://leetcode.com/problems/3sum/
+[3sum-closest]: https://leetcode.com/problems/3sum-closest/
+[3sum-smaller]: https://leetcode.com/problems/3sum-smaller/
 [4sum-ii]: https://leetcode.com/problems/4sum-ii/
 [two-sum]: https://leetcode.com/problems/two-sum/
 [two-sum-ii-input-array-is-sorted]: https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/

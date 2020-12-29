@@ -101,6 +101,8 @@ public int characterReplacement(String s, int k) {
 }
 {% endhighlight %}
 
+[][longest-substring-with-at-most-two-distinct-characters]
+
 [Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit][longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit]
 
 {% highlight java %}
@@ -336,6 +338,7 @@ private boolean condition(int[] nums, int distance, int k) {
 [get-equal-substrings-within-budget]: https://leetcode.com/problems/get-equal-substrings-within-budget/
 [longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit]: https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/
 [longest-repeating-character-replacement]: https://leetcode.com/problems/longest-repeating-character-replacement/
+[longest-substring-with-at-most-two-distinct-characters]: https://leetcode.com/problems/longest-substring-with-at-most-two-distinct-characters/
 [longest-substring-without-repeating-characters]: https://leetcode.com/problems/longest-substring-without-repeating-characters/
 [max-consecutive-ones-iii]: https://leetcode.com/problems/max-consecutive-ones-iii/
 [maximum-points-you-can-obtain-from-cards]: https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/

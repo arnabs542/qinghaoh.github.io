@@ -8,9 +8,61 @@ Count each element in an array `int[] a`.
 
 If `0 <= a[i] <= max`, where max is not too big, then we can use `int[] count = new int[max + 1]` as buckets, instead of `Map<Integer, Integer>` 
 
-[How Many Numbers Are Smaller Than the Current Number][how-many-numbers-are-smaller-than-the-current-number]
+## Rotation
+
+[Rotate Array][rotate-array]
+
+![Example](/assets/rotate_array.png)
 
 {% highlight java %}
+public void rotate(int[] nums, int k) {
+    k %= nums.length;
+    int start = 0, count = 0;
+    while (count != nums.length) {
+        int index = start;
+        int curr = nums[index];
+        do {
+            index = (index + k) % nums.length;
+            int tmp = nums[index];
+            nums[index] = curr;
+            curr = tmp;
+            count++;
+        } while (index != start);
+        start++;
+    }
+    return;
+}
 {% endhighlight %}
 
-[how-many-numbers-are-smaller-than-the-current-number]: https://leetcode.com/problems/how-many-numbers-are-smaller-than-the-current-number/
+[Shift 2D Grid][shift-2d-grid]
+
+[Reverse Words in a String II][reverse-words-in-a-string-ii]
+
+{% highlight java %}
+public void reverseWords(char[] s) {
+    reverse(s, 0, s.length);
+
+    int start = 0, end = 0;
+    while (end < s.length) {
+        if (s[end] == ' ') {
+            reverse(s, start, end);
+            start = end + 1;
+        }
+        end++;
+    }
+    reverse(s, start, end);
+}
+
+private void reverse(char[] s, int start, int end) {
+    int i = start, j = end - 1;
+    while (i < j) {
+        char tmp = s[i];
+        s[i++] = s[j];
+        s[j--] = tmp;
+    }
+}
+{% endhighlight %}
+
+[reverse-words-in-a-string-ii]: https://leetcode.com/problems/reverse-words-in-a-string-ii/
+[rotate-array]: https://leetcode.com/problems/rotate-array/
+[shift-2d-grid]: https://leetcode.com/problems/shift-2d-grid/

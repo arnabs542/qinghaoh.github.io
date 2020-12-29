@@ -215,6 +215,33 @@ private void backtrack(List<List<Integer>> list, List<Integer> tmpList, int star
 }
 {% endhighlight %}
 
+[Factor Combinations][factor-combinations]
+
+{% highlight java %}
+public List<List<Integer>> getFactors(int n) {
+    List<List<Integer>> list = new ArrayList<>();
+    backtrack(list, new ArrayList<>(), 2, n);
+    return list;
+}
+
+private void backtrack(List<List<Integer>> list, List<Integer> tmpList, int index, int n) {
+    if (n == 1) {
+        if (tmpList.size() > 1) {
+            list.add(new ArrayList<Integer>(tmpList));
+        }
+        return;
+    }
+
+    for (int i = index; i <= n; i++) {
+        if (n % i == 0) {
+            tmpList.add(i);
+            backtrack(list, tmpList, i, n / i);
+            tmpList.remove(tmpList.size() - 1);
+        }
+    }
+}
+{% endhighlight %}
+
 [Palindrome Partitioning][palindrome-partitioning]
 
 {% highlight java %}
@@ -385,6 +412,7 @@ private boolean backtrack(int[] nums, int index, boolean[] visited, int k, int s
 [combination-sum]: https://leetcode.com/problems/combination-sum/
 [combination-sum-ii]: https://leetcode.com/problems/combination-sum-ii/
 [combination-sum-iii]: https://leetcode.com/problems/combination-sum-iii/
+[factor-combinations]: https://leetcode.com/problems/factor-combinations/
 [matchsticks-to-square]: https://leetcode.com/problems/matchsticks-to-square/
 [palindrome-partitioning]: https://leetcode.com/problems/palindrome-partitioning/
 [palindrome-permutation-ii]: https://leetcode.com/problems/palindrome-permutation-ii/

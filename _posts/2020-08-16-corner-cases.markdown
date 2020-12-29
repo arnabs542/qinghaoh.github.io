@@ -306,6 +306,24 @@ private String getClosest(String s) {
 }
 {% endhighlight %}
 
+[Number of Students Unable to Eat Lunch][number-of-students-unable-to-eat-lunch]
+
+{% highlight java %}
+public int countStudents(int[] students, int[] sandwiches) {
+    int[] count = {0, 0};
+    for (int s: students) {
+        count[s]++;
+    }
+
+    int eaten = 0;
+    while (eaten < sandwiches.length && count[sandwiches[eaten]] > 0) {
+        count[sandwiches[eaten++]]--;
+    }
+
+    return students.length - eaten;
+}
+{% endhighlight %}
+
 [circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
 [count-number-of-teams]: https://leetcode.com/problems/count-number-of-teams/
 [count-of-matches-in-tournament]: https://leetcode.com/problems/count-of-matches-in-tournament/
@@ -314,6 +332,7 @@ private String getClosest(String s) {
 [minimum-time-difference]: https://leetcode.com/problems/minimum-time-difference/
 [most-visited-sector-in-a-circular-track]: https://leetcode.com/problems/most-visited-sector-in-a-circular-track/
 [number-of-steps-to-reduce-a-number-in-binary-representation-to-one]: https://leetcode.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one/
+[number-of-students-unable-to-eat-lunch]: https://leetcode.com/problems/number-of-students-unable-to-eat-lunch/
 [rabbits-in-forest]: https://leetcode.com/problems/rabbits-in-forest/
 [reverse-integer]: https://leetcode.com/problems/reverse-integer/
 [similar-rgb-color]: https://leetcode.com/problems/similar-rgb-color/

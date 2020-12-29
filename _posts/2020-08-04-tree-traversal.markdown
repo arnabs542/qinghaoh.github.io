@@ -312,15 +312,93 @@ public TreeNode bstFromPreorder(int[] preorder) {
     return build(preorder, Integer.MAX_VALUE);
 }
 
-public TreeNode build(int[] preorder, int bound) {
-    if (index == preorder.length || preorder[index] > bound) {
+public TreeNode build(int[] preorder, int high) {
+    if (index == preorder.length || preorder[index] > high) {
         return null;
     }
 
     TreeNode root = new TreeNode(preorder[index++]);
     root.left = build(preorder, root.val);
-    root.right = build(preorder, bound);
+    root.right = build(preorder, high);
     return root;
+}
+{% endhighlight %}
+
+# Verification
+
+[Verify Preorder Sequence in Binary Search Tree][verify-preorder-sequence-in-binary-search-tree]
+
+{% highlight java %}
+public boolean verifyPreorder(int[] preorder) {
+    int low = Integer.MIN_VALUE;
+    Deque<Integer> st = new ArrayDeque<>();
+    for (int p : preorder) {
+        if (p < low) {
+            return false;
+        }
+
+        // monotonically decreasing stack
+        // pops left subtree
+        while (!st.isEmpty() && p > st.peek()) {
+            // the sequence of low is the inorder traversal
+            low = st.pop();
+        }
+        st.push(p);
+    }
+    return true;
+}
+{% endhighlight %}
+
+In-place:
+
+{% highlight java %}
+public boolean verifyPreorder(int[] preorder) {
+    int low = Integer.MIN_VALUE, i = -1;
+    for (int p : preorder) {
+        if (p < low) {
+            return false;
+        }
+
+        // pops left subtree
+        while (i >= 0 && p > preorder[i]) {
+            // the sequence of low is the inorder traversal
+            low = preorder[i--];
+        }
+        preorder[++i] = p;
+    }
+    return true;
+}
+{% endhighlight %}
+
+For example:
+
+```
+[5,2,1,3,6]
+```
+```
+		low
+[5,2,1,3,6]	-2147483648
+[5,2,1,3,6]	-2147483648
+[5,2,1,3,6]	-2147483648
+[5,3,1,3,6]	2
+[6,3,1,3,6]	5
+```
+
+In-place, no overwriting:
+
+{% highlight java %}
+public boolean verifyPreorder(int[] preorder) {
+    int low = Integer.MIN_VALUE;
+    for (int i = 0; i < preorder.length; i++) {
+        if (preorder[i] < low) {
+            return false;
+        }
+
+        for (int j = i - 1; j >= 0 && preorder[j] < preorder[i]; j--) {
+            low = Math.max(low, preorder[j]);
+        }
+    }
+    return true;
 }
 {% endhighlight %}
 
@@ -403,3 +481,4 @@ public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
 [construct-binary-tree-from-preorder-and-inorder-traversal]: https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
 [construct-binary-tree-from-preorder-and-postorder-traversal]: https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/
 [find-largest-value-in-each-tree-row]: https://leetcode.com/problems/find-largest-value-in-each-tree-row/
+[verify-preorder-sequence-in-binary-search-tree]: https://leetcode.com/problems/verify-preorder-sequence-in-binary-search-tree/
