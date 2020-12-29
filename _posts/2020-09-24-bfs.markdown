@@ -132,8 +132,9 @@ public int depthSumInverse(List<NestedInteger> nestedList) {
 [Walls and Gates][walls-and-gates]
 
 {% highlight java %}
+{% raw %}
 private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-
+{% endraw %}
 public void wallsAndGates(int[][] rooms) {
     Queue<int[]> q = new LinkedList<>();
     for (int i = 0; i < rooms.length; i++) {

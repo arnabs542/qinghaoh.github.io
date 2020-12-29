@@ -70,7 +70,11 @@ Queue implementations generally do not allow insertion of ***null*** elements, a
 
 ## Local Variable Type Interface
 
-https://docs.oracle.com/en/java/javase/13/language/local-variable-type-inference.html
+[Local variable type interface](https://docs.oracle.com/en/java/javase/13/language/local-variable-type-inference.html)
+
+## Boolean Logical Operators
+
+[Boolean Logical Operators &, ^, and \|](https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.22.2): no short-circuit
 
 [underscores-literals]: https://docs.oracle.com/javase/7/docs/technotes/guides/language/underscores-literals.html
 [for]: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/for.html

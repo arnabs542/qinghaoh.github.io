@@ -30,7 +30,12 @@ List<Integer> b = Arrays.stream(a).boxed().collect(Collectors.toList());
 {% highlight java %}
 Integer[] a = {0, 1, 2};
 Set<Integer> b = Arrays.stream(a).collect(Collectors.toSet());
+{% endhighlight %}
 
+# int[] -> Iterable\<Integer\>
+{% highlight java %}
+int[] a = {0, 1, 2};
+Iterable<Integer> b = IntStream.of(a).boxed().iterator();
 {% endhighlight %}
 
 # Array -> Stream
