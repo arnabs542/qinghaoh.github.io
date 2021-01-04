@@ -11,11 +11,11 @@ tags: tree
 *height*
   * the length of the longest downward path to a leaf from the node
   * the height of the root is the height of the tree
-  * the root node has depth zero
+  * leaf nodes have height zero
 
 *depth*
   * the length of the path from the node to its root (i.e., its root path)
-  * leaf nodes have height zero
+  * the root node has depth zero
 
 # Complete Tree
 

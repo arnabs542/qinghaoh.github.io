@@ -35,6 +35,48 @@ public int subarraySum(int[] nums, int k) {
 }
 {% endhighlight %}
 
+[Maximum Size Subarray Sum Equals k][maximum-size-subarray-sum-equals-k]
+
+{% highlight java %}
+public int maxSubArrayLen(int[] nums, int k) {
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(0, -1);
+
+    int max = 0, sum = 0;;
+    for (int i = 0; i < nums.length; i++) {
+        sum += nums[i];
+        if (map.containsKey(sum - k)) {
+            max = Math.max(max, i - map.get(sum - k));
+        }
+
+        // stores the index of the first occurrence of sum
+        map.putIfAbsent(sum, i);
+    }
+    return max;
+}
+{% endhighlight %}
+
+[Contiguous Array][contiguous-array]
+
+{% highlight java %}
+public int findMaxLength(int[] nums) {
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(0, -1);
+
+    // count(ones) - count(zeros)
+    int diff = 0, max = 0;
+    for (int i = 0; i < nums.length; i++) {
+        diff += nums[i] == 0 ? -1 : 1;
+        if (map.containsKey(diff)) {
+            max = Math.max(max, i - map.get(diff));
+        } else {
+            map.put(diff, i);
+        }
+    }
+    return max;
+}
+{% endhighlight %}
+
 [Count Triplets That Can Form Two Arrays of Equal XOR][count-triplets-that-can-form-two-arrays-of-equal-xor]
 
 [Product of the Last K Numbers][product-of-the-last-k-numbers]
@@ -59,6 +101,32 @@ public void add(int num) {
 public int getProduct(int k) {
     int n = p.size();
     return k < n ? p.get(n - 1) / p.get(n - k - 1) : 0;
+}
+{% endhighlight %}
+
+## Discrete Time
+
+[Discrete Time](https://en.wikipedia.org/wiki/Discrete_time_and_continuous_time#Discrete_time) Signal Processing
+
+[Range Addition][range-addition]
+
+{% highlight java %}
+public int[] getModifiedArray(int length, int[][] updates) {
+    int[] result = new int[length];
+    // finds pulses
+    for (int[] u : updates) {
+        result[u[0]] += u[2];
+        if (u[1] + 1 < length) {
+            result[u[1] + 1] -= u[2];
+        }
+    }
+
+    // accumulates pulses
+    for(int i = 1; i < length; i++) {
+        result[i] += result[i - 1];
+    }
+
+    return result;
 }
 {% endhighlight %}
 
@@ -105,9 +173,12 @@ Generalization: `N` non-overlapping subarrays
 {% highlight java %}
 {% endhighlight %}
 
+[contiguous-array]: https://leetcode.com/problems/contiguous-array/
 [count-triplets-that-can-form-two-arrays-of-equal-xor]: https://leetcode.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/
 [find-two-non-overlapping-sub-arrays-each-with-target-sum]: https://leetcode.com/problems/find-two-non-overlapping-sub-arrays-each-with-target-sum/
 [maximum-number-of-occurrences-of-a-substring]: https://leetcode.com/problems/maximum-number-of-occurrences-of-a-substring/
+[maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
 [product-of-the-last-k-numbers]: https://leetcode.com/problems/product-of-the-last-k-numbers/
+[range-addition]: https://leetcode.com/problems/range-addition/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/
 [subarrays-with-k-different-integers]: https://leetcode.com/problems/subarrays-with-k-different-integers/

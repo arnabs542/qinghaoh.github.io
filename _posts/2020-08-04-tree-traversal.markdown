@@ -127,6 +127,49 @@ public List<Integer> postorderTraversal(TreeNode root) {
 }
 {% endhighlight %}
 
+## Vertical
+
+[Binary Tree Vertical Order Traversal][binary-tree-vertical-order-traversal]
+
+{% highlight java %}
+public List<List<Integer>> verticalOrder(TreeNode root) {
+    List<List<Integer>> list = new ArrayList<>();
+    if (root == null) {
+        return list;
+    }
+
+    Map<Integer, List<Integer>> map = new TreeMap<>();
+    Queue<TreeNode> q = new LinkedList<>();
+    Queue<Integer> cols = new LinkedList<>();
+
+    q.add(root);
+    cols.add(0);
+
+    while (!q.isEmpty()) {
+        TreeNode node = q.poll();
+        int col = cols.poll();
+
+        map.computeIfAbsent(col, k -> new ArrayList<Integer>()).add(node.val);
+
+        if (node.left != null) {
+            q.add(node.left); 
+            cols.add(col - 1);
+        }
+
+        if (node.right != null) {
+            q.add(node.right);
+            cols.add(col + 1);
+        }
+    }
+
+    for (var col : map.values()) {
+        list.add(col);
+    }
+
+    return list;
+}
+{% endhighlight %}
+
 ## Depth First Search
 
 [Find Largest Value in Each Tree Row][find-largest-value-in-each-tree-row]
@@ -495,6 +538,7 @@ public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
 
 [all-elements-in-two-binary-search-trees/submissions]: https://leetcode.com/problems/all-elements-in-two-binary-search-trees/submissions/
 [binary-search-tree-iterator]: https://leetcode.com/problems/binary-search-tree-iterator/
+[binary-tree-vertical-order-traversal]: https://leetcode.com/problems/binary-tree-vertical-order-traversal
 [binary-tree-preorder-traversal]: https://leetcode.com/problems/binary-tree-preorder-traversal
 [binary-tree-inorder-traversal]: https://leetcode.com/problems/binary-tree-inorder-traversal
 [binary-tree-postorder-traversal]: https://leetcode.com/problems/binary-tree-postorder-traversal

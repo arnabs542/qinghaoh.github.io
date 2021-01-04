@@ -1,0 +1,15 @@
+---
+layout: post
+title:  "String"
+tags: string
+---
+# Lydon Word
+
+A [Lyndon word](https://en.wikipedia.org/wiki/Lyndon_word) is a nonempty string that is strictly smaller in lexicographic order than all of its rotations.
+
+[Largest Subarray Length K][largest-subarray-length-k]
+
+{% highlight java %}
+{% endhighlight %}
+
+[largest-subarray-length-k]: https://leetcode.com/problems/largest-subarray-length-k/

@@ -261,8 +261,9 @@ public int binarySearch(int[] arr) {
     return low;
 }
 
-// monotonically increasing
-private boolean condition(int value) {
+// f(x) is monotonically increasing
+private boolean condition(int x) {
+    return f(x) >= 0;
 }
 {% endhighlight %}
 
@@ -282,6 +283,8 @@ public int searchInsert(int[] nums, int target) {
     return low;
 }
 {% endhighlight %}
+
+[Fixed Point][fixed-point]
 
 [Koko Eating Bananas][koko-eating-bananas]
 
@@ -601,6 +604,7 @@ if (insertionPoint < 0) {
 [find-minimum-in-rotated-sorted-array]: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
 [find-minimum-in-rotated-sorted-array-ii]: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/
 [first-bad-version]: https://leetcode.com/problems/first-bad-version/
+[fixed-point]: https://leetcode.com/problems/fixed-point/
 [h-index-ii]: https://leetcode.com/problems/h-index-ii/
 [koko-eating-bananas]: https://leetcode.com/problems/koko-eating-bananas/
 [kth-missing-positive-number]: https://leetcode.com/problems/kth-missing-positive-number/

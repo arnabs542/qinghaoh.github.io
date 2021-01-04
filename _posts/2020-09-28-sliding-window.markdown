@@ -101,7 +101,7 @@ public int characterReplacement(String s, int k) {
 }
 {% endhighlight %}
 
-[][longest-substring-with-at-most-two-distinct-characters]
+[Longest Substring with At Most K Distinct Characters][longest-substring-with-at-most-k-distinct-characters]
 
 [Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit][longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit]
 
@@ -165,7 +165,7 @@ public int numberOfSubarrays(int[] nums, int k) {
 }
 {% endhighlight %}
 
-## Minimum Length
+## Min Length
 
 [Minimum Size Subarray Sum][minimum-size-subarray-sum]
 
@@ -296,6 +296,28 @@ private int atMost(int[] nums, int k) {
 }
 {% endhighlight %}
 
+# At Most
+
+[Subarray Product Less Than K][subarray-product-less-than-k]
+
+{% highlight java %}
+public int numSubarrayProductLessThanK(int[] nums, int k) {
+    if (k <= 1) {
+        return 0;
+    }
+
+    int i = 0, j = 0, prod = 1, count = 0;
+    while (j < nums.length) {
+        prod *= nums[j++];
+        while (prod >= k) {
+            prod /= nums[i++];
+        }
+        count += j - i;
+    }
+    return count;
+}
+{% endhighlight %}
+
 [Find K-th Smallest Pair Distance][find-k-th-smallest-pair-distance]
 
 {% highlight java %}
@@ -332,13 +354,43 @@ private boolean condition(int[] nums, int distance, int k) {
 [Maximum Points You Can Obtain from Cards][maximum-points-you-can-obtain-from-cards]
 [Minimum Difference Between Largest and Smallest Value in Three Moves][minimum-difference-between-largest-and-smallest-value-in-three-moves]
 
+[Find All Anagrams in a String][find-all-anagrams-in-a-string]
+
+{% highlight java %}
+public List<Integer> findAnagrams(String s, String p) {
+    int[] count = new int[26];
+    for (char c : p.toCharArray()) {
+        count[c - 'a']++;
+    }
+
+    List<Integer> list = new ArrayList<>();
+    int i = 0, j = 0, k = p.length();
+    while (j < s.length()) {
+        if (count[s.charAt(j++) - 'a']-- > 0) {
+            k--; 
+        }
+
+        if (k == 0) {
+            list.add(i);
+        }
+
+        // count of chars in p won't go below 0
+        if (j - i == p.length() && count[s.charAt(i++) - 'a']++ >= 0) {
+            k++;
+        }
+    }
+    return list;
+}
+{% endhighlight %}
+
 [count-number-of-nice-subarrays]: https://leetcode.com/problems/count-number-of-nice-subarrays/
+[find-all-anagrams-in-a-string]: https://leetcode.com/problems/find-all-anagrams-in-a-string/
 [find-k-th-smallest-pair-distance]: https://leetcode.com/problems/find-k-th-smallest-pair-distance/
 [fruit-into-baskets]: https://leetcode.com/problems/fruit-into-baskets/
 [get-equal-substrings-within-budget]: https://leetcode.com/problems/get-equal-substrings-within-budget/
 [longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit]: https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/
 [longest-repeating-character-replacement]: https://leetcode.com/problems/longest-repeating-character-replacement/
-[longest-substring-with-at-most-two-distinct-characters]: https://leetcode.com/problems/longest-substring-with-at-most-two-distinct-characters/
+[longest-substring-with-at-most-k-distinct-characters]: https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/
 [longest-substring-without-repeating-characters]: https://leetcode.com/problems/longest-substring-without-repeating-characters/
 [max-consecutive-ones-iii]: https://leetcode.com/problems/max-consecutive-ones-iii/
 [maximum-points-you-can-obtain-from-cards]: https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
@@ -346,5 +398,6 @@ private boolean condition(int[] nums, int distance, int k) {
 [minimum-difference-between-largest-and-smallest-value-in-three-moves]: https://leetcode.com/problems/minimum-difference-between-largest-and-smallest-value-in-three-moves/
 [number-of-substrings-containing-all-three-characters]: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
 [replace-the-substring-for-balanced-string]: https://leetcode.com/problems/replace-the-substring-for-balanced-string/
+[subarray-product-less-than-k]: https://leetcode.com/problems/subarray-product-less-than-k/submissions/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/
 [subarrays-with-k-different-integers]: https://leetcode.com/problems/subarrays-with-k-different-integers/

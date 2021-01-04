@@ -3,9 +3,9 @@ layout: post
 title:  "Dynamic Programming V"
 tag: dynamic programming
 ---
-![Paint Fence](/assets/paint_fence.png)
-
 [Paint Fence][paint-fence]
+
+![Paint Fence](/assets/paint_fence.png)
 
 {% highlight java %}
 public int numWays(int n, int k) {

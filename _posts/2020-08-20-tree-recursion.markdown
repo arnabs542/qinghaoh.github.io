@@ -70,6 +70,33 @@ private int height(TreeNode node) {
 
 [Diameter of N-Ary Tree][diameter-of-n-ary-tree]
 
+[Find Leaves of Binary Tree][find-leaves-of-binary-tree]
+
+{% highlight java %}
+private List<List<Integer>> leaves;
+
+public List<List<Integer>> findLeaves(TreeNode root) {
+    this.leaves = new ArrayList<>();
+    dfs(root);
+    return this.leaves;
+}
+
+private int dfs(TreeNode node) {
+    if (node == null) {
+        return -1;
+    }
+
+    int height = Math.max(dfs(node.left), dfs(node.right)) + 1;
+
+    if (height == leaves.size()) {
+        leaves.add(new ArrayList<>());
+    }
+    leaves.get(height).add(node.val);
+
+    return height;
+}
+{% endhighlight %}
+
 [Binary Tree Maximum Path Sum][binary-tree-maximum-path-sum]
 
 {% highlight java %}
@@ -192,6 +219,28 @@ private int[] dfs(TreeNode node) {
     int path = Math.max(Math.max(left[1], right[0]) + 1, Math.max(left[2], right[2]));
 
     return new int[]{left[1] + 1, right[0] + 1, path};
+}
+{% endhighlight %}
+
+[Largest BST Subtree][largest-bst-subtree]
+
+{% highlight java %}
+public int largestBSTSubtree(TreeNode root) {
+    return dfs(root)[0];
+}
+
+private int[] dfs(TreeNode node) {
+    if (node == null) {
+        // [0]: largets BST in this subtree
+        // [1]: low
+        // [2]: high
+        return new int[]{0, Integer.MAX_VALUE, Integer.MIN_VALUE};
+    }
+
+    int[] left = dfs(node.left), right = dfs(node.right);
+    return node.val > left[2] && node.val < right[1] ?
+        new int[]{1 + left[0] + right[0], Math.min(node.val, left[1]), Math.max(node.val, right[2])} :
+        new int[]{Math.max(left[0], right[0]), Integer.MIN_VALUE, Integer.MAX_VALUE};
 }
 {% endhighlight %}
 
@@ -520,8 +569,10 @@ public int dfs(TreeNode node, int currSum, int target, Map<Integer, Integer> pre
 [diameter-of-binary-tree]: https://leetcode.com/problems/diameter-of-binary-tree/
 [diameter-of-n-ary-tree]: https://leetcode.com/problems/diameter-of-n-ary-tree/
 [find-bottom-left-tree-value]: https://leetcode.com/problems/find-bottom-left-tree-value/
+[find-leaves-of-binary-tree]: https://leetcode.com/problems/find-leaves-of-binary-tree/
 [house-robber-iii]: https://leetcode.com/problems/house-robber-iii/
 [increasing-order-search-tree]: https://leetcode.com/problems/increasing-order-search-tree/
+[largest-bst-subtree]: https://leetcode.com/problems/largest-bst-subtree/
 [longest-univalue-path]: https://leetcode.com/problems/longest-univalue-path/
 [longest-zigzag-path-in-a-binary-tree]: https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/
 [lowest-common-ancestor-of-deepest-leaves]: https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/
