@@ -5,19 +5,56 @@ tag: trie
 ---
 [Trie](https://en.wikipedia.org/wiki/Trie)
 
-[][]
+[Index Pairs of a String][index-pairs-of-a-string]
 
 {% highlight java %}
-public int maxProfit(int[] prices) {
-    int sold = 0, hold = Integer.MIN_VALUE, rest = 0;
-    for (int price : prices) {
-        int prevSold = sold;
-        sold = hold + price;
-        hold = Math.max(hold, rest - price);
-        rest = Math.max(rest, prevSold);
+public int[][] indexPairs(String text, String[] words) {
+    TrieNode root = new TrieNode();
+    for (String w: words) {
+        insert(root, w);
     }
-    return Math.max(sold, rest);
+
+    List<int[]> list = new ArrayList<>();
+    for (int i = 0; i < text.length(); ++i) {
+        TrieNode node = root;
+        for (int j = i; j < text.length(); j++) {
+            node = node.children[text.charAt(j) - 'a'];
+            if (node == null) {
+                break;
+            }
+            if (node.end) {
+                list.add(new int[]{i, j});
+            }
+        }
+    }
+
+    int[][] result = new int[list.size()][2];
+    for (int i = 0; i < result.length; ++i) {
+        result[i] = list.get(i);
+    }
+    return result;
+}
+
+class TrieNode {
+    TrieNode[] children;
+    boolean end;
+
+    TrieNode() {
+        end = false;
+        children = new TrieNode[26];
+    }
+}
+
+private void insert(TrieNode root, String word) {        
+    TrieNode node = root;
+    for (char c: word.toCharArray()) {
+        if (node.children[c - 'a'] == null) {
+            node.children[c - 'a'] = new TrieNode();
+        }
+        node = node.children[c - 'a'];
+    }
+    node.end = true;
 }
 {% endhighlight %}
 
-[best-time-to-buy-and-sell-stock-with-cooldown]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+[index-pairs-of-a-string]: https://leetcode.com/problems/index-pairs-of-a-string/

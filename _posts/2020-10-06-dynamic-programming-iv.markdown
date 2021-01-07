@@ -176,6 +176,41 @@ for (int j = 0; j < N; j++) {
 }
 {% endhighlight %}
 
+[Bomb Enemy][bomb-enemy]
+
+{% highlight java %}
+public int maxKilledEnemies(char[][] grid) {
+    int m = grid.length, n = m == 0 ? 0 : grid[0].length;
+    int count = 0, rowhits = 0;
+    int[] colhits = new int[n];
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            // resets rowhits after a wall
+            if (j == 0 || grid[i][j - 1] == 'W') {
+                rowhits = 0;
+                for (int k = j; k < n && grid[i][k] != 'W'; k++) {
+                    rowhits += grid[i][k] == 'E' ? 1 : 0;
+                }
+            }
+
+            // resets colhits[j] below a wall
+            if (i == 0 || grid[i - 1][j] == 'W') {
+                colhits[j] = 0;
+                for (int k = i; k < m && grid[k][j] != 'W'; k++) {
+                    colhits[j] += grid[k][j] == 'E' ? 1 : 0;
+                }
+            }
+
+            if (grid[i][j] == '0') {
+                count = Math.max(count, rowhits + colhits[j]);
+            }
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
+[bomb-enemy]: https://leetcode.com/problems/bomb-enemy/
 [largest-plus-sign]: https://leetcode.com/problems/largest-plus-sign/
 [maximal-rectangle]: https://leetcode.com/problems/maximal-rectangle/
 [maximal-square]: https://leetcode.com/problems/maximal-square/
