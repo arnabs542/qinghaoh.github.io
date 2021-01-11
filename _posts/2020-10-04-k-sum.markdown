@@ -33,7 +33,7 @@ Two pointers
 
 [4Sum II][4sum-ii]
 
-`O(n^2)`
+`O(n ^ 2)`
 
 {% highlight java %}
 public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
@@ -54,9 +54,16 @@ public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
 }
 {% endhighlight %}
 
+[Split Array with Equal Sum][split-array-with-equal-sum]
+
+`O(n ^ 2)`:
+
+(0, i), (i, j) + Set; (j, k), (k, n)
+
 [3sum]: https://leetcode.com/problems/3sum/
 [3sum-closest]: https://leetcode.com/problems/3sum-closest/
 [3sum-smaller]: https://leetcode.com/problems/3sum-smaller/
 [4sum-ii]: https://leetcode.com/problems/4sum-ii/
+[split-array-with-equal-sum]: https://leetcode.com/problems/split-array-with-equal-sum/
 [two-sum]: https://leetcode.com/problems/two-sum/
 [two-sum-ii-input-array-is-sorted]: https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/

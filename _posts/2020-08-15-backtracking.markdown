@@ -3,6 +3,9 @@ layout: post
 title:  "Backtracking"
 tags: dfs
 ---
+
+Backtracking = DFS + pruning
+
 [Permutations][permutations]
 
 {% highlight java %}

@@ -210,7 +210,10 @@ public int maxKilledEnemies(char[][] grid) {
 }
 {% endhighlight %}
 
+[Longest Line of Consecutive One in Matrix][longest-line-of-consecutive-one-in-matrix]
+
 [bomb-enemy]: https://leetcode.com/problems/bomb-enemy/
 [largest-plus-sign]: https://leetcode.com/problems/largest-plus-sign/
+[longest-line-of-consecutive-one-in-matrix]: https://leetcode.com/problems/longest-line-of-consecutive-one-in-matrix/
 [maximal-rectangle]: https://leetcode.com/problems/maximal-rectangle/
 [maximal-square]: https://leetcode.com/problems/maximal-square/

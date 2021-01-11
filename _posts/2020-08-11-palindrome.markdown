@@ -122,6 +122,53 @@ public int longestPalindromeSubseq(String s) {
 [Count Different Palindromic Subsequences][count-different-palindromic-subsequences]
 
 {% highlight java %}
+private static final int MOD = (int)1e9 + 7, NUM = 4;
+
+public int countPalindromicSubsequences(String S) {
+    int n = S.length();
+    int[] prev = new int[n + 1], next = new int[n + 1];
+
+    int[] index = new int[NUM];
+    Arrays.fill(index, -1);
+    for (int i = 0; i < n; i++) {
+        prev[i] = index[S.charAt(i) - 'a'];
+        index[S.charAt(i) - 'a'] = i;
+    }
+
+    Arrays.fill(index, n);
+    for (int i = n - 1; i >= 0; i--) {
+        next[i] = index[S.charAt(i) - 'a'];
+        index[S.charAt(i) - 'a'] = i;
+    }
+
+    int[][] dp = new int[n][n];
+
+    // "a"
+    for (int i = 0; i < n; i++) {
+        dp[i][i] = 1;
+    }
+
+    for (int len = 1; len < n; len++) {
+        for (int i = 0, j = i + len; j < n; i++, j++) {
+            if (S.charAt(i) != S.charAt(j)) {
+                dp[i][j] = dp[i][j - 1] + dp[i + 1][j] - dp[i + 1][j - 1];
+            } else {
+                // [i, j]
+                int low = next[i], high = prev[j];
+                dp[i][j] = dp[i + 1][j - 1] * 2;  // w/ and w/o S(i) & S(j)
+                if (low == high) {  // a...a...a, only one char 'a' inside
+                    dp[i][j]++;  // +{"aa"}
+                } else if (low > high) {  // a...a, no char 'a' inside
+                    dp[i][j] += 2;  // +{"a", "aa"}
+                } else {  // a...a...a...a
+                    dp[i][j] -= dp[low + 1][high - 1];
+                }
+            }
+            dp[i][j] = Math.floorMod(dp[i][j], MOD);
+        }
+    }
+    return dp[0][n - 1];
+}
 {% endhighlight %}
 
 [construct-k-palindrome-strings]: https://leetcode.com/problems/construct-k-palindrome-strings/

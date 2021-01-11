@@ -263,6 +263,36 @@ public int leastInterval(char[] tasks, int n) {
 }
 {% endhighlight %}
 
+[Hand of Straights][hand-of-straights]
+
+{% highlight java %}
+public boolean isNStraightHand(int[] hand, int W) {
+    Map<Integer, Integer> count = new TreeMap<>();
+    for (int h : hand) {
+        count.put(h, count.getOrDefault(h, 0) + 1);
+    }
+
+    // number of groups that are not closed
+    int prev = -1, opened = 0;
+    // The i-th queue element is the number of opened groups starting from the i-th key
+    Queue<Integer> q = new LinkedList<>();
+    for (var e : count.entrySet()) {
+        int k = e.getKey(), v = e.getValue();
+        if ((opened > 0 && k > prev + 1) || opened > v) {
+            return false;
+        }
+
+        q.add(v - opened);
+        prev = k;
+        opened = v;
+        if (q.size() == W) {
+            opened -= q.poll();
+        }
+    }
+    return opened == 0;
+}
+{% endhighlight %}
+
 [Wiggle Sort][wiggle-sort]
 
 {% highlight java %}
@@ -283,6 +313,7 @@ private void swap(int[] A, int i, int j) {
 
 [broken-calculator]: https://leetcode.com/problems/broken-calculator/
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
+[hand-of-straights]: https://leetcode.com/problems/hand-of-straights/
 [jump-game]: https://leetcode.com/problems/jump-game/
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
 [longest-happy-string]: https://leetcode.com/problems/longest-happy-string/

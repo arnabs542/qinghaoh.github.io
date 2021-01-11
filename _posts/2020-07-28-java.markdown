@@ -49,6 +49,29 @@ int g = (-5) % (-3);  // -2
 int h = (-5) / (-3);  // 1
 {% endhighlight %}
 
+[floorMod](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html#floorMod(int,int))
+
+{% highlight java %}
+floorDiv(x, y) * y + floorMod(x, y) == x
+{% endhighlight %}
+
+The difference in values between floorMod and the % operator is due to the difference between floorDiv that returns the integer less than or equal to the quotient and the / operator that returns the integer closest to zero.
+
+Examples:
+If the signs of the arguments are the same, the results of floorMod and the % operator are the same.
+
+{% highlight java %}
+floorMod(+4, +3) == +1;   and (+4 % +3) == +1
+floorMod(-4, -3) == -1;   and (-4 % -3) == -1
+{% endhighlight %}
+
+If the signs of the arguments are different, the results differ from the % operator.
+
+{% highlight java %}
+floorMod(+4, -3) == -2;   and (+4 % -3) == +1
+floorMod(-4, +3) == +2;   and (-4 % +3) == -1
+{% endhighlight %}
+
 ### Floating-point
 
 The Java programming language defines % on floating-point operations to behave in a manner analogous to that of the integer remainder operator.

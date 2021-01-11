@@ -51,6 +51,8 @@ Look at the left part before this `2`. Suppose another `2` can be placed adjacen
 
 Apparently now `2` has more occurrences than `1`. This is contradiction. Note this contradiction occurs although we haven't yet filled all the even positions.
 
+[Reorganize String][reorganize-string]
+
 ## Array Partition I
 [Arry Parition I][array-partition-i]
 
@@ -85,5 +87,6 @@ min(max1, max2) + min(num1, num2) >= max(num1, num2) + min(num1, num2) = num1 + 
 
 Q.E.D.
 
-[distant-barcodes]: https://leetcode.com/problems/distant-barcodes/
 [array-partition-i]: https://leetcode.com/problems/array-partition-i/
+[distant-barcodes]: https://leetcode.com/problems/distant-barcodes/
+[reorganize-string]: https://leetcode.com/problems/reorganize-string/
