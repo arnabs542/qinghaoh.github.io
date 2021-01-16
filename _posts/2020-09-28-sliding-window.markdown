@@ -17,19 +17,19 @@ tags: array
  * that match a given condition.
  */
 public int maxLength(int[] nums, int k) {
-    int i = 0, j = 0, count = 0;
+    int i = 0, j = 0;
     
     // the sliding window never shrinks
     // even if it doesn't meet the requirement at a certain moment
     while (j < nums.length) {
-        if (update(nums, j++)) {
-            count++;
+        if (updateCounters(nums, j++)) {
+            k--;
         }
 
-        // if count > k, both i, j move forward together
-        // right shifts
-        if (count > k && update(nums, i++)) {
-            count--;
+        // if k < 0, both i, j move forward together
+        // i.e. right shifts
+        if (k < 0 && update(nums, i++)) {
+            k++;
         }
     }
 
@@ -38,7 +38,11 @@ public int maxLength(int[] nums, int k) {
     return j - i;
 }
 
-private boolean update(int[] nums, int index) {
+/**
+ * There can be multiple counters to track status.
+ * Updates the counters based on the index.
+ */
+private boolean updateCounters(int[] nums, int index) {
 }
 {% endhighlight %}
 
@@ -46,14 +50,14 @@ private boolean update(int[] nums, int index) {
 
 {% highlight java %}
 public int longestOnes(int[] A, int K) {
-    int i = 0, j = 0, zero = 0;
+    int i = 0, j = 0;
     while (j < A.length) {
         if (A[j++] == 0) {
-            zero++;
+            K--;
         }
 
-        if (zero > K && A[i++] == 0) {
-            zero--;
+        if (K < 0 && A[i++] == 0) {
+            K++;
         }
     }
     return j - i;
@@ -136,35 +140,6 @@ public int longestSubarray(int[] nums, int limit) {
 }
 {% endhighlight %}
 
-[Count Number of Nice Subarrays][count-number-of-nice-subarrays]
-
-If we apply `nums[i] -> nums[i] % 2`, the problem becomes [Subarray Sum Equals K][subarray-sum-equals-k]
-
-Another solution is by "three" pointers:
-
-{% highlight java %}
-public int numberOfSubarrays(int[] nums, int k) {
-    int i = 0, j = 0, count = 0, result = 0;
-    while (j < nums.length) {
-        if (nums[j] % 2 == 1) {
-            k--;
-            count = 0;
-        }
-
-        while (k == 0) {
-            k += nums[i++] % 2;
-            count++;
-        }
-
-        // i moves forward by `count` steps in the last move
-        result += count;
-        j++;
-    }
-
-    return result;
-}
-{% endhighlight %}
-
 ## Min Length
 
 [Minimum Size Subarray Sum][minimum-size-subarray-sum]
@@ -243,6 +218,44 @@ public int numberOfSubstrings(String s) {
 
 ## At Most K Different Elements
 
+### Template
+
+{% highlight java %}
+/**
+ * Finds the count of the subarrays that contain at most k elements
+ * that match a given condition.
+ */
+public int atMost(int[] nums, int k) {
+    int i = 0, j = 0, count = 0;
+
+    // the sliding window never shrinks
+    // even if it doesn't meet the requirement at a certain moment
+    while (j < nums.length) {
+        if (updateCounters(nums, j++)) {
+            k--;
+        }
+
+        while (k < 0) {
+            k += update(nums, i++));
+        }
+
+        // (j - i) is the length of each valid contiguous subarray with at most K different integers
+        // Fomula: given an array of length n, it will produce (n * (n + 1)) / 2 total contiguous subarrays
+        count += j - i;
+    }
+
+    // [i, j) is a sliding window.
+    return count;
+}
+
+/**
+ * There can be multiple counters to track status.
+ * Updates the counters based on the index.
+ */
+private int updateCounters(int[] nums, int index) {
+}
+{% endhighlight %}
+
 [Subarrays with K Different Integers][subarrays-with-k-different-integers]
 
 {% highlight java %}
@@ -282,14 +295,39 @@ public int numberOfSubarrays(int[] nums, int k) {
 private int atMost(int[] nums, int k) {
     int i = 0, j = 0, result = 0;
     while (j < nums.length) {
-        k -= nums[j] % 2;
+        k -= nums[j++] % 2;
 
         while (k < 0) {
             k += nums[i++] % 2;
         }
 
-        result += j - i + 1;
-        j++;
+        result += j - i;
+    }
+
+    return result;
+}
+{% endhighlight %}
+
+If we apply `nums[i] -> nums[i] % 2`, the problem becomes [Subarray Sum Equals K][subarray-sum-equals-k]
+
+Another solution is by "three" pointers:
+
+{% highlight java %}
+public int numberOfSubarrays(int[] nums, int k) {
+    int i = 0, j = 0, count = 0, result = 0;
+    while (j < nums.length) {
+        if (nums[j++] % 2 == 1) {
+            k--;
+            count = 0;
+        }
+
+        while (k == 0) {
+            k += nums[i++] % 2;
+            count++;
+        }
+
+        // i moves forward by `count` steps in the last move
+        result += count;
     }
 
     return result;
@@ -383,6 +421,38 @@ public List<Integer> findAnagrams(String s, String p) {
 }
 {% endhighlight %}
 
+## Exact
+
+[Minimum Operations to Reduce X to Zero][minimum-operations-to-reduce-x-to-zero]
+
+{% highlight java %}
+private static final int MAX = (int)1e5 + 1;
+
+public int minOperations(int[] nums, int x) {
+    int sum = 0;
+    for (int num : nums) {
+        sum += num;
+    }
+
+    int i = 0, j = 0, min = MAX;
+    while (j < nums.length) {
+        // sum([0...i) + (j...n - 1]) == x
+        sum -= nums[j++];
+
+        while (sum < x && i < j) {
+            sum += nums[i++];
+        }
+
+        if (sum == x) {
+            min = Math.min(min, nums.length - j + i);
+        }
+    }
+    return min == MAX ? -1 : min;
+}
+{% endhighlight %}
+
+Similar to: [Maximum Size Subarray Sum Equals k][maximum-size-subarray-sum-equals-k]
+
 [count-number-of-nice-subarrays]: https://leetcode.com/problems/count-number-of-nice-subarrays/
 [find-all-anagrams-in-a-string]: https://leetcode.com/problems/find-all-anagrams-in-a-string/
 [find-k-th-smallest-pair-distance]: https://leetcode.com/problems/find-k-th-smallest-pair-distance/
@@ -394,8 +464,10 @@ public List<Integer> findAnagrams(String s, String p) {
 [longest-substring-without-repeating-characters]: https://leetcode.com/problems/longest-substring-without-repeating-characters/
 [max-consecutive-ones-iii]: https://leetcode.com/problems/max-consecutive-ones-iii/
 [maximum-points-you-can-obtain-from-cards]: https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
-[minimum-size-subarray-sum]: https://leetcode.com/problems/minimum-size-subarray-sum/
+[maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
 [minimum-difference-between-largest-and-smallest-value-in-three-moves]: https://leetcode.com/problems/minimum-difference-between-largest-and-smallest-value-in-three-moves/
+[minimum-operations-to-reduce-x-to-zero]: https://leetcode.com/problems/minimum-operations-to-reduce-x-to-zero/
+[minimum-size-subarray-sum]: https://leetcode.com/problems/minimum-size-subarray-sum/
 [number-of-substrings-containing-all-three-characters]: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
 [replace-the-substring-for-balanced-string]: https://leetcode.com/problems/replace-the-substring-for-balanced-string/
 [subarray-product-less-than-k]: https://leetcode.com/problems/subarray-product-less-than-k/submissions/

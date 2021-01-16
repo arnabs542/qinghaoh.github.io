@@ -290,8 +290,33 @@ public int maxEqualRowsAfterFlips(int[][] matrix) {
 }
 {% endhighlight %}
 
+[Find Root of N-Ary Tree][find-root-of-n-ary-tree]
+
+{% highlight java %}
+public Node findRoot(List<Node> tree) {
+    // visits all nodes
+    // the root node would be the only node that is visited once
+    // the rest of the nodes would be visited twice.
+    int xor = 0;
+    for (Node node : tree) {
+        xor = xor ^ node.val;
+        for (Node child : node.children) {
+            xor = xor ^ child.val;
+        }
+    }
+
+    for (Node node : tree) {
+        if (node.val == xor) {
+            return node;
+        }
+    }
+    return null;
+}
+{% endhighlight %}
+
 [binary-number-with-alternating-bits]: https://leetcode.com/problems/binary-number-with-alternating-bits/
 [circular-permutation-in-binary-representation]: https://leetcode.com/problems/circular-permutation-in-binary-representation/
+[find-root-of-n-ary-tree]: https://leetcode.com/problems/find-root-of-n-ary-tree/
 [flip-columns-for-maximum-number-of-equal-rows]: https://leetcode.com/problems/flip-columns-for-maximum-number-of-equal-rows/
 [k-th-symbol-in-grammar]: https://leetcode.com/problems/k-th-symbol-in-grammar/
 [maximum-xor-of-two-numbers-in-an-array]: https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/

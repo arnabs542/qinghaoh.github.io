@@ -73,27 +73,26 @@ private int height(TreeNode node) {
 [Find Leaves of Binary Tree][find-leaves-of-binary-tree]
 
 {% highlight java %}
-private List<List<Integer>> leaves;
+private List<List<Integer>> leaves = new ArrayList<>();
 
 public List<List<Integer>> findLeaves(TreeNode root) {
-    this.leaves = new ArrayList<>();
     dfs(root);
-    return this.leaves;
+    return leaves;
 }
 
-private int dfs(TreeNode node) {
+private int height(TreeNode node) {
     if (node == null) {
         return -1;
     }
 
-    int height = Math.max(dfs(node.left), dfs(node.right)) + 1;
+    int h = Math.max(height(node.left), height(node.right)) + 1;
 
-    if (height == leaves.size()) {
+    if (h == leaves.size()) {
         leaves.add(new ArrayList<>());
     }
-    leaves.get(height).add(node.val);
+    leaves.get(h).add(node.val);
 
-    return height;
+    return h;
 }
 {% endhighlight %}
 
@@ -162,6 +161,54 @@ private int length(TreeNode node) {
 
     path = Math.max(path, leftPath + rightPath);
     return Math.max(leftPath, rightPath);
+}
+{% endhighlight %}
+
+[Binary Tree Right Side View][binary-tree-right-side-view]
+
+{% highlight java %}
+private List<Integer> rightside;
+
+public List<Integer> rightSideView(TreeNode root) {
+    this.rightside = new ArrayList<>();
+
+    dfs(root, 0);
+    return rightside;
+}
+
+public void dfs(TreeNode node, int level) {
+    if (node == null) {
+        return;
+    }
+
+    if (rightside.size() == level) {
+        rightside.add(node.val);
+    } 
+
+    dfs(node.right, level + 1);
+    dfs(node.left, level + 1);
+}
+{% endhighlight %}
+
+Another solution is BFS.
+
+[Split BST][split-bst]
+
+{% highlight java %}
+public TreeNode[] splitBST(TreeNode root, int V) {
+    TreeNode[] result = new TreeNode[2];
+    if (root != null) {
+        if (root.val <= V) {
+            result = splitBST(root.right, V);
+            root.right = result[0];
+            result[0] = root;
+        } else {
+            result = splitBST(root.left, V);
+            root.left = result[1];
+            result[1] = root;
+        }
+    }
+    return result;
 }
 {% endhighlight %}
 
@@ -563,7 +610,74 @@ public int dfs(TreeNode node, int currSum, int target, Map<Integer, Integer> pre
 }
 {% endhighlight %}
 
+[All Nodes Distance K in Binary Tree][all-nodes-distance-k-in-binary-tree]
+
+{% highlight java %}
+private List<Integer> list = new ArrayList<>();
+private Map<TreeNode, Integer> map = new HashMap<>();
+private TreeNode target;
+private int k;
+
+public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
+    this.target = target;
+    this.k = K;
+
+    distance(root);
+    dfs(root, map.get(root));
+    return list;
+}
+
+/**
+ * Returns the distance from node to target if the node is on the path from root to target;
+ * otherwise returns -1.
+ * @param node a node in the tree
+ * @return distance from node to target if node is on the path from root to target, otherwise -1
+ */
+private int distance(TreeNode node) {
+    if (node == null) {
+        return -1;
+    }
+
+    if (node == target) {
+        map.put(node, 0);
+        return 0;
+    }
+
+    int left = distance(node.left);
+    if (left >= 0) {
+        map.put(node, left + 1);
+        return left + 1;
+    }
+
+    int right = distance(node.right);
+    if (right >= 0) {
+        map.put(node, right + 1);
+        return right + 1;
+    }
+    return -1;
+}
+
+private void dfs(TreeNode node, int d) {
+    if (node == null) {
+        return;
+    }
+
+    if (map.containsKey(node)) {
+        d = map.get(node);
+    }
+
+    if (d == k) {
+        list.add(node.val);
+    }
+
+    dfs(node.left, d + 1);
+    dfs(node.right, d + 1);
+}
+{% endhighlight %}
+
+[all-nodes-distance-k-in-binary-tree]: https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/
 [binary-tree-maximum-path-sum]: https://leetcode.com/problems/binary-tree-maximum-path-sum/
+[binary-tree-right-side-view]: https://leetcode.com/problems/binary-tree-right-side-view/
 [convert-bst-to-greater-tree]: https://leetcode.com/problems/convert-bst-to-greater-tree/
 [count-good-nodes-in-binary-tree]: https://leetcode.com/problems/count-good-nodes-in-binary-tree/
 [diameter-of-binary-tree]: https://leetcode.com/problems/diameter-of-binary-tree/
@@ -582,3 +696,4 @@ public int dfs(TreeNode node, int currSum, int target, Map<Integer, Integer> pre
 [path-sum-iii]: https://leetcode.com/problems/path-sum-iii/
 [pseudo-palindromic-paths-in-a-binary-tree]: https://leetcode.com/problems/pseudo-palindromic-paths-in-a-binary-tree/
 [second-minimum-node-in-a-binary-tree]: https://leetcode.com/problems/second-minimum-node-in-a-binary-tree/
+[split-bst]: https://leetcode.com/problems/split-bst/

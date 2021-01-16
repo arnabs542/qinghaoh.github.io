@@ -220,7 +220,28 @@ public int longestArithSeqLength(int[] A) {
 }
 {% endhighlight %}
 
+[Length of Longest Fibonacci Subsequence][length-of-longest-fibonacci-subsequence]
+
+{% highlight java %}
+public int lenLongestFibSubseq(int[] A) {
+    int[][] dp = new int[A.length][A.length];
+    Map<Integer, Integer> index = new HashMap<>();
+    // (k, i, j)
+    int max = 0;
+    for (int j = 0; j < A.length; j++) {
+        index.put(A[j], j);
+        for (int i = 0; i < j; i++) {
+            int k = index.getOrDefault(A[j] - A[i], -1);
+            dp[i][j] = (A[j] - A[i] < A[i] && k >= 0) ? dp[k][i] + 1 : 2;
+            max = Math.max(max, dp[i][j]);
+        }
+    }
+    return max > 2 ? max : 0;
+}
+{% endhighlight %}
+
 [largest-divisible-subset]: https://leetcode.com/problems/largest-divisible-subset/
+[length-of-longest-fibonacci-subsequence]: https://leetcode.com/problems/length-of-longest-fibonacci-subsequence/
 [longest-arithmetic-subsequence]: https://leetcode.com/problems/longest-arithmetic-subsequence/
 [longest-increasing-subsequence]: https://leetcode.com/problems/longest-increasing-subsequence/
 [is-subsequence]: https://leetcode.com/problems/is-subsequence/

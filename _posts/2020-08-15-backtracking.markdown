@@ -87,6 +87,8 @@ private void backtrack(List<List<Integer>> list, List<Integer> tmpList, int[] nu
 
 [Palindrome Permutation II][palindrome-permutation-ii]
 
+[Beautiful Arrangement][beautiful-arrangement]
+
 [Subsets][subsets]
 
 {% highlight java %}
@@ -355,8 +357,6 @@ private void backtrack(List<String> list, StringBuilder sb, int index, int k) {
     sb.setLength(length);
 }
 {% endhighlight %}
-
-[Beautiful Arrangement][beautiful-arrangement]
 
 # Subset Sum Problem
 

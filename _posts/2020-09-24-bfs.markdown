@@ -114,8 +114,7 @@ public int depthSumInverse(List<NestedInteger> nestedList) {
     Queue<NestedInteger> q = new LinkedList(nestedList);
     int runningSum = 0, sum = 0;
     while (!q.isEmpty()) {
-       int size = q.size();
-       for (int i = 0; i < size; i++) {
+       for (int i = q.size(); i > 0; i--) {
            NestedInteger ni = q.poll();
            if (ni.isInteger()) {
                runningSum += ni.getInteger();
