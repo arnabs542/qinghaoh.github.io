@@ -232,7 +232,7 @@ public List<List<Integer>> getFactors(int n) {
 private void backtrack(List<List<Integer>> list, List<Integer> tmpList, int index, int n) {
     if (n == 1) {
         if (tmpList.size() > 1) {
-            list.add(new ArrayList<Integer>(tmpList));
+            list.add(new ArrayList<>(tmpList));
         }
         return;
     }

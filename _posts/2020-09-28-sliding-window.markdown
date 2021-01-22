@@ -7,9 +7,11 @@ tags: array
 
 [Longest Substring Without Repeating Characters][longest-substring-without-repeating-characters]
 
-## Max Length
+## At Most
 
-### Template
+### Max Length
+
+#### Template
 
 {% highlight java %}
 /**
@@ -28,7 +30,7 @@ public int maxLength(int[] nums, int k) {
 
         // if k < 0, both i, j move forward together
         // i.e. right shifts
-        if (k < 0 && update(nums, i++)) {
+        if (k < 0 && updateCounters(nums, i++)) {
             k++;
         }
     }
@@ -41,8 +43,11 @@ public int maxLength(int[] nums, int k) {
 /**
  * There can be multiple counters to track status.
  * Updates the counters based on the index.
+ * @return true if nums[index] matches the given condition, otherwise false
  */
 private boolean updateCounters(int[] nums, int index) {
+    update();
+    return condition(nums[index]);
 }
 {% endhighlight %}
 
@@ -72,14 +77,14 @@ public int longestOnes(int[] A, int K) {
 public int totalFruit(int[] tree) {
     int[] type = new int[tree.length];
     int k = 2;
-    int i = 0, j = 0, count = 0;
+    int i = 0, j = 0;
     while (j < tree.length) {
         if (type[tree[j++]]++ == 0) {
-            count++;
+            k--;
         }
 
-        if (count > k && --type[tree[i++]] == 0) {
-            count--;
+        if (k < 0 && --type[tree[i++]] == 0) {
+            k++;
         }
     }
     return j - i;
@@ -140,85 +145,11 @@ public int longestSubarray(int[] nums, int limit) {
 }
 {% endhighlight %}
 
-## Min Length
-
-[Minimum Size Subarray Sum][minimum-size-subarray-sum]
-
-{% highlight java %}
-public int minSubArrayLen(int s, int[] nums) {
-    int i = 0, j = 0, min = nums.length + 1;
-    while (j < nums.length) {
-        s -= nums[j++];
-
-        while (s <= 0) {
-            min = Math.min(min, j - i);
-            s += nums[i++];
-        }
-    }
-
-    return min == nums.length + 1 ? 0 : min;
-}
-{% endhighlight %}
-
-[Replace the Substring for Balanced String][replace-the-substring-for-balanced-string]
-
-{% highlight java %}
-public int balancedString(String s) {
-    int[] count = new int[26];
-    for (char c : s.toCharArray()) {
-        count[c - 'A']++;
-    }
-
-    int i = 0, j = 0, min = s.length(), k = s.length() / 4;
-    while (j < s.length()) {
-        count[s.charAt(j++) - 'A']--;
-
-        while (i < s.length() && condition(count, k)) {
-            min = Math.min(min, j - i);
-            count[s.charAt(i++) - 'A']++;
-        }
-    }
-    return min;
-}
-
-private boolean condition(int[] count, int k) {
-    for (char c : "QWER".toCharArray()) {
-        if (count[c - 'A'] > k) {
-            return false;
-        }
-    }
-    return true;
-}
-{% endhighlight %}
-
-## At Least
-
-[Number of Substrings Containing All Three Characters][number-of-substrings-containing-all-three-characters]
-
-{% highlight java %}
-public int numberOfSubstrings(String s) {
-    int k = 3;
-    int[] count = new int[k];
-    int i = 0, j = 0, result = 0;
-    while (j < s.length()) {
-        if (count[s.charAt(j++) - 'a']++ == 0) {
-            k--;
-        }
-
-        while (k == 0) {
-            if (--count[s.charAt(i++) - 'a'] == 0) {
-                k++;
-            }
-        }
-        result += i;
-    }
-    return result;
-}
-{% endhighlight %}
-
 ## At Most K Different Elements
 
-### Template
+### Count
+
+#### Template
 
 {% highlight java %}
 /**
@@ -236,7 +167,7 @@ public int atMost(int[] nums, int k) {
         }
 
         while (k < 0) {
-            k += update(nums, i++));
+            k += updateCounters(nums, i++));
         }
 
         // (j - i) is the length of each valid contiguous subarray with at most K different integers
@@ -251,6 +182,7 @@ public int atMost(int[] nums, int k) {
 /**
  * There can be multiple counters to track status.
  * Updates the counters based on the index.
+ * @return
  */
 private int updateCounters(int[] nums, int index) {
 }
@@ -277,8 +209,6 @@ private int atMost(int[] A, int K) {
             }
         }
 
-        // (j - i) is the length of each valid contiguous subarray with at most K different integers
-        // Fomula: given an array of length n, it will produce (n * (n + 1)) / 2 total contiguous subarrays
         result += j - i;
     }
     return result;
@@ -387,6 +317,112 @@ private boolean condition(int[] nums, int distance, int k) {
 }
 {% endhighlight %}
 
+## Min Length
+
+[Minimum Size Subarray Sum][minimum-size-subarray-sum]
+
+{% highlight java %}
+public int minSubArrayLen(int s, int[] nums) {
+    int i = 0, j = 0, min = nums.length + 1;
+    while (j < nums.length) {
+        s -= nums[j++];
+
+        while (s <= 0) {
+            min = Math.min(min, j - i);
+            s += nums[i++];
+        }
+    }
+
+    return min == nums.length + 1 ? 0 : min;
+}
+{% endhighlight %}
+
+[Replace the Substring for Balanced String][replace-the-substring-for-balanced-string]
+
+{% highlight java %}
+public int balancedString(String s) {
+    int[] count = new int[26];
+    for (char c : s.toCharArray()) {
+        count[c - 'A']++;
+    }
+
+    int i = 0, j = 0, min = s.length(), k = s.length() / 4;
+    while (j < s.length()) {
+        count[s.charAt(j++) - 'A']--;
+
+        while (i < s.length() && condition(count, k)) {
+            min = Math.min(min, j - i);
+            count[s.charAt(i++) - 'A']++;
+        }
+    }
+    return min;
+}
+
+private boolean condition(int[] count, int k) {
+    for (char c : "QWER".toCharArray()) {
+        if (count[c - 'A'] > k) {
+            return false;
+        }
+    }
+    return true;
+}
+{% endhighlight %}
+
+[Minimum Window Substring][minimum-window-substring]
+
+{% highlight java %}
+public String minWindow(String s, String t) {
+    int[] count = new int[256];
+    for (char c : t.toCharArray()) {
+        count[c]++;
+    }
+
+    int i = 0, j = 0, k = t.length(), min = s.length();
+    String window = "";
+    while (j < s.length()) {
+        if (count[s.charAt(j++)]-- > 0) {
+            k--;
+        }
+
+        while (k == 0) {
+            if (j - i <= min) {
+                window = s.substring(i, j);
+                min = j - i;
+            }
+            if (count[s.charAt(i++)]++ == 0) {
+                k++;
+            }
+        }
+    }
+    return window;
+}
+{% endhighlight %}
+
+## At Least
+
+[Number of Substrings Containing All Three Characters][number-of-substrings-containing-all-three-characters]
+
+{% highlight java %}
+public int numberOfSubstrings(String s) {
+    int k = 3;
+    int[] count = new int[k];
+    int i = 0, j = 0, result = 0;
+    while (j < s.length()) {
+        if (count[s.charAt(j++) - 'a']++ == 0) {
+            k--;
+        }
+
+        while (k == 0) {
+            if (--count[s.charAt(i++) - 'a'] == 0) {
+                k++;
+            }
+        }
+        result += i;
+    }
+    return result;
+}
+{% endhighlight %}
+
 # Fixed Size
 
 [Maximum Points You Can Obtain from Cards][maximum-points-you-can-obtain-from-cards]
@@ -468,6 +504,7 @@ Similar to: [Maximum Size Subarray Sum Equals k][maximum-size-subarray-sum-equal
 [minimum-difference-between-largest-and-smallest-value-in-three-moves]: https://leetcode.com/problems/minimum-difference-between-largest-and-smallest-value-in-three-moves/
 [minimum-operations-to-reduce-x-to-zero]: https://leetcode.com/problems/minimum-operations-to-reduce-x-to-zero/
 [minimum-size-subarray-sum]: https://leetcode.com/problems/minimum-size-subarray-sum/
+[minimum-window-substring]: https://leetcode.com/problems/minimum-window-substring/
 [number-of-substrings-containing-all-three-characters]: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
 [replace-the-substring-for-balanced-string]: https://leetcode.com/problems/replace-the-substring-for-balanced-string/
 [subarray-product-less-than-k]: https://leetcode.com/problems/subarray-product-less-than-k/submissions/

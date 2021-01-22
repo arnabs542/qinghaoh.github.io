@@ -5,6 +5,8 @@ tags: graph
 ---
 [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
 
+Dijkstra's Shortest Path First algorithm (SPF algorithm) is an algorithm for finding the shortest paths between nodes in a graph
+
 [Path with Maximum Probability][path-with-maximum-probability]
 
 {% highlight java %}

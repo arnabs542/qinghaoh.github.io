@@ -118,12 +118,22 @@ public int[][] multiply(int[][] A, int[][] B) {
 
 [Graham scan](https://en.wikipedia.org/wiki/Graham_scan)
 
-For three points $$ P_{1}=(x_{1},y_{1})$$, $$P_{2}=(x_{2},y_{2}$$ and $$P_{3}=(x_{3},y_{3})$$, compute the z-coordinate of the cross product of the two vectors $$\overrightarrow {P_{1}P_{2}} and $$\overrightarrow {P_{1}P_{3}}$$, which is given by the expression $$(x_{2}-x_{1})(y_{3}-y_{1})-(y_{2}-y_{1})(x_{3}-x_{1})$$.
+For three points $$ P_{1}=(x_{1},y_{1})$$, $$P_{2}=(x_{2},y_{2}$$ and $$P_{3}=(x_{3},y_{3})$$, compute the z-coordinate of the cross product of the two vectors $$\overrightarrow {P_{1}P_{2}}$$ and $$\overrightarrow {P_{1}P_{3}}$$, which is given by the expression $$(x_{2}-x_{1})(y_{3}-y_{1})-(y_{2}-y_{1})(x_{3}-x_{1})$$.
 
 [Convex Polygon][convex-polygon]
 
+[Count Sorted Vowel Strings][count-sorted-vowel-strings]
+
+{% highlight java %}
+public int countVowelStrings(int n) {
+    // comb(n + 4, 4)
+    return (n + 4) * (n + 3) * (n + 2) * (n + 1) / 24;
+}
+{% endhighlight %}
+
 [2-keys-keyboard]: https://leetcode.com/problems/2-keys-keyboard/
 [convex-polygon]: https://leetcode.com/problems/convex-polygon/
+[count-sorted-vowel-strings]: https://leetcode.com/problems/count-sorted-vowel-strings/
 [escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/
 [implement-rand10-using-rand7]: https://leetcode.com/problems/implement-rand10-using-rand7/
 [sparse-matrix-multiplication]: https://leetcode.com/problems/sparse-matrix-multiplication/

@@ -151,7 +151,7 @@ public int shortest(String word1, String word2) {
 }
 {% endhighlight %}
 
-[][]
+[Count Unique Characters of All Substrings of a Given String][count-unique-characters-of-all-substrings-of-a-given-string]
 
 {% highlight java %}
 private final int MOD = (int)1e9 + 7;
@@ -182,8 +182,31 @@ public int uniqueLetterString(String s) {
 
 [Sort Transformed Array][sort-transformed-array]
 
+# Three Pointers
+
+[Intersection of Three Sorted Arrays][intersection-of-three-sorted-arrays]
+
+{% highlight java %}
+if (arr1[p1] == arr2[p2] && arr2[p2] == arr3[p3]) {
+    list.add(arr1[p1]);
+    p1++;
+    p2++;
+    p3++;
+} else {
+    if (arr1[p1] < arr2[p2]) {
+        p1++;
+    } else if (arr2[p2] < arr3[p3]) {
+        p2++;
+    } else {  // arr1[p1] >= arr2[p2] && arr2[p2] >= arr3[p3]
+        p3++;
+    }
+}
+{% endhighlight %}
+
 [backspace-string-compare]: https://leetcode.com/problems/backspace-string-compare/
 [container-with-most-water]: https://leetcode.com/problems/container-with-most-water/
+[count-unique-characters-of-all-substrings-of-a-given-string]: https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/
+[intersection-of-three-sorted-arrays]: https://leetcode.com/problems/intersection-of-three-sorted-arrays/
 [number-of-subsequences-that-satisfy-the-given-sum-condition]: https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/
 [remove-all-adjacent-duplicates-in-string-ii]: https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string-ii/
 [shortest-word-distance-ii]: https://leetcode.com/problems/shortest-word-distance-ii/

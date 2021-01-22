@@ -107,6 +107,49 @@ public int jump(int[] nums) {
 }
 {% endhighlight %}
 
+[Minimum Jumps to Reach Home][minimum-jumps-to-reach-home]
+
+{% highlight java %}
+public int minimumJumps(int[] forbidden, int a, int b, int x) {
+    Set<Integer> visited = new HashSet<>();
+    int furthest = x;
+    for (int p : forbidden) {
+        visited.add(p);  // forward
+        visited.add(-p);  // backward
+        furthest = Math.max(furthest, p);
+    }
+    furthest += a + b;
+
+    // position, direction (0: forward, 1: backward)
+    int[] node = {0, 0};
+    Queue<int[]> q = new LinkedList();
+    q.offer(node);
+    visited.add(0);
+
+    int jumps = 0;
+    while (!q.isEmpty()) {
+        for (int i = q.size(); i > 0; i--) {
+            node = q.poll();
+            if (node[0] == x) {
+                return jumps;
+            }
+
+            int forward = node[0] + a;
+            if (forward <= furthest && visited.add(forward)) {
+                q.offer(new int[]{forward, 0});
+            }
+
+            int backward = node[0] - b;
+            if (node[1] == 0 && backward >= 0 && visited.add(-backward)) {
+                q.offer(new int[]{backward, 1});
+            }
+        }
+        jumps++;
+    }
+    return -1;
+}
+{% endhighlight %}
+
 [Nested List Weight Sum II][nested-list-weight-sum-ii]
 
 {% highlight java %}
@@ -261,6 +304,7 @@ private int rot(int[][] grid, int i, int j, int time) {
 
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
+[minimum-jumps-to-reach-home]: https://leetcode.com/problems/minimum-jumps-to-reach-home/
 [nested-list-weight-sum-ii]: https://leetcode.com/problems/nested-list-weight-sum-ii/
 [rotting-oranges]: https://leetcode.com/problems/rotting-oranges/
 [the-maze]: https://leetcode.com/problems/the-maze/
