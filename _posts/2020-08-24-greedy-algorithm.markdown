@@ -200,13 +200,14 @@ public int minimumSwap(String s1, String s2) {
         }
     }
 
-    // case 3: "xx" "xy"
+    // case 3: "x" "y"
     if ((count[0] + count[1]) % 2 == 1) {
         return -1;
     }
 
-    // case1: "xx" "yy"
-    // case2: "xy" "yx"
+    // count[0] % 2 == count[1] % 2
+    // case1: "xx" "yy" - 1 swap, apply as much as possible
+    // case2: "xy" "yx" - 2 swaps
     return count[0] / 2 + count[1] / 2 + count[0] % 2 * 2;
 }
 {% endhighlight %}

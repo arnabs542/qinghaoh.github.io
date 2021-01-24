@@ -182,6 +182,35 @@ public int uniqueLetterString(String s) {
 
 [Sort Transformed Array][sort-transformed-array]
 
+[One Edit Distance][one-edit-distance]
+
+{% highlight java %}
+public boolean isOneEditDistance(String s, String t) {
+    if (s.equals(t) || Math.abs(s.length() - t.length()) > 1) {
+        return false;
+    }
+
+    int i = 0, j = 0;
+    boolean hasDiff = false;
+    while (i < s.length() && j < t.length()) {
+        if (s.charAt(i) != t.charAt(j)) {
+            if (hasDiff) {
+                return false;
+            }
+            hasDiff = true;
+            if (s.length() > t.length()) {
+                j--;
+            } else if (s.length() < t.length()) {
+                i--;
+            }
+        }
+        i++;
+        j++;
+    }
+    return true;
+}
+{% endhighlight %}
+
 # Three Pointers
 
 [Intersection of Three Sorted Arrays][intersection-of-three-sorted-arrays]
@@ -208,6 +237,7 @@ if (arr1[p1] == arr2[p2] && arr2[p2] == arr3[p3]) {
 [count-unique-characters-of-all-substrings-of-a-given-string]: https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/
 [intersection-of-three-sorted-arrays]: https://leetcode.com/problems/intersection-of-three-sorted-arrays/
 [number-of-subsequences-that-satisfy-the-given-sum-condition]: https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/
+[one-edit-distance]: https://leetcode.com/problems/one-edit-distance/
 [remove-all-adjacent-duplicates-in-string-ii]: https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string-ii/
 [shortest-word-distance-ii]: https://leetcode.com/problems/shortest-word-distance-ii/
 [sort-transformed-array]: https://leetcode.com/problems/sort-transformed-array/

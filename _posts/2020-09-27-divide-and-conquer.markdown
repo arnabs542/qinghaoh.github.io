@@ -23,8 +23,7 @@ public ListNode mergeKLists(ListNode[] lists) {
 }
 
 private ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-    ListNode head = new ListNode(0);
-    ListNode curr = head;
+    ListNode head = new ListNode(0), curr = head;
     while (l1 != null && l2 != null) {
         if (l1.val < l2.val) {
             curr.next = l1;

@@ -270,6 +270,53 @@ public boolean carPooling(int[][] trips, int capacity) {
 }
 {% endhighlight %}
 
+[Campus Bikes][campus-bikes]
+
+{% highlight java %}
+private static final int MAX_DISTANCE = 2000;
+
+public int[] assignBikes(int[][] workers, int[][] bikes) {
+    List<int[]>[] buckets = new ArrayList[MAX_DISTANCE + 1];
+
+    int n = workers.length, m = bikes.length;
+    // implicitly sorts first by workers, then by bikes
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            int d = distance(workers[i], bikes[j]);
+            if (buckets[d] == null) {
+                buckets[d] = new ArrayList<>();
+            }
+            buckets[d].add(new int[] {i, j});
+        }
+    }
+
+    boolean[] bikeVisited = new boolean[m];
+    int[] result = new int[n];
+    Arrays.fill(result, -1);
+
+    for (int d = 0; d < buckets.length; d++) {
+        if (buckets[d] == null) {
+            continue;
+        }
+
+        for (int i = 0; i < buckets[d].size(); i++) {
+            int w = buckets[d].get(i)[0], b = buckets[d].get(i)[1];
+            if (bikeVisited[b] == true  || result[w] >= 0) {
+                continue;
+            }
+
+            result[w] = b;
+            bikeVisited[b] = true;
+        }
+    }
+    return result;
+}
+
+private int distance(int[] p1, int[] p2) {
+    return Math.abs(p1[0] - p2[0]) + Math.abs(p1[1] - p2[1]);
+}
+{% endhighlight %}
+
 ## Counting Sort
 [Counting sort](https://en.wikipedia.org/wiki/Counting_sort)
 
@@ -447,6 +494,7 @@ private void swap(int[] A, int i, int j) {
 }
 {% endhighlight %}
 
+[campus-bikes]: https://leetcode.com/problems/campus-bikes/
 [car-pooling]: https://leetcode.com/problems/car-pooling/
 [count-of-smaller-numbers-after-self]: https://leetcode.com/problems/count-of-smaller-numbers-after-self/
 [create-target-array-in-the-given-order]: https://leetcode.com/problems/create-target-array-in-the-given-order/

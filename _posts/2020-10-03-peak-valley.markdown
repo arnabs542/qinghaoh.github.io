@@ -40,5 +40,25 @@ public int movesToMakeZigzag(int[] nums) {
 }
 {% endhighlight %}
 
+[Find Permutation][find-permutation]
+
+{% highlight java %}
+private int MAX = 1001;
+
+public int movesToMakeZigzag(int[] nums) {
+    int[] result = new int[2];
+    int left = 0, right = 0;
+    for (int i = 0; i < nums.length; ++i) {
+        left = i > 0 ? nums[i - 1] : MAX;
+        right = i < nums.length - 1 ? nums[i + 1] : MAX;
+
+        // decreases nums[odd] or nums[even]
+        result[i % 2] += Math.max(0, nums[i] - Math.min(left, right) + 1);
+    }
+    return Math.min(result[0], result[1]);
+}
+{% endhighlight %}
+
 [best-time-to-buy-and-sell-stock-ii]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
 [decrease-elements-to-make-array-zigzag]: https://leetcode.com/problems/decrease-elements-to-make-array-zigzag/
+[find-permutation]: https://leetcode.com/problems/find-permutation/
