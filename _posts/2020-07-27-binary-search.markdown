@@ -200,47 +200,6 @@ public List<Integer> findClosestElements(int[] arr, int k, int x) {
 }
 {% endhighlight %}
 
-[Kth Missing Positive Number][kth-missing-positive-number]
-
-{% highlight java %}
-public int findKthPositive(int[] arr, int k) {
-    int low = 0, high = arr.length;
-    while (low < high) {
-        int mid = (low + high) >>> 1;
-        // If there's no missing positive integer in index range [0, i]
-        //  then arr[i] == i + 1
-        // Therefore, arr[i] - i - 1 is the number of missing positive integers
-        //
-        // Let b[i] = arr[i] - i - 1,
-        //  b[i + 1] - b[i] == arr[i + 1] - (i + 1) - 1 - (arr[i] - i - 1)
-        //                  == arr[i + 1] - arr[i] - 1
-        // Since arr[] is strictly increasing, arr[i + 1] - arr[i] >= 1
-        //  b[i + 1] - b[i] >= 1 - 1 = 0
-        // So b[i] is a sorted array. We can apply binary search to it. 
-        if (arr[mid] - mid - 1 < k) {
-            low = mid + 1;
-        } else {
-            high = mid;
-        }
-    }
-
-    // When the loop exits, low == high
-    // From the binary search process, we know for index i in range [0, low),
-    //  the number of missing positive integers is arr[i] - i - 1 < k
-    //  arr[i] < k + i + 1 <= k + low
-    //
-    // The possible value of low when binary search finishes is low <= arr.length
-    //  if low < arr.length, since low == high, we have arr[low] - low - 1 >= k
-    //  k + low <= arr[low] - 1 < arr[low]
-    //  so arr[low] is outside of the number range [1, low + k]
-    //
-    // Therefore, in the number range of [1, low + k],
-    //  only arr[0], arr[1], ..., arr[low - 1] are present, in total `low` positive integers
-    //  the number of missing positive integers is (low + k) - low == k
-    return low + k;
-}
-{% endhighlight %}
-
 # Generalization
 
 @zhijun_liao
@@ -388,6 +347,35 @@ public int[] kthSmallestPrimeFraction(int[] A, int K) {
     return new int[]{p, q};
 }
 {% endhighlight %}
+
+[Kth Missing Positive Number][kth-missing-positive-number]
+
+{% highlight java %}
+public int findKthPositive(int[] arr, int k) {
+    int low = 0, high = arr.length;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        // when there's no missing positive integer in index range [0, i]
+        // arr[i] == i + 1
+        //
+        // a[i] = arr[i] - i - 1
+        // a[i] is the number of missing positive integers
+        // a[i + 1] - a[i] == arr[i + 1] - (i + 1) - 1 - (arr[i] - i - 1)
+        //                 == arr[i + 1] - arr[i] - 1 >= 0
+        // so a[i] is increasing
+        if (arr[mid] - mid - 1 >= k) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    // kth -> +k
+    return low + k;
+}
+{% endhighlight %}
+
+[Missing Element in Sorted Array][missing-element-in-sorted-array]
 
 [H-Index II][h-index-ii]
 
@@ -612,6 +600,7 @@ if (insertionPoint < 0) {
 [k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
 [magnetic-force-between-two-balls]: https://leetcode.com/problems/magnetic-force-between-two-balls/
 [minimum-number-of-days-to-make-m-bouquets]: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/
+[missing-element-in-sorted-array]: https://leetcode.com/problems/missing-element-in-sorted-array/
 [split-array-largest-sum]: https://leetcode.com/problems/split-array-largest-sum/
 [search-insert-position]: https://leetcode.com/problems/search-insert-position/
 [search-in-rotated-sorted-array]: https://leetcode.com/problems/search-in-rotated-sorted-array/

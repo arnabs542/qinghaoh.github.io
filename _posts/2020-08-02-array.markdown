@@ -10,6 +10,27 @@ If `0 <= a[i] <= max`, where max is not too big, then we can use `int[] count = 
 
 ## Rotation
 
+[First Missing Positive][first-missing-positive]
+
+{% highlight java %}
+public void rotate(int[] nums, int k) {
+    k %= nums.length;
+    int start = 0, count = 0;
+    while (count != nums.length) {
+        int index = start, curr = nums[index];
+        do {
+            index = (index + k) % nums.length;
+            int tmp = nums[index];
+            nums[index] = curr;
+            curr = tmp;
+            count++;
+        } while (index != start);
+        start++;
+    }
+    return;
+}
+{% endhighlight %}
+
 [Rotate Array][rotate-array]
 
 ![Example](/assets/rotate_array.png)
@@ -19,8 +40,7 @@ public void rotate(int[] nums, int k) {
     k %= nums.length;
     int start = 0, count = 0;
     while (count != nums.length) {
-        int index = start;
-        int curr = nums[index];
+        int index = start, curr = nums[index];
         do {
             index = (index + k) % nums.length;
             int tmp = nums[index];
@@ -63,6 +83,7 @@ private void reverse(char[] s, int start, int end) {
 }
 {% endhighlight %}
 
+[first-missing-positive]: https://leetcode.com/problems/first-missing-positive/
 [reverse-words-in-a-string-ii]: https://leetcode.com/problems/reverse-words-in-a-string-ii/
 [rotate-array]: https://leetcode.com/problems/rotate-array/
 [shift-2d-grid]: https://leetcode.com/problems/shift-2d-grid/

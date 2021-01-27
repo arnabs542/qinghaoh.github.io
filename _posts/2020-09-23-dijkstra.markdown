@@ -90,5 +90,50 @@ public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
 }
 {% endhighlight %}
 
+[Path with Minimum Effort][path-with-minimum-effort]
+
+{% highlight java %}
+{% raw %}
+private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+{% endraw %}
+private static final int MAX = (int)1e6;
+
+public int minimumEffortPath(int[][] heights) {
+    int m = heights.length, n = heights[0].length;
+    int[][] effort = new int[m][n];
+    for (int[] e : effort) {
+        Arrays.fill(e, MAX);
+    }
+
+    // i, j, effort
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[2]));
+    pq.offer(new int[]{0, 0, 0});
+
+    while (!pq.isEmpty()) {
+        int[] node = pq.poll();
+        int i = node[0], j = node[1], e = node[2];
+        if (e > effort[i][j]) {
+            continue;
+        }
+        if (i == m - 1 && j == n - 1) {
+            return e;
+        }
+        for (int[] d : DIRECTIONS) {
+            int r = i + d[0], c = j + d[1];
+            if (r == m || r < 0 || c == n || c < 0) {
+                continue;
+            }
+            int v = Math.max(Math.abs(heights[r][c] - heights[i][j]), e);
+            if (v < effort[r][c]) {
+                effort[r][c] = v;
+                pq.offer(new int[]{r, c, v});
+            }
+        }
+    }
+    return -1;
+}
+{% endhighlight %}
+
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [path-with-maximum-probability]: https://leetcode.com/problems/path-with-maximum-probability/
+[path-with-minimum-effort]: https://leetcode.com/problems/path-with-minimum-effort/

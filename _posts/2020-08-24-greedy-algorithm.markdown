@@ -312,6 +312,26 @@ private void swap(int[] A, int i, int j) {
 }
 {% endhighlight %}
 
+[Minimum Factorization][minimum-factorization]
+
+{% highlight java %}
+public int smallestFactorization(int a) {
+    if (a < 10) {
+        return a;
+    }
+
+    long b = 0, t = 1;
+    for (int i = 9; i >= 2; i--) {
+        while (a % i == 0) {
+            a /= i;
+            b += t * i;
+            t *= 10;
+        }
+    }
+    return a == 1 && b <= Integer.MAX_VALUE ? (int)b : 0;
+}
+{% endhighlight %}
+
 [broken-calculator]: https://leetcode.com/problems/broken-calculator/
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [hand-of-straights]: https://leetcode.com/problems/hand-of-straights/
@@ -319,6 +339,7 @@ private void swap(int[] A, int i, int j) {
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
 [longest-happy-string]: https://leetcode.com/problems/longest-happy-string/
 [maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
+[minimum-factorization]: https://leetcode.com/problems/minimum-factorization/
 [minimum-swaps-to-make-strings-equal]: https://leetcode.com/problems/minimum-swaps-to-make-strings-equal/
 [split-array-into-consecutive-subsequences]: https://leetcode.com/problems/split-array-into-consecutive-subsequences/
 [string-without-aaa-or-bbb]: https://leetcode.com/problems/string-without-aaa-or-bbb/
