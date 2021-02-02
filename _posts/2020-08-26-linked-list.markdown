@@ -59,5 +59,65 @@ public int findDuplicate(int[] nums) {
 
 A hidden condition is `nums[0] != 0`, otherwise the tortoise and hare will stay at `0` forever.
  
+[Add Two Numbers II][add-two-numbers-ii]
+
+{% highlight java %}
+public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+    int s1 = size(l1), s2 = size(l2);
+    return s1 > s2 ? addTwoNumbers(l1, l2, s1, s2) : addTwoNumbers(l2, l1, s2, s1);
+}
+
+private ListNode addTwoNumbers(ListNode l1, ListNode l2, int s1, int s2) {
+    ListNode head = null, curr = null;
+    while (l1 != null) {
+        int v1 = l1.val, v2 = s1 == s2 ? l2.val : 0;
+        l1 = l1.next;
+        if (s1 == s2) {
+            l2 = l2.next;
+        } else {
+            s1--;
+        }
+
+        // creates the result list in reverse order
+        curr = new ListNode(v1 + v2);
+        curr.next = head;
+        head = curr;
+    }
+
+    // normalization
+    head = null;
+    int carry = 0;
+    while (curr != null) {
+        curr.val += carry;
+        carry = curr.val > 9 ? 1 : 0;
+        curr.val %= 10;
+
+        // reverses the result list
+        ListNode tmp = curr.next;
+        curr.next = head;
+        head = curr;
+        curr = tmp;
+    }
+
+    // adds a new head if carry exists
+    if (carry > 0) {
+        curr = new ListNode(1);
+        curr.next = head;
+        head = curr;
+    }
+    return head;
+}
+
+private int size(ListNode l) {
+    int s = 0;
+    while (l != null) {
+        l = l.next;
+        s++;
+    }
+    return s;
+}
+{% endhighlight %}
+
+[add-two-numbers-ii]: https://leetcode.com/problems/add-two-numbers-ii/
 [find-the-duplicate-number]: https://leetcode.com/problems/find-the-duplicate-number/
 [linked-list-cycle-ii]: https://leetcode.com/problems/linked-list-cycle-ii/

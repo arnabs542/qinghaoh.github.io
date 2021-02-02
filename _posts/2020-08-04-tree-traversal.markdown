@@ -170,6 +170,41 @@ public List<List<Integer>> verticalOrder(TreeNode root) {
 }
 {% endhighlight %}
 
+[Vertical Order Traversal of a Binary Tree][vertical-order-traversal-of-a-binary-tree]
+
+{% highlight java %}
+private Map<Integer, Map<Integer, PriorityQueue<Integer>>> map = new TreeMap<>();
+
+public List<List<Integer>> verticalTraversal(TreeNode root) {
+    dfs(root, 0, 0);
+
+    List<List<Integer>> list = new ArrayList<>();
+    for (var ys : map.values()) {
+        List<Integer> tmp = new ArrayList<>();
+        for (var nodes : ys.values()) {
+            while (!nodes.isEmpty()) {
+                tmp.add(nodes.poll());
+            }
+        }
+        list.add(tmp);
+    }
+    return list;
+}
+
+private void dfs(TreeNode root, int x, int y) {
+    if (root == null) {
+        return;
+    }
+
+    map.putIfAbsent(x, new TreeMap<>());
+    map.get(x).putIfAbsent(y, new PriorityQueue<>());
+    map.get(x).get(y).offer(root.val);
+
+    dfs(root.left, x - 1, y + 1);
+    dfs(root.right, x + 1, y + 1);
+}
+{% endhighlight %}
+
 ## Depth First Search
 
 [Find Largest Value in Each Tree Row][find-largest-value-in-each-tree-row]
@@ -550,3 +585,4 @@ public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
 [inorder-successor-in-bst]: https://leetcode.com/problems/inorder-successor-in-bst/
 [inorder-successor-in-bst-ii]: https://leetcode.com/problems/inorder-successor-in-bst-ii/
 [verify-preorder-sequence-in-binary-search-tree]: https://leetcode.com/problems/verify-preorder-sequence-in-binary-search-tree/
+[vertical-order-traversal-of-a-binary-tree]: https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/

@@ -9,7 +9,26 @@ n ^ 0 = n
 n ^ n = 0
 2k ^ (2k + 1) = 1
 n &= -n  // clears all but lsb
+n & (n - 1) == 0  // power of 2
 ```
+[Concatenation of Consecutive Binary Numbers][concatenation-of-consecutive-binary-numbers]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int concatenatedBinary(int n) {
+    long sum = 0;
+    int length = 0;
+    for (int i = 1; i <= n; i++) {
+        // power of 2
+        if ((i & (i - 1)) == 0) {
+            length++;
+        }
+        sum = ((sum << length) | i) % MOD;
+    }
+    return (int)sum;
+}
+{% endhighlight %}
 
 [Binary Number with Alternating Bits][binary-number-with-alternating-bits]
 
@@ -315,6 +334,7 @@ public Node findRoot(List<Node> tree) {
 {% endhighlight %}
 
 [binary-number-with-alternating-bits]: https://leetcode.com/problems/binary-number-with-alternating-bits/
+[concatenation-of-consecutive-binary-numbers]: https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/
 [circular-permutation-in-binary-representation]: https://leetcode.com/problems/circular-permutation-in-binary-representation/
 [find-root-of-n-ary-tree]: https://leetcode.com/problems/find-root-of-n-ary-tree/
 [flip-columns-for-maximum-number-of-equal-rows]: https://leetcode.com/problems/flip-columns-for-maximum-number-of-equal-rows/

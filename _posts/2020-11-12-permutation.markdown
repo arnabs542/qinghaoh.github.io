@@ -25,4 +25,45 @@ public String getPermutation(int n, int k) {
 }
 {% endhighlight %}
 
+[Next Permutation][next-permutation]
+
+[Generation in lexicographic order](https://en.wikipedia.org/wiki/Permutation#Generation_in_lexicographic_order)
+
+{% highlight java %}
+public void nextPermutation(int[] nums) {
+    // Narayana Pandita
+    // finds the largest index k such that a[k] < a[k + 1]
+    int i = nums.length - 2;
+    while (i >= 0 && nums[i + 1] <= nums[i]) {
+        i--;
+    }
+
+    if (i >= 0) {
+        // finds the largest index l greater than k such that a[k] < a[l]
+        int j = nums.length - 1;
+        while (j >= 0 && nums[j] <= nums[i]) {
+            j--;
+        }
+        // swaps the value of a[k] with that of a[l]
+        swap(nums, i, j);
+    }
+    // reverses the sequence from a[k + 1] up to and including the final element a[n]
+    reverse(nums, i + 1);
+}
+
+private void reverse(int[] nums, int start) {
+    int i = start, j = nums.length - 1;
+    while (i < j) {
+        swap(nums, i++, j--);
+    }
+}
+
+private void swap(int[] nums, int i, int j) {
+    int tmp = nums[i];
+    nums[i] = nums[j];
+    nums[j] = tmp;
+}
+{% endhighlight %}
+
+[next-permutation]: https://leetcode.com/problems/next-permutation/
 [permutation-sequence]: https://leetcode.com/problems/permutation-sequence/

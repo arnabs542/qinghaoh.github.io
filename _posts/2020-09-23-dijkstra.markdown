@@ -134,6 +134,42 @@ public int minimumEffortPath(int[][] heights) {
 }
 {% endhighlight %}
 
+[Campus Bikes II][campus-bikes-ii]
+
+{% highlight java %}
+public int assignBikes(int[][] workers, int[][] bikes) {
+    // worker, bike mask, distance
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[2]));
+    pq.offer(new int[]{0, 0, 0});
+
+    Set<String> visited = new HashSet<>();
+    while (!pq.isEmpty()){
+        int[] node = pq.poll();
+        int worker = node[0], mask = node[1], d = node[2];
+
+        if (visited.add(worker + "#" + mask)) {
+            if (worker == workers.length) {
+                return d;
+            }
+
+            for (int i = 0; i < bikes.length; i++) {
+                // i-th bike is available
+                if ((mask & (1 << i)) == 0) {
+                    pq.offer(new int[]{worker + 1, mask | (1 << i), d + distance(workers[worker], bikes[i])});
+                }
+            }
+        }
+
+    }
+    return -1;
+}
+
+private int distance(int[] p1, int[] p2) {
+    return Math.abs(p1[0] - p2[0]) + Math.abs(p1[1] - p2[1]);
+}
+{% endhighlight %}
+
+[campus-bikes-ii]: https://leetcode.com/problems/campus-bikes-ii/
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [path-with-maximum-probability]: https://leetcode.com/problems/path-with-maximum-probability/
 [path-with-minimum-effort]: https://leetcode.com/problems/path-with-minimum-effort/

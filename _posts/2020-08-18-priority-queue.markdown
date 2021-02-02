@@ -42,6 +42,33 @@ public int kthSmallest(int[][] matrix, int k) {
 
 [Kth Smallest Prime Fraction][k-th-smallest-prime-fraction]
 
-[kth-smallest-element-in-a-sorted-matrix]: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
+[Minimize Deviation in Array][minimize-deviation-in-array]
+
+{% highlight java %}
+public int minimumDeviation(int[] nums) {
+    // max heap
+    Queue<Integer> pq = new PriorityQueue<>(Comparator.comparingInt(a -> -a));
+    int min = Integer.MAX_VALUE, d = Integer.MAX_VALUE;
+    for (int num : nums) {
+        // doubles odd numbers, so we only decrease numbers later
+        if (num % 2 == 1) {
+            num *= 2;
+        }
+        pq.offer(num);
+        min = Math.min(min, num);
+    }
+
+    while (pq.peek() % 2 == 0) {
+        int num = pq.poll();
+        d = Math.min(d, num - min);
+        min = Math.min(min, num / 2);
+        pq.offer(num / 2);
+    }
+    return Math.min(d, pq.peek() - min);
+}
+{% endhighlight %}
+
 [k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
+[kth-smallest-element-in-a-sorted-matrix]: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
 [maximize-sum-of-array-after-k-negations]: https://leetcode.com/problems/maximize-sum-of-array-after-k-negations/
+[minimize-deviation-in-array]: https://leetcode.com/problems/minimize-deviation-in-array/

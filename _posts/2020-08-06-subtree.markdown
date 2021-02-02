@@ -5,7 +5,86 @@ tags: tree
 ---
 [Subtree of Another Tree][subtree-of-another-tree]
 
+# Lowest Common Ancestor
+
+[Lowest common ancestor (LCA)](https://en.wikipedia.org/wiki/Lowest_common_ancestor)
+
+[Lowest Common Ancestor of a Binary Tree][lowest-common-ancestor-of-a-binary-tree]
+
 {% highlight java %}
+private TreeNode lca = null;
+
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if (lca != null) {
+        return null;
+    }
+
+    if (root == null || root == p || root == q) {
+        return root;
+    }
+
+    TreeNode left = lowestCommonAncestor(root.left, p, q), right = lowestCommonAncestor(root.right, p, q);
+    if (left != null && right != null) {
+        lca = root;
+        return lca;
+    }
+
+    return left == null ? right : left;
+}
 {% endhighlight %}
 
+[Lowest Common Ancestor of a Binary Tree II][lowest-common-ancestor-of-a-binary-tree-ii]
+
+{% highlight java %}
+private int count = 0;
+
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    TreeNode lca = dfs(root, p, q);
+    return count == 2 ? lca : null;
+}
+
+/**
+ * If subtree contains either p or q, returns this node;
+ * if subtree contains both p and q, returns LCA of them;
+ * otherwise, returns null.
+ */
+private TreeNode dfs(TreeNode node, TreeNode p, TreeNode q) {
+    if (node == null) {
+        return null;
+    }
+
+    TreeNode left = dfs(node.left, p, q), right = dfs(node.right, p, q);
+
+    if (node == p || node == q) {
+        count++;
+        return node;
+    }
+
+    if (left != null && right != null) {
+        return node;
+    }
+
+    return left == null ? right : left;
+}
+{% endhighlight %}
+
+[Lowest Common Ancestor of a Binary Tree III][lowest-common-ancestor-of-a-binary-tree-iii]
+
+{% highlight java %}
+public Node lowestCommonAncestor(Node p, Node q) {
+    Node a = p, b = q;
+    while (a != b) {
+        a = a == null? q : a.parent;
+        b = b == null? p : b.parent;    
+    }
+    return a;
+}
+{% endhighlight %}
+
+[Intersection of Two Linked Lists][intersection-of-two-linked-lists]
+
+[intersection-of-two-linked-lists]: https://leetcode.com/problems/intersection-of-two-linked-lists/
+[lowest-common-ancestor-of-a-binary-tree]: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
+[lowest-common-ancestor-of-a-binary-tree-ii]: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree-ii/
+[lowest-common-ancestor-of-a-binary-tree-iii]: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree-iii/
 [subtree-of-another-tree]: https://leetcode.com/problems/subtree-of-another-tree/
