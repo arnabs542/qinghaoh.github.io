@@ -568,6 +568,35 @@ private boolean condition(int[] position, int d, int m) {
 }
 {% endhighlight %}
 
+[Maximum Font to Fit a Sentence in a Screen][maximum-font-to-fit-a-sentence-in-a-screen]
+
+{% highlight java %}
+public int maxFont(String text, int w, int h, int[] fonts, FontInfo fontInfo) {
+    int low = 0, high = fonts.length - 1;
+    while (low < high) {
+        int mid = low + (high - low + 1) / 2;
+        if (condition(text, w, h, fonts, mid, fontInfo)) {
+            low = mid;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return condition(text, w, h, fonts, low, fontInfo) ? fonts[low] : -1;
+}
+
+private boolean condition(String text, int w, int h, int[] fonts, int index, FontInfo fontInfo) {
+    int font = fonts[index];
+    if (fontInfo.getHeight(font) > h) {
+        return false;
+    }
+    int sum = 0;
+    for (char c : text.toCharArray()) {
+        sum += fontInfo.getWidth(font, c);
+    }
+    return sum <= w;
+}
+{% endhighlight %}
+
 # Java
 ## Arrays
 [public static \<T\> int binarySearch(T\[\] a, int fromIndex, int toIndex, T key, Comparator\<? super T\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#binarySearch-T:A-int-int-T-java.util.Comparator-)
@@ -599,6 +628,7 @@ if (insertionPoint < 0) {
 [kth-smallest-element-in-a-sorted-matrix]: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
 [k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
 [magnetic-force-between-two-balls]: https://leetcode.com/problems/magnetic-force-between-two-balls/
+[maximum-font-to-fit-a-sentence-in-a-screen]: https://leetcode.com/problems/maximum-font-to-fit-a-sentence-in-a-screen/
 [minimum-number-of-days-to-make-m-bouquets]: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/
 [missing-element-in-sorted-array]: https://leetcode.com/problems/missing-element-in-sorted-array/
 [split-array-largest-sum]: https://leetcode.com/problems/split-array-largest-sum/

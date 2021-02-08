@@ -83,7 +83,34 @@ private void reverse(char[] s, int start, int end) {
 }
 {% endhighlight %}
 
+# Distance
+
+[Shortest Distance to a Character][shortest-distance-to-a-character]
+
+{% highlight java %}
+public int[] shortestToChar(String s, char c) {
+    int n = s.length(), index = -n;
+    int[] d = new int[n];
+    // c on left
+    for (int i = 0; i < n; i++) {
+        if (s.charAt(i) == c) {
+            index = i;
+        }
+        d[i] = i - index;
+    }
+    // c on right
+    for (int i = n - 1; i >= 0; i--) {
+        if (s.charAt(i) == c) {
+            index = i;
+        }
+        d[i] = Math.min(d[i], Math.abs(index - i));
+    }
+    return d;
+}
+{% endhighlight %}
+
 [first-missing-positive]: https://leetcode.com/problems/first-missing-positive/
 [reverse-words-in-a-string-ii]: https://leetcode.com/problems/reverse-words-in-a-string-ii/
 [rotate-array]: https://leetcode.com/problems/rotate-array/
 [shift-2d-grid]: https://leetcode.com/problems/shift-2d-grid/
+[shortest-distance-to-a-character]: https://leetcode.com/problems/shortest-distance-to-a-character/

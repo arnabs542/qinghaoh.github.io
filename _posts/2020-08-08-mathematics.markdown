@@ -64,6 +64,24 @@ public int minSteps(int n) {
 }
 {% endhighlight %}
 
+[4 Keys Keyboard][4-keys-keyboard]
+
+{% highlight java %}
+public int maxA(int N) {
+    // https://oeis.org/A178715
+    int[] dp = new int[N + 1];
+    for (int i = 0; i <= N; i++) {
+        dp[i] = i;
+        // j steps to reach maxA(j)
+        // then uses the remaining n - j steps to reach n - j - 1 copies of maxA(j)
+        for (int j = 1; j <= i - 3; j++) {
+            dp[i] = Math.max(dp[i], dp[j] * (i - j - 1));
+        }
+    }
+    return dp[N];
+}
+{% endhighlight %}
+
 [Taxicab geometry](https://en.wikipedia.org/wiki/Taxicab_geometry)
 
 Taxicab metric = $$l_1$$ distance = $$l_1$$ norm = $Manhattan distance
@@ -132,6 +150,7 @@ public int countVowelStrings(int n) {
 {% endhighlight %}
 
 [2-keys-keyboard]: https://leetcode.com/problems/2-keys-keyboard/
+[4-keys-keyboard]: https://leetcode.com/problems/4-keys-keyboard/
 [convex-polygon]: https://leetcode.com/problems/convex-polygon/
 [count-sorted-vowel-strings]: https://leetcode.com/problems/count-sorted-vowel-strings/
 [escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/

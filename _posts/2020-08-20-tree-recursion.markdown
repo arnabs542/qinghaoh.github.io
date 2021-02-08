@@ -125,6 +125,43 @@ private int dfs(TreeNode node) {
 }
 {% endhighlight %}
 
+[Find Distance in a Binary Tree][find-distance-in-a-binary-tree]
+
+{% highlight java %}
+private int d = -1;
+
+public int findDistance(TreeNode root, int p, int q) {
+    dfs(root, p, q);
+    return Math.max(d, 0);
+}
+
+private int dfs(TreeNode node, int p, int q) {
+    if (node == null) {
+        return -1;
+    }
+
+    int left = dfs(node.left, p, q), right = dfs(node.right, p, q);
+    if (node.val == p || node.val == q) {
+        if (left < 0 && right < 0) {
+            return 0;
+        }
+        d = Math.max(left, right) + 1;
+        return -1;
+    }
+
+    if (left >= 0 && right >= 0) {
+        d = left + right + 2;
+        return -1;
+    }
+
+    if (left >= 0 || right >= 0) {
+        return Math.max(left, right) + 1;
+    }
+
+    return -1;
+}
+{% endhighlight %}
+
 [Longest Univalue Path][longest-univalue-path]
 
 {% highlight java %}
@@ -366,16 +403,16 @@ public int findSecondMinimumValue(TreeNode root) {
 
 {% highlight java %}
 public TreeNode lcaDeepestLeaves(TreeNode root) {
-    return dps(root).getValue();
+    return dfs(root).getValue();
 }
 
 // <depth, lowest_common_ancestor>
-private Pair<Integer, TreeNode> dps(TreeNode node) {
+private Pair<Integer, TreeNode> dfs(TreeNode node) {
     if (node == null) {
         return new Pair(0, null);
     }
 
-    Pair<Integer, TreeNode> l = dps(node.left), r = dps(node.right);
+    Pair<Integer, TreeNode> l = dfs(node.left), r = dfs(node.right);
 
     int d1 = l.getKey(), d2 = r.getKey();
     return new Pair(Math.max(d1, d2) + 1, d1 == d2 ? node : d1 > d2 ? l.getValue() : r.getValue());
@@ -404,7 +441,7 @@ private void dfs(Node node, int level) {
     list.get(level).add(node.val);
 
     for (Node child : node.children) {
-        dps(child, level + 1);
+        dfs(child, level + 1);
     }
 }
 {% endhighlight %}
@@ -683,6 +720,7 @@ private void dfs(TreeNode node, int d) {
 [diameter-of-binary-tree]: https://leetcode.com/problems/diameter-of-binary-tree/
 [diameter-of-n-ary-tree]: https://leetcode.com/problems/diameter-of-n-ary-tree/
 [find-bottom-left-tree-value]: https://leetcode.com/problems/find-bottom-left-tree-value/
+[find-distance-in-a-binary-tree]: https://leetcode.com/problems/find-distance-in-a-binary-tree/
 [find-leaves-of-binary-tree]: https://leetcode.com/problems/find-leaves-of-binary-tree/
 [house-robber-iii]: https://leetcode.com/problems/house-robber-iii/
 [increasing-order-search-tree]: https://leetcode.com/problems/increasing-order-search-tree/

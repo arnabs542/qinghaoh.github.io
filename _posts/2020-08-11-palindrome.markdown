@@ -100,12 +100,13 @@ public String longestPalindrome(String s) {
 
 {% highlight java %}
 public int longestPalindromeSubseq(String s) {
+    int n = s.length();
     // dp[i][j]: s.substring(i, j + 1)
-    int[][] dp = new int[s.length()][s.length()];
+    int[][] dp = new int[n][n];
 
-    for (int i = s.length() - 1; i >= 0; i--) {
+    for (int i = n - 1; i >= 0; i--) {
         dp[i][i] = 1;
-        for (int j = i + 1; j < s.length(); j++) {
+        for (int j = i + 1; j < n; j++) {
             if (s.charAt(i) == s.charAt(j)) {
                 dp[i][j] = dp[i + 1][j - 1] + 2;
             } else {
@@ -114,7 +115,7 @@ public int longestPalindromeSubseq(String s) {
         }
     }
 
-    return dp[0][s.length() - 1];
+    return dp[0][n - 1];
 }
 {% endhighlight %}
 

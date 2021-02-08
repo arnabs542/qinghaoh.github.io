@@ -39,4 +39,68 @@ public boolean stoneGame(int[] piles) {
 
 Alex can always take either all odd piles or all even piles, and one of the colors must have a sum number of stones larger than the other color.
 
+# Top-down DP
+
+[Can I Win][can-i-win]
+
+{% highlight java %}
+private int maxChoosableInteger;
+private Map<Integer, Boolean> map = new HashMap<>();
+
+public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
+    this.maxChoosableInteger = maxChoosableInteger;
+
+    if (desiredTotal == 0) {
+        return true;
+    }
+
+    if (maxChoosableInteger * (maxChoosableInteger + 1) / 2 < desiredTotal) {
+        return false;
+    }
+
+    return dfs(desiredTotal, 0);
+}
+
+private boolean dfs(int total, int state) {
+    if (map.containsKey(state)) {
+        return map.get(state);
+    }
+
+    boolean canWin = false;
+    for (int i = maxChoosableInteger; i > 0; i--) {
+        if ((state & (1 << (i - 1))) == 0) {
+            // can't force a win == lose
+            // because both players play optimally
+            if (i >= total || !dfs(total - i, state | (1 << (i - 1)))) {
+                canWin = true;
+                break;
+            }
+        }
+    }
+    map.put(state, canWin);
+    return canWin;
+}
+{% endhighlight %}
+
+[Flip Game II][flip-game-ii]
+
+Another solution is
+
+[Impartial game](https://en.wikipedia.org/wiki/Impartial_game)
+
+In combinatorial game theory, an impartial game is a game in which the allowable moves depend only on the position and not on which of the two players is currently moving, and where the payoffs are symmetric. In other words, the only difference between player 1 and player 2 is that player 1 goes first.
+
+[Normal play convention](https://en.wikipedia.org/wiki/Normal_play_convention)
+
+In combinatorial game theory, the normal play convention of an impartial game is that the last player able to move is the winner.
+
+[Sprague–Grundy theorem](https://en.wikipedia.org/wiki/Sprague%E2%80%93Grundy_theorem)
+
+In combinatorial game theory, the Sprague–Grundy theorem states that every impartial game under the normal play convention is equivalent to a one-heap game of nim, or to an infinite generalization of nim.
+
+{% highlight java %}
+{% endhighlight %}
+
+[can-i-win]: https://leetcode.com/problems/can-i-win/
+[flip-game-ii]: https://leetcode.com/problems/flip-game-ii/
 [stone-game]: https://leetcode.com/problems/stone-game/

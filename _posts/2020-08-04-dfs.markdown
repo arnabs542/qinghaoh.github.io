@@ -112,6 +112,34 @@ public int dfs(int i, int[] manager, int[] informTime) {
 }
 {% endhighlight %}
 
+[Clone Graph][clone-graph]
+
+{% highlight java %}
+private Map<Integer, Node> map = new HashMap<>();
+
+public Node cloneGraph(Node node) {
+    return dfs(node);
+}
+
+private Node dfs(Node node) {
+    if (node == null) {
+        return null;
+    }
+
+    if (map.containsKey(node.val)) {
+        return map.get(node.val);
+    }
+
+    Node copy = new Node(node.val, new ArrayList<>());
+    map.put(copy.val, copy);
+    for (Node n : node.neighbors) {
+        copy.neighbors.add(dfs(n));
+    }
+    return copy;
+}
+{% endhighlight %}
+
+[clone-graph]: https://leetcode.com/problems/clone-graph/
 [keys-and-rooms]: https://leetcode.com/problems/keys-and-rooms/
 [pyramid-transition-matrix]: https://leetcode.com/problems/pyramid-transition-matrix/
 [time-needed-to-inform-all-employees]: https://leetcode.com/problems/time-needed-to-inform-all-employees/

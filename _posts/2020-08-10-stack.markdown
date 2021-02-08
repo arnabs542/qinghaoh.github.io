@@ -526,6 +526,29 @@ private void pushToStack(List<NestedInteger> nestedList) {
 }
 {% endhighlight %}
 
+[Ternary Expression Parser][ternary-expression-parser]
+
+{% highlight java %}
+public String parseTernary(String expression) {
+    Deque<Character> st = new ArrayDeque<>();
+    char op = ' ';
+    for (int i = expression.length() - 1; i >= 0; i--) {
+        char c = expression.charAt(i);
+        if (c == '?' || c == ':') {
+            op = c;
+        } else {
+            if (op == '?') {
+                char c1 = st.pop(), c2 = st.pop();
+                st.push(c == 'T' ? c1 : c2);
+            } else {
+                st.push(c);
+            }
+        }
+    }
+    return String.valueOf(st.peek());
+}
+{% endhighlight %}
+
 [132-pattern]: https://leetcode.com/problems/132-pattern/
 [final-prices-with-a-special-discount-in-a-shop]: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/
 [find-the-most-competitive-subsequence]: https://leetcode.com/problems/find-the-most-competitive-subsequence/
@@ -539,9 +562,10 @@ private void pushToStack(List<NestedInteger> nestedList) {
 [next-greater-element-ii]: https://leetcode.com/problems/next-greater-element-ii/
 [next-greater-node-in-linked-list]: https://leetcode.com/problems/next-greater-node-in-linked-list/
 [online-stock-span]: https://leetcode.com/problems/online-stock-span/
-[score-of-parentheses]: https://leetcode.com/problems/score-of-parentheses/
-[sum-of-subarray-minimums]: https://leetcode.com/problems/sum-of-subarray-minimums/
-[remove-k-digits]: https://leetcode.com/problems/remove-k-digits/
 [remove-duplicate-letters]: https://leetcode.com/problems/remove-duplicate-letters/
 [remove-outermost-parentheses]: https://leetcode.com/problems/remove-outermost-parentheses/
 [reverse-substrings-between-each-pair-of-parentheses]: https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/
+[score-of-parentheses]: https://leetcode.com/problems/score-of-parentheses/
+[sum-of-subarray-minimums]: https://leetcode.com/problems/sum-of-subarray-minimums/
+[ternary-expression-parser]: https://leetcode.com/problems/ternary-expression-parser/
+[remove-k-digits]: https://leetcode.com/problems/remove-k-digits/
