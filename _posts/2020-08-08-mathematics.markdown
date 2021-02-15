@@ -149,8 +149,47 @@ public int countVowelStrings(int n) {
 }
 {% endhighlight %}
 
+# Median
+
+[Best Meeting Point][best-meeting-point]
+
+* Mean minimizes total distance for Euclidian distance
+* Median minimzes total distance for absolute deviation
+* Mode minimizes distance for indicator function
+
+{% highlight java %}
+public int minTotalDistance(int[][] grid) {
+    int m = grid.length, n = grid[0].length;
+    List<Integer> x = new ArrayList<>(), y = new ArrayList<>();    
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (grid[i][j] == 1) {
+                x.add(i);
+            }
+        }
+    }
+    for (int j = 0; j < n; j++) {
+        for (int i = 0; i < m; i ++) {
+            if (grid[i][j] == 1) {  
+                y.add(j);
+            }
+        }
+    }
+    return minDistance1D(x) + minDistance1D(y);
+}
+
+public int minDistance1D(List<Integer> points) {
+    int d = 0, median = points.get(points.size() / 2);
+    for (int p : points) {
+        d += Math.abs(p - median);
+    }
+    return d;
+}
+{% endhighlight %}
+
 [2-keys-keyboard]: https://leetcode.com/problems/2-keys-keyboard/
 [4-keys-keyboard]: https://leetcode.com/problems/4-keys-keyboard/
+[best-meeting-point]: https://leetcode.com/problems/best-meeting-point/
 [convex-polygon]: https://leetcode.com/problems/convex-polygon/
 [count-sorted-vowel-strings]: https://leetcode.com/problems/count-sorted-vowel-strings/
 [escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/

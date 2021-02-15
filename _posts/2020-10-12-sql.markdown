@@ -160,7 +160,7 @@ GROUP BY a1.player_id, a1.event_date
 ;
 {% endhighlight %}
 
-MySQL uses three-valued logic -- RUE, FALSE and UNKNOWN. Anything compared to NULL evaluates to the third value: UNKNOWN. That “anything” includes NULL itself! That’s why MySQL provides the IS NULL and IS NOT NULL operators to specifically check for NULL.
+MySQL uses three-valued logic -- TRUE, FALSE and UNKNOWN. Anything compared to NULL evaluates to the third value: UNKNOWN. That “anything” includes NULL itself! That’s why MySQL provides the IS NULL and IS NOT NULL operators to specifically check for NULL.
 
 [Customer Placing the Largest Number of Orders][customer-placing-the-largest-number-of-orders]
 
@@ -239,6 +239,20 @@ HAVING COUNT(actor_id) >= 3
 ;
 {% endhighlight %}
 
+[Game Play Analysis IV][game-play-analysis-iv]
+
+{% highlight sql %}
+SELECT
+    ROUND(COUNT(t2.player_id) / COUNT(t1.player_id), 2) AS fraction
+FROM
+    (SELECT player_id, MIN(event_date) AS first_login
+     FROM Activity
+     GROUP BY player_id) t1
+LEFT JOIN Activity t2
+    ON t1.player_id = t2.player_id AND t1.first_login = t2.event_date - 1
+;
+{% endhighlight %}
+
 [actors-and-directors-who-cooperated-at-least-three-times]: https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
 [classes-more-than-5-students]: https://leetcode.com/problems/classes-more-than-5-students/
 [consecutive-available-seats]: https://leetcode.com/problems/consecutive-available-seats/
@@ -248,6 +262,7 @@ HAVING COUNT(actor_id) >= 3
 [game-play-analysis-i]: https://leetcode.com/problems/game-play-analysis-i/
 [game-play-analysis-ii]: https://leetcode.com/problems/game-play-analysis-ii/
 [game-play-analysis-iii]: https://leetcode.com/problems/game-play-analysis-iii/
+[game-play-analysis-iv]: https://leetcode.com/problems/game-play-analysis-iv/
 [reformat-department-table]: https://leetcode.com/problems/reformat-department-table/
 [rising-temperature]: https://leetcode.com/problems/rising-temperature/
 [sales-person]: https://leetcode.com/problems/sales-person/

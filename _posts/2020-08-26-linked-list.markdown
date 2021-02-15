@@ -118,6 +118,51 @@ private int size(ListNode l) {
 }
 {% endhighlight %}
 
+[Copy List with Random Pointer][copy-list-with-random-pointer]
+
+{% highlight java %}
+public Node copyRandomList(Node head) {
+    Node curr = head, next = null;
+
+    // links each copy node to its original node
+    while (curr != null) {
+        next = curr.next;
+        Node copy = new Node(curr.val);
+        curr.next = copy;
+        copy.next = next;
+        curr = next;
+    }
+
+    // assigns random pointers for the copy nodes
+    curr = head;
+    while (curr != null) {
+        if (curr.random != null) {
+            curr.next.random = curr.random.next;
+        }
+        curr = curr.next.next;
+    }
+
+    curr = head;
+    Node dummyCopyHead = new Node(0);
+    Node copyCurr = dummyCopyHead, copyNext = null;
+
+    while (curr != null) {
+        // extracts the copy list
+        copyNext = curr.next;
+        copyCurr.next = copyNext;
+        copyCurr = copyNext;
+
+        // restores the original list
+        next = curr.next.next;
+        curr.next = next;
+        curr = next;
+    }
+
+    return dummyCopyHead.next;
+}
+{% endhighlight %}
+
 [add-two-numbers-ii]: https://leetcode.com/problems/add-two-numbers-ii/
+[copy-list-with-random-pointer]: https://leetcode.com/problems/copy-list-with-random-pointer/
 [find-the-duplicate-number]: https://leetcode.com/problems/find-the-duplicate-number/
 [linked-list-cycle-ii]: https://leetcode.com/problems/linked-list-cycle-ii/

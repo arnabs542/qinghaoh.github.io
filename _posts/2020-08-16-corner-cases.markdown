@@ -324,6 +324,28 @@ public int countStudents(int[] students, int[] sandwiches) {
 }
 {% endhighlight %}
 
+[Pour Water][pour-water]
+
+{% highlight java %}
+public int[] pourWater(int[] heights, int V, int K) {
+    while (V > 0) {
+        int i = K;
+        while (i > 0 && heights[i] >= heights[i - 1]) {
+            i--;
+        }
+        while (i < heights.length - 1 && heights[i] >= heights[i + 1]) {
+            i++;
+        }
+        while (i > K && heights[i] == heights[i - 1]) {
+            i--;
+        }
+        heights[i]++;
+        V--;
+    }
+    return heights;
+}
+{% endhighlight %}
+
 [circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
 [count-number-of-teams]: https://leetcode.com/problems/count-number-of-teams/
 [count-of-matches-in-tournament]: https://leetcode.com/problems/count-of-matches-in-tournament/
@@ -333,6 +355,7 @@ public int countStudents(int[] students, int[] sandwiches) {
 [most-visited-sector-in-a-circular-track]: https://leetcode.com/problems/most-visited-sector-in-a-circular-track/
 [number-of-steps-to-reduce-a-number-in-binary-representation-to-one]: https://leetcode.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one/
 [number-of-students-unable-to-eat-lunch]: https://leetcode.com/problems/number-of-students-unable-to-eat-lunch/
+[pour-water]: https://leetcode.com/problems/pour-water/
 [rabbits-in-forest]: https://leetcode.com/problems/rabbits-in-forest/
 [reverse-integer]: https://leetcode.com/problems/reverse-integer/
 [similar-rgb-color]: https://leetcode.com/problems/similar-rgb-color/

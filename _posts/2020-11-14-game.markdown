@@ -84,7 +84,11 @@ private boolean dfs(int total, int state) {
 
 [Flip Game II][flip-game-ii]
 
-Another solution is
+Another solution is:
+
+[Combinatorial game theory](https://en.wikipedia.org/wiki/Combinatorial_game_theory)
+
+Combinatorial game theory (CGT) has been largely confined to two-player games that have a position in which the players take turns changing in defined ways or moves to achieve a defined winning condition.
 
 [Impartial game](https://en.wikipedia.org/wiki/Impartial_game)
 
@@ -94,11 +98,91 @@ In combinatorial game theory, an impartial game is a game in which the allowable
 
 In combinatorial game theory, the normal play convention of an impartial game is that the last player able to move is the winner.
 
+[Nim](https://en.wikipedia.org/wiki/Nim)
+
+Nim is a mathematical game of strategy in which two players take turns removing (or "nimming") objects from distinct heaps or piles. On each turn, a player must remove at least one object, and may remove any number of objects provided they all come from the **same** heap or pile. The game is either to take the last object.
+
+Nim-sum is the bitwise xor of the heap sizes.
+
+**Theorem**: In a normal Nim game, the player making the first move has a winning strategy if and only if the nim-sum of the sizes of the heaps is **not zero**. Otherwise, the second player has a winning strategy.
+
+Strategy: the winning strategy is to finish every move with a nim-sum of 0. This is always possible if the nim-sum is not zero before the move. To find out which move to make, let `X` be the nim-sum of all the heap sizes. Find a heap where `X \xor heap-size < heap-size`; the winning strategy is to play in such a heap, reducing that heap to `X \xor heap-size`.
+
+[Nimber](https://en.wikipedia.org/wiki/Nimber)
+
+In mathematics, the nimbers, also called Grundy numbers, are the values of heaps in the game Nim.
+
+The Grundy Number/ nimber is equal to 0 for a game that is lost immediately by the first player and is equal to Mex of the nimbers of all possible next positions for any other game.
+
+[Mex](https://en.wikipedia.org/wiki/Mex_(mathematics))
+
+In mathematics, the mex of a subset of a well-ordered set is the smallest value from the whole set that does not belong to the subset. That is, it is the minimum value of the complement set. The name "mex" is shorthand for "minimum excluded" value.
+
 [Sprague–Grundy theorem](https://en.wikipedia.org/wiki/Sprague%E2%80%93Grundy_theorem)
 
 In combinatorial game theory, the Sprague–Grundy theorem states that every impartial game under the normal play convention is equivalent to a one-heap game of nim, or to an infinite generalization of nim.
 
+Then Sprague-Grundy Theorem says that if both A and B play optimally, then the player starting first is guaranteed to win if the XOR of the grundy numbers of position in each sub-games at the beginning of the game is non-zero. Otherwise, if the XOR evaluates to zero, then player A will lose definitely, no matter what.
+
 {% highlight java %}
+// O(n ^ 2)
+public boolean canWin(String s) {
+    int sg = 0;
+    List<Integer> nimbers = new ArrayList<>();
+    // DP to get nimbers
+    for (String t : s.split("-+")) {
+        int n = t.length();
+        // t is consecutive '+'s
+        if (n != 0) {
+            while (nimbers.size() <= n) {
+                char[] chars = t.toCharArray();
+                int i = 0, j = nimbers.size() - 2;
+                // g(t) = mex(g(0, n - 2), g(1, n - 3), ...)
+                //      = mex(g(0) ^ g(n - 2), g(1) ^ g(n - 3), ...)
+                //
+                // chars marks the presence of nimbers of all sub-game states
+                // chars[i] == '-': sub-game nimber i exists
+                while (i <= j) {
+                    chars[nimbers.get(i++) ^ nimbers.get(j--)] = '-';
+                }  
+                // mex
+                nimbers.add(new String(chars).indexOf('+'));
+            }
+            sg ^= nimbers.get(n);
+        }
+    }
+    return sg != 0;
+}
+{% endhighlight %}
+
+{% highlight java %}
+// O(n)
+public boolean canWin(String s) {
+    // https://oeis.org/A002187
+    // Has period 34 with the only exceptions at n=0, 14, 16, 17, 31, 34 and 51.
+    // our definition is shifted by 1, so the last exception is nimbers[52]
+    int p = 34, n = 51 + 1 + p;
+    int[] nimbers = new int[n + 1];
+    for (int k = 2; k <= n; k++) {
+        char[] chars = "+".repeat(k).toCharArray();
+        int i = 0, j = k - 2;
+        while (i <= j) {
+            chars[nimbers[i++] ^ nimbers[j--]] = '-';
+        }
+        nimbers[k] = new String(chars).indexOf('+');
+    }
+
+    int sg = 0;
+    for (String t : s.split("-+")) {
+        // t is consecutive '+'s
+        int len = t.length();
+        while (len > n) {
+            len -= p;
+        }
+        sg ^= nimbers[len];
+    }
+    return sg != 0;
+}
 {% endhighlight %}
 
 [can-i-win]: https://leetcode.com/problems/can-i-win/

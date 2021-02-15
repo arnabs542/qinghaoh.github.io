@@ -79,13 +79,13 @@ A Fenwick tree or binary indexed tree is a data structure that can efficiently u
 
 {% highlight java %}
 public class FenwickTree {
-    private int[] A;
+    private int[] nums;
     private int size;
 
     public FenwickTree(int size) {
         this.size = size;
         // one-based indexing is assumed
-        A = new int[size + 1];
+        nums = new int[size + 1];
     }
 
     // Returns the sum from index 1 to i
@@ -93,7 +93,7 @@ public class FenwickTree {
     public int sum(int i) {
         int sum = 0;
         while (i > 0)  {
-            sum += A[i];
+            sum += nums[i];
             i -= lsb(i);
         }             
         return sum;
@@ -103,7 +103,7 @@ public class FenwickTree {
     // O(log(n))
     public void add(int i, int k) {
         while (i <= size) {
-            A[i] += k;
+            nums[i] += k;
             i += lsb(i);
         }
     }
@@ -175,6 +175,76 @@ public int[] processQueries(int[] queries, int m) {
 }
 {% endhighlight %}
 
+## 2D
+
+[Range Sum Query 2D - Mutable][range-sum-query-2d-mutable]
+
+{% highlight java %}
+private FenwickTree ft;
+private int[][] nums;
+
+public NumMatrix(int[][] matrix) {
+    if (matrix.length == 0 || matrix[0].length == 0) {
+        return;
+    }
+
+    int m = matrix.length, n = matrix[0].length;
+    this.nums = new int[m][n];
+    this.ft = new FenwickTree(m, n);
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            update(i, j, matrix[i][j]);
+        }
+    }
+}
+
+public void update(int row, int col, int val) {
+    ft.add(row + 1, col + 1, val - nums[row][col]);
+    nums[row][col] = val;
+}
+
+public int sumRegion(int row1, int col1, int row2, int col2) {
+    return ft.sum(row2 + 1, col2 + 1) - ft.sum(row1, col2 + 1) - ft.sum(row2 + 1, col1) + ft.sum(row1, col1);
+}
+
+public class FenwickTree {
+    private int[][] grid;
+    private int m, n;
+
+    public FenwickTree(int m, int n) {
+        this.m = m;
+        this.n = n;
+        // one-based indexing is assumed
+        grid = new int[m + 1][n + 1];
+    }
+
+    // Returns the sum from index (1, 1) to (row, col)
+    public int sum(int row, int col) {
+        int sum = 0;
+        for (int i = row; i > 0; i -= lsb(i)) {
+            for (int j = col; j > 0; j -= lsb(j)) {
+                sum += grid[i][j];
+            }
+        }          
+        return sum;
+    }
+
+    // Adds k to element with index (row, col)
+    public void add(int row, int col, int k) {
+        for (int i = row; i <= m; i += lsb(i)) {
+            for (int j = col; j <= n; j += lsb(j)) {
+                grid[i][j] += k;
+            }
+        }
+    }
+
+    private int lsb(int i) {
+        return i & (-i);
+    }
+}
+{% endhighlight %}
+
 # Cartesian Tree
 
 [Cartesian tree](https://en.wikipedia.org/wiki/Cartesian_tree)
@@ -216,3 +286,4 @@ TreeNode -> Map<TreeNode, List<TreeNode>>
 [maximum-binary-tree]: https://leetcode.com/problems/maximum-binary-tree/
 [queries-on-a-permutation-with-key]: https://leetcode.com/problems/queries-on-a-permutation-with-key/
 [range-sum-query-mutable]: https://leetcode.com/problems/range-sum-query-mutable/
+[range-sum-query-2d-mutable]: https://leetcode.com/problems/range-sum-query-2d-mutable/
