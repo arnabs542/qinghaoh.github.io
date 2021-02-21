@@ -333,11 +333,35 @@ public Node findRoot(List<Node> tree) {
 }
 {% endhighlight %}
 
+[Integer Replacement][integer-replacement]
+
+{% highlight java %}
+public int integerReplacement(int n) {
+    int count = 0;
+    // not n > 1, because of Integer.MAX_VALUE
+    while (n != 1) {
+        if (n % 2 == 0) {
+            n >>>= 1;
+        } else {
+            // checks the last two digits
+            if (n == 3 || (n & 3) == 1) {
+                n--;
+            } else {
+                n++;
+            }
+        }
+        count++;
+    }
+    return count;
+}
+{% endhighlight %}
+
 [binary-number-with-alternating-bits]: https://leetcode.com/problems/binary-number-with-alternating-bits/
 [concatenation-of-consecutive-binary-numbers]: https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/
 [circular-permutation-in-binary-representation]: https://leetcode.com/problems/circular-permutation-in-binary-representation/
 [find-root-of-n-ary-tree]: https://leetcode.com/problems/find-root-of-n-ary-tree/
 [flip-columns-for-maximum-number-of-equal-rows]: https://leetcode.com/problems/flip-columns-for-maximum-number-of-equal-rows/
+[integer-replacement]: https://leetcode.com/problems/integer-replacement/
 [k-th-symbol-in-grammar]: https://leetcode.com/problems/k-th-symbol-in-grammar/
 [maximum-xor-of-two-numbers-in-an-array]: https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/
 [single-number]: https://leetcode.com/problems/single-number/

@@ -253,18 +253,63 @@ LEFT JOIN Activity t2
 ;
 {% endhighlight %}
 
+[Get Highest Answer Rate Question][get-highest-answer-rate-question]
+
+{% highlight sql %}
+SELECT question_id as survey_log
+FROM
+    (SELECT
+        question_id,
+        SUM(CASE WHEN action="show" THEN 1 ELSE 0 END) as num_show,
+        SUM(CASE WHEN action="answer" THEN 1 ELSE 0 END) as num_answer
+     FROM survey_log
+     GROUP BY question_id
+) as q
+ORDER BY (num_answer / num_show) DESC
+LIMIT 1
+;
+{% endhighlight %}
+
+[Customers Who Bought All Products][customers-who-bought-all-products]
+
+{% highlight sql %}
+SELECT customer_id
+FROM customer c
+GROUP BY customer_id
+HAVING COUNT(DISTINCT product_key) =
+    (SELECT COUNT(DISTINCT product_key)
+     FROM product)
+;
+{% endhighlight %}
+
+[Tree Node][tree-node]
+
+{% highlight sql %}
+SELECT id,
+    CASE WHEN p_id IS NULL THEN 'Root'
+         WHEN id IN (SELECT p_id FROM tree) THEN 'Inner'
+         ELSE 'Leaf'
+    END AS Type
+FROM tree
+ORDER BY id
+;
+{% endhighlight %}
+
 [actors-and-directors-who-cooperated-at-least-three-times]: https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
 [classes-more-than-5-students]: https://leetcode.com/problems/classes-more-than-5-students/
 [consecutive-available-seats]: https://leetcode.com/problems/consecutive-available-seats/
 [customer-placing-the-largest-number-of-orders]: https://leetcode.com/problems/customer-placing-the-largest-number-of-orders/
+[customers-who-bought-all-products]: https://leetcode.com/problems/customers-who-bought-all-products/
 [employees-earning-more-than-their-managers]: https://leetcode.com/problems/employees-earning-more-than-their-managers/
 [friend-requests-i-overall-acceptance-rate]: https://leetcode.com/problems/friend-requests-i-overall-acceptance-rate/
 [game-play-analysis-i]: https://leetcode.com/problems/game-play-analysis-i/
 [game-play-analysis-ii]: https://leetcode.com/problems/game-play-analysis-ii/
 [game-play-analysis-iii]: https://leetcode.com/problems/game-play-analysis-iii/
 [game-play-analysis-iv]: https://leetcode.com/problems/game-play-analysis-iv/
+[get-highest-answer-rate-question]: https://leetcode.com/problems/get-highest-answer-rate-question/
 [reformat-department-table]: https://leetcode.com/problems/reformat-department-table/
 [rising-temperature]: https://leetcode.com/problems/rising-temperature/
 [sales-person]: https://leetcode.com/problems/sales-person/
 [second-highest-salary]: https://leetcode.com/problems/second-highest-salary/
 [swap-salary]: https://leetcode.com/problems/swap-salary/
+[tree-node]: https://leetcode.com/problems/tree-node/

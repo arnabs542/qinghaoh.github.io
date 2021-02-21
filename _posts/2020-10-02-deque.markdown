@@ -70,6 +70,33 @@ public int[] maxSlidingWindow(int[] nums, int k) {
 }
 {% endhighlight %}
 
+[Jump Game VI][jump-game-vi]
+
+{% highlight java %}
+public int maxResult(int[] nums, int k) {
+    int n = nums.length;
+    // dp[i]: max score to reach the end starting at index i
+    int[] dp = new int[n];
+    dp[n - 1] = nums[n - 1];
+
+    Deque<Integer> dq = new ArrayDeque<>();
+    for (int i = n - 2; i >= 0; i--) {
+        // max(dp[]) in fixed-size window [i + 1, i + k]
+        if (!dq.isEmpty() && dq.peek() == i + k + 1) {
+            dq.poll();
+        }
+
+        while (!dq.isEmpty() && dp[dq.peekLast()] < dp[i + 1]) {
+            dq.pollLast();
+        }
+
+        dq.offer(i + 1);
+        dp[i] = nums[i] + dp[dq.peek()];
+    }
+    return dp[0];
+}
+{% endhighlight %}
+
 [Constrained Subsequence Sum][constrained-subsequence-sum]
 
 {% highlight java %}
@@ -96,5 +123,6 @@ public int constrainedSubsetSum(int[] nums, int k) {
 {% endhighlight %}
 
 [constrained-subsequence-sum]: https://leetcode.com/problems/constrained-subsequence-sum/
+[jump-game-vi]: https://leetcode.com/problems/jump-game-vi/
 [shortest-subarray-with-sum-at-least-k]: https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/
 [sliding-window-maximum]: https://leetcode.com/problems/sliding-window-maximum/

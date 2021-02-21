@@ -187,6 +187,12 @@ public int minDistance1D(List<Integer> points) {
 }
 {% endhighlight %}
 
+# Dearrangement
+
+$$ !n=(n-1)({!(n-1)}+{!(n-2)}) $$
+
+$$ !n=n!\sum _{i=0}^{n}{\frac {(-1)^{i}}{i!}}, \quad n\geq 0 $$
+
 [2-keys-keyboard]: https://leetcode.com/problems/2-keys-keyboard/
 [4-keys-keyboard]: https://leetcode.com/problems/4-keys-keyboard/
 [best-meeting-point]: https://leetcode.com/problems/best-meeting-point/

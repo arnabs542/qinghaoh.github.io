@@ -175,7 +175,7 @@ private int closest(int value, int min, int max) {
 }
 {% endhighlight %}
 
-[][swap-for-longest-repeated-character-substring]
+[Swap for Longest Repeated Character Substring][swap-for-longest-repeated-character-substring]
 
 {% highlight java %}
 public int maxRepOpt1(String text) {
@@ -346,11 +346,55 @@ public int[] pourWater(int[] heights, int V, int K) {
 }
 {% endhighlight %}
 
+[Minimum Area Rectangle][minimum-area-rectangle]
+
+{% highlight java %}
+public int minAreaRect(int[][] points) {
+    Map<Integer, Set<Integer>> map = new HashMap<>();
+    for (int[] p : points) {
+        map.computeIfAbsent(p[0], k -> new HashSet<>()).add(p[1]);
+    }
+
+    int min = Integer.MAX_VALUE;
+    for (int i = 0; i < points.length; i++) {
+        for (int j = 0; j < i; j++) {
+            int[] p1 = points[i], p2 = points[j];
+            // same x or y
+            if (p1[0] == p2[0] || p1[1] == p2[1]) {
+                continue;
+            }
+
+            int area = Math.abs(p1[0] - p2[0]) * Math.abs(p1[1] - p2[1]);
+            if (area > min) {
+                continue;
+            }
+
+            // confirms the other two points exist in the set
+            if (map.get(p1[0]).contains(p2[1]) && map.get(p2[0]).contains(p1[1])) {
+                min = area;
+            }
+        }
+    }
+    return min == Integer.MAX_VALUE ? 0 : min;
+}
+{% endhighlight %}
+
+[Maximum Score From Removing Stones][maximum-score-from-removing-stones]
+
+{% highlight java %}
+public int maximumScore(int a, int b, int c) {
+    // in the end, 3 0's or 2 0's
+    return Math.min((a + b + c) / 2, a + b + c - Math.max(a, Math.max(b, c)));
+}
+{% endhighlight %}
+
 [circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
 [count-number-of-teams]: https://leetcode.com/problems/count-number-of-teams/
 [count-of-matches-in-tournament]: https://leetcode.com/problems/count-of-matches-in-tournament/
 [heaters]: https://leetcode.com/problems/heaters/
 [maximum-length-of-a-concatenated-string-with-unique-characters]: https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/
+[maximum-score-from-removing-stones]: https://leetcode.com/problems/maximum-score-from-removing-stones/
+[minimum-area-rectangle]: https://leetcode.com/problems/minimum-area-rectangle/
 [minimum-time-difference]: https://leetcode.com/problems/minimum-time-difference/
 [most-visited-sector-in-a-circular-track]: https://leetcode.com/problems/most-visited-sector-in-a-circular-track/
 [number-of-steps-to-reduce-a-number-in-binary-representation-to-one]: https://leetcode.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one/

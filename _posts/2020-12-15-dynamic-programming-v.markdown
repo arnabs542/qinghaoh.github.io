@@ -52,12 +52,13 @@ public int numWays(int n, int k) {
 
 {% highlight java %}
 public int rob(int[] nums) {
-    int[] dp = new int[nums.length + 1];
+    int n = nums.length;
+    int[] dp = new int[n + 1];
     dp[1] = nums[0];
-    for (int i = 1; i < nums.length; i++) {
+    for (int i = 1; i < n; i++) {
         dp[i + 1] = Math.max(dp[i], dp[i - 1] + nums[i]);
     }       
-    return dp[nums.length];
+    return dp[n];
 }
 {% endhighlight %}
 
@@ -94,6 +95,27 @@ private int rob(int[] nums, int start, int end) {
         prev = tmp;
     }
     return curr;
+}
+{% endhighlight %}
+
+[Number of Dice Rolls With Target Sum][number-of-dice-rolls-with-target-sum]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int numRollsToTarget(int d, int f, int target) {
+    int[][] dp = new int[d + 1][target + 1];
+    dp[d][0] = 1;
+    for (int i = d - 1; i >= 0; i--) {
+        for (int j = 1; j <= f; j++) {
+            for (int k = 0; k < target; k++) {
+                if (j + k <= target) {
+                    dp[i][j + k] = (dp[i][j + k] + dp[i + 1][k]) % MOD;
+                }
+            }
+        }
+    }
+    return dp[0][target];
 }
 {% endhighlight %}
 
@@ -137,4 +159,5 @@ public int dieSimulator(int n, int[] rollMax) {
 [dice-roll-simulation]: https://leetcode.com/problems/dice-roll-simulation/
 [house-robber]: https://leetcode.com/problems/house-robber/
 [house-robber-ii]: https://leetcode.com/problems/house-robber-ii/
+[number-of-dice-rolls-with-target-sum]: https://leetcode.com/problems/number-of-dice-rolls-with-target-sum/
 [paint-fence]: https://leetcode.com/problems/paint-fence/

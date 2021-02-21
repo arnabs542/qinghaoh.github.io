@@ -158,6 +158,37 @@ public int maxEvents(int[][] events) {
 }
 {% endhighlight %}
 
+[Maximum Number of Eaten Apples][maximum-number-of-eaten-apples]
+
+{% highlight java %}
+public int eatenApples(int[] apples, int[] days) {        
+    // apple, end day
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));  
+    int count = 0;
+    for (int i = 0; i < apples.length || !pq.isEmpty(); i++) {
+        // adds apples grown on the i-th day in a bag
+        if (i < apples.length) {
+            pq.offer(new int[]{apples[i], i + days[i]});
+        }
+
+        // removes rotten apples
+        while (!pq.isEmpty() && pq.peek()[1] <= i) {
+            pq.poll();
+        }
+
+        // gets the earliest available apple
+        if (!pq.isEmpty()) {
+            count++;
+            // removes if no apples left in the bag
+            if (--pq.peek()[0] == 0) {
+                pq.poll();
+            }
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
 [Maximum Distance in Arrays][maximum-distance-in-arrays]
 
 {% highlight java %}
@@ -240,6 +271,7 @@ private int jump(int[] nums) {
 {% endhighlight %}
 
 [maximum-distance-in-arrays]: https://leetcode.com/problems/maximum-distance-in-arrays/
+[maximum-number-of-eaten-apples]: https://leetcode.com/problems/maximum-number-of-eaten-apples/
 [maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
 [meeting-rooms-ii]: https://leetcode.com/problems/meeting-rooms-ii/
 [merge-intervals]: https://leetcode.com/problems/merge-intervals/

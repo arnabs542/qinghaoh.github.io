@@ -180,8 +180,50 @@ private boolean dfs(int[][] graph, int[] colors, int index, int color) {
 }
 {% endhighlight %}
 
+# Eulerian Path
+
+[Eulerian path](https://en.wikipedia.org/wiki/Eulerian_path): In graph theory, an **Eulerian trail** (or **Eulerian path**) is a trail in a finite graph that visits every edge exactly once (allowing for revisiting vertices). Similarly, an **Eulerian circuit** or **Eulerian cycle** is an Eulerian trail that starts and ends on the same vertex.
+
+** Euler's Theorem **:
+
+A connected graph has an Euler cycle if and only if every vertex has even degree.
+
+A directed graph has an Eulerian cycle if and only if every vertex has equal in degree and out degree, and all of its vertices with nonzero degree belong to a single strongly connected component.
+
+A directed graph has an Eulerian trail if and only if at most one vertex has (out-degree) − (in-degree) = 1, at most one vertex has (in-degree) − (out-degree) = 1, every other vertex has equal in-degree and out-degree, and all of its vertices with nonzero degree belong to a single connected component of the underlying undirected graph.
+
+## Hierholzer's Algorithm
+
+[Reconstruct Itinerary][reconstruct-itinerary]
+
+{% highlight java %}
+private Map<String, Queue<String>> map = new HashMap<>();;
+private List<String> list = new ArrayList<>();
+
+public List<String> findItinerary(List<List<String>> tickets) {
+    for (List<String> t : tickets) {
+        map.computeIfAbsent(t.get(0), k -> new PriorityQueue()).add(t.get(1));
+    }
+
+    visit("JFK");
+    return list;
+}
+
+private void visit(String node) {
+    while (map.containsKey(node) && !map.get(node).isEmpty()) {
+        // deletes visited vertex
+        visit(map.get(node).poll());
+    }
+
+    // current vertex is an exit
+    // adds the vertext to the route backwards
+    list.add(0, node);
+}
+{% endhighlight %}
+
 [evaluate-division]: https://leetcode.com/problems/evaluate-division/
 [find-the-celebrity]: https://leetcode.com/problems/find-the-celebrity/
 [find-the-town-judge]: https://leetcode.com/problems/find-the-town-judge/
 [graph-valid-tree]: https://leetcode.com/problems/graph-valid-tree/
 [is-graph-bipartite]: https://leetcode.com/problems/is-graph-bipartite/
+[reconstruct-itinerary]: https://leetcode.com/problems/reconstruct-itinerary/

@@ -38,7 +38,7 @@ In C and C++, the remainder operator accepts only integral operands, but in the 
 {% highlight java %}
 dividend / divisor
 result = Math.abs(dividend) / Math.abs(divisor)
-magnitude = Integer.signum(dividend) * (Math.abs(dividend) % Math.abs(divisor))
+remainder = Integer.signum(dividend) * (Math.abs(dividend) % Math.abs(divisor))
 {% endhighlight %}
 
 {% highlight java %}
