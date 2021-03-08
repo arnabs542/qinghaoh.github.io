@@ -177,8 +177,55 @@ private int rob(int[] nums, int start, int end) {
 }
 {% endhighlight %}
 
+[Delete and Earn][delete-and-earn]
+
+{% highlight java %}
+public int deleteAndEarn(int[] nums) {
+    int[] sum = new int[10001];
+    for (int num : nums) {
+        sum[num] += num;
+    }
+
+    int take = 0, skip = 0;
+    for (int s : sum) {
+        int tmp = skip;
+        skip = Math.max(skip, take);
+        take = tmp + s;
+    }
+    return Math.max(take, skip);
+}
+{% endhighlight %}
+
+[Number of Sets of K Non-Overlapping Line Segments][number-of-sets-of-k-non-overlapping-line-segments]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int numberOfSets(int n, int k) {
+    // dp[][i][j]
+    // 0: lines don't start from i
+    // 1: lines start from i
+    int[][][] dp = new int[2][n][k + 1];
+    for (int j = 0; j < n; j++) {
+        dp[0][j][0] = 1;
+        dp[1][j][0] = 1;
+    }
+
+    for (int i = n - 2; i >= 0; i--) {
+        for (int j = 1; j <= k; j++) {
+            dp[0][i][j] = (dp[0][i + 1][j] + dp[1][i + 1][j]) % MOD;
+            dp[1][i][j] = (dp[1][i + 1][j] + dp[0][i][j - 1]) % MOD;
+        }
+    }
+
+    return (dp[0][0][k] + dp[1][0][k]) % MOD;
+}
+{% endhighlight %}
+
 [best-time-to-buy-and-sell-stock-iii]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/
 [best-time-to-buy-and-sell-stock-iv]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/
 [best-time-to-buy-and-sell-stock-with-cooldown]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+[delete-and-earn]: https://leetcode.com/problems/delete-and-earn/
 [house-robber]: https://leetcode.com/problems/house-robber/
 [house-robber-ii]: https://leetcode.com/problems/house-robber-ii/
+[number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/

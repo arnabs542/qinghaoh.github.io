@@ -31,6 +31,20 @@ tag: map
 | last | | | highest |
 | sub | set | fromElement, toElement | [) |
 
+[BitSet](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/BitSet.html)
+
+[Distribute Candies][distribute-candies]
+
 {% highlight java %}
+private static final int MAX_NUM_TYPES = 2 * (int)1e5 + 1;
+
+public int distributeCandies(int[] candyType) {
+    BitSet bitset = new BitSet(MAX_NUM_TYPES);
+    for (int c : candyType) {
+        bitset.set(c + MAX_NUM_TYPES / 2);
+    }
+    return Math.min(candyType.length / 2, bitset.cardinality());
+}
 {% endhighlight %}
 
+[distribute-candies]:https://leetcode.com/problems/distribute-candies/

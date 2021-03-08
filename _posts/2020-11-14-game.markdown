@@ -39,6 +39,29 @@ public boolean stoneGame(int[] piles) {
 
 Alex can always take either all odd piles or all even piles, and one of the colors must have a sum number of stones larger than the other color.
 
+# Greedy
+
+[Stone Game VI][stone-game-vi]
+
+{% highlight java %}
+public int stoneGameVI(int[] aliceValues, int[] bobValues) {
+    int n = aliceValues.length, diff = 0;
+    int[] sum = new int[n];
+    for (int i = 0; i < n; i++) {
+        sum[i] = aliceValues[i] + bobValues[i];
+        // Bob takes all stones first
+        diff -= bobValues[i];
+    }
+
+    Arrays.sort(sum);
+    for (int i =  n - 1; i >= 0; i -= 2) {
+        diff += sum[i];
+    }
+
+    return Integer.compare(diff, 0);
+}
+{% endhighlight %}
+
 # Top-down DP
 
 [Can I Win][can-i-win]
@@ -188,3 +211,4 @@ public boolean canWin(String s) {
 [can-i-win]: https://leetcode.com/problems/can-i-win/
 [flip-game-ii]: https://leetcode.com/problems/flip-game-ii/
 [stone-game]: https://leetcode.com/problems/stone-game/
+[stone-game-vi]: https://leetcode.com/problems/stone-game-vi/

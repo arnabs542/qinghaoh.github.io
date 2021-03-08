@@ -187,6 +187,28 @@ public int minDistance1D(List<Integer> points) {
 }
 {% endhighlight %}
 
+# Combination
+
+[Number of Sets of K Non-Overlapping Line Segments][number-of-sets-of-k-non-overlapping-line-segments]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int numberOfSets(int n, int k) {
+    // equivalent to:
+    // n + k - 1 points, k segments, not allowed to share endpoints.
+    // C(n + k - 1, 2 * k)
+    // (n + k - 1)! / ((n - k - 1)! * (2 * k)!)
+    BigInteger count = BigInteger.valueOf(1);
+    for (int i = 1; i < k * 2 + 1; i++) {
+        count = count.multiply(BigInteger.valueOf(n + k - i));
+        count = count.divide(BigInteger.valueOf(i));
+    }
+    count = count.mod(BigInteger.valueOf(MOD));
+    return count.intValue();
+}
+{% endhighlight %}
+
 # Dearrangement
 
 $$ !n=(n-1)({!(n-1)}+{!(n-2)}) $$
@@ -200,5 +222,6 @@ $$ !n=n!\sum _{i=0}^{n}{\frac {(-1)^{i}}{i!}}, \quad n\geq 0 $$
 [count-sorted-vowel-strings]: https://leetcode.com/problems/count-sorted-vowel-strings/
 [escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/
 [implement-rand10-using-rand7]: https://leetcode.com/problems/implement-rand10-using-rand7/
+[number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
 [sparse-matrix-multiplication]: https://leetcode.com/problems/sparse-matrix-multiplication/
 

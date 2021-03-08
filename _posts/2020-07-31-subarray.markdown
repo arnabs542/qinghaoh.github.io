@@ -136,6 +136,25 @@ public int[] getModifiedArray(int length, int[][] updates) {
 
 If a substring occurs `n` times, any of its substring occurs at least `n` times. So a substring with length `minSize` will have the max occurrences.
 
+[Shortest Unsorted Continuous Subarray][shortest-unsorted-continuous-subarray]
+
+{% highlight java %}
+public int findUnsortedSubarray(int[] nums) {
+    int n = nums.length, start = -1, end = -2, min = nums[n - 1], max = nums[0];
+    for (int i = 1; i < n; i++) {
+        max = Math.max(max, nums[i]);
+        min = Math.min(min, nums[n - 1 - i]);
+        if (nums[i] < max) {
+            end = i;
+        }
+        if (nums[n - 1 - i] > min) {
+            start = n - 1 - i;
+        }
+    }
+    return end - start + 1;
+}
+{% endhighlight %}
+
 ## Dynamic Programming
 
 [Find Two Non-overlapping Sub-arrays Each With Target Sum][find-two-non-overlapping-sub-arrays-each-with-target-sum]
@@ -151,7 +170,7 @@ public int minSumOfLengths(int[] arr, int target) {
     int i = 0, j = 0, sum = 0, result = MAX, min = MAX;
     while (j < arr.length) {
         sum += arr[j];
-        while (sum > target){
+        while (sum > target) {
             sum -= arr[i++];
         }
 
@@ -214,5 +233,6 @@ public int numberOfArithmeticSlices(int[] A) {
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
 [product-of-the-last-k-numbers]: https://leetcode.com/problems/product-of-the-last-k-numbers/
 [range-addition]: https://leetcode.com/problems/range-addition/
+[shortest-unsorted-continuous-subarray]: https://leetcode.com/problems/shortest-unsorted-continuous-subarray/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/
 [subarrays-with-k-different-integers]: https://leetcode.com/problems/subarrays-with-k-different-integers/

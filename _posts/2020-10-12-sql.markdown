@@ -295,7 +295,37 @@ ORDER BY id
 ;
 {% endhighlight %}
 
-[actors-and-directors-who-cooperated-at-least-three-times]: https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
+[Nth Highest Salary][nth-highest-salary]
+
+{% highlight sql %}
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  DECLARE M INT;
+  SET M = N - 1;
+  RETURN (
+      # Write your MySQL query statement below.
+      SELECT DISTINCT Salary
+      FROM Employee
+      ORDER BY Salary DESC
+      LIMIT M, 1
+  );
+END
+{% endhighlight %}
+
+[Leetflex Banned Accounts][leetflex-banned-accounts]
+
+{% highlight sql %}
+SELECT
+    DISTINCT a.account_id
+FROM LogInfo a, LogInfo b
+-- BETWEEN is inclusive
+WHERE a.login BETWEEN b.login AND b.logout
+AND a.account_id = b.account_id
+AND a.ip_address != b.ip_address
+;
+{% endhighlight %}
+
+[actors-an-directors-who-cooperated-at-least-three-times]: https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
 [classes-more-than-5-students]: https://leetcode.com/problems/classes-more-than-5-students/
 [consecutive-available-seats]: https://leetcode.com/problems/consecutive-available-seats/
 [customer-placing-the-largest-number-of-orders]: https://leetcode.com/problems/customer-placing-the-largest-number-of-orders/
@@ -307,6 +337,8 @@ ORDER BY id
 [game-play-analysis-iii]: https://leetcode.com/problems/game-play-analysis-iii/
 [game-play-analysis-iv]: https://leetcode.com/problems/game-play-analysis-iv/
 [get-highest-answer-rate-question]: https://leetcode.com/problems/get-highest-answer-rate-question/
+[leetflex-banned-accounts]: https://leetcode.com/problems/leetflex-banned-accounts/
+[nth-highest-salary]: https://leetcode.com/problems/nth-highest-salary/
 [reformat-department-table]: https://leetcode.com/problems/reformat-department-table/
 [rising-temperature]: https://leetcode.com/problems/rising-temperature/
 [sales-person]: https://leetcode.com/problems/sales-person/

@@ -177,6 +177,27 @@ public int[] processQueries(int[] queries, int m) {
 }
 {% endhighlight %}
 
+[Create Sorted Array through Instructions][create-sorted-array-through-instructions]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int createSortedArray(int[] instructions) {
+    int max = 0;
+    for (int i : instructions) {
+        max = Math.max(max, i);
+    }
+
+    FenwickTree ft = new FenwickTree(max);
+    int cost = 0;
+    for (int i = 0; i < instructions.length; i++) {
+        cost = (int)(cost + Math.min(ft.sum(instructions[i] - 1), i - ft.sum(instructions[i])) % MOD) % MOD;
+        ft.add(instructions[i], 1);
+    }
+    return cost;
+}
+{% endhighlight %}
+
 ## 2D
 
 [Range Sum Query 2D - Mutable][range-sum-query-2d-mutable]
@@ -285,6 +306,7 @@ TreeNode -> Map<TreeNode, List<TreeNode>>
 [all-nodes-distance-k-in-binary-tree]: https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/
 [count-complete-tree-nodes]: https://leetcode.com/problems/count-complete-tree-nodes/
 [count-number-of-teams]: https://leetcode.com/problems/count-number-of-teams/
+[create-sorted-array-through-instructions]: https://leetcode.com/problems/create-sorted-array-through-instructions/
 [maximum-binary-tree]: https://leetcode.com/problems/maximum-binary-tree/
 [queries-on-a-permutation-with-key]: https://leetcode.com/problems/queries-on-a-permutation-with-key/
 [range-sum-query-mutable]: https://leetcode.com/problems/range-sum-query-mutable/

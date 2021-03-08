@@ -356,14 +356,46 @@ public int integerReplacement(int n) {
 }
 {% endhighlight %}
 
+[Divide Two Integers][divide-two-integers]
+
+{% highlight java %}
+public int divide(int dividend, int divisor) {
+    if (dividend == Integer.MIN_VALUE && divisor == -1) {
+        return Integer.MAX_VALUE;
+    }
+
+    int a = Math.abs(dividend), b = Math.abs(divisor), result = 0;
+    for (int i = 31; i >= 0; i--) {
+        if ((a >>> i) - b >= 0) {
+            result += 1 << i;
+            a -= b << i;
+        }
+    }
+
+    return (dividend > 0) == (divisor > 0) ? result : -result;
+}
+{% endhighlight %}
+
+[Missing Number][missing-number]
+
+{% highlight java %}
+    int missing = nums.length;
+    for (int i = 0; i < nums.length; i++) {
+        missing ^= i ^ nums[i];
+    }
+    return missing;
+{% endhighlight %}
+
 [binary-number-with-alternating-bits]: https://leetcode.com/problems/binary-number-with-alternating-bits/
 [concatenation-of-consecutive-binary-numbers]: https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/
 [circular-permutation-in-binary-representation]: https://leetcode.com/problems/circular-permutation-in-binary-representation/
+[divide-two-integers]: https://leetcode.com/problems/divide-two-integers/
 [find-root-of-n-ary-tree]: https://leetcode.com/problems/find-root-of-n-ary-tree/
 [flip-columns-for-maximum-number-of-equal-rows]: https://leetcode.com/problems/flip-columns-for-maximum-number-of-equal-rows/
 [integer-replacement]: https://leetcode.com/problems/integer-replacement/
 [k-th-symbol-in-grammar]: https://leetcode.com/problems/k-th-symbol-in-grammar/
 [maximum-xor-of-two-numbers-in-an-array]: https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/
+[missing-number]: https://leetcode.com/problems/missing-number/
 [single-number]: https://leetcode.com/problems/single-number/
 [single-number-ii]: https://leetcode.com/problems/single-number-ii/
 [single-number-iii]: https://leetcode.com/problems/single-number-iii/

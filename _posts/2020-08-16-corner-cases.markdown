@@ -388,6 +388,23 @@ public int maximumScore(int a, int b, int c) {
 }
 {% endhighlight %}
 
+[Nth Digit][nth-digit]
+
+{% highlight java %}
+public int findNthDigit(int n) {
+    long count = 9;
+    int len = 1;
+
+    while (n > len * count) {
+        n -= len * count;
+        len++;
+        count *= 10;
+    }
+
+    return Character.getNumericValue(Integer.toString((int)(count / 9) + (n - 1) / len).charAt((n - 1) % len));
+}
+{% endhighlight %}
+
 [circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
 [count-number-of-teams]: https://leetcode.com/problems/count-number-of-teams/
 [count-of-matches-in-tournament]: https://leetcode.com/problems/count-of-matches-in-tournament/
@@ -397,6 +414,7 @@ public int maximumScore(int a, int b, int c) {
 [minimum-area-rectangle]: https://leetcode.com/problems/minimum-area-rectangle/
 [minimum-time-difference]: https://leetcode.com/problems/minimum-time-difference/
 [most-visited-sector-in-a-circular-track]: https://leetcode.com/problems/most-visited-sector-in-a-circular-track/
+[nth-digit]: https://leetcode.com/problems/nth-digit/
 [number-of-steps-to-reduce-a-number-in-binary-representation-to-one]: https://leetcode.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one/
 [number-of-students-unable-to-eat-lunch]: https://leetcode.com/problems/number-of-students-unable-to-eat-lunch/
 [pour-water]: https://leetcode.com/problems/pour-water/
