@@ -59,6 +59,10 @@ public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
 }
 {% endhighlight %}
 
+[Minimum Knight Moves][minimum-knight-moves]
+
+Symmetry
+
 [Jump Game II][jump-game-ii]
 
 {% highlight java %}
@@ -305,6 +309,7 @@ private int rot(int[][] grid, int i, int j, int time) {
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
 [minimum-jumps-to-reach-home]: https://leetcode.com/problems/minimum-jumps-to-reach-home/
+[minimum-knight-moves]: https://leetcode.com/problems/minimum-knight-moves/
 [nested-list-weight-sum-ii]: https://leetcode.com/problems/nested-list-weight-sum-ii/
 [rotting-oranges]: https://leetcode.com/problems/rotting-oranges/
 [the-maze]: https://leetcode.com/problems/the-maze/

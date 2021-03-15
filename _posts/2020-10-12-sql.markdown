@@ -325,9 +325,67 @@ AND a.ip_address != b.ip_address
 ;
 {% endhighlight %}
 
+[Immediate Food Delivery II][immediate-food-delivery-ii]
+
+{% highlight sql %}
+SELECT
+    ROUND(100 * SUM(
+        CASE order_date
+            WHEN customer_pref_delivery_date THEN 1
+            ELSE 0
+        END) / COUNT(distinct customer_id), 2) AS immediate_percentage
+FROM
+    Delivery
+WHERE
+    (customer_id, order_date)
+IN
+    (SELECT
+        customer_id, MIN(order_date) as min_date
+    FROM
+        Delivery
+    GROUP BY
+        customer_id
+    )
+;
+{% endhighlight %}
+
+[Countries You Can Safely Invest In][countries-you-can-safely-invest-in]
+
+{% highlight sql %}
+SELECT
+    co.name AS country
+FROM
+    Person p
+JOIN
+    Calls ca
+ON
+    p.id = ca.caller_id OR p.id = ca.callee_id
+JOIN
+    Country co
+ON
+    co.country_code = LEFT(p.phone_number, 3)
+GROUP BY
+    co.name
+HAVING
+    AVG(duration) > (SELECT AVG(duration) FROM Calls)
+;
+{% endhighlight %}
+
+# Functions
+
+{% highlight sql %}
+LEFT(str,len)
+{% endhighlight %}
+
+{% highlight sql %}
+DATE_FORMAT(date,format)
+{% endhighlight %}
+[format](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_date-format)
+
 [actors-an-directors-who-cooperated-at-least-three-times]: https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
 [classes-more-than-5-students]: https://leetcode.com/problems/classes-more-than-5-students/
 [consecutive-available-seats]: https://leetcode.com/problems/consecutive-available-seats/
+[countries-you-can-safely-invest-in]: https://leetcode.com/problems/countries-you-can-safely-invest-in/
 [customer-placing-the-largest-number-of-orders]: https://leetcode.com/problems/customer-placing-the-largest-number-of-orders/
 [customers-who-bought-all-products]: https://leetcode.com/problems/customers-who-bought-all-products/
 [employees-earning-more-than-their-managers]: https://leetcode.com/problems/employees-earning-more-than-their-managers/
@@ -337,6 +395,7 @@ AND a.ip_address != b.ip_address
 [game-play-analysis-iii]: https://leetcode.com/problems/game-play-analysis-iii/
 [game-play-analysis-iv]: https://leetcode.com/problems/game-play-analysis-iv/
 [get-highest-answer-rate-question]: https://leetcode.com/problems/get-highest-answer-rate-question/
+[immediate-food-delivery-ii]: https://leetcode.com/problems/immediate-food-delivery-ii/
 [leetflex-banned-accounts]: https://leetcode.com/problems/leetflex-banned-accounts/
 [nth-highest-salary]: https://leetcode.com/problems/nth-highest-salary/
 [reformat-department-table]: https://leetcode.com/problems/reformat-department-table/

@@ -499,6 +499,44 @@ private int backtrack(int num, int level, boolean[] visited) {
 }
 {% endhighlight %}
 
+# NP Complete
+
+[Optimal Account Balancing][optimal-account-balancing]
+
+{% highlight java %}
+// NP-complete
+public int minTransfers(int[][] transactions) {
+    Map<Integer, Integer> g = new HashMap<>();
+    for (int[] t : transactions) {
+        g.put(t[0], g.getOrDefault(t[0], 0) - t[2]);
+        g.put(t[1], g.getOrDefault(t[1], 0) + t[2]);
+    }
+    return backtrack(0, g.values().stream().mapToInt(Integer::valueOf).toArray());
+}
+
+private int backtrack(int index, int[] debt) {
+    // skips 0 debt
+    while (index < debt.length && debt[index] == 0) {
+        index++;
+    }
+
+    if (index == debt.length) {
+        return 0;
+    }
+
+    int min = Integer.MAX_VALUE;
+    for (int i = index + 1; i < debt.length; i++) {
+        // + & -
+        if (debt[index] * debt[i] < 0) {
+            debt[i] += debt[index];
+            min = Math.min(min, 1 + backtrack(index + 1, debt));
+            debt[i] -= debt[index];
+        }
+    }
+    return min;
+}
+{% endhighlight %}
+
 [android-unlock-patterns]: https://leetcode.com/problems/android-unlock-patterns/
 [beautiful-arrangement]: https://leetcode.com/problems/beautiful-arrangement/
 [combination-sum]: https://leetcode.com/problems/combination-sum/
@@ -507,6 +545,7 @@ private int backtrack(int num, int level, boolean[] visited) {
 [factor-combinations]: https://leetcode.com/problems/factor-combinations/
 [generalized-abbreviation]: https://leetcode.com/problems/generalized-abbreviation/
 [matchsticks-to-square]: https://leetcode.com/problems/matchsticks-to-square/
+[optimal-account-balancing]: https://leetcode.com/problems/optimal-account-balancing/
 [palindrome-partitioning]: https://leetcode.com/problems/palindrome-partitioning/
 [palindrome-permutation-ii]: https://leetcode.com/problems/palindrome-permutation-ii/
 [partition-equal-subset-sum]: https://leetcode.com/problems/partition-equal-subset-sum/

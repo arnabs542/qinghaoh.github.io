@@ -128,10 +128,55 @@ public String rearrangeString(String s, int k) {
 }
 {% endhighlight %}
 
+# NP-Complete
+
+[Parallel Courses II][parallel-courses-ii]
+
+{% highlight java %}
+// NP-complete
+// O(3 ^ n)
+public int minNumberOfSemesters(int n, int[][] dependencies, int k) {
+    // bit mask of prerequisite courses
+    int[] p = new int[n];
+    for (int[] d : dependencies) {
+        p[d[1] - 1] |= 1 << (d[0] - 1);
+    }
+
+    int[] dp = new int[1 << n];
+    Arrays.fill(dp, n);
+    dp[0] = 0;
+
+    // state represents the courses that have been taken so far
+    for (int state = 0; state < (1 << n); state++) {
+        int courses = 0;
+        for (int i = 0; i < n; i++) {
+            // prerequisite courses of i is a subset of current state
+            // so we can take course i
+            if ((state & p[i]) == p[i]) {
+                courses |= (1 << i);
+            }
+        }
+
+        // removes courses that have been taken
+        courses &= ~state;
+
+        // enumerates all subsets of courses
+        for (int s = courses; s > 0; s = (s - 1) & courses) {
+            if (Integer.bitCount(s) <= k) {
+                // state | s is the next state after taking the courses in s
+                dp[state | s] = Math.min(dp[state | s], dp[state] + 1);
+            }
+        }
+    }
+    return dp[(1 << n) - 1];
+}
+{% endhighlight %}
+
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [longest-happy-string]: https://leetcode.com/problems/longest-happy-string/
 [maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
 [minimum-swaps-to-make-strings-equal]: https://leetcode.com/problems/minimum-swaps-to-make-strings-equal/
+[parallel-courses-ii]: https://leetcode.com/problems/parallel-courses-ii/
 [rearrange-string-k-distance-apart]: https://leetcode.com/problems/rearrange-string-k-distance-apart/
 [string-without-aaa-or-bbb]: https://leetcode.com/problems/string-without-aaa-or-bbb/
 [task-scheduler]: https://leetcode.com/problems/task-scheduler/

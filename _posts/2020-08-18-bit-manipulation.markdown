@@ -10,6 +10,7 @@ n ^ n = 0
 2k ^ (2k + 1) = 1
 n &= -n  // clears all but lsb
 n & (n - 1) == 0  // power of 2
+i = (i - 1) & superset // enumerate all subsets
 ```
 [Concatenation of Consecutive Binary Numbers][concatenation-of-consecutive-binary-numbers]
 

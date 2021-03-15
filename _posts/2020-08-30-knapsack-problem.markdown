@@ -146,6 +146,34 @@ private int subsetSum(int[] nums, int S) {
 }
 {% endhighlight %}
 
+[Last Stone Weight II][last-stone-weight-ii]
+
+{% highlight java %}
+private static final int MAX = 30 * 100;
+
+public int lastStoneWeightII(int[] stones) {
+    // smaller group
+    boolean[] dp = new boolean[MAX / 2 + 1];
+    dp[0] = true;
+
+    int sum = 0;
+    for (int s : stones) {
+        sum += s;
+        // min to ensure smaller group
+        for (int i = Math.min(MAX / 2, sum); i >= s; i--) {
+            dp[i] |= dp[i - s];
+        }
+    }
+
+    for (int i = sum / 2; i >= 0; i--) {
+        if (dp[i]) {
+            return sum - i - i;
+        }
+    }
+    return 0;
+}
+{% endhighlight %}
+
 [Ones and Zeroes][ones-and-zeroes]
 
 {% highlight java %}
@@ -337,6 +365,7 @@ public int coinChange(int[] coins, int amount) {
 [coin-change]: https://leetcode.com/problems/coin-change/
 [coin-change-2]: https://leetcode.com/problems/coin-change-2/
 [combination-sum-iv]: https://leetcode.com/problems/combination-sum-iv/
+[last-stone-weight-ii]: https://leetcode.com/problems/last-stone-weight-ii/
 [ones-and-zeroes]: https://leetcode.com/problems/ones-and-zeroes/
 [partition-equal-subset-sum]: https://leetcode.com/problems/partition-equal-subset-sum/
 [target-sum]: https://leetcode.com/problems/target-sum/

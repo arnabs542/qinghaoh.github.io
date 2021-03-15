@@ -87,6 +87,9 @@ min(max1, max2) + min(num1, num2) >= max(num1, num2) + min(num1, num2) = num1 + 
 
 Q.E.D.
 
+[Airplane Seat Assignment Probability][airplane-seat-assignment-probability]
+
+[airplane-seat-assignment-probability]: https://leetcode.com/problems/airplane-seat-assignment-probability/
 [array-partition-i]: https://leetcode.com/problems/array-partition-i/
 [distant-barcodes]: https://leetcode.com/problems/distant-barcodes/
 [reorganize-string]: https://leetcode.com/problems/reorganize-string/

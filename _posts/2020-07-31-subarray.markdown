@@ -104,6 +104,10 @@ public int getProduct(int k) {
 }
 {% endhighlight %}
 
+### Pre-computed
+
+[Shortest Distance to Target Color][shortest-distance-to-target-color]
+
 ## Discrete Time
 
 [Discrete Time](https://en.wikipedia.org/wiki/Discrete_time_and_continuous_time#Discrete_time) Signal Processing
@@ -233,6 +237,7 @@ public int numberOfArithmeticSlices(int[] A) {
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
 [product-of-the-last-k-numbers]: https://leetcode.com/problems/product-of-the-last-k-numbers/
 [range-addition]: https://leetcode.com/problems/range-addition/
+[shortest-distance-to-target-color]: https://leetcode.com/problems/shortest-distance-to-target-color/
 [shortest-unsorted-continuous-subarray]: https://leetcode.com/problems/shortest-unsorted-continuous-subarray/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/
 [subarrays-with-k-different-integers]: https://leetcode.com/problems/subarrays-with-k-different-integers/

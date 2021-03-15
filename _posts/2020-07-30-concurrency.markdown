@@ -94,29 +94,6 @@ public void third(Runnable printThird) throws InterruptedException {
 }
 {% endhighlight %}
 
-# Mutex
-
-[Mutex/Lock](https://en.wikipedia.org/wiki/Lock_(computer_science))
-
-* [void lock()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/concurrent/locks/Lock.html#lock())
-* [void unlock()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/concurrent/locks/Lock.html#unlock())
-
-[ReentrantLock](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/concurrent/locks/ReentrantLock.html)
-
-A reentrant mutual exclusion Lock with the same basic behavior and semantics as the implicit monitor lock accessed using synchronized methods and statements, but with extended capabilities.
-
-In computing, a computer program or subroutine is called reentrant if multiple invocations can safely run concurrently on a single processor system, where a reentrant procedure can be interrupted in the middle of its execution and then safely be called again ("re-entered") before its previous invocations complete execution.
-
-{% highlight java %}
-Lock l = ...;
-l.lock();
-try {
-    // access the resource protected by this lock
-} finally {
-    l.unlock();
-}
-{% endhighlight %}
-
 [The Dining Philosophers][the-dining-philosophers]
 
 [Dining philosophers problem](https://en.wikipedia.org/wiki/Dining_philosophers_problem)
@@ -164,6 +141,65 @@ public void wantsToEat(int philosopher,
 }
 {% endhighlight %}
 
+# Mutex
+
+[Mutex/Lock](https://en.wikipedia.org/wiki/Lock_(computer_science))
+
+* [void lock()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/concurrent/locks/Lock.html#lock())
+* [void unlock()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/concurrent/locks/Lock.html#unlock())
+
+[ReentrantLock](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/concurrent/locks/ReentrantLock.html)
+
+A reentrant mutual exclusion Lock with the same basic behavior and semantics as the implicit monitor lock accessed using **synchronized** methods and statements, but with extended capabilities.
+
+In computing, a computer program or subroutine is called reentrant if multiple invocations can safely run concurrently on a single processor system, where a reentrant procedure can be interrupted in the middle of its execution and then safely be called again ("re-entered") before its previous invocations complete execution.
+
+{% highlight java %}
+Lock l = ...;
+l.lock();
+try {
+    // access the resource protected by this lock
+} finally {
+    l.unlock();
+}
+{% endhighlight %}
+
+## Synchronized
+
+[Traffic Light Controlled Intersection][traffic-light-controlled-intersection]
+
+{% highlight java %}
+class TrafficLight {
+    private final Signal signal;
+
+    public TrafficLight() {
+        signal = new Signal();
+    }
+
+    public void carArrived(
+        int carId,           // ID of the car
+        int roadId,          // ID of the road the car travels on. Can be 1 (road A) or 2 (road B)
+        int direction,       // Direction of the car
+        Runnable turnGreen,  // Use turnGreen.run() to turn light to green on current road
+        Runnable crossCar    // Use crossCar.run() to make car cross the intersection
+    ) {
+        // allows only one car to pass at a time
+        synchronized(signal) {
+            if (signal.greenRoad != roadId) {
+                turnGreen.run();
+                signal.greenRoad = roadId;
+            }
+            crossCar.run();
+        }
+    }
+
+    class Signal {
+        int greenRoad = 1;  // road ID that's green
+    }
+}
+{% endhighlight %}
+
 [print_in_order]: https://leetcode.com/problems/print-in-order/
 [semaphore]: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Semaphore.html
 [the-dining-philosophers]: https://leetcode.com/problems/the-dining-philosophers/
+[traffic-light-controlled-intersection]: https://leetcode.com/problems/traffic-light-controlled-intersection/

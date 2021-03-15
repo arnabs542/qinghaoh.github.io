@@ -184,7 +184,7 @@ private boolean dfs(int[][] graph, int[] colors, int index, int color) {
 
 [Eulerian path](https://en.wikipedia.org/wiki/Eulerian_path): In graph theory, an **Eulerian trail** (or **Eulerian path**) is a trail in a finite graph that visits every edge exactly once (allowing for revisiting vertices). Similarly, an **Eulerian circuit** or **Eulerian cycle** is an Eulerian trail that starts and ends on the same vertex.
 
-** Euler's Theorem **:
+**Euler's Theorem**:
 
 A connected graph has an Euler cycle if and only if every vertex has even degree.
 
