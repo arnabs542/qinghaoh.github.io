@@ -111,7 +111,12 @@ String[] array = list.toArray(new String[0])
 {% endhighlight %}
 
 # Math
-* [public static double random()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html#random())
+* [public static double random()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html#random()): it internally uses `Random.nextDouble()`
+
+{% highlight java %}
+// number of digits in n
+int k = (int) (Math.log10(n) + 1);
+{% endhighlight %}
 
 # Object
 * [protected Object clone() throws CloneNotSupportedException](https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone--)

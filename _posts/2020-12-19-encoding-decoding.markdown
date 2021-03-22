@@ -152,8 +152,46 @@ public TreeNode str2tree(String s) {
 }
 {% endhighlight %}
 
+[Encode and Decode TinyURL][encode-and-decode-tinyurl]
+
+{% highlight java %}
+public class Codec {
+    // 62 chars
+    private static final String ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String PATH = "http://tinyurl.com/";
+
+    private Map<String, String> map = new HashMap<>();
+    private Random rand = new Random();
+    private String key = getRand();
+
+    private String getRand() {
+        StringBuilder sb = new StringBuilder();
+        // short url has 6 random chars
+        for (int i = 0; i < 6; i++) {
+            sb.append(ALPHABET.charAt(rand.nextInt(ALPHABET.length())));
+        }
+        return sb.toString();
+    }
+
+    // Encodes a URL to a shortened URL.
+    public String encode(String longUrl) {
+        while (map.containsKey(key)) {
+            key = getRand();
+        }
+        map.put(key, longUrl);
+        return PATH + key;
+    }
+
+    // Decodes a shortened URL to its original URL.
+    public String decode(String shortUrl) {
+        return map.get(shortUrl.replace(PATH, ""));
+    }
+}
+{% endhighlight %}
+
 [construct-binary-tree-from-string]: https://leetcode.com/problems/construct-binary-tree-from-string/
 [encode-and-decode-strings]: https://leetcode.com/problems/encode-and-decode-strings/
+[encode-and-decode-tinyurl]: https://leetcode.com/problems/encode-and-decode-tinyurl/
 [encode-n-ary-tree-to-binary-tree]: https://leetcode.com/problems/encode-n-ary-tree-to-binary-tree/
 [serialize-and-deserialize-binary-tree]: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
 [serialize-and-deserialize-n-ary-tree]: https://leetcode.com/problems/serialize-and-deserialize-n-ary-tree/

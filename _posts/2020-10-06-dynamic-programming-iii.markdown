@@ -196,6 +196,21 @@ public int deleteAndEarn(int[] nums) {
 }
 {% endhighlight %}
 
+[Wiggle Subsequence][wiggle-subsequence]
+
+{% highlight java %}
+// max wiggle sequence length so far at index i
+    int up = 1, down = 1;
+    for (int i = 1; i < nums.length; i++) {
+        if (nums[i] > nums[i - 1]) {
+            up = down + 1;
+        } else if (nums[i] < nums[i - 1]) {
+            down = up + 1;
+        }
+    }
+    return Math.max(up, down);
+{% endhighlight %}
+
 [Number of Sets of K Non-Overlapping Line Segments][number-of-sets-of-k-non-overlapping-line-segments]
 
 {% highlight java %}
@@ -229,3 +244,4 @@ public int numberOfSets(int n, int k) {
 [house-robber]: https://leetcode.com/problems/house-robber/
 [house-robber-ii]: https://leetcode.com/problems/house-robber-ii/
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
+[wiggle-subsequence]: https://leetcode.com/problems/wiggle-subsequence/

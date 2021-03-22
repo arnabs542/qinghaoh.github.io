@@ -83,3 +83,25 @@ Collections.max(map.entrySet(), Map.Entry.comparingByValue()).getKey();
 # Map.Entry
 * [static \<K,V extends Comparable\<? super V\>\> Comparator\<Map.Entry\<K,V\>\> comparingByValue()](https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html#comparingByValue--)
 
+[Making File Names Unique][making-file-names-unique]
+
+{% highlight java %}
+public String[] getFolderNames(String[] names) {
+    String[] folders = new String[names.length];
+    // name: smallest valid integer
+    Map<String, Integer> map = new HashMap<>();
+    for (int i = 0; i < names.length; i++) {
+        String curr = names[i];
+        int count = map.getOrDefault(curr, 1);
+        while (map.containsKey(curr)) {
+            curr = names[i] + "(" + count++ + ")";
+        }
+        map.put(curr, 1);
+        map.put(names[i], count);
+        folders[i] = curr;
+    }
+    return folders;
+}
+{% endhighlight %}
+
+[making-file-names-unique]: https://leetcode.com/problems/making-file-names-unique/

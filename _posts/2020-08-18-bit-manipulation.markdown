@@ -387,6 +387,34 @@ public int divide(int dividend, int divisor) {
     return missing;
 {% endhighlight %}
 
+[UTF-8 Validation][utf-8-validation]
+
+{% highlight java %}
+public boolean validUtf8(int[] data) {
+    int count = 0;
+    for (int d : data) {
+        d = d & 255;
+        if (count == 0) {
+            if ((d >> 5) == 0b110) {
+                count = 1;
+            } else if ((d >> 4) == 0b1110) {
+                count = 2;
+            } else if ((d >> 3) == 0b11110) {
+                count = 3;
+            } else if ((d >> 7) != 0) {
+                return false;
+            }
+        } else {
+            if ((d >> 6) != 0b10) {
+                return false;
+            }
+            count--;
+        }
+    }
+    return count == 0;
+}
+{% endhighlight %}
+
 [binary-number-with-alternating-bits]: https://leetcode.com/problems/binary-number-with-alternating-bits/
 [concatenation-of-consecutive-binary-numbers]: https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/
 [circular-permutation-in-binary-representation]: https://leetcode.com/problems/circular-permutation-in-binary-representation/
@@ -401,4 +429,5 @@ public int divide(int dividend, int divisor) {
 [single-number-ii]: https://leetcode.com/problems/single-number-ii/
 [single-number-iii]: https://leetcode.com/problems/single-number-iii/
 [total-hamming-distance]: https://leetcode.com/problems/total-hamming-distance/
+[utf-8-validation]: https://leetcode.com/problems/utf-8-validation/
 [xor-operation-in-an-array]: https://leetcode.com/problems/xor-operation-in-an-array/

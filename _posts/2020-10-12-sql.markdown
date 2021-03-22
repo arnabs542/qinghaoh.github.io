@@ -295,6 +295,25 @@ ORDER BY id
 ;
 {% endhighlight %}
 
+[Calculate Salaries][calculate-salaries]
+
+{% highlight sql %}
+SELECT
+    company_id,
+    employee_id,
+    employee_name,
+    CASE WHEN max_salary < 1000 THEN salary
+         WHEN max_salary > 10000 THEN ROUND(salary * (1 - 0.49))
+         ELSE ROUND(salary * (1 - 0.24)) END AS salary
+FROM
+    (SELECT
+        s.*,
+        MAX(salary) OVER(PARTITION BY company_id) AS max_salary
+     FROM
+        Salaries s) m
+;
+{% endhighlight %}
+
 [Nth Highest Salary][nth-highest-salary]
 
 {% highlight sql %}
@@ -371,6 +390,38 @@ HAVING
 ;
 {% endhighlight %}
 
+[Product Price at a Given Date][product-price-at-a-given-date]
+
+{% highlight sql %}
+SELECT
+    DISTINCT product_id, 10 as price
+FROM
+    Products
+GROUP BY
+    product_id
+HAVING
+    MIN(change_date) > '2019-08-16'
+
+UNION
+
+SELECT
+    product_id, new_price
+FROM
+    Products
+WHERE
+    (product_id, change_date)
+IN
+    (SELECT
+        product_id, MAX(change_date) AS recent_date
+    FROM
+        Products
+    WHERE
+        change_date <= "2019-08-16"
+    GROUP BY
+        product_id)
+;
+{% endhighlight %}
+
 # Functions
 
 {% highlight sql %}
@@ -382,7 +433,12 @@ DATE_FORMAT(date,format)
 {% endhighlight %}
 [format](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_date-format)
 
+{% highlight sql %}
+YEAR(date)
+{% endhighlight %}
+
 [actors-an-directors-who-cooperated-at-least-three-times]: https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
+[calculate-salaries]: https://leetcode.com/problems/calculate-salaries/
 [classes-more-than-5-students]: https://leetcode.com/problems/classes-more-than-5-students/
 [consecutive-available-seats]: https://leetcode.com/problems/consecutive-available-seats/
 [countries-you-can-safely-invest-in]: https://leetcode.com/problems/countries-you-can-safely-invest-in/
@@ -398,6 +454,7 @@ DATE_FORMAT(date,format)
 [immediate-food-delivery-ii]: https://leetcode.com/problems/immediate-food-delivery-ii/
 [leetflex-banned-accounts]: https://leetcode.com/problems/leetflex-banned-accounts/
 [nth-highest-salary]: https://leetcode.com/problems/nth-highest-salary/
+[product-price-at-a-given-date]: https://leetcode.com/problems/product-price-at-a-given-date/
 [reformat-department-table]: https://leetcode.com/problems/reformat-department-table/
 [rising-temperature]: https://leetcode.com/problems/rising-temperature/
 [sales-person]: https://leetcode.com/problems/sales-person/

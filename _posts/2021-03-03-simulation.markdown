@@ -64,5 +64,32 @@ public double champagneTower(int poured, int query_row, int query_glass) {
 }
 {% endhighlight %}
 
+[Dota2 Senate][dota2-senate]
+
+{% highlight java %}
+public String predictPartyVictory(String senate) {
+    Queue<Integer> r = new LinkedList<>(), d = new LinkedList<>();
+    int n = senate.length();
+    for (int i = 0; i< n; i++) {
+        if (senate.charAt(i) == 'R') {
+            r.offer(i);
+        } else {
+            d.offer(i);
+        }
+    }
+
+    while (!r.isEmpty() && !d.isEmpty()) {
+        int ri = r.poll(), di = d.poll();
+        if (ri < di) {
+            r.offer(ri + n);
+        } else {
+            d.offer(di + n);
+        }
+    }
+    return r.size() > d.size() ? "Radiant" : "Dire";
+}
+{% endhighlight %}
+
 [champagne-tower]: https://leetcode.com/problems/champagne-tower/
+[dota2-senate]: https://leetcode.com/problems/dota2-senate/
 [pour-water]: https://leetcode.com/problems/pour-water/

@@ -68,6 +68,30 @@ public int minimumDeviation(int[] nums) {
 }
 {% endhighlight %}
 
+[Furthest Building You Can Reach][furthest-building-you-can-reach]
+
+{% highlight java %}
+public int furthestBuilding(int[] heights, int bricks, int ladders) {
+    Queue<Integer> pq = new PriorityQueue<>();
+    for (int i = 0; i < heights.length - 1; i++) {
+        int d = heights[i + 1] - heights[i];
+        if (d > 0) {
+            pq.add(d);
+        }
+
+        // it's optimal to use ladders in largest jumps
+        if (pq.size() > ladders) {
+            bricks -= pq.poll();
+        }
+
+        if (bricks < 0) {
+            return i;
+        }
+    }
+    return heights.length - 1;
+}
+{% endhighlight %}
+
 [k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
 [kth-smallest-element-in-a-sorted-matrix]: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
 [maximize-sum-of-array-after-k-negations]: https://leetcode.com/problems/maximize-sum-of-array-after-k-negations/
