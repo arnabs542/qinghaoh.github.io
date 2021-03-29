@@ -104,4 +104,44 @@ public String[] getFolderNames(String[] names) {
 }
 {% endhighlight %}
 
+[Vowel Spellchecker][vowel-spellchecker]
+
+{% highlight java %}
+public String[] spellchecker(String[] wordlist, String[] queries) {
+    Set<String> words = new HashSet<>();
+    Map<String, String> cap = new HashMap<>(), vowel = new HashMap<>();
+
+    for (String w : wordlist) {
+        words.add(w);
+        String lower = w.toLowerCase(), devowel = lower.replaceAll("[aeiou]", "#");
+        cap.putIfAbsent(lower, w);
+        vowel.putIfAbsent(devowel, w);
+    }
+
+    int n = queries.length;
+    String[] result = new String[n];
+    for (int i = 0; i < n; i++) {
+        String q = queries[i];
+        if (words.contains(q)) {
+            result[i] = q;
+            continue;
+        }
+
+        String lower = q.toLowerCase(), devowel = lower.replaceAll("[aeiou]", "#");
+        if (cap.containsKey(lower)) {
+            result[i] = cap.get(lower);
+            continue;
+        }
+
+        if (vowel.containsKey(devowel)) {
+            result[i] = vowel.get(devowel);
+            continue;
+        }
+        result[i] = "";
+    }
+    return result;
+}
+{% endhighlight %}
+
 [making-file-names-unique]: https://leetcode.com/problems/making-file-names-unique/
+[vowel-spellchecker]: https://leetcode.com/problems/vowel-spellchecker/

@@ -189,9 +189,36 @@ public class Codec {
 }
 {% endhighlight %}
 
+[Find Duplicate Subtrees][find-duplicate-subtrees]
+
+{% highlight java %}
+private List<TreeNode> list = new ArrayList<>();
+private Map<String, Integer> map = new HashMap<>();
+
+// O(n ^ 2)
+public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+    dfs(root);
+    return list;
+}
+
+private String dfs(TreeNode node) {
+    if (node == null) {
+        return "#";
+    }
+
+    String s = node.val + "#" + dfs(node.left) + "#" + dfs(node.right);
+    map.put(s, map.getOrDefault(s, 0) + 1);
+    if (map.get(s) == 2) {
+        list.add(node);
+    }
+    return s;
+}
+{% endhighlight %}
+
 [construct-binary-tree-from-string]: https://leetcode.com/problems/construct-binary-tree-from-string/
 [encode-and-decode-strings]: https://leetcode.com/problems/encode-and-decode-strings/
 [encode-and-decode-tinyurl]: https://leetcode.com/problems/encode-and-decode-tinyurl/
 [encode-n-ary-tree-to-binary-tree]: https://leetcode.com/problems/encode-n-ary-tree-to-binary-tree/
+[find-duplicate-subtrees]: https://leetcode.com/problems/find-duplicate-subtrees/
 [serialize-and-deserialize-binary-tree]: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
 [serialize-and-deserialize-n-ary-tree]: https://leetcode.com/problems/serialize-and-deserialize-n-ary-tree/

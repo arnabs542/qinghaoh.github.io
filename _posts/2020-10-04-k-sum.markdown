@@ -33,6 +33,38 @@ Two pointers
 * Sort + O(n ^ (k - 2)) * Two pointers
 * O(n ^ (k - 2)) * Set/Map
 
+[3Sum With Multiplicity][3sum-with-multiplicity]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int threeSumMulti(int[] arr, int target) {
+    long[] c = new long[101];
+    for (int a : arr) {
+        c[a]++;
+    }
+
+    long num = 0;
+    for (int i = 0; i < c.length; i++) {
+        for (int j = i; j < c.length; j++) {
+            int k = target - i - j;
+            if (k >= c.length || k < 0) {
+                continue;
+            }
+
+            if (i == j && j == k) {
+                num += c[i] * (c[i] - 1) * (c[i] - 2) / 6;
+            } else if (i == j && j != k) {
+                num += c[i] * (c[i] - 1) / 2 * c[k];
+            } else if (j < k) {
+                num += c[i] * c[j] * c[k];
+            }
+        }
+    }
+    return (int)(num % MOD);
+}
+{% endhighlight %}
+
 [4Sum II][4sum-ii]
 
 `O(n ^ 2)`
@@ -65,6 +97,7 @@ public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
 [3sum]: https://leetcode.com/problems/3sum/
 [3sum-closest]: https://leetcode.com/problems/3sum-closest/
 [3sum-smaller]: https://leetcode.com/problems/3sum-smaller/
+[3sum-with-multiplicity]: https://leetcode.com/problems/3sum-with-multiplicity/
 [4sum-ii]: https://leetcode.com/problems/4sum-ii/
 [split-array-with-equal-sum]: https://leetcode.com/problems/split-array-with-equal-sum/
 [two-sum]: https://leetcode.com/problems/two-sum/

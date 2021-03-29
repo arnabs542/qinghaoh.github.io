@@ -116,6 +116,96 @@ public double largestSumOfAverages(int[] A, int K) {
 }
 {% endhighlight %}
 
+[Maximum Score from Performing Multiplication Operations][maximum-score-from-performing-multiplication-operations]
+
+{% highlight java %}
+private int n, m;
+private int[] nums, multipliers;
+private int[][] memo;
+
+public int maximumScore(int[] nums, int[] multipliers) {
+    this.n = nums.length;
+    this.m = multipliers.length;
+    this.nums= nums;
+    this.multipliers = multipliers;
+    this.memo = new int[m][m];  // m is much smaller than n, avoid MLE
+    for (int i = 0; i < m; i++) {
+        Arrays.fill(memo[i], Integer.MIN_VALUE);
+    }
+    return helper(0, 0);
+}
+
+private int helper(int start, int index) {
+    if (index == m) {
+        return 0;
+    }
+
+    if (memo[start][index] != Integer.MIN_VALUE) {
+        return memo[start][index];
+    }
+
+    int left = helper(start + 1, index + 1) + nums[start] * multipliers[index];
+    int right = helper(start, index + 1) + nums[start + n - index - 1] * multipliers[index];
+    return memo[start][index] = Math.max(left, right);
+}
+{% endhighlight %}
+
+[Minimum Score Triangulation of Polygon][minimum-score-triangulation-of-polygon]
+
+{% highlight java %}
+private int[][] memo;
+
+public int minScoreTriangulation(int[] values) {
+    int n = values.length;
+    memo = new int[n][n];
+    return minScore(values, 0, n - 1);
+}
+
+private int minScore(int[] values, int start, int end) {
+    if (start + 1 == end) {
+        return 0;
+    }
+
+    if (memo[start][end] > 0) {
+        return memo[start][end];
+    }
+
+    int min = Integer.MAX_VALUE;
+    for (int i = start + 1; i < end; i++) {
+        int sum = values[start] * values[end] * values[i];
+        sum += minScore(values, start, i);
+        sum += minScore(values, i, end);
+        min = Math.min(min, sum);
+    }
+    return memo[start][end] = min;
+}
+{% endhighlight %}
+
+{% highlight java %}
+public int minScoreTriangulation(int[] values) {
+    int n = values.length;        
+    int[][] dp = new int[n][n];
+    for (int i = n - 1; i >= 0; i--) {
+        for (int j = i + 2; j < n; j++) {
+            dp[i][j] = Integer.MAX_VALUE;
+            for (int k = i + 1; k < j; k++) {
+                dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k][j] + values[i] * values[j] * values[k]);
+            }
+        }
+    }
+    return dp[0][n - 1];
+}
+{% endhighlight %}
+
+{% highlight java %}
+    for (int j = 2; j < n; j++) {
+        for (int i = j - 2; i >= 0; i--) {
+
+        }
+    }
+}
+{% endhighlight %}
+
 ## State Transition
 
 [Partition to K Equal Sum Subsets][partition-to-k-equal-sum-subsets]
@@ -165,4 +255,6 @@ public boolean canPartitionKSubsets(int[] nums, int k) {
 {% endhighlight %}
 
 [largest-sum-of-averages]: https://leetcode.com/problems/largest-sum-of-averages/
+[maximum-score-from-performing-multiplication-operations]: https://leetcode.com/problems/maximum-score-from-performing-multiplication-operations/
+[minimum-score-triangulation-of-polygon]: https://leetcode.com/problems/minimum-score-triangulation-of-polygon/
 [partition-to-k-equal-sum-subsets]: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/

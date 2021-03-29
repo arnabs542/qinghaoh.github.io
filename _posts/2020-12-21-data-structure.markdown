@@ -143,6 +143,50 @@ private int hashCode(int key) {
 }
 {% endhighlight %}
 
+[Design a Stack With Increment Operation][design-a-stack-with-increment-operation]
+
+{% highlight java %}
+private Deque<Integer> stack = new ArrayDeque<>();
+private int[] inc;
+private int maxSize = 0;
+
+public CustomStack(int maxSize) {
+    this.maxSize = maxSize;
+    this.inc = new int[maxSize];
+}
+
+public void push(int x) {
+    if (stack.size() < maxSize) {
+        stack.push(x);
+    }
+}
+
+public int pop() {
+    int i = stack.size() - 1;
+    if (i < 0) {
+        return -1;
+    }
+
+    if (i > 0) {
+        inc[i - 1] += inc[i];
+    }
+
+    int num = stack.pop() + inc[i];
+    inc[i] = 0;
+    return num;
+}
+
+// lazy increment
+public void increment(int k, int val) {
+    // 0-indexed inc
+    int i = Math.min(k, stack.size()) - 1;
+    if (i >= 0) {
+        inc[i] += val;
+    }
+}
+{% endhighlight %}
+
+[design-a-stack-with-increment-operation]: https://leetcode.com/problems/design-a-stack-with-increment-operation/
 [design-hashmap]: https://leetcode.com/problems/design-phone-hashmap/
 [design-phone-directory]: https://leetcode.com/problems/design-phone-directory/
 [lru-cache]: https://leetcode.com/problems/lru-cache/

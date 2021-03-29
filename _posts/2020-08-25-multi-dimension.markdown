@@ -166,6 +166,36 @@ public int[][] matrixBlockSum(int[][] mat, int K) {
 
 [Lonely Pixel I][lonely-pixel-i]
 
+# Traversal
+
+[Diagonal Traverse II][diagonal-traverse-ii]
+
+{% highlight java %}
+public int[] findDiagonalOrder(List<List<Integer>> nums) {
+    List<Deque<Integer>> diags = new ArrayList<>();
+    int n = 0;
+    for (int i = 0; i < nums.size(); i++) {
+        List<Integer> row = nums.get(i);
+        for (int j = 0; j < row.size(); j++, n++) {
+            if (i + j == diags.size()) {
+                diags.add(new ArrayDeque<>());
+            }
+            diags.get(i + j).push(row.get(j));
+        }
+    }
+
+    int[] result = new int[n];
+    int i = 0;
+    for (Deque<Integer> d : diags) {
+        for (int num : d) {
+            result[i++] = num;
+        }
+    }
+    return result;
+}
+{% endhighlight %}
+
+[diagonal-traverse-ii]: https://leetcode.com/problems/diagonal-traverse-ii/
 [edit-distance]: https://leetcode.com/problems/edit-distance/
 [find-positive-integer-solution-for-a-given-equation]: https://leetcode.com/problems/find-positive-integer-solution-for-a-given-equation/
 [lonely-pixel-i]: https://leetcode.com/problems/lonely-pixel-i/

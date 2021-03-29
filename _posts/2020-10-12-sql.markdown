@@ -24,6 +24,20 @@ UPDATE salary
 SET sex = CHAR(ASCII('f') ^ ASCII('m') ^ ASCII(sex));
 {% endhighlight %}
 
+[Percentage of Users Attended a Contest][percentage-of-users-attended-a-contest]
+
+{% highlight sql %}
+SELECT
+    contest_id, ROUND(COUNT(DISTINCT user_id) / (SELECT COUNT(*) FROM Users) * 100, 2) AS percentage
+FROM
+    Register
+GROUP BY
+    contest_id
+ORDER BY
+    percentage DESC, contest_id
+;
+{% endhighlight %}
+
 [Classes More Than 5 Students][classes-more-than-5-students]
 
 {% highlight sql %}
@@ -422,6 +436,36 @@ IN
 ;
 {% endhighlight %}
 
+[Number of Trusted Contacts of a Customer][number-of-trusted-contacts-of-a-customer]
+
+{% highlight sql %}
+SELECT
+    i.invoice_id,
+    cu.customer_name,
+    i.price,
+    COUNT(co.user_id) as contacts_cnt,
+    COUNT(cu2.email) as trusted_contacts_cnt
+FROM
+    invoices i
+JOIN
+    Customers cu
+ON
+    cu.customer_id = i.user_id
+LEFT JOIN
+    Contacts co
+ON
+    co.user_id = cu.customer_id
+LEFT JOIN
+    Customers cu2
+ON
+    cu2.email = co.contact_email
+GROUP BY
+    i.invoice_id, cu.customer_name, i.price
+ORDER BY
+    i.invoice_id
+;
+{% endhighlight %}
+
 # Functions
 
 {% highlight sql %}
@@ -454,6 +498,8 @@ YEAR(date)
 [immediate-food-delivery-ii]: https://leetcode.com/problems/immediate-food-delivery-ii/
 [leetflex-banned-accounts]: https://leetcode.com/problems/leetflex-banned-accounts/
 [nth-highest-salary]: https://leetcode.com/problems/nth-highest-salary/
+[number-of-trusted-contacts-of-a-customer]: https://leetcode.com/problems/number-of-trusted-contacts-of-a-customer/
+[percentage-of-users-attended-a-contest]: https://leetcode.com/problems/percentage-of-users-attended-a-contest/
 [product-price-at-a-given-date]: https://leetcode.com/problems/product-price-at-a-given-date/
 [reformat-department-table]: https://leetcode.com/problems/reformat-department-table/
 [rising-temperature]: https://leetcode.com/problems/rising-temperature/

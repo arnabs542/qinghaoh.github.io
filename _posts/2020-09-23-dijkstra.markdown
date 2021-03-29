@@ -7,6 +7,39 @@ tags: graph
 
 Dijkstra's Shortest Path First algorithm (SPF algorithm) is an algorithm for finding the shortest paths between nodes in a graph
 
+```
+function Dijkstra(Graph, source):
+
+    create vertex set Q
+
+    for each vertex v in Graph:
+        dist[v] ← INFINITY
+        prev[v] ← UNDEFINED
+        add v to Q
+    dist[source] ← 0
+
+    while Q is not empty:
+        u ← vertex in Q with min dist[u]
+
+        remove u from Q
+
+        for each neighbor v of u:           // only v that are still in Q
+            alt ← dist[u] + length(u, v)
+            if alt < dist[v]:
+                dist[v] ← alt
+                prev[v] ← u
+
+    return dist[], prev[]
+```
+
+Comparison with BFS:
+
+|       | BFS  | Dijkstra |
+|-------| ------------- | ------------- |
+| graph | unweighted  | weighted  |
+| queue | queue  | priority queue  |
+| time complexity | O(V + E) | O(V + Elog(V)) |
+
 [Path with Maximum Probability][path-with-maximum-probability]
 
 {% highlight java %}
@@ -90,6 +123,10 @@ public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
 }
 {% endhighlight %}
 
+## Variations
+
+Cost function is monotonically increasing/decreasing.
+
 [Path with Minimum Effort][path-with-minimum-effort]
 
 {% highlight java %}
@@ -134,6 +171,8 @@ public int minimumEffortPath(int[][] heights) {
 }
 {% endhighlight %}
 
+[Path With Maximum Minimum Value][path-with-maximum-minimum-value]
+
 [Campus Bikes II][campus-bikes-ii]
 
 {% highlight java %}
@@ -171,5 +210,6 @@ private int distance(int[] p1, int[] p2) {
 
 [campus-bikes-ii]: https://leetcode.com/problems/campus-bikes-ii/
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
+[path-with-maximum-minimum-value]: https://leetcode.com/problems/path-with-maximum-minimum-value/
 [path-with-maximum-probability]: https://leetcode.com/problems/path-with-maximum-probability/
 [path-with-minimum-effort]: https://leetcode.com/problems/path-with-minimum-effort/

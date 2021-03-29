@@ -189,13 +189,19 @@ The algorithm will take an average of $$ M $$ iterations to obtain a sample.
 
 [Implement Rand10() Using Rand7()][implement-rand10-using-rand7]
 
+![rand7 to rand10](https://leetcode.com/problems/implement-rand10-using-rand7/Figures/470/rejectionSamplingTable.png)
+
+(from https://leetcode.com/problems/implement-rand10-using-rand7/Figures/470/rejectionSamplingTable.png)
+
 {% highlight java %}
 public int rand10() {
-    int num = 0;
+    int row, col, index;
     do {
-        num = (rand7() - 1) * 7 + rand7();
-    } while (num > 40);
-    return (num - 1) % 10 + 1;
+        row = rand7();
+        col = rand7();
+        index = col + (row - 1) * 7;
+    } while (index > 40);
+    return 1 + index % 10;
 }
 {% endhighlight %}
 
