@@ -4,6 +4,8 @@ title:  "Mathematics"
 tags: math
 usemathjax: true
 ---
+# Theorem
+
 [Lagrange's four-square theorem](https://en.wikipedia.org/wiki/Lagrange%27s_four-square_theorem)
 
 Lagrange's four-square theorem, also known as Bachet's conjecture, states that every natural number can be represented as the sum of four integer squares. That is, the squares form an additive basis of order four.
@@ -36,6 +38,21 @@ $$ T={\frac {1}{2}}{\big |}(x_{A}-x_{C})(y_{B}-y_{A})-(x_{A}-x_{B})(y_{C}-y_{A})
 [Euclid-Euler theorem](https://en.wikipedia.org/wiki/Euclid%E2%80%93Euler_theorem)
 
 The Euclid–Euler theorem is a theorem in mathematics that relates perfect numbers to Mersenne primes. It states that an even number is perfect if and only if it has the form $$ 2p−1(2p − 1) $$, where $$ 2p − 1 $$ is a prime number. 
+
+[Euler's theorem](https://en.wikipedia.org/wiki/Euler's_theorem)
+
+In number theory, Euler's theorem (also known as the Fermat–Euler theorem or Euler's totient theorem) states that if n and a are coprime positive integers, then a raised to the power of the totient of n is congruent to one, modulo n, or:
+
+$$ a^{\varphi (n)} \equiv 1 \pmod{n} $$
+
+where $$ \varphi (n) $$ is Euler's totient function.
+
+**Euler's totient function** counts the positive integers up to a given integer $$ n $$ that are relatively prime to $$ n $$.
+
+[Super Pow][super-pow]
+
+{% highlight java %}
+{% endhighlight %}
 
 [Floor and celing functions](https://en.wikipedia.org/wiki/Floor_and_ceiling_functions)
 
@@ -215,6 +232,41 @@ $$ !n=(n-1)({!(n-1)}+{!(n-2)}) $$
 
 $$ !n=n!\sum _{i=0}^{n}{\frac {(-1)^{i}}{i!}}, \quad n\geq 0 $$
 
+# Exponentiation
+
+[Exponentiation by squaring](https://en.wikipedia.org/wiki/Exponentiation_by_squaring): square-and-multiply/binary exponentiation/double-and-add
+
+$$ x^{n}={\begin{cases}x\,(x^{2})^{\frac {n-1}{2}},&{\mbox{if }}n{\mbox{ is odd}}\\(x^{2})^{\frac {n}{2}},&{\mbox{if }}n{\mbox{ is even}}.\end{cases}} $$
+
+If we write $$ n $$ in binary as $$ b_{k}\cdots b_{0} $$, then this is equivalent to defining a sequence $$ r_{k+1}, \ldots, r_{0} $$ by letting $$ r_{k+1} = 1 $$ and then defining $$ r_{i}=r_{i+1}^{2}x^{b_{i}} $$ for $$ i = k, \ldots, 0 $$, where $$ r_{0} $$ will equal $$ x^{n} $$.
+
+[Pow(x, n)][powx-n]
+
+![Exponentiation by squaring](/assets/powx_n.png)
+
+{% highlight java %}
+public double myPow(double x, int n) {
+    // if n == Integer.MIN_VALUE, -n would overflow
+    // so n is converted to long
+    long nl = n;
+    if (nl < 0) {
+        x = 1 / x;
+        nl = -nl;
+    }
+
+    // fast power algorithm
+    // r = x ^ 0
+    double r = 1, pow = x;
+    for (long i = nl; i > 0; i /= 2) {
+        if (i % 2 == 1) {
+            r *= pow;
+        }
+        pow *= pow;
+    }
+    return r;
+}
+{% endhighlight %}
+
 [2-keys-keyboard]: https://leetcode.com/problems/2-keys-keyboard/
 [4-keys-keyboard]: https://leetcode.com/problems/4-keys-keyboard/
 [best-meeting-point]: https://leetcode.com/problems/best-meeting-point/
@@ -223,5 +275,7 @@ $$ !n=n!\sum _{i=0}^{n}{\frac {(-1)^{i}}{i!}}, \quad n\geq 0 $$
 [escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/
 [implement-rand10-using-rand7]: https://leetcode.com/problems/implement-rand10-using-rand7/
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
+[powx-n]: https://leetcode.com/problems/powx-n/
 [sparse-matrix-multiplication]: https://leetcode.com/problems/sparse-matrix-multiplication/
+[super-pow]: https://leetcode.com/problems/super-pow/
 

@@ -216,11 +216,11 @@ public List<Integer> largestValues(TreeNode root) {
         return list;
     }
 
-    dps(root, list, 0);
+    dfs(root, list, 0);
     return list;
 }
 
-private void dps(TreeNode node, List<Integer> list, int depth) {
+private void dfs(TreeNode node, List<Integer> list, int depth) {
     if (node == null) {
         return;
     }
@@ -231,8 +231,37 @@ private void dps(TreeNode node, List<Integer> list, int depth) {
         list.set(depth, Math.max(list.get(depth), node.val));
     }
 
-    dps(node.left, list, depth + 1);
-    dps(node.right, list, depth + 1);
+    dfs(node.left, list, depth + 1);
+    dfs(node.right, list, depth + 1);
+}
+{% endhighlight %}
+
+[Flip Binary Tree To Match Preorder Traversal][flip-binary-tree-to-match-preorder-traversal]
+
+{% highlight java %}
+private List<Integer> list = new ArrayList<>();
+private int index = 0;
+
+public List<Integer> flipMatchVoyage(TreeNode root, int[] voyage) {
+    return dfs(root, voyage) ? list : Arrays.asList(-1);
+}
+
+// preorder
+private boolean dfs(TreeNode node, int[] voyage) {
+    if (node == null) {
+        return true;
+    }
+
+    if (node.val != voyage[index++]) {
+        return false;
+    }
+
+    if (node.left != null && node.left.val != voyage[index]) {
+        list.add(node.val);
+        return dfs(node.right, voyage) && dfs(node.left, voyage);
+    }
+
+    return dfs(node.left, voyage) && dfs(node.right, voyage);
 }
 {% endhighlight %}
 
@@ -582,6 +611,7 @@ public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
 [construct-binary-tree-from-preorder-and-inorder-traversal]: https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
 [construct-binary-tree-from-preorder-and-postorder-traversal]: https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/
 [find-largest-value-in-each-tree-row]: https://leetcode.com/problems/find-largest-value-in-each-tree-row/
+[flip-binary-tree-to-match-preorder-traversal]: https://leetcode.com/problems/flip-binary-tree-to-match-preorder-traversal/
 [inorder-successor-in-bst]: https://leetcode.com/problems/inorder-successor-in-bst/
 [inorder-successor-in-bst-ii]: https://leetcode.com/problems/inorder-successor-in-bst-ii/
 [verify-preorder-sequence-in-binary-search-tree]: https://leetcode.com/problems/verify-preorder-sequence-in-binary-search-tree/

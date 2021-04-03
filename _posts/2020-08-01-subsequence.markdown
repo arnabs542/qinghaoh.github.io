@@ -91,12 +91,14 @@ public boolean isSubsequence(String s, String t) {
 [Longest Increasing][longest-increasing-subsequence]
 
 {% highlight java %}
+// O(n ^ 2)
 public int lengthOfLIS(int[] nums) {
+    int n = nums.length;
     // dp[i]: LIS ends at index i
-    int[] dp = new int[nums.length];
+    int[] dp = new int[n];
 
     int max = 0;
-    for (int i = 0; i < nums.length; i++) {
+    for (int i = 0; i < n; i++) {
         dp[i] = 1;
         for (int j = 0; j < i; j++) {
             if (nums[j] < nums[i]) {
@@ -110,11 +112,18 @@ public int lengthOfLIS(int[] nums) {
 }
 {% endhighlight %}
 
-Similar problem: [Largest Divisible Subset][largest-divisible-subset]
+Similar problems:
+* [Largest Divisible Subset][largest-divisible-subset]
+* [Russian Doll Envelopes][russian-doll-envelopes]: 2D
 
 A quicker solution is [Patience sorting](https://en.wikipedia.org/wiki/Patience_sorting). [This](https://www.cs.princeton.edu/courses/archive/spring13/cos423/lectures/LongestIncreasingSubsequence.pdf) is a Princeton lecture for it.
 
+1. Initially, there are no piles. The first card dealt forms a new pile consisting of the single card.
+1. Each subsequent card is placed on the leftmost existing pile whose top card has a value greater than or equal to the new card's value, or to the right of all of the existing piles, thus forming a new pile.
+1. When there are no more cards remaining to deal, the game ends.
+
 {% highlight java %}
+// O(nlog(n))
 public int lengthOfLIS(int[] nums) {
     List<Integer> piles = new ArrayList<>(nums.length);
     for (int num : nums) {
@@ -150,8 +159,26 @@ public int lengthOfLIS(int[] nums) {
             count++;
         }
     }
-
     return count;
+}
+{% endhighlight %}
+
+[Russian Doll Envelopes][russian-doll-envelopes]
+
+{% highlight java %}
+public int maxEnvelopes(int[][] envelopes) {
+    // ascending in the first dimension and descending in the second
+    // so when the first dimension are equal, two envelopes won't be in the same increasing subsequence
+    Arrays.sort(envelopes, (a, b) -> a[0] == b[0] ? b[1] - a[1] : a[0] - b[0]);
+
+    // extracts the second dimension
+    int n = envelopes.length;
+    int[] h = new int[n];
+    for (int i = 0; i < n; i++) {
+        h[i] = envelopes[i][1];
+    }
+
+    return lengthOfLIS(h);
 }
 {% endhighlight %}
 
@@ -261,6 +288,7 @@ public int longestSubsequence(int[] arr, int difference) {
 [longest-arithmetic-subsequence-of-given-difference]: https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
 [longest-increasing-subsequence]: https://leetcode.com/problems/longest-increasing-subsequence/
 [is-subsequence]: https://leetcode.com/problems/is-subsequence/
+[russian-doll-envelopes]: https://leetcode.com/problems/russian-doll-envelopes/
 [shortest-common-subsequence]: https://leetcode.com/problems/shortest-common-subsequence/
 [smallest-range-ii]: https://leetcode.com/problems/smallest-range-ii/
 [sum-of-subsequence-widths]: https://leetcode.com/problems/sum-of-subsequence-widths/

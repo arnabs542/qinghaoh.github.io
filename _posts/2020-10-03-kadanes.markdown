@@ -54,6 +54,21 @@ public int maxSumAfterOperation(int[] nums) {
 }
 {% endhighlight %}
 
+[Maximum Subarray Sum with One Deletion][maximum-subarray-sum-with-one-deletion]
+
+{% highlight java %}
+public int maximumSum(int[] arr) {
+    int n = arr.length;
+    int oneDelete = 0, noDelete = arr[0], max = arr[0];
+    for (int i = 1; i < n; i++) {
+        oneDelete = Math.max(oneDelete + arr[i], noDelete);
+        noDelete = Math.max(noDelete + arr[i], arr[i]);
+        max = Math.max(max, Math.max(oneDelete, noDelete));
+    }
+    return max;
+}
+{% endhighlight %}
+
 [Best Time to Buy and Sell Stock][best-time-to-buy-and-sell-stock]
 
 {% highlight java %}
@@ -83,7 +98,7 @@ public int maxProfit(int[] prices) {
 {% highlight java %}
 public int maxScoreSightseeingPair(int[] A) {
     int max = 0, curr = 0;
-    for(int i = 0; i < A.length; i++) {
+    for (int i = 0; i < A.length; i++) {
         max = Math.max(max, curr + A[i] - i);
         curr = Math.max(curr, A[i] + i);
     }
@@ -107,3 +122,4 @@ public int maxScoreSightseeingPair(int[] A) {
 [best-sightseeing-pair]: https://leetcode.com/problems/best-sightseeing-pair/
 [best-time-to-buy-and-sell-stock]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
 [maximum-subarray-sum-after-one-operation]: https://leetcode.com/problems/maximum-subarray-sum-after-one-operation/
+[maximum-subarray-sum-with-one-deletion]: https://leetcode.com/problems/maximum-subarray-sum-with-one-deletion/

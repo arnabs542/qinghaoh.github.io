@@ -133,14 +133,10 @@ Cost function is monotonically increasing/decreasing.
 {% raw %}
 private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 {% endraw %}
-private static final int MAX = (int)1e6;
 
 public int minimumEffortPath(int[][] heights) {
     int m = heights.length, n = heights[0].length;
-    int[][] effort = new int[m][n];
-    for (int[] e : effort) {
-        Arrays.fill(e, MAX);
-    }
+    Set<Integer> visited = new HashSet<>();
 
     // i, j, effort
     Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[2]));
@@ -149,21 +145,16 @@ public int minimumEffortPath(int[][] heights) {
     while (!pq.isEmpty()) {
         int[] node = pq.poll();
         int i = node[0], j = node[1], e = node[2];
-        if (e > effort[i][j]) {
-            continue;
-        }
         if (i == m - 1 && j == n - 1) {
             return e;
         }
-        for (int[] d : DIRECTIONS) {
-            int r = i + d[0], c = j + d[1];
-            if (r == m || r < 0 || c == n || c < 0) {
-                continue;
-            }
-            int v = Math.max(Math.abs(heights[r][c] - heights[i][j]), e);
-            if (v < effort[r][c]) {
-                effort[r][c] = v;
-                pq.offer(new int[]{r, c, v});
+
+        if (visited.add(i * n + j)) {
+            for (int[] d : DIRECTIONS) {
+                int r = i + d[0], c = j + d[1];
+                if (r >= 0 && r < m && c >= 0 && c < n && !visited.contains(r * n + c)) {
+                    pq.offer(new int[]{r, c, Math.max(Math.abs(heights[r][c] - heights[i][j]), e)});
+                }
             }
         }
     }
@@ -172,6 +163,8 @@ public int minimumEffortPath(int[][] heights) {
 {% endhighlight %}
 
 [Path With Maximum Minimum Value][path-with-maximum-minimum-value]
+
+[Swim in Rising Water][swim-in-rising-water]
 
 [Campus Bikes II][campus-bikes-ii]
 
@@ -213,3 +206,4 @@ private int distance(int[] p1, int[] p2) {
 [path-with-maximum-minimum-value]: https://leetcode.com/problems/path-with-maximum-minimum-value/
 [path-with-maximum-probability]: https://leetcode.com/problems/path-with-maximum-probability/
 [path-with-minimum-effort]: https://leetcode.com/problems/path-with-minimum-effort/
+[swim-in-rising-water]: https://leetcode.com/problems/swim-in-rising-water/

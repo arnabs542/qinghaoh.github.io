@@ -306,6 +306,64 @@ private int rot(int[][] grid, int i, int j, int time) {
 }
 {% endhighlight %}
 
+# Bidirectional BFS
+
+[Word Ladder][word-ladder]
+
+{% highlight java %}
+public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+    if (!wordList.contains(endWord)) {
+        return 0;
+    }
+
+    Set<String> dict = new HashSet<>(wordList);
+    Set<String> beginSet = new HashSet<>(), endSet = new HashSet<>();
+    beginSet.add(beginWord);
+    endSet.add(endWord);
+
+    int len = 1;
+    Set<String> visited = new HashSet<>();
+
+    while (!beginSet.isEmpty() && !endSet.isEmpty()) {
+        // always makes beginSet the smaller one by swapping
+        if (beginSet.size() > endSet.size()) {
+            Set<String> tmp = beginSet;
+            beginSet = endSet;
+            endSet = tmp;
+        }
+
+        Set<String> set = new HashSet<>();  // next level of beginSet
+        for (String word : beginSet) {
+            char[] chs = word.toCharArray();
+
+            for (int i = 0; i < chs.length; i++) {
+                for (char c = 'a'; c <= 'z'; c++) {
+                    char old = chs[i];
+                    chs[i] = c;
+                    String target = String.valueOf(chs);
+
+                    // target is already visited in the other set
+                    if (endSet.contains(target)) {
+                        return len + 1;
+                    }
+
+                    if (!visited.contains(target) && dict.contains(target)) {
+                        set.add(target);
+                        visited.add(target);
+                    }
+                    chs[i] = old;
+                }
+            }
+        }
+
+        beginSet = set;
+        len++;
+    }
+
+    return 0;
+}
+{% endhighlight %}
+
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
 [minimum-jumps-to-reach-home]: https://leetcode.com/problems/minimum-jumps-to-reach-home/
@@ -315,3 +373,4 @@ private int rot(int[][] grid, int i, int j, int time) {
 [the-maze]: https://leetcode.com/problems/the-maze/
 [the-maze-ii]: https://leetcode.com/problems/the-maze-ii/
 [walls-and-gates]: https://leetcode.com/problems/walls-and-gates/
+[word-ladder]: https://leetcode.com/problems/word-ladder/

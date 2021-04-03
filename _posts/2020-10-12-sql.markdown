@@ -61,9 +61,32 @@ SELECT
     weather.id AS 'Id'
 FROM
     weather
-        JOIN
+JOIN
     weather w ON DATEDIFF(weather.recordDate, w.recordDate) = 1
         AND weather.Temperature > w.Temperature
+;
+{% endhighlight %}
+
+[Restaurant Growth][restaurant-growth]
+
+{% highlight sql %}
+WITH Day AS(
+    SELECT visited_on, SUM(amount) AS day_sum
+    FROM Customer
+    GROUP BY visited_on)
+
+SELECT
+    a.visited_on AS visited_on,
+    SUM(b.day_sum) AS amount,
+    ROUND(AVG(b.day_sum), 2) AS average_amount
+FROM
+    Day a, Day b
+WHERE
+    DATEDIFF(a.visited_on, b.visited_on) BETWEEN 0 AND 6
+GROUP BY
+    a.visited_on
+HAVING
+    COUNT(b.visited_on) = 7
 ;
 {% endhighlight %}
 
@@ -75,7 +98,8 @@ SELECT
             Salary
         FROM
             Employee
-        ORDER BY Salary DESC
+        ORDER BY
+            Salary DESC
         LIMIT 1 OFFSET 1) AS SecondHighestSalary
 ;
 {% endhighlight %}
@@ -83,10 +107,13 @@ SELECT
 {% highlight sql %}
 SELECT
     IFNULL(
-      (SELECT DISTINCT Salary
-       FROM Employee
-       ORDER BY Salary DESC
-        LIMIT 1 OFFSET 1),
+      (SELECT DISTINCT
+              Salary
+          FROM
+              Employee
+          ORDER BY
+              Salary DESC
+          LIMIT 1 OFFSET 1),
     NULL) AS SecondHighestSalary
 ;
 {% endhighlight %}
@@ -137,26 +164,32 @@ ORDER BY id
 [Game Play Analysis I][game-play-analysis-i]
 
 {% highlight sql %}
-SELECT player_id,
+SELECT
+    player_id,
     MIN(event_date) AS first_login
-FROM Activity
-GROUP BY player_id
+FROM
+    Activity
+GROUP BY
+    player_id
 ;
 {% endhighlight %}
 
 [Game Play Analysis II][game-play-analysis-ii]
 
 {% highlight sql %}
-SELECT player_id,
+SELECT
+    player_id,
     device_id
 FROM Activity
-WHERE (player_id, event_date) IN
-    (
-        SELECT player_id,
-        MIN(event_date)
-        FROM Activity
-        GROUP BY player_id
-    )
+WHERE
+    (player_id, event_date) IN
+        (SELECT
+             player_id,
+             MIN(event_date)
+         FROM
+             Activity
+         GROUP BY
+             player_id)
 ;
 {% endhighlight %}
 
@@ -179,16 +212,43 @@ MySQL uses three-valued logic -- TRUE, FALSE and UNKNOWN. Anything compared to N
 [Customer Placing the Largest Number of Orders][customer-placing-the-largest-number-of-orders]
 
 {% highlight sql %}
-SELECT customer_number
-FROM orders
-GROUP BY customer_number
-HAVING COUNT(order_number) = (
-    SELECT COUNT(order_number) AS order_count
-    FROM orders
-    GROUP BY customer_number
-    ORDER BY order_count DESC
-    LIMIT 1
+SELECT
+    customer_number
+FROM
+    orders
+GROUP BY
+    customer_number
+HAVING
+    COUNT(order_number) = (
+        SELECT
+            COUNT(order_number) AS order_count
+        FROM
+            orders
+        GROUP BY
+            customer_number
+        ORDER BY
+            order_count DESC
+        LIMIT 1
 )
+;
+{% endhighlight %}
+
+[Sales Analysis I][sales-analysis-i]
+
+{% highlight sql %}
+SELECT
+    seller_id
+FROM
+    Sales
+GROUP BY
+    seller_id
+HAVING SUM(price) >= ALL(
+    SELECT
+        SUM(price)
+    FROM
+        Sales
+    GROUP BY
+        seller_id)
 ;
 {% endhighlight %}
 
@@ -350,11 +410,13 @@ END
 {% highlight sql %}
 SELECT
     DISTINCT a.account_id
-FROM LogInfo a, LogInfo b
+FROM
+    LogInfo a, LogInfo b
 -- BETWEEN is inclusive
-WHERE a.login BETWEEN b.login AND b.logout
-AND a.account_id = b.account_id
-AND a.ip_address != b.ip_address
+WHERE
+    a.login BETWEEN b.login AND b.logout
+    AND a.account_id = b.account_id
+    AND a.ip_address != b.ip_address
 ;
 {% endhighlight %}
 
@@ -502,7 +564,9 @@ YEAR(date)
 [percentage-of-users-attended-a-contest]: https://leetcode.com/problems/percentage-of-users-attended-a-contest/
 [product-price-at-a-given-date]: https://leetcode.com/problems/product-price-at-a-given-date/
 [reformat-department-table]: https://leetcode.com/problems/reformat-department-table/
+[restaurant-growth]: https://leetcode.com/problems/restaurant-growth/
 [rising-temperature]: https://leetcode.com/problems/rising-temperature/
+[sales-analysis-i]: https://leetcode.com/problems/sales-analysis-i/
 [sales-person]: https://leetcode.com/problems/sales-person/
 [second-highest-salary]: https://leetcode.com/problems/second-highest-salary/
 [swap-salary]: https://leetcode.com/problems/swap-salary/

@@ -37,6 +37,43 @@ public boolean isPalindrome(int x) {
 }
 {% endhighlight %}
 
+[Prime Palindrome][prime-palindrome]
+
+A positive integer (in decimal notation) is divisible by 11 iff the difference of the sum of the digits in even-numbered positions and the sum of digits in odd-numbered positions is divisible by 11.
+
+{% highlight java %}
+public int primePalindrome(int N) {
+    if (N >= 8 && N <= 11) {
+        return 11;
+    }
+
+    // even digit palindrome is divisible by 11
+    // x has at most 5 digits
+    for (int x = 1; x < 100000; x++) {
+        // builds odd digit palindrome
+        String s = String.valueOf(x), r = new StringBuilder(s).reverse().toString();
+        int k = Integer.valueOf(s + r.substring(1));
+        if (k >= N && isPrime(k)) {
+            return k;
+        }
+    }
+    return -1;
+}
+
+private boolean isPrime(int x) {
+    if (x < 2 || x % 2 == 0) {
+        return x == 2;
+    }
+
+    for (int i = 3; i * i <= x; i += 2) {
+        if (x % i == 0)  {
+            return false;
+        }
+    }
+    return true;
+}
+{% endhighlight %}
+
 ## Greedy
 
 [Construct K Palindrome Strings][construct-k-palindrome-strings]
@@ -177,3 +214,4 @@ public int countPalindromicSubsequences(String S) {
 [longest-palindromic-substring]: https://leetcode.com/problems/longest-palindromic-substring/
 [palindrome-number]: https://leetcode.com/problems/palindrome-number/
 [palindromic-substring]: https://leetcode.com/problems/palindromic-substring/
+[prime-palindrome]: https://leetcode.com/problems/prime-palindrome/

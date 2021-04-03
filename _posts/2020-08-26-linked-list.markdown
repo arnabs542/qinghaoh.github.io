@@ -118,6 +118,53 @@ private int size(ListNode l) {
 }
 {% endhighlight %}
 
+# Reverse
+
+[Palindrome Linked List][palindrome-linked-list]
+
+{% highlight java %}
+public boolean isPalindrome(ListNode head) {
+    ListNode fast = head, slow = head;
+    while (fast != null && fast.next != null) {
+        fast = fast.next.next;
+        slow = slow.next;
+    }
+
+    // if the number of nodes is even, fast == null
+    // else (odd) fast != null
+    if (fast != null) {
+        slow = slow.next;
+    }
+
+    // slow is the head of the second half
+    // if the number of nodes is odd, the second half is shorter
+    slow = reverse(slow);
+    fast = head;
+
+    while (slow != null) {
+        if (fast.val != slow.val) {
+            return false;
+        }
+        fast = fast.next;
+        slow = slow.next;
+    }
+    return true;
+}
+
+private ListNode reverse(ListNode head) {
+    ListNode prev = null;
+    while (head != null) {
+        ListNode next = head.next;
+        head.next = prev;
+        prev = head;
+        head = next;
+    }
+    return prev;
+}
+{% endhighlight %}
+
+# Clone
+
 [Copy List with Random Pointer][copy-list-with-random-pointer]
 
 {% highlight java %}
@@ -166,3 +213,4 @@ public Node copyRandomList(Node head) {
 [copy-list-with-random-pointer]: https://leetcode.com/problems/copy-list-with-random-pointer/
 [find-the-duplicate-number]: https://leetcode.com/problems/find-the-duplicate-number/
 [linked-list-cycle-ii]: https://leetcode.com/problems/linked-list-cycle-ii/
+[palindrome-linked-list]: https://leetcode.com/problems/palindrome-linked-list/

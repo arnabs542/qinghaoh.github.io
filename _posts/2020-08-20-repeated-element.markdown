@@ -39,6 +39,11 @@ public int repeatedNTimes(int[] A) {
 
 We can of course expand this subarray window to, for example, 4.
 
+[Guess the Majority in a Hidden Array][guess-the-majority-in-a-hidden-array]
+
+{% highlight java %}
+{% endhighlight %}
+
 ## Sliding window
 
 [Detect Pattern of Length M Repeated K or More Times][detect-pattern-of-length-m-repeated-k-or-more-times]
@@ -57,4 +62,5 @@ public boolean containsPattern(int[] arr, int m, int k) {
 {% endhighlight %}
 
 [detect-pattern-of-length-m-repeated-k-or-more-times]: https://leetcode.com/problems/detect-pattern-of-length-m-repeated-k-or-more-times/
+[guess-the-majority-in-a-hidden-array]: https://leetcode.com/problems/guess-the-majority-in-a-hidden-array/
 [n-repeated-element-in-size-2n-array]: https://leetcode.com/problems/n-repeated-element-in-size-2n-array/

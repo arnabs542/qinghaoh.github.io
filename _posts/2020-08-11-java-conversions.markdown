@@ -18,6 +18,7 @@ int[] b = Arrays.stream(a).mapToInt(Integer::intValue).toArray();
 # List\<Integer\> -> int[]
 {% highlight java %}
 list.stream().mapToInt(Integer::valueOf).toArray();
+list.stream().mapToInt(i -> i).toArray();
 {% endhighlight %}
 
 # int[] -> List\<Integer\>

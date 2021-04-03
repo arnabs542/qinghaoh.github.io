@@ -205,13 +205,61 @@ public int rand10() {
 }
 {% endhighlight %}
 
+[Generate Random Point in a Circle][generate-random-point-in-a-circle]
+
+![Random point in a circle](/assets/generate_random_point_in_a_circle_rejection_sampling.png)
+
+{% highlight java %}
+private double r, x, y;
+
+public Solution(double radius, double x_center, double y_center) {
+    this.r = radius;
+    this.x = x_center;
+    this.y = y_center;
+}
+
+public double[] randPoint() {
+    double x0 = x - r;
+    double y0 = y - r;
+
+    while (true) {
+        double xr = x0 + Math.random() * r * 2;
+        double yr = y0 + Math.random() * r * 2;
+        if ((xr - x) * (xr - x) + (yr - y) * (yr - y) <= r * r) {
+            return new double[]{xr, yr};
+        }
+    }
+}
+{% endhighlight %}
+
 ## Inverse Transform Sampling
 
 [Inverse transform sampling](https://en.wikipedia.org/wiki/Inverse_transform_sampling)
 
+1. Generate a random number $$ u $$ from the standard uniform distribution in the interval $$ [0,1] $$, e.g. from $$ U\sim \mathrm {Unif} [0,1] $$
+1. Find the inverse of the desired CDF, e.g. $$ F_{X}^{-1}(x) $$
+1. Compute $$ X=F_{X}^{-1}(u) $$. The computed random variable $$ X $$ has distribution $$ F_X(x) $$
+
 [Generate Random Point in a Circle][generate-random-point-in-a-circle]
 
 {% highlight java %}
+private double r, x, y;
+
+public Solution(double radius, double x_center, double y_center) {
+    this.r = radius;
+    this.x = x_center;
+    this.y = y_center;
+}
+
+public double[] randPoint() {
+    // PDF: f(x) = 2 * r, R = 1
+    // CDF: F(x) = r ^ 2
+    // F' = sqrt(r)
+    double d = r * Math.sqrt(Math.random());
+    double theta = 2 * Math.random() * Math.PI;
+
+    return new double[]{x + d * Math.cos(theta), y + d * Math.sin(theta)};
+}
 {% endhighlight %}
 
 ## Reservoir Sampling

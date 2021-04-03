@@ -98,5 +98,63 @@ private String search(String s, int len) {
 }
 {% endhighlight %}
 
+# Greedy
+
+[Stamping The Sequence][stamping-the-sequence]
+
+{% highlight java %}
+private int questions = 0;  // count of wildcard '?'
+private String stamp;
+private char[] t;
+
+// reverse
+public int[] movesToStamp(String stamp, String target) {
+    int m = stamp.length(), n = target.length();
+    this.stamp = stamp;
+    this.t = target.toCharArray();
+
+    // visited[i] indicates the string t.substring(i, i + m) is stamped or not
+    // this avoids stamps at the same place
+    boolean[] visited = new boolean[n - m + 1];
+    List<Integer> list = new ArrayList<>();
+    while (questions < n) {
+        boolean stamped = false;
+        for (int i = 0; i <= n - m && questions < n; i++) {
+            if (!visited[i] && canStamp(i)) {
+                doStamp(i);
+                stamped = true;
+                list.add(0, i);
+                visited[i] = true;
+            }
+        }
+
+        if (!stamped) {
+            return new int[0];
+        }
+    }
+
+    return list.stream().mapToInt(Integer::valueOf).toArray();
+}
+
+private boolean canStamp(int pos) {
+    for (int i = 0; i < stamp.length(); i++) {
+        if (t[pos + i] != '?' && t[pos + i] != stamp.charAt(i)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+private void doStamp(int pos) {
+    for (int i = 0; i < stamp.length(); i++) {
+        if (t[pos + i] != '?') {
+            t[pos + i] = '?';
+            questions++;
+        }
+    }
+}
+{% endhighlight %}
+
 [longest-duplicate-substring]: https://leetcode.com/problems/longest-duplicate-substring/
 [longest-repeating-substring]: https://leetcode.com/problems/longest-repeating-substring/
+[stamping-the-sequence]: https://leetcode.com/problems/stamping-the-sequence/
