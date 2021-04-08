@@ -492,6 +492,32 @@ public int scoreOfParentheses(String S) {
 }
 {% endhighlight %}
 
+[Longest Valid Parentheses][longest-valid-parentheses]
+
+TODO: what's the invariant/intuiation behind this?
+
+{% highlight java %}
+public int longestValidParentheses(String s) {
+    Deque<Integer> st = new ArrayDeque<>();
+    st.push(-1);  // imagine there's a ')' at index -1
+
+    int max = 0;
+    for (int i = 0; i < s.length(); i++) {
+        if (s.charAt(i) == '(') {
+            st.push(i);
+        } else {
+            st.pop();
+            if (st.isEmpty()) {
+                st.push(i);
+            } else {
+                max = Math.max(max, i - st.peek());
+            }
+        }
+    }
+    return max;
+}
+{% endhighlight %}
+
 [Flatten Nested List Iterator][flatten-nested-list-iterator]
 
 {% highlight java %}
@@ -554,6 +580,7 @@ public String parseTernary(String expression) {
 [find-the-most-competitive-subsequence]: https://leetcode.com/problems/find-the-most-competitive-subsequence/
 [flatten-nested-list-iterator]: https://leetcode.com/problems/flatten-nested-list-iterator/
 [largest-rectangle-in-histogram]: https://leetcode.com/problems/largest-rectangle-in-histogram/
+[longest-valid-parentheses]: https://leetcode.com/problems/longest-valid-parentheses/
 [maximal-rectangle]: https://leetcode.com/problems/maximal-rectangle/
 [maximum-nesting-depth-of-two-valid-parentheses-strings]: https://leetcode.com/problems/maximum-nesting-depth-of-two-valid-parentheses-strings/
 [minimum-add-to-make-parentheses-valid]: https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/

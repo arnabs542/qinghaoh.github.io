@@ -161,6 +161,34 @@ ORDER BY id
 ;
 {% endhighlight %}
 
+[Evaluate Boolean Expression][evaluate-boolean-expression]
+
+{% highlight sql %}
+SELECT
+    e.left_operand,
+    e.operator,
+    e.right_operand,
+    (
+        CASE
+            WHEN e.operator = '<' AND v1.value < v2.value THEN 'true'
+            WHEN e.operator = '=' AND v1.value = v2.value THEN 'true'
+            WHEN e.operator = '>' AND v1.value > v2.value THEN 'true'
+            ELSE 'false'
+        END
+    ) AS value
+FROM
+    Expressions e
+JOIN
+    Variables v1
+ON
+    e.left_operand = v1.name
+JOIN
+    Variables v2
+ON
+    e.right_operand = v2.name
+;
+{% endhighlight %}
+
 [Game Play Analysis I][game-play-analysis-i]
 
 {% highlight sql %}
@@ -369,6 +397,8 @@ ORDER BY id
 ;
 {% endhighlight %}
 
+# OVER
+
 [Calculate Salaries][calculate-salaries]
 
 {% highlight sql %}
@@ -387,6 +417,33 @@ FROM
         Salaries s) m
 ;
 {% endhighlight %}
+
+If **PARTITION BY** is not specified, the function treats all rows of the query result set as a single partition.
+
+[Find the Start and End Number of Continuous Ranges][find-the-start-and-end-number-of-continuous-ranges]
+
+{% highlight sql %}
+SELECT
+    MIN(log_id) AS start_id, MAX(log_id) AS end_id
+FROM
+    (SELECT
+        log_id, ROW_NUMBER() OVER(ORDER BY log_id) AS num
+     FROM
+        Logs) l
+GROUP BY
+    log_id - num
+;
+{% endhighlight %}
+
+```
+log_id, num, difference
+1, 1, 0
+2, 2, 0
+3, 3, 0
+7, 4, 3
+8, 5, 3
+10, 6, 4
+```
 
 [Nth Highest Salary][nth-highest-salary]
 
@@ -466,6 +523,8 @@ HAVING
 ;
 {% endhighlight %}
 
+# UNION
+
 [Product Price at a Given Date][product-price-at-a-given-date]
 
 {% highlight sql %}
@@ -528,6 +587,48 @@ ORDER BY
 ;
 {% endhighlight %}
 
+[Monthly Transactions II][monthly-transactions-ii]
+
+{% highlight sql %}
+SELECT
+    month,
+    country,
+    SUM(CASE WHEN state = 'approved' THEN 1 ELSE 0 END) AS approved_count,
+    SUM(CASE WHEN state = 'approved' THEN amount ELSE 0 END) AS approved_amount,
+    SUM(CASE WHEN state = 'back' THEN 1 ELSE 0 END) AS chargeback_count,
+    SUM(CASE WHEN state = 'back' THEN amount ELSE 0 END) AS chargeback_amount
+FROM
+    (SELECT
+        LEFT(c.trans_date, 7) AS month,
+        country,
+        'back' AS state,
+        amount
+    FROM
+        Chargebacks c
+    JOIN
+        Transactions t
+    ON
+        c.trans_id = t.id
+
+-- some trans_date exists in Chargebacks only
+-- so we need to UNION the two tables
+    UNION ALL
+
+    SELECT
+        LEFT(trans_date, 7) AS month,
+        country,
+        state,
+        amount
+    FROM
+        Transactions
+    WHERE
+        state = 'approved'
+    ) s
+GROUP BY
+    month, country
+;
+{% endhighlight %}
+
 # Functions
 
 {% highlight sql %}
@@ -551,6 +652,8 @@ YEAR(date)
 [customer-placing-the-largest-number-of-orders]: https://leetcode.com/problems/customer-placing-the-largest-number-of-orders/
 [customers-who-bought-all-products]: https://leetcode.com/problems/customers-who-bought-all-products/
 [employees-earning-more-than-their-managers]: https://leetcode.com/problems/employees-earning-more-than-their-managers/
+[evaluate-boolean-expression]: https://leetcode.com/problems/evaluate-boolean-expression/
+[find-the-start-and-end-number-of-continuous-ranges]: https://leetcode.com/problems/find-the-start-and-end-number-of-continuous-ranges/
 [friend-requests-i-overall-acceptance-rate]: https://leetcode.com/problems/friend-requests-i-overall-acceptance-rate/
 [game-play-analysis-i]: https://leetcode.com/problems/game-play-analysis-i/
 [game-play-analysis-ii]: https://leetcode.com/problems/game-play-analysis-ii/
@@ -559,6 +662,7 @@ YEAR(date)
 [get-highest-answer-rate-question]: https://leetcode.com/problems/get-highest-answer-rate-question/
 [immediate-food-delivery-ii]: https://leetcode.com/problems/immediate-food-delivery-ii/
 [leetflex-banned-accounts]: https://leetcode.com/problems/leetflex-banned-accounts/
+[monthly-transactions-ii]: https://leetcode.com/problems/monthly-transactions-ii/
 [nth-highest-salary]: https://leetcode.com/problems/nth-highest-salary/
 [number-of-trusted-contacts-of-a-customer]: https://leetcode.com/problems/number-of-trusted-contacts-of-a-customer/
 [percentage-of-users-attended-a-contest]: https://leetcode.com/problems/percentage-of-users-attended-a-contest/

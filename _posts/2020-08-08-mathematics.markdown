@@ -10,15 +10,15 @@ usemathjax: true
 
 Lagrange's four-square theorem, also known as Bachet's conjecture, states that every natural number can be represented as the sum of four integer squares. That is, the squares form an additive basis of order four.
 
-$$ p=a_{0}^{2}+a_{1}^{2}+a_{2}^{2}+a_{3}^{2} $$
+\\[p=a_{0}^{2}+a_{1}^{2}+a_{2}^{2}+a_{3}^{2}\\]
 
 [Legendre's three-square theorem](https://en.wikipedia.org/wiki/Legendre%27s_three-square_theorem)
 
 Legendre's three-square theorem states that a natural number can be represented as the sum of three squares of integers
 
-$$ n=x^{2}+y^{2}+z^{2} $$
+\\[n=x^{2}+y^{2}+z^{2}\\]
 
-if and only if $$ n $$ is not of the form $$ n = 4^a(8b + 7) $$ for nonnegative integers $$ a $$ and $$ b $$.
+if and only if \\(n\\) is not of the form \\(n = 4^a(8b + 7)\\) for nonnegative integers \\(a\\) and \\(b\\).
 
 [Sum of two squares theorem](https://en.wikipedia.org/wiki/Sum_of_two_squares_theorem)
 
@@ -29,40 +29,104 @@ An integer greater than one can be written as a sum of two squares if and only i
 Zeller's congruence is an algorithm devised by Christian Zeller to calculate the day of the week for any Julian or Gregorian calendar date.
 
 Gregorian calendar:
-$$ h=\left(q+\left\lfloor {\frac {13(m+1)}{5}}\right\rfloor +K+\left\lfloor {\frac {K}{4}}\right\rfloor +\left\lfloor {\frac {J}{4}}\right\rfloor -2J\right){\bmod {7}} $$
+\\[h=\left(q+\left\lfloor {\frac {13(m+1)}{5}}\right\rfloor +K+\left\lfloor {\frac {K}{4}}\right\rfloor +\left\lfloor {\frac {J}{4}}\right\rfloor -2J\right){\bmod {7}}\\]
 
 [Triangle area using coordinates](https://en.wikipedia.org/wiki/Triangle#Using_coordinates)
 
-$$ T={\frac {1}{2}}{\big |}(x_{A}-x_{C})(y_{B}-y_{A})-(x_{A}-x_{B})(y_{C}-y_{A}) $$
+\\[
+T={\frac {1}{2}}{\big |}(x_{A}-x_{C})(y_{B}-y_{A})-(x_{A}-x_{B})(y_{C}-y_{A}){\big |}
+\\]
 
 [Euclid-Euler theorem](https://en.wikipedia.org/wiki/Euclid%E2%80%93Euler_theorem)
 
-The Euclid–Euler theorem is a theorem in mathematics that relates perfect numbers to Mersenne primes. It states that an even number is perfect if and only if it has the form $$ 2p−1(2p − 1) $$, where $$ 2p − 1 $$ is a prime number. 
+The Euclid–Euler theorem is a theorem in mathematics that relates perfect numbers to Mersenne primes. It states that an even number is perfect if and only if it has the form \\(2^p−1(2^p − 1)\\), where \\(2^p − 1\\) is a prime number. 
 
 [Euler's theorem](https://en.wikipedia.org/wiki/Euler's_theorem)
 
-In number theory, Euler's theorem (also known as the Fermat–Euler theorem or Euler's totient theorem) states that if n and a are coprime positive integers, then a raised to the power of the totient of n is congruent to one, modulo n, or:
+In number theory, Euler's theorem (also known as the Fermat–Euler theorem or Euler's totient theorem) states that if n and a are coprime positive integers, then a raised to the power of the totient of \\(n\\) is congruent to one, modulo \\(n\\), or:
 
-$$ a^{\varphi (n)} \equiv 1 \pmod{n} $$
+\\[a^{\varphi (n)} \equiv 1 \pmod{n}\\]
 
-where $$ \varphi (n) $$ is Euler's totient function.
+where \\(\varphi (n)\\) is Euler's totient function.
 
-**Euler's totient function** counts the positive integers up to a given integer $$ n $$ that are relatively prime to $$ n $$.
+**Euler's totient function** counts the positive integers up to a given integer \\(n\\) that are relatively prime to \\(n\\).
+
+If \\(n\\) is a prime, then \\(\varphi (n) = n - 1\\)
+
+Multiplicative: if \\(\gcd(m, n) = 1\\), then \\(\varphi (m) \varphi (n) = \varphi (mn)\\).
 
 [Super Pow][super-pow]
 
 {% highlight java %}
+public int superPow(int a, int[] b) {
+    if (a % 1337 == 0) {
+        return 0;
+    }
+
+    // 1337 = 7 * 191
+    // phi(1337) = phi(7) * phi(191) = 6 * 190 = 1140
+    int p = 0;
+    for (int i : b) {
+        p = (p * 10 + i) % 1140;
+    }
+
+    if (p == 0) {
+        p += 1440;
+    }
+    return power(a, p, 1337);
+}
+
+// 50. Pow(x, n)
+private int power(int a, int n, int mod) {
+    a %= mod;
+    int result = 1;
+    while (n != 0) {
+        if (n % 2 == 1) {
+            result = result * a % mod;
+        }
+        a = a * a % mod;
+        n /= 2;
+    }
+    return result;
+}
 {% endhighlight %}
+
+If \\(\gcd(a, 1337) = 1\\),
+
+\\[a^b \mod 1337 = a^{b \mod \varphi(1337)} \mod 1337 = a^{b \mod 1140} \mod 1337\\]
+
+If \\(a \mod 7 = 0\\), let \\(a = 7^nm\\), \\(b = \varphi(1337)p + q\\), where \\(0 < q \le \varphi(1337)\\)
+
+\\[
+\begin{multline}
+\shoveleft
+\begin{aligned}
+a^b \mod 1337 &= (7^nm)^b \mod 1337 \\
+&= (7^{nb}m^b) \mod 1337 \\\\
+&= ((7^{nb} \mod 1337) \cdot (m^b \mod 1337)) \mod 1337
+\end{aligned}
+\end{multline}
+\\]
+
+\\[
+\begin{aligned}
+a^b \mod 1337 &= (7^nm)^b \mod 1337 \\
+&= (7^{nb}m^b) \mod 1337 \\\\
+&= ((7^{nb} \mod 1337) \cdot (m^b \mod 1337)) \mod 1337
+\end{aligned}
+\\]
 
 [Floor and celing functions](https://en.wikipedia.org/wiki/Floor_and_ceiling_functions)
 
-$$ \left\lceil {\frac {n}{m}}\right\rceil =\left\lfloor {\frac {n+m-1}{m}}\right\rfloor =\left\lfloor {\frac {n-1}{m}}\right\rfloor +1 $$
+\\[\left\lceil {\frac {n}{m}}\right\rceil =\left\lfloor {\frac {n+m-1}{m}}\right\rfloor =\left\lfloor {\frac {n-1}{m}}\right\rfloor +1\\]
 
-$$ \left\lfloor {\frac {n}{m}}\right\rfloor =\left\lceil {\frac {n-m+1}{m}}\right\rceil =\left\lceil {\frac {n+1}{m}}\right\rceil -1 $$
+\\[\left\lfloor {\frac {n}{m}}\right\rfloor =\left\lceil {\frac {n-m+1}{m}}\right\rceil =\left\lceil {\frac {n+1}{m}}\right\rceil -1\\]
 
 [Inclusion–exclusion principle](https://en.wikipedia.org/wiki/Inclusion%E2%80%93exclusion_principle)
 
-$$ |A\cup B|=|A|+|B|-|A\cap B| $$
+\\[
+|A\cup B|=|A|+|B|-|A\cap B|
+\\]
 
 [2 Keys Keyboard][2-keys-keyboard]
 
@@ -101,13 +165,13 @@ public int maxA(int N) {
 
 [Taxicab geometry](https://en.wikipedia.org/wiki/Taxicab_geometry)
 
-Taxicab metric = $$l_1$$ distance = $$l_1$$ norm = $Manhattan distance
+Taxicab metric = \\(l_1\\) distance = \\(l_1\\) norm = $Manhattan distance
 
 [Triangle inequality](https://en.wikipedia.org/wiki/Triangle_inequality#Normed_vector_space)
 
 In a normed vector space $$ V $$, one of the defining properties of the norm is the triangle inequality:
 
-$$ \|x+y\|\leq \|x\|+\|y\|\quad \forall \,x,y\in V $$
+\\[\|x+y\|\leq \|x\|+\|y\|\quad \forall \,x,y\in V\\]
 
 [Escape The Ghosts][escape-the-ghosts]
 
@@ -126,9 +190,9 @@ public boolean escapeGhosts(int[][] ghosts, int[] target) {
 
 [Fibonacci number](https://en.wikipedia.org/wiki/Fibonacci_number#Sequence_properties)
 
-$$\sum _{i=0}^{n-1}F_{2i+1}=F_{2n}$$
+\\[\sum_{i=0}^{n-1}F_{2i+1}=F_{2n}\\]
 
-$$\sum _{i=1}^{n}F_{2i}=F_{2n+1}-1$$
+\\[\sum_{i=1}^{n}F_{2i}=F_{2n+1}-1\\]
 
 [Sparse Matrix Multiplication][sparse-matrix-multiplication]
 
@@ -153,7 +217,7 @@ public int[][] multiply(int[][] A, int[][] B) {
 
 [Graham scan](https://en.wikipedia.org/wiki/Graham_scan)
 
-For three points $$ P_{1}=(x_{1},y_{1})$$, $$P_{2}=(x_{2},y_{2}$$ and $$P_{3}=(x_{3},y_{3})$$, compute the z-coordinate of the cross product of the two vectors $$\overrightarrow {P_{1}P_{2}}$$ and $$\overrightarrow {P_{1}P_{3}}$$, which is given by the expression $$(x_{2}-x_{1})(y_{3}-y_{1})-(y_{2}-y_{1})(x_{3}-x_{1})$$.
+For three points \\(P_{1}=(x_{1},y_{1})\\), \\(P_{2}=(x_{2},y_{2}\\) and \\(P_{3}=(x_{3},y_{3})\\), compute the z-coordinate of the cross product of the two vectors \\(\overrightarrow {P_{1}P_{2}}\\) and \\(\overrightarrow {P_{1}P_{3}}\\), which is given by the expression \\((x_{2}-x_{1})(y_{3}-y_{1})-(y_{2}-y_{1})(x_{3}-x_{1})\\).
 
 [Convex Polygon][convex-polygon]
 
@@ -228,17 +292,22 @@ public int numberOfSets(int n, int k) {
 
 # Dearrangement
 
-$$ !n=(n-1)({!(n-1)}+{!(n-2)}) $$
+\\[!n=(n-1)({!(n-1)}+{!(n-2)})\\]
 
-$$ !n=n!\sum _{i=0}^{n}{\frac {(-1)^{i}}{i!}}, \quad n\geq 0 $$
+\\[!n=n!\sum _{i=0}^{n}{\frac {(-1)^{i}}{i!}}, \quad n\geq 0\\]
 
 # Exponentiation
 
 [Exponentiation by squaring](https://en.wikipedia.org/wiki/Exponentiation_by_squaring): square-and-multiply/binary exponentiation/double-and-add
 
-$$ x^{n}={\begin{cases}x\,(x^{2})^{\frac {n-1}{2}},&{\mbox{if }}n{\mbox{ is odd}}\\(x^{2})^{\frac {n}{2}},&{\mbox{if }}n{\mbox{ is even}}.\end{cases}} $$
+\\[
+\begin{cases}
+x^{n}={\begin{cases}x\,(x^{2})^{\frac {n-1}{2}},&{\mbox{if }}n{\mbox{ is odd}}
+(x^{2})^{\frac {n}{2}},&{\mbox{if }}n{\mbox{ is even}}.\end{cases}}
+\end{cases}
+\\]
 
-If we write $$ n $$ in binary as $$ b_{k}\cdots b_{0} $$, then this is equivalent to defining a sequence $$ r_{k+1}, \ldots, r_{0} $$ by letting $$ r_{k+1} = 1 $$ and then defining $$ r_{i}=r_{i+1}^{2}x^{b_{i}} $$ for $$ i = k, \ldots, 0 $$, where $$ r_{0} $$ will equal $$ x^{n} $$.
+If we write \\(n\\) in binary as \\(b_{k}\cdots b_{0}\\), then this is equivalent to defining a sequence \\(r_{k+1}, \ldots, r_{0}\\) by letting \\(r_{k+1} = 1\\) and then defining \\(r_{i}=r_{i+1}^{2}x^{b_{i}} \\) for \\(i = k, \ldots, 0\\), where \\(r_{0}\\) will equal \\(x^{n}\\).
 
 [Pow(x, n)][powx-n]
 

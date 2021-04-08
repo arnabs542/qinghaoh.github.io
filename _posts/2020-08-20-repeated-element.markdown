@@ -42,6 +42,43 @@ We can of course expand this subarray window to, for example, 4.
 [Guess the Majority in a Hidden Array][guess-the-majority-in-a-hidden-array]
 
 {% highlight java %}
+public int guessMajority(ArrayReader reader) {
+    int n = reader.length();
+    int groupEqualsNum3 = 1;  // initially nums[3] is in this group
+    int groupNotEqualsNum3 = 0;
+    int indexA = -1, indexB = -1;
+    int r0123 = reader.query(0, 1, 2, 3);
+    for (int i = 4; i < n; i++) {
+        // divides all numbers after nums[3] into two groups
+        if (reader.query(0, 1, 2, i) == r0123) {  // nums[3] == nums[i]
+            groupEqualsNum3++;
+            indexA = i;
+        } else {  // nums[3] != nums[i]
+            groupNotEqualsNum3++;
+            indexB = i;
+        }
+    }
+
+    // finds out which group nums[0], nums[1], nums[2] belongs to
+    int r0124 = reader.query(0, 1, 2, 4);
+    {% raw %}
+    int[][] queries = {{1, 2, 3, 4}, {0, 2, 3, 4}, {0, 1, 3, 4}};
+    {% endraw %}
+    for (int i = 0; i < 3; i++) {
+        // e.g. r1234 vs r0124. Both contain nums[1], nums[2] and nums[4].
+        // if r1234 == r0124, then nums[0] == nums[3]
+        // otherwise nums[0] != nums[3]
+        if (reader.query(queries[i][0], queries[i][1], queries[i][2], queries[i][3]) == r0124) {
+            groupEqualsNum3++;
+            indexA = i;
+        } else {
+            groupNotEqualsNum3++;
+            indexB = i;
+        }
+    }
+
+    return groupEqualsNum3 == groupNotEqualsNum3 ? -1 : (groupEqualsNum3 > groupNotEqualsNum3 ? indexA : indexB);
+}
 {% endhighlight %}
 
 ## Sliding window

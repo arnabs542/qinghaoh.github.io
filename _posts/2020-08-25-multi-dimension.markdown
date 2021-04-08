@@ -195,10 +195,62 @@ public int[] findDiagonalOrder(List<List<Integer>> nums) {
 }
 {% endhighlight %}
 
+## Flood Fill
+
+[Flood fill](https://en.wikipedia.org/wiki/Flood_fill): also called seed fill, is an algorithm that determines and alters the area connected to a given node in a **multi-dimensional** array with some matching attribute.
+
+[Number of Enclaves][number-of-enclaves]
+
+{% highlight java %}
+{% raw %}
+private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+{% endraw %}
+private int[][] grid;
+private int m, n;
+
+public int numEnclaves(int[][] grid) {
+    this.grid = grid;
+    this.m = grid.length;
+    this.n = grid[0].length;
+
+    // flood-fills the land (1 -> 0) from the boundary
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            // boundary
+            if (i == 0 || j == 0 || i == m - 1 || j == n - 1) {
+                fill(i, j);
+            }
+        }
+    }
+
+    int count = 0;
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            count += grid[i][j];
+        }
+    }
+    return count;
+}
+
+private void fill(int i, int j) {
+    if (i < 0 || j < 0 || i == m || j == n || grid[i][j] == 0) {
+        return;
+    }
+
+    grid[i][j] = 0;
+    for (int[] d : DIRECTIONS) {
+        fill(i + d[0], j + d[1]);
+    }
+}
+{% endhighlight %}
+
+Regular DFS/BFS would also work.
+
 [diagonal-traverse-ii]: https://leetcode.com/problems/diagonal-traverse-ii/
 [edit-distance]: https://leetcode.com/problems/edit-distance/
 [find-positive-integer-solution-for-a-given-equation]: https://leetcode.com/problems/find-positive-integer-solution-for-a-given-equation/
 [lonely-pixel-i]: https://leetcode.com/problems/lonely-pixel-i/
 [matrix-block-sum]: https://leetcode.com/problems/matrix-block-sum/
 [maximal-square]: https://leetcode.com/problems/maximal-square/
+[number-of-enclaves]: https://leetcode.com/problems/number-of-enclaves/
 [search-a-2d-matrix]: https://leetcode.com/problems/search-a-2d-matrix/
