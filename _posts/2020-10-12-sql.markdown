@@ -629,6 +629,26 @@ GROUP BY
 ;
 {% endhighlight %}
 
+[Last Person to Fit in the Elevator][last-person-to-fit-in-the-elevator]
+
+{% highlight sql %}
+SELECT
+    q1.person_name
+FROM
+    Queue q1
+JOIN
+    Queue q2
+ON q1.turn >= q2.turn
+GROUP BY
+    q1.turn
+HAVING
+    SUM(q2.weight) <= 1000
+ORDER BY
+    q1.turn DESC
+LIMIT 1
+;
+{% endhighlight %}
+
 # Functions
 
 {% highlight sql %}
@@ -661,6 +681,7 @@ YEAR(date)
 [game-play-analysis-iv]: https://leetcode.com/problems/game-play-analysis-iv/
 [get-highest-answer-rate-question]: https://leetcode.com/problems/get-highest-answer-rate-question/
 [immediate-food-delivery-ii]: https://leetcode.com/problems/immediate-food-delivery-ii/
+[last-person-to-fit-in-the-elevator]: https://leetcode.com/problems/last-person-to-fit-in-the-elevator/
 [leetflex-banned-accounts]: https://leetcode.com/problems/leetflex-banned-accounts/
 [monthly-transactions-ii]: https://leetcode.com/problems/monthly-transactions-ii/
 [nth-highest-salary]: https://leetcode.com/problems/nth-highest-salary/

@@ -94,8 +94,8 @@ Assume there are \\(n\\) seats in total.
 The probability that the \\(n\\)-th passenger takes his own seat when the first passenger takes:
 
 * his own seat: \\(\frac{1}{n}\\)
-* the \(n\)-th passenger's seat: \\(0\\)
-* the \(i\)-th passenger's seat where \\(1 < i < n\\): \\(\frac{1}{n} \cdot p(n + 1 - i)\\)
+* the \\(n\\)-th passenger's seat: \\(0\\)
+* the \\(i\\)-th passenger's seat where \\(1 < i < n\\): \\(\frac{1}{n} \cdot p(n + 1 - i)\\)
 
 \\[
 \begin{equation} \label{eq:1}

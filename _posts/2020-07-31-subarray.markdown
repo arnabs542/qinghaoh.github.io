@@ -134,6 +134,39 @@ public int[] getModifiedArray(int length, int[][] updates) {
 }
 {% endhighlight %}
 
+[Minimum Moves to Make Array Complementary][minimum-moves-to-make-array-complementary]
+
+{% highlight java %}
+public int minMoves(int[] nums, int limit) {
+    // delta array
+    // let target T = nums[i] + nums[n - 1 - i]
+    // changing T from (i - 1) to i takes p[i] more operations
+    // 2 <= T <= 2 * limit
+    int[] p = new int[2 * limit + 2];
+
+    //       2          1     0      1             2
+    // |----------|-----------|------------|----------------|
+    // 2   min(a, b) + 1    a + b   max(a, b) + limit   2 * limit
+    //
+    int n = nums.length;
+    for (int i = 0; i < n / 2; i++) {
+        int a = nums[i], b = nums[n - 1 - i];
+        p[2] += 2;  // [2, min(a,b)]
+        p[Math.min(a, b) + 1]--;  // (min(a, b), a + b)
+        p[a + b]--;
+        p[a + b + 1]++;  // (a + b, max(a, b) + limit]
+        p[Math.max(a, b) + limit + 1]++;  // (max(a, b) + limit, 2 * limit]
+    }
+
+    int move = 2 * n, sum = 0;
+    for (int i = 2; i <= 2 * limit; i++) {
+        sum += p[i];
+        move = Math.min(move, sum);
+    }
+    return move;
+}
+{% endhighlight %}
+
 ## Sliding Window
 
 [Maximum Number of Occurrences of a Substring][maximum-number-of-occurrences-of-a-substring]
@@ -235,6 +268,7 @@ public int numberOfArithmeticSlices(int[] A) {
 [find-two-non-overlapping-sub-arrays-each-with-target-sum]: https://leetcode.com/problems/find-two-non-overlapping-sub-arrays-each-with-target-sum/
 [maximum-number-of-occurrences-of-a-substring]: https://leetcode.com/problems/maximum-number-of-occurrences-of-a-substring/
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
+[minimum-moves-to-make-array-complementary]: https://leetcode.com/problems/minimum-moves-to-make-array-complementary/
 [product-of-the-last-k-numbers]: https://leetcode.com/problems/product-of-the-last-k-numbers/
 [range-addition]: https://leetcode.com/problems/range-addition/
 [shortest-distance-to-target-color]: https://leetcode.com/problems/shortest-distance-to-target-color/

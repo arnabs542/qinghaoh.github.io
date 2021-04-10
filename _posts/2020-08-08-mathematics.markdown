@@ -37,85 +37,6 @@ Gregorian calendar:
 T={\frac {1}{2}}{\big |}(x_{A}-x_{C})(y_{B}-y_{A})-(x_{A}-x_{B})(y_{C}-y_{A}){\big |}
 \\]
 
-[Euclid-Euler theorem](https://en.wikipedia.org/wiki/Euclid%E2%80%93Euler_theorem)
-
-The Euclid–Euler theorem is a theorem in mathematics that relates perfect numbers to Mersenne primes. It states that an even number is perfect if and only if it has the form \\(2^p−1(2^p − 1)\\), where \\(2^p − 1\\) is a prime number. 
-
-[Euler's theorem](https://en.wikipedia.org/wiki/Euler's_theorem)
-
-In number theory, Euler's theorem (also known as the Fermat–Euler theorem or Euler's totient theorem) states that if n and a are coprime positive integers, then a raised to the power of the totient of \\(n\\) is congruent to one, modulo \\(n\\), or:
-
-\\[a^{\varphi (n)} \equiv 1 \pmod{n}\\]
-
-where \\(\varphi (n)\\) is Euler's totient function.
-
-**Euler's totient function** counts the positive integers up to a given integer \\(n\\) that are relatively prime to \\(n\\).
-
-If \\(n\\) is a prime, then \\(\varphi (n) = n - 1\\)
-
-Multiplicative: if \\(\gcd(m, n) = 1\\), then \\(\varphi (m) \varphi (n) = \varphi (mn)\\).
-
-[Super Pow][super-pow]
-
-{% highlight java %}
-public int superPow(int a, int[] b) {
-    if (a % 1337 == 0) {
-        return 0;
-    }
-
-    // 1337 = 7 * 191
-    // phi(1337) = phi(7) * phi(191) = 6 * 190 = 1140
-    int p = 0;
-    for (int i : b) {
-        p = (p * 10 + i) % 1140;
-    }
-
-    if (p == 0) {
-        p += 1440;
-    }
-    return power(a, p, 1337);
-}
-
-// 50. Pow(x, n)
-private int power(int a, int n, int mod) {
-    a %= mod;
-    int result = 1;
-    while (n != 0) {
-        if (n % 2 == 1) {
-            result = result * a % mod;
-        }
-        a = a * a % mod;
-        n /= 2;
-    }
-    return result;
-}
-{% endhighlight %}
-
-If \\(\gcd(a, 1337) = 1\\),
-
-\\[a^b \mod 1337 = a^{b \mod \varphi(1337)} \mod 1337 = a^{b \mod 1140} \mod 1337\\]
-
-If \\(a \mod 7 = 0\\), let \\(a = 7^nm\\), \\(b = \varphi(1337)p + q\\), where \\(0 < q \le \varphi(1337)\\)
-
-\\[
-\begin{multline}
-\shoveleft
-\begin{aligned}
-a^b \mod 1337 &= (7^nm)^b \mod 1337 \\
-&= (7^{nb}m^b) \mod 1337 \\\\
-&= ((7^{nb} \mod 1337) \cdot (m^b \mod 1337)) \mod 1337
-\end{aligned}
-\end{multline}
-\\]
-
-\\[
-\begin{aligned}
-a^b \mod 1337 &= (7^nm)^b \mod 1337 \\
-&= (7^{nb}m^b) \mod 1337 \\\\
-&= ((7^{nb} \mod 1337) \cdot (m^b \mod 1337)) \mod 1337
-\end{aligned}
-\\]
-
 [Floor and celing functions](https://en.wikipedia.org/wiki/Floor_and_ceiling_functions)
 
 \\[\left\lceil {\frac {n}{m}}\right\rceil =\left\lfloor {\frac {n+m-1}{m}}\right\rfloor =\left\lfloor {\frac {n-1}{m}}\right\rfloor +1\\]
@@ -127,23 +48,6 @@ a^b \mod 1337 &= (7^nm)^b \mod 1337 \\
 \\[
 |A\cup B|=|A|+|B|-|A\cap B|
 \\]
-
-[2 Keys Keyboard][2-keys-keyboard]
-
-Prime Factorization
-
-{% highlight java %}
-public int minSteps(int n) {
-    int s = 0;
-    for (int d = 2; d <= n; d++) {
-        while (n % d == 0) {
-            s += d;
-            n /= d;
-        }
-    }
-    return s;
-}
-{% endhighlight %}
 
 [4 Keys Keyboard][4-keys-keyboard]
 
@@ -336,7 +240,6 @@ public double myPow(double x, int n) {
 }
 {% endhighlight %}
 
-[2-keys-keyboard]: https://leetcode.com/problems/2-keys-keyboard/
 [4-keys-keyboard]: https://leetcode.com/problems/4-keys-keyboard/
 [best-meeting-point]: https://leetcode.com/problems/best-meeting-point/
 [convex-polygon]: https://leetcode.com/problems/convex-polygon/
@@ -346,5 +249,3 @@ public double myPow(double x, int n) {
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
 [powx-n]: https://leetcode.com/problems/powx-n/
 [sparse-matrix-multiplication]: https://leetcode.com/problems/sparse-matrix-multiplication/
-[super-pow]: https://leetcode.com/problems/super-pow/
-

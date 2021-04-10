@@ -1,8 +1,17 @@
 ---
 layout: post
 title:  "Prime"
-tags: number
+tags: math
+usemathjax: true
 ---
+# Theorem
+
+[Euclid-Euler theorem](https://en.wikipedia.org/wiki/Euclid%E2%80%93Euler_theorem)
+
+The Euclid–Euler theorem is a theorem in mathematics that relates perfect numbers to Mersenne primes. It states that an even number is perfect if and only if it has the form \\(2^p−1(2^p − 1)\\), where \\(2^p − 1\\) is a prime number.
+
+# Algorithm
+
 [Count Primes][count-primes]
 
 [Sieve of Eratosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes)
@@ -28,4 +37,22 @@ public int countPrimes(int n) {
 
 Proof: [Divergence of the Sum of the Reciprocals of the Primes](https://en.wikipedia.org/wiki/Divergence_of_the_sum_of_the_reciprocals_of_the_primes)
 
+# Prime Factorization
+
+[2 Keys Keyboard][2-keys-keyboard]
+
+{% highlight java %}
+public int minSteps(int n) {
+    int s = 0;
+    for (int d = 2; d <= n; d++) {
+        while (n % d == 0) {
+            s += d;
+            n /= d;
+        }
+    }
+    return s;
+}
+{% endhighlight %}
+
+[2-keys-keyboard]: https://leetcode.com/problems/2-keys-keyboard/
 [count-primes]: https://leetcode.com/problems/count-primes/
