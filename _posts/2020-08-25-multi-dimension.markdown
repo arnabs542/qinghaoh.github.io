@@ -246,9 +246,14 @@ private void fill(int i, int j) {
 
 Regular DFS/BFS would also work.
 
+# Sort
+
+[Largest Submatrix With Rearrangements][largest-submatrix-with-rearrangements]
+
 [diagonal-traverse-ii]: https://leetcode.com/problems/diagonal-traverse-ii/
 [edit-distance]: https://leetcode.com/problems/edit-distance/
 [find-positive-integer-solution-for-a-given-equation]: https://leetcode.com/problems/find-positive-integer-solution-for-a-given-equation/
+[largest-submatrix-with-rearrangements]: https://leetcode.com/problems/largest-submatrix-with-rearrangements/
 [lonely-pixel-i]: https://leetcode.com/problems/lonely-pixel-i/
 [matrix-block-sum]: https://leetcode.com/problems/matrix-block-sum/
 [maximal-square]: https://leetcode.com/problems/maximal-square/

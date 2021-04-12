@@ -31,12 +31,6 @@ Zeller's congruence is an algorithm devised by Christian Zeller to calculate the
 Gregorian calendar:
 \\[h=\left(q+\left\lfloor {\frac {13(m+1)}{5}}\right\rfloor +K+\left\lfloor {\frac {K}{4}}\right\rfloor +\left\lfloor {\frac {J}{4}}\right\rfloor -2J\right){\bmod {7}}\\]
 
-[Triangle area using coordinates](https://en.wikipedia.org/wiki/Triangle#Using_coordinates)
-
-\\[
-T={\frac {1}{2}}{\big |}(x_{A}-x_{C})(y_{B}-y_{A})-(x_{A}-x_{B})(y_{C}-y_{A}){\big |}
-\\]
-
 [Floor and celing functions](https://en.wikipedia.org/wiki/Floor_and_ceiling_functions)
 
 \\[\left\lceil {\frac {n}{m}}\right\rceil =\left\lfloor {\frac {n+m-1}{m}}\right\rfloor =\left\lfloor {\frac {n-1}{m}}\right\rfloor +1\\]
@@ -67,31 +61,6 @@ public int maxA(int N) {
 }
 {% endhighlight %}
 
-[Taxicab geometry](https://en.wikipedia.org/wiki/Taxicab_geometry)
-
-Taxicab metric = \\(l_1\\) distance = \\(l_1\\) norm = $Manhattan distance
-
-[Triangle inequality](https://en.wikipedia.org/wiki/Triangle_inequality#Normed_vector_space)
-
-In a normed vector space $$ V $$, one of the defining properties of the norm is the triangle inequality:
-
-\\[\|x+y\|\leq \|x\|+\|y\|\quad \forall \,x,y\in V\\]
-
-[Escape The Ghosts][escape-the-ghosts]
-
-{% highlight java %}
-public boolean escapeGhosts(int[][] ghosts, int[] target) {
-    // Manhattan distance
-    int d = Math.abs(target[0]) + Math.abs(target[1]);
-    for (int[] g : ghosts) {
-        if (Math.abs(g[0] - target[0]) + Math.abs(g[1] - target[1]) <= d) {
-            return false;
-        }
-    }
-    return true;
-}
-{% endhighlight %}
-
 [Fibonacci number](https://en.wikipedia.org/wiki/Fibonacci_number#Sequence_properties)
 
 \\[\sum_{i=0}^{n-1}F_{2i+1}=F_{2n}\\]
@@ -116,21 +85,6 @@ public int[][] multiply(int[][] A, int[][] B) {
         }
     }
     return result;
-}
-{% endhighlight %}
-
-[Graham scan](https://en.wikipedia.org/wiki/Graham_scan)
-
-For three points \\(P_{1}=(x_{1},y_{1})\\), \\(P_{2}=(x_{2},y_{2}\\) and \\(P_{3}=(x_{3},y_{3})\\), compute the z-coordinate of the cross product of the two vectors \\(\overrightarrow {P_{1}P_{2}}\\) and \\(\overrightarrow {P_{1}P_{3}}\\), which is given by the expression \\((x_{2}-x_{1})(y_{3}-y_{1})-(y_{2}-y_{1})(x_{3}-x_{1})\\).
-
-[Convex Polygon][convex-polygon]
-
-[Count Sorted Vowel Strings][count-sorted-vowel-strings]
-
-{% highlight java %}
-public int countVowelStrings(int n) {
-    // comb(n + 4, 4)
-    return (n + 4) * (n + 3) * (n + 2) * (n + 1) / 24;
 }
 {% endhighlight %}
 
@@ -172,7 +126,22 @@ public int minDistance1D(List<Integer> points) {
 }
 {% endhighlight %}
 
+# Permutation
+
+[Permutations of multisets](https://en.wikipedia.org/wiki/Permutation#Permutations_of_multisets)
+
+\\[{n \choose m_{1},m_{2},\ldots ,m_{l}}={\frac {n!}{m_{1}!\,m_{2}!\,\cdots \,m_{l}!}}=\frac {\left(\sum_{i=1}^{l}{m_{i}}\right)!}{\prod_{i=1}^{l}{m_{i}!}}\\]
+
 # Combination
+
+[Count Sorted Vowel Strings][count-sorted-vowel-strings]
+
+{% highlight java %}
+public int countVowelStrings(int n) {
+    // comb(n + 4, 4)
+    return (n + 4) * (n + 3) * (n + 2) * (n + 1) / 24;
+}
+{% endhighlight %}
 
 [Number of Sets of K Non-Overlapping Line Segments][number-of-sets-of-k-non-overlapping-line-segments]
 
@@ -194,11 +163,19 @@ public int numberOfSets(int n, int k) {
 }
 {% endhighlight %}
 
-# Dearrangement
+## Catalan Number
 
-\\[!n=(n-1)({!(n-1)}+{!(n-2)})\\]
+The nth Catalan number is given directly in terms of binomial coefficients by
 
-\\[!n=n!\sum _{i=0}^{n}{\frac {(-1)^{i}}{i!}}, \quad n\geq 0\\]
+\\[
+C_{n}={\frac {1}{n+1}}{2n \choose n}={\frac {(2n)!}{(n+1)!\,n!}}=\prod \limits _{k=2}^{n}{\frac {n+k}{k}}\qquad {\text{for }}n\geq 0
+\\]
+
+\\[
+C_{0}=1\quad {\text{and}}\quad C_{n+1}={\frac {2(2n+1)}{n+2}}C_{n}
+\\]
+
+[Handshakes That Don't Cross][handshakes-that-dont-cross]
 
 # Exponentiation
 
@@ -240,12 +217,29 @@ public double myPow(double x, int n) {
 }
 {% endhighlight %}
 
+# Radix
+
+[Check if Number is a Sum of Powers of Three][check-if-number-is-a-sum-of-powers-of-three]
+
+{% highlight java %}
+public boolean checkPowersOfThree(int n) {
+    while (n > 0) {
+        if (n % 3 == 2) {
+            return false;
+        }
+
+        // right shifts ternary bits by 1
+        n /= 3;
+    }
+    return true;
+}
+{% endhighlight %}
+
 [4-keys-keyboard]: https://leetcode.com/problems/4-keys-keyboard/
 [best-meeting-point]: https://leetcode.com/problems/best-meeting-point/
-[convex-polygon]: https://leetcode.com/problems/convex-polygon/
+[check-if-number-is-a-sum-of-powers-of-three]: https://leetcode.com/problems/check-if-number-is-a-sum-of-powers-of-three/
 [count-sorted-vowel-strings]: https://leetcode.com/problems/count-sorted-vowel-strings/
-[escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/
-[implement-rand10-using-rand7]: https://leetcode.com/problems/implement-rand10-using-rand7/
+[handshakes-that-dont-cross]: https://leetcode.com/problems/handshakes-that-dont-cross/
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
 [powx-n]: https://leetcode.com/problems/powx-n/
 [sparse-matrix-multiplication]: https://leetcode.com/problems/sparse-matrix-multiplication/

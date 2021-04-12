@@ -41,25 +41,24 @@ private ListNode mergeTwoLists(ListNode l1, ListNode l2) {
 
 Another solution is to add all nodes to a min heap.
 
-[Ugly Number II][ugly-number-ii]
+[Super Ugly Number][super-ugly-number]
 
 {% highlight java %}
-public int nthUglyNumber(int n) {
+public int nthSuperUglyNumber(int n, int[] primes) {
     int[] ugly = new int[n];
     ugly[0] = 1;
 
-    int i2 = 0, i3 = 0, i5 = 0;
-    for (int i = 1; i < n; i++) {
-        ugly[i] = Math.min(Math.min(ugly[i2] * 2, ugly[i3] * 3), ugly[i5] * 5);
+    // prime factorization
+    int m = primes.length;
+    int[] power = new int[m];
 
-        if (ugly[i2] * 2 == ugly[i]) {
-            i2++;
-        }
-        if (ugly[i3] * 3 == ugly[i]) {
-            i3++;
-        }   
-        if (ugly[i5] * 5 == ugly[i]) {
-            i5++;
+    for (int i = 1; i < n; i++) {
+        ugly[i] = Integer.MAX_VALUE;
+        for (int j = 0; j < m; j++) {
+            if (ugly[power[j]] * primes[j] == ugly[i - 1]) {
+                power[j]++;
+            }
+            ugly[i] = Math.min(ugly[i], ugly[power[j]] * primes[j]);
         }
     }
 
@@ -92,6 +91,45 @@ public String longestNiceSubstring(String s) {
 }
 {% endhighlight %}
 
+[Beautiful Array][beautiful-array]
+
+{% highlight java %}
+public int[] beautifulArray(int N) {
+    List<Integer> list = new ArrayList<>();
+    list.add(1);
+
+    // properties:
+    // if A is a beautiful array, then
+    //  * A + c is a beautiful array
+    //  * c * A is a beautiful array
+    //  * deletion: A is still a beautiful array after deleting some elements in it
+    while (list.size() < N) {
+        List<Integer> tmp = new ArrayList<>();
+        // divide and conquer
+        // divides the numbers into two parts: odd + even, because odd + even = odd != 2 * x
+        for (int i : list) {
+            if (i * 2 - 1 <= N) {
+                tmp.add(i * 2 - 1);
+            }
+        }
+        for (int i : list) {
+            if (i * 2 <= N) {
+                tmp.add(i * 2);
+            }
+        }
+        list = tmp;
+    }
+    return list.stream().mapToInt(i -> i).toArray();
+}
+{% endhighlight %}
+
+It's easy to come up with a recursive version.
+
+[Bit reversal permutation](https://en.wikipedia.org/wiki/Bit-reversal_permutation)
+
+Another solution is bit reverse (br) sort. It can be proven that if `i + k = j * 2`, then `br(j)` is either less than or greater than both `br(i)` and `br(k)`. Thus the algorithm is to sort the numbers based on their bit reverse. Credit to @Aging.
+
+[beautiful-array]: https://leetcode.com/problems/beautiful-array/
 [longest-nice-substring]: https://leetcode.com/problems/longest-nice-substring/
 [merge-k-sorted-lists]: https://leetcode.com/problems/merge-k-sorted-lists/
-[ugly-number-ii]: https://leetcode.com/problems/ugly-number-ii/
+[super-ugly-number]: https://leetcode.com/problems/super-ugly-number/

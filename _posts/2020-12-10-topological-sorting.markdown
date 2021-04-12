@@ -217,7 +217,16 @@ public boolean sequenceReconstruction(int[] org, List<List<Integer>> seqs) {
 }
 {% endhighlight %}
 
+# Longest Path
+
+Longest path in a DAG can be solved by topological sorting.
+
+[Longest Increasing Path in a Matrix][longest-increasing-path-in-a-matrix]
+
+Another solution is DFS + memorization
+
 [course-schedule-ii]: https://leetcode.com/problems/course-schedule-ii/
+[longest-increasing-path-in-a-matrix]: https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
 [minimum-height-trees]: https://leetcode.com/problems/minimum-height-trees/
 [sequence-reconstruction]: https://leetcode.com/problems/sequence-reconstruction/
 [tree-diameter]: https://leetcode.com/problems/tree-diameter/

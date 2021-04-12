@@ -155,26 +155,6 @@ public int findBestValue(int[] arr, int target) {
 }
 {% endhighlight %}
 
-[Circle and Rectangle Overlapping][circle-and-rectangle-overlapping]
-
-{% highlight java %}
-public boolean checkOverlap(int radius, int x_center, int y_center, int x1, int y1, int x2, int y2) {
-    // finds the closest point of the rectangle to the center.
-    // if the center is in the rectangle, the center itself is the point
-    int x = closest(x_center, x1, x2);
-    int y = closest(y_center, y1, y2);
-
-    int dx = x_center - x;
-    int dy = y_center - y;
-
-    return dx * dx + dy * dy <= radius * radius;
-}
-
-private int closest(int value, int min, int max) {
-    return Math.max(min, Math.min(max, value));
-}
-{% endhighlight %}
-
 [Swap for Longest Repeated Character Substring][swap-for-longest-repeated-character-substring]
 
 {% highlight java %}
@@ -324,40 +304,6 @@ public int countStudents(int[] students, int[] sandwiches) {
 }
 {% endhighlight %}
 
-[Minimum Area Rectangle][minimum-area-rectangle]
-
-{% highlight java %}
-public int minAreaRect(int[][] points) {
-    Map<Integer, Set<Integer>> map = new HashMap<>();
-    for (int[] p : points) {
-        map.computeIfAbsent(p[0], k -> new HashSet<>()).add(p[1]);
-    }
-
-    int min = Integer.MAX_VALUE;
-    for (int i = 0; i < points.length; i++) {
-        for (int j = 0; j < i; j++) {
-            int[] p1 = points[i], p2 = points[j];
-            // same x or y
-            // computes diagonal points only
-            if (p1[0] == p2[0] || p1[1] == p2[1]) {
-                continue;
-            }
-
-            int area = Math.abs(p1[0] - p2[0]) * Math.abs(p1[1] - p2[1]);
-            if (area > min) {
-                continue;
-            }
-
-            // confirms the other two points exist in the set
-            if (map.get(p1[0]).contains(p2[1]) && map.get(p2[0]).contains(p1[1])) {
-                min = area;
-            }
-        }
-    }
-    return min == Integer.MAX_VALUE ? 0 : min;
-}
-{% endhighlight %}
-
 [Maximum Score From Removing Stones][maximum-score-from-removing-stones]
 
 {% highlight java %}
@@ -384,13 +330,11 @@ public int findNthDigit(int n) {
 }
 {% endhighlight %}
 
-[circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
 [count-number-of-teams]: https://leetcode.com/problems/count-number-of-teams/
 [count-of-matches-in-tournament]: https://leetcode.com/problems/count-of-matches-in-tournament/
 [heaters]: https://leetcode.com/problems/heaters/
 [maximum-length-of-a-concatenated-string-with-unique-characters]: https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/
 [maximum-score-from-removing-stones]: https://leetcode.com/problems/maximum-score-from-removing-stones/
-[minimum-area-rectangle]: https://leetcode.com/problems/minimum-area-rectangle/
 [minimum-time-difference]: https://leetcode.com/problems/minimum-time-difference/
 [most-visited-sector-in-a-circular-track]: https://leetcode.com/problems/most-visited-sector-in-a-circular-track/
 [nth-digit]: https://leetcode.com/problems/nth-digit/

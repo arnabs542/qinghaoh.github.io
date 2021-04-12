@@ -1,0 +1,107 @@
+---
+layout: post
+title:  "Geometry"
+tags: math
+usemathjax: true
+---
+# Theorem
+
+[Triangle area using coordinates](https://en.wikipedia.org/wiki/Triangle#Using_coordinates)
+
+\\[
+T={\frac {1}{2}}{\big |}(x_{A}-x_{C})(y_{B}-y_{A})-(x_{A}-x_{B})(y_{C}-y_{A}){\big |}
+\\]
+
+[Taxicab geometry](https://en.wikipedia.org/wiki/Taxicab_geometry)
+
+Taxicab metric = \\(l_1\\) distance = \\(l_1\\) norm = $Manhattan distance
+
+[Triangle inequality](https://en.wikipedia.org/wiki/Triangle_inequality#Normed_vector_space)
+
+In a normed vector space $$ V $$, one of the defining properties of the norm is the triangle inequality:
+
+\\[\|x+y\|\leq \|x\|+\|y\|\quad \forall \,x,y\in V\\]
+
+[Escape The Ghosts][escape-the-ghosts]
+
+{% highlight java %}
+public boolean escapeGhosts(int[][] ghosts, int[] target) {
+    // Manhattan distance
+    int d = Math.abs(target[0]) + Math.abs(target[1]);
+    for (int[] g : ghosts) {
+        if (Math.abs(g[0] - target[0]) + Math.abs(g[1] - target[1]) <= d) {
+            return false;
+        }
+    }
+    return true;
+}
+{% endhighlight %}
+
+[Graham scan](https://en.wikipedia.org/wiki/Graham_scan)
+
+For three points \\(P_{1}=(x_{1},y_{1})\\), \\(P_{2}=(x_{2},y_{2}\\) and \\(P_{3}=(x_{3},y_{3})\\), compute the z-coordinate of the cross product of the two vectors \\(\overrightarrow {P_{1}P_{2}}\\) and \\(\overrightarrow {P_{1}P_{3}}\\), which is given by the expression \\((x_{2}-x_{1})(y_{3}-y_{1})-(y_{2}-y_{1})(x_{3}-x_{1})\\).
+
+[Convex Polygon][convex-polygon]
+
+# Overlapping
+
+[Circle and Rectangle Overlapping][circle-and-rectangle-overlapping]
+
+{% highlight java %}
+public boolean checkOverlap(int radius, int x_center, int y_center, int x1, int y1, int x2, int y2) {
+    // finds the closest point of the rectangle to the center.
+    // if the center is in the rectangle, the center itself is the point
+    int x = closest(x_center, x1, x2);
+    int y = closest(y_center, y1, y2);
+
+    int dx = x_center - x;
+    int dy = y_center - y;
+
+    return dx * dx + dy * dy <= radius * radius;
+}
+
+private int closest(int value, int min, int max) {
+    return Math.max(min, Math.min(max, value));
+}
+{% endhighlight %}
+
+# Area
+
+[Minimum Area Rectangle][minimum-area-rectangle]
+
+{% highlight java %}
+public int minAreaRect(int[][] points) {
+    Map<Integer, Set<Integer>> map = new HashMap<>();
+    for (int[] p : points) {
+        map.computeIfAbsent(p[0], k -> new HashSet<>()).add(p[1]);
+    }
+
+    int min = Integer.MAX_VALUE;
+    for (int i = 0; i < points.length; i++) {
+        for (int j = 0; j < i; j++) {
+            int[] p1 = points[i], p2 = points[j];
+            // same x or y
+            // computes diagonal points only
+            if (p1[0] == p2[0] || p1[1] == p2[1]) {
+                continue;
+            }
+
+            int area = Math.abs(p1[0] - p2[0]) * Math.abs(p1[1] - p2[1]);
+            if (area > min) {
+                continue;
+            }
+
+            // confirms the other two points exist in the set
+            if (map.get(p1[0]).contains(p2[1]) && map.get(p2[0]).contains(p1[1])) {
+                min = area;
+            }
+        }
+    }
+    return min == Integer.MAX_VALUE ? 0 : min;
+}
+{% endhighlight %}
+
+[circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
+[convex-polygon]: https://leetcode.com/problems/convex-polygon/
+[escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/
+[minimum-area-rectangle]: https://leetcode.com/problems/minimum-area-rectangle/

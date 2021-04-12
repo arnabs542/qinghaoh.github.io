@@ -6,6 +6,16 @@ tags: dfs
 
 Backtracking = DFS + pruning
 
+# Template
+
+{% highlight java %}
+private void backtrack(var i) {
+    for (var i : space) {
+        backtrack();
+    }
+}
+{% endhighlight %}
+
 [Permutations][permutations]
 
 {% highlight java %}
@@ -131,6 +141,32 @@ private void backtrack(List<List<Integer>> list, List<Integer> tmpList, int[] nu
         backtrack(list, tmpList, nums, i + 1);
         tmpList.remove(tmpList.size() - 1);
     }
+}
+{% endhighlight %}
+
+[Letter Tile Possibilities][letter-tile-possibilities]
+
+{% highlight java %}
+public int numTilePossibilities(String tiles) {
+    int[] count = new int[26];
+    for (char c : tiles.toCharArray()) {
+        count[c - 'A']++;
+    }
+    return backtrack(count);
+}
+
+private int backtrack(int[] count) {
+    int sum = 0;
+    for (int i = 0; i < 26; i++) {
+        if (count[i] == 0) {
+            continue;
+        }
+        sum++;
+        count[i]--;
+        sum += backtrack(count);
+        count[i]++;
+    }
+    return sum;
 }
 {% endhighlight %}
 
@@ -544,6 +580,7 @@ private int backtrack(int index, int[] debt) {
 [combination-sum-iii]: https://leetcode.com/problems/combination-sum-iii/
 [factor-combinations]: https://leetcode.com/problems/factor-combinations/
 [generalized-abbreviation]: https://leetcode.com/problems/generalized-abbreviation/
+[letter-tile-possibilities]: https://leetcode.com/problems/letter-tile-possibilities/
 [matchsticks-to-square]: https://leetcode.com/problems/matchsticks-to-square/
 [optimal-account-balancing]: https://leetcode.com/problems/optimal-account-balancing/
 [palindrome-partitioning]: https://leetcode.com/problems/palindrome-partitioning/
