@@ -199,7 +199,35 @@ class TrafficLight {
 }
 {% endhighlight %}
 
+# Parallel Stream
+
+[Web Crawler Multithreaded][web-crawler-multithreaded]
+
+{% highlight java %}
+public List<String> crawl(String startUrl, HtmlParser htmlParser) {
+    int index = startUrl.indexOf('/', 7);  // skips http://
+    String hostname = index < 0 ? startUrl : startUrl.substring(0, index);  // hostname with protocol
+
+    Set<String> visited = ConcurrentHashMap.newKeySet();
+    visited.add(startUrl);
+
+    return crawl(startUrl, htmlParser, visited, hostname)
+        .collect(Collectors.toList());
+}
+
+private Stream<String> crawl(String startUrl, HtmlParser parser, Set<String> visited, String hostname) {
+    Stream<String> stream = parser.getUrls(startUrl)
+        .parallelStream()
+        .filter(u -> u.startsWith(hostname))
+        .filter(u -> visited.add(u))
+        .flatMap(u -> crawl(u, parser, visited, hostname));
+
+    return Stream.concat(Stream.of(startUrl), stream);
+}
+{% endhighlight %}
+
 [print_in_order]: https://leetcode.com/problems/print-in-order/
 [semaphore]: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Semaphore.html
 [the-dining-philosophers]: https://leetcode.com/problems/the-dining-philosophers/
 [traffic-light-controlled-intersection]: https://leetcode.com/problems/traffic-light-controlled-intersection/
+[web-crawler-multithreaded]: https://leetcode.com/problems/web-crawler-multithreaded/

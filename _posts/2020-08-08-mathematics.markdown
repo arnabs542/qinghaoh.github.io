@@ -177,6 +177,28 @@ C_{0}=1\quad {\text{and}}\quad C_{n+1}={\frac {2(2n+1)}{n+2}}C_{n}
 
 [Handshakes That Don't Cross][handshakes-that-dont-cross]
 
+```
+dp[n + 1] = dp[0] * dp[n] + dp[1] * dp[n - 1] + ... + dp[n] * dp[0]
+```
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int numberOfWays(int num_people) {
+    int n = num_people / 2;  // pairs
+    long[] dp = new long[n + 1];
+    dp[0] = 1;
+
+    // splits pairs
+    for (int k = 1; k <= n; k++) {
+        for (int i = 0; i < k; i++) {
+            dp[k] = (dp[k] + dp[i] * dp[k - 1 - i]) % MOD;
+        }
+    }
+    return (int)dp[n];
+}
+{% endhighlight %}
+
 # Exponentiation
 
 [Exponentiation by squaring](https://en.wikipedia.org/wiki/Exponentiation_by_squaring): square-and-multiply/binary exponentiation/double-and-add

@@ -8,10 +8,26 @@ tags: bit
 n ^ 0 = n
 n ^ n = 0
 2k ^ (2k + 1) = 1
-n &= -n  // clears all but lsb
-n & (n - 1) == 0  // power of 2
-i = (i - 1) & superset // enumerate all subsets
+
+n &= -n 		// clears all but lsb
+n &= n - 1		// zeros out lsb
+n & (n - 1) == 0  	// power of 2
+
+i = (i - 1) & superset	// enumerate all subsets
 ```
+
+[Counting Bits][counting-bits]
+
+{% highlight java %}
+public int[] countBits(int num) {
+    int[] result = new int[num + 1];
+    for (int i = 0; i <= num; i++) {
+        result[i] = result[i & (i - 1)] + 1;
+    }
+    return result;
+}
+{% endhighlight %}
+
 [Concatenation of Consecutive Binary Numbers][concatenation-of-consecutive-binary-numbers]
 
 {% highlight java %}
@@ -418,6 +434,7 @@ public boolean validUtf8(int[] data) {
 [binary-number-with-alternating-bits]: https://leetcode.com/problems/binary-number-with-alternating-bits/
 [concatenation-of-consecutive-binary-numbers]: https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/
 [circular-permutation-in-binary-representation]: https://leetcode.com/problems/circular-permutation-in-binary-representation/
+[counting-bits]: https://leetcode.com/problems/counting-bits/
 [divide-two-integers]: https://leetcode.com/problems/divide-two-integers/
 [find-root-of-n-ary-tree]: https://leetcode.com/problems/find-root-of-n-ary-tree/
 [flip-columns-for-maximum-number-of-equal-rows]: https://leetcode.com/problems/flip-columns-for-maximum-number-of-equal-rows/

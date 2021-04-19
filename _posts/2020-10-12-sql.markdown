@@ -67,29 +67,6 @@ JOIN
 ;
 {% endhighlight %}
 
-[Restaurant Growth][restaurant-growth]
-
-{% highlight sql %}
-WITH Day AS(
-    SELECT visited_on, SUM(amount) AS day_sum
-    FROM Customer
-    GROUP BY visited_on)
-
-SELECT
-    a.visited_on AS visited_on,
-    SUM(b.day_sum) AS amount,
-    ROUND(AVG(b.day_sum), 2) AS average_amount
-FROM
-    Day a, Day b
-WHERE
-    DATEDIFF(a.visited_on, b.visited_on) BETWEEN 0 AND 6
-GROUP BY
-    a.visited_on
-HAVING
-    COUNT(b.visited_on) = 7
-;
-{% endhighlight %}
-
 [Second Highest Salary][second-highest-salary]
 
 {% highlight sql %}
@@ -237,6 +214,8 @@ GROUP BY a1.player_id, a1.event_date
 
 MySQL uses three-valued logic -- TRUE, FALSE and UNKNOWN. Anything compared to NULL evaluates to the third value: UNKNOWN. That “anything” includes NULL itself! That’s why MySQL provides the IS NULL and IS NOT NULL operators to specifically check for NULL.
 
+# HAVING
+
 [Customer Placing the Largest Number of Orders][customer-placing-the-largest-number-of-orders]
 
 {% highlight sql %}
@@ -277,6 +256,24 @@ HAVING SUM(price) >= ALL(
         Sales
     GROUP BY
         seller_id)
+;
+{% endhighlight %}
+
+[Sales Analysis II][sales-analysis-ii]
+
+{% highlight sql %}
+SELECT
+    s.buyer_id
+FROM
+    Product p
+JOIN
+    Sales s
+ON
+    p.product_id = s.product_id 
+GROUP BY
+    s.buyer_id 
+HAVING
+    SUM(p.product_name = 'S8') > 0 AND SUM(p.product_name = 'iPhone') = 0;
 ;
 {% endhighlight %}
 
@@ -674,6 +671,84 @@ ORDER BY
 ;
 {% endhighlight %}
 
+# Common Table Expressions (CTE)
+
+[Restaurant Growth][restaurant-growth]
+
+{% highlight sql %}
+WITH Day AS(
+    SELECT visited_on, SUM(amount) AS day_sum
+    FROM Customer
+    GROUP BY visited_on)
+
+SELECT
+    a.visited_on AS visited_on,
+    SUM(b.day_sum) AS amount,
+    ROUND(AVG(b.day_sum), 2) AS average_amount
+FROM
+    Day a, Day b
+WHERE
+    DATEDIFF(a.visited_on, b.visited_on) BETWEEN 0 AND 6
+GROUP BY
+    a.visited_on
+HAVING
+    COUNT(b.visited_on) = 7
+;
+{% endhighlight %}
+
+### Recursive CTE
+
+{% highlight sql %}
+WITH expression_name (column_list)
+AS
+(
+    -- Anchor member
+    initial_query  
+    UNION ALL
+    -- Recursive member that references expression_name.
+    recursive_query  
+)
+-- references expression name
+SELECT *
+FROM   expression_name
+{% endhighlight %}
+
+![Flow chart](https://cdn.sqlservertutorial.net/wp-content/uploads/SQL-Server-Recursive-CTE-execution-flow.png)
+
+Ref: https://www.sqlservertutorial.net/sql-server-basics/sql-server-recursive-cte/
+
+[Find the Missing IDs][find-the-missing-ids]
+
+{% highlight sql %}
+WITH RECURSIVE Seq AS (
+    SELECT
+        1 AS ids
+    UNION
+    SELECT
+        ids + 1
+    FROM
+        Seq
+    WHERE
+        ids < (
+            SELECT
+                MAX(customer_id)
+            FROM
+                Customers)
+    )
+
+SELECT
+    ids
+FROM
+    Seq
+WHERE
+    ids NOT IN (
+        SELECT
+            customer_id
+        FROM
+            Customers)
+;
+{% endhighlight %}
+
 # Functions
 
 {% highlight sql %}
@@ -700,6 +775,7 @@ YEAR(date)
 [employees-earning-more-than-their-managers]: https://leetcode.com/problems/employees-earning-more-than-their-managers/
 [evaluate-boolean-expression]: https://leetcode.com/problems/evaluate-boolean-expression/
 [find-the-start-and-end-number-of-continuous-ranges]: https://leetcode.com/problems/find-the-start-and-end-number-of-continuous-ranges/
+[find-the-missing-ids]: https://leetcode.com/problems/find-the-missing-ids/
 [friend-requests-i-overall-acceptance-rate]: https://leetcode.com/problems/friend-requests-i-overall-acceptance-rate/
 [game-play-analysis-i]: https://leetcode.com/problems/game-play-analysis-i/
 [game-play-analysis-ii]: https://leetcode.com/problems/game-play-analysis-ii/
@@ -718,6 +794,7 @@ YEAR(date)
 [restaurant-growth]: https://leetcode.com/problems/restaurant-growth/
 [rising-temperature]: https://leetcode.com/problems/rising-temperature/
 [sales-analysis-i]: https://leetcode.com/problems/sales-analysis-i/
+[sales-analysis-ii]: https://leetcode.com/problems/sales-analysis-ii/
 [sales-person]: https://leetcode.com/problems/sales-person/
 [second-highest-salary]: https://leetcode.com/problems/second-highest-salary/
 [swap-salary]: https://leetcode.com/problems/swap-salary/

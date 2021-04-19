@@ -7,21 +7,30 @@ tags: array
 
 {% highlight java %}
 public String removeDuplicates(String s, int k) {
+    int n = s.length();
+    // count[i]: number of duplicates ending at i
+    int[] count = new int[n];
+
     char[] c = s.toCharArray();
-    int[] count = new int[s.length()];  // DP
     int i = 0, j = 0;
-    while (j < c.length) {
+    while (j < n) {
+        // copies the j-th char to the i-th position
         c[i] = c[j];
+
         count[i] = i > 0 && c[i - 1] == c[i] ? count[i - 1] + 1 : 1;
         if (count[i] == k) {
             i -= k;
         }
+
         i++;
         j++;
     }
+
     return new String(c, 0, i);
 }
 {% endhighlight %}
+
+Another solution is to use stack.
 
 [Backspace String Compare][backspace-string-compare]
 

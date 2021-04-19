@@ -213,11 +213,13 @@ public int mctFromLeafValues(int[] arr) {
 }
 {% endhighlight %}
 
+## Histogram
+
 [Largest Rectangle in Histogram][largest-rectangle-in-histogram]
 
 {% highlight java %}
 public int largestRectangleArea(int[] heights) {
-    // index of non-descending heights
+    // index of non-descreasing heights
     Deque<Integer> st = new ArrayDeque<>();
     int area = 0;
     for (int i = 0; i <= heights.length; i++) {            
@@ -262,26 +264,32 @@ public int maximalRectangle(char[][] matrix) {
     int area = 0;
     int[] height = new int[n + 1];
 
-    for (int row = 0; row < m; row++) {
+    for (int i = 0; i < m; i++) {
         Deque<Integer> st = new ArrayDeque<>();
-        for (int i = 0; i <= n; i++) {
-            if (i < n && matrix[row][i] == '1') {
-                height[i] += 1;
+        for (int j = 0; j <= n; j++) {
+            // histogram height array in each row
+            if (j < n && matrix[i][j] == '1') {
+                height[j]++;
             } else {
-                height[i] = 0;
+                height[j] = 0;
             }
 
-            while (!st.isEmpty() && height[i] < height[st.peek()]) {
+            while (!st.isEmpty() && height[j] < height[st.peek()]) {
                 int h = height[st.pop()];
-                int w = st.isEmpty() ? i : (i - 1) - st.peek();
+                int w = st.isEmpty() ? j : (j - 1) - st.peek();
                 area = Math.max(area, h * w);
             }
-            st.push(i);
+            st.push(j);
         }
     }
 
     return area;
 }
+{% endhighlight %}
+
+[Count Submatrices With All Ones][count-submatrices-with-all-ones]
+
+{% highlight java %}
 {% endhighlight %}
 
 [Remove Duplicate Letters][remove-duplicate-letters]
@@ -576,6 +584,7 @@ public String parseTernary(String expression) {
 {% endhighlight %}
 
 [132-pattern]: https://leetcode.com/problems/132-pattern/
+[count-submatrices-with-all-ones]: https://leetcode.com/problems/count-submatrices-with-all-ones/
 [final-prices-with-a-special-discount-in-a-shop]: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/
 [find-the-most-competitive-subsequence]: https://leetcode.com/problems/find-the-most-competitive-subsequence/
 [flatten-nested-list-iterator]: https://leetcode.com/problems/flatten-nested-list-iterator/

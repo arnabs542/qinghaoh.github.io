@@ -17,20 +17,23 @@ Where `0 <= i <= j <= a.length`
 
 {% highlight java %}
 public int subarraySum(int[] nums, int k) {
-    int sum = 0, count = 0;
     Map<Integer, Integer> map = new HashMap<>();  // prefix sum : count
-    for (int num : nums) {
-        sum += num;
-        if (sum == k) {
-            count++;
-        }
+    map.put(0, 1);  // p[0]
 
+    int sum = 0, count = 0;
+    for (int num : nums) {
+        // calculates p[i]
+        sum += num;
+
+        // p[i] - k exists in the map
         if (map.containsKey(sum - k)) {
             count += map.get(sum - k);
         }
 
+        // increments counter of p[i]
         map.put(sum, map.getOrDefault(sum, 0) + 1);
     }
+
     return count;
 }
 {% endhighlight %}

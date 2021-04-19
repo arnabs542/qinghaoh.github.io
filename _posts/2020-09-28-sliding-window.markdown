@@ -428,6 +428,27 @@ public int numberOfSubstrings(String s) {
 [Maximum Points You Can Obtain from Cards][maximum-points-you-can-obtain-from-cards]
 [Minimum Difference Between Largest and Smallest Value in Three Moves][minimum-difference-between-largest-and-smallest-value-in-three-moves]
 
+[Minimum Swaps to Group All 1's Together][minimum-swaps-to-group-all-1s-together]
+
+{% highlight java %}
+public int minSwaps(int[] data) {
+    int sum = 0;
+    for (int d : data) {
+        sum += d;
+    }
+
+    int i = 0, j = 0, count = 0, min = data.length;
+    while (j < data.length) {
+        count += data[j++];
+        if (j - i >= sum) {
+            min = Math.min(min, sum - count);
+            count -= data[i++];
+        }
+    }
+    return min;
+}
+{% endhighlight %}
+
 [Find All Anagrams in a String][find-all-anagrams-in-a-string]
 
 {% highlight java %}
@@ -462,15 +483,13 @@ public List<Integer> findAnagrams(String s, String p) {
 [Minimum Operations to Reduce X to Zero][minimum-operations-to-reduce-x-to-zero]
 
 {% highlight java %}
-private static final int MAX = (int)1e5 + 1;
-
 public int minOperations(int[] nums, int x) {
     int sum = 0;
     for (int num : nums) {
         sum += num;
     }
 
-    int i = 0, j = 0, min = MAX;
+    int i = 0, j = 0, min = Integer.MAX_VALUE;
     while (j < nums.length) {
         // sum([0...i) + (j...n - 1]) == x
         sum -= nums[j++];
@@ -483,7 +502,7 @@ public int minOperations(int[] nums, int x) {
             min = Math.min(min, nums.length - j + i);
         }
     }
-    return min == MAX ? -1 : min;
+    return min == Integer.MAX_VALUE ? -1 : min;
 }
 {% endhighlight %}
 
@@ -504,6 +523,7 @@ Similar to: [Maximum Size Subarray Sum Equals k][maximum-size-subarray-sum-equal
 [minimum-difference-between-largest-and-smallest-value-in-three-moves]: https://leetcode.com/problems/minimum-difference-between-largest-and-smallest-value-in-three-moves/
 [minimum-operations-to-reduce-x-to-zero]: https://leetcode.com/problems/minimum-operations-to-reduce-x-to-zero/
 [minimum-size-subarray-sum]: https://leetcode.com/problems/minimum-size-subarray-sum/
+[minimum-swaps-to-group-all-1s-together]: https://leetcode.com/problems/minimum-swaps-to-group-all-1s-together/
 [minimum-window-substring]: https://leetcode.com/problems/minimum-window-substring/
 [number-of-substrings-containing-all-three-characters]: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
 [replace-the-substring-for-balanced-string]: https://leetcode.com/problems/replace-the-substring-for-balanced-string/

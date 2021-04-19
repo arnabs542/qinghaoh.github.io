@@ -6,9 +6,11 @@ tags: array
 # Search
 
 ## Reduce to One-dimension
+
 [Search a 2D Matrix][search-a-2d-matrix]
 
 ## Monotonic in Each Dimenstion
+
 [Find Positive Integer Solution for a Given Equation][find-positive-integer-solution-for-a-given-equation]
 
 {% highlight java %}
@@ -138,7 +140,8 @@ public int maximalSquare(char[][] matrix) {
 }
 {% endhighlight %}
 
-# Block Sum
+# Range Sum
+
 [Matrix Block Sum][matrix-block-sum]
 
 {% highlight java %}
@@ -165,6 +168,42 @@ public int[][] matrixBlockSum(int[][] mat, int K) {
 {% endhighlight %}
 
 [Lonely Pixel I][lonely-pixel-i]
+
+# 2D Prefix Sum
+
+2D -> 1D: Calculates prefix sum for each row, and then each column, or vice versa.
+
+[Number of Submatrices That Sum to Target][number-of-submatrices-that-sum-to-target]
+
+{% highlight java %}
+int[][] p = new int[m + 1][n];
+
+// calculates prefix sum for each column 
+for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+        p[i + 1][j] = p[i][j] + matrix[i][j];
+    }
+}
+
+// rows in range [r1, r2]
+for (int r1 = 0; r1 < m; r1++) {
+    for (int r2 = r1; r2 < m; r2++) {
+        // 560. Subarray Sum Equals K
+        count += subarraySum(p, r1, r2, target);
+    }
+}
+{% endhighlight %}
+
+Alternatively,
+
+{% highlight java %}
+// calculates prefix sum for row
+for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+        p[i][j + 1] = p[i][j] + matrix[i][j];
+    }
+}
+{% endhighlight %}
 
 # Traversal
 
@@ -258,4 +297,5 @@ Regular DFS/BFS would also work.
 [matrix-block-sum]: https://leetcode.com/problems/matrix-block-sum/
 [maximal-square]: https://leetcode.com/problems/maximal-square/
 [number-of-enclaves]: https://leetcode.com/problems/number-of-enclaves/
+[number-of-submatrices-that-sum-to-target]: https://leetcode.com/problems/number-of-submatrices-that-sum-to-target/
 [search-a-2d-matrix]: https://leetcode.com/problems/search-a-2d-matrix/
