@@ -21,7 +21,7 @@ i = (i - 1) & superset	// enumerate all subsets
 {% highlight java %}
 public int[] countBits(int num) {
     int[] result = new int[num + 1];
-    for (int i = 0; i <= num; i++) {
+    for (int i = 1; i <= num; i++) {
         result[i] = result[i & (i - 1)] + 1;
     }
     return result;

@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Subtring"
+title:  "Substring"
 tags: string
 ---
 # Dynamic Programming

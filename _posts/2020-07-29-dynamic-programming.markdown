@@ -273,6 +273,25 @@ public int calculateMinimumHP(int[][] dungeon) {
 }
 {% endhighlight %}
 
+[Triangle][triangle]
+
+{% highlight java %}
+public int minimumTotal(List<List<Integer>> triangle) {
+    int n = triangle.size();
+    // bottom level
+    Integer[] dp = triangle.get(n - 1).toArray(new Integer[0]);
+
+    // from bottom to top
+    for (int i = n - 2; i >= 0; i--) {
+        for (int j = 0; j <= i; j++) {
+            dp[j] = Math.min(dp[j], dp[j + 1]) + triangle.get(i).get(j);
+        }
+    }
+
+    return dp[0];
+}
+{% endhighlight %}
+
 [delete-operation-for-two-strings]: https://leetcode.com/problems/delete-operation-for-two-strings/
 [dungeon-game]: https://leetcode.com/problems/dungeon-game/
 [edit-distance]: https://leetcode.com/problems/edit-distance/
@@ -281,4 +300,5 @@ public int calculateMinimumHP(int[][] dungeon) {
 [min-cost-climbing-stairs]: https://leetcode.com/problems/min-cost-climbing-stairs/
 [minimum-ascii-delete-sum-for-two-strings]: https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/
 [paint-house-ii]: https://leetcode.com/problems/paint-house-ii/
+[triangle]: https://leetcode.com/problems/triangle/
 [uncrossed-lines]: https://leetcode.com/problems/uncrossed-lines/

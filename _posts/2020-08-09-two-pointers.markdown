@@ -241,12 +241,65 @@ if (arr1[p1] == arr2[p2] && arr2[p2] == arr3[p3]) {
 }
 {% endhighlight %}
 
+# Two Passes
+
+[Push Dominoes][push-dominoes]
+
+{% highlight java %}
+public String pushDominoes(String dominoes) {
+    char[] chars = dominoes.toCharArray();
+    int n = chars.length;
+
+    int[] forces = new int[n];
+    int force = 0;
+
+    // -> right
+    for (int i = 0; i < n; i++) {
+        if (chars[i] == 'R'){
+            force = n;
+        } else if (chars[i] == 'L') {
+            force = 0;
+        } else {
+            force = Math.max(force - 1, 0);
+        }
+        forces[i] += force;
+    }
+
+    // <- left
+    force = 0;
+    for (int i = n - 1; i >= 0; i--) {
+        if (chars[i] == 'L') {
+            force = n;
+        } else if (chars[i] == 'R') {
+            force = 0;
+        } else {
+            force = Math.max(force - 1, 0);
+        }
+        forces[i] -= force;
+
+        chars[i] = forces[i] < 0 ? 'L' : (forces[i] > 0 ? 'R' : '.');
+    }
+    return new String(chars);
+}
+{% endhighlight %}
+
+```
+.L.R...LR..L..
+
+[  0,  0,0,14, 13, 12, 11,  0,14, 13, 12,  0,0,0]
+[-13,-14,0, 0,-11,-12,-13,-14, 0,-12,-13,-14,0,0]
+
+[-13,-14,0,14,  2,  0, -2,-14,14,  1, -1,-14,0,0]
+
+LL.RR.LLRRLL..
+```
 [backspace-string-compare]: https://leetcode.com/problems/backspace-string-compare/
 [container-with-most-water]: https://leetcode.com/problems/container-with-most-water/
 [count-unique-characters-of-all-substrings-of-a-given-string]: https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/
 [intersection-of-three-sorted-arrays]: https://leetcode.com/problems/intersection-of-three-sorted-arrays/
 [number-of-subsequences-that-satisfy-the-given-sum-condition]: https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/
 [one-edit-distance]: https://leetcode.com/problems/one-edit-distance/
+[push-dominoes]: https://leetcode.com/problems/push-dominoes/
 [remove-all-adjacent-duplicates-in-string-ii]: https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string-ii/
 [shortest-word-distance-ii]: https://leetcode.com/problems/shortest-word-distance-ii/
 [sort-transformed-array]: https://leetcode.com/problems/sort-transformed-array/

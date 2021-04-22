@@ -123,6 +123,15 @@ public int[] beautifulArray(int N) {
 }
 {% endhighlight %}
 
+```
+N = 10
+
+[1]
+[1,2]
+[1,3,2,4]
+[1,5,3,7,2,6,4,8]
+```
+
 It's easy to come up with a recursive version.
 
 [Bit reversal permutation](https://en.wikipedia.org/wiki/Bit-reversal_permutation)

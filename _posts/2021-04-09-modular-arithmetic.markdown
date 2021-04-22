@@ -62,24 +62,36 @@ If \\(\gcd(a, 1337) = 1\\),
 
 If \\(a \bmod 7 = 0\\), let \\(a = 7^nm\\), \\(b = \varphi(1337)p + q\\), where \\(0 < q \le \varphi(1337)\\)
 
-\\[
-\begin{multline}
-\shoveleft
+$$
 \begin{aligned}
 a^b \bmod 1337 &= (7^nm)^b \bmod 1337 \\
-&= (7^{nb}m^b) \bmod 1337 \\\\
-&= ((7^{nb} \bmod 1337) \cdot (m^b \bmod 1337)) \bmod 1337
+&= (7^{nb}m^b) \bmod 1337 \\
+&= ((7^{nb} \bmod 1337) \cdot (m^b \bmod 1337)) \bmod 1337 \\
+&= ((7^{n(\varphi(1337)p + q)} \bmod 1337) \cdot (m^{\varphi(1337)p + q} \bmod 1337)) \bmod 1337
 \end{aligned}
-\end{multline}
-\\]
+$$
 
-\\[
+Since \\(\gcd(m, 1337) = 1\\), we know \\(m^\varphi(1337) \bmod 1337 = 1\\)
+
+$$
 \begin{aligned}
-a^b \mod 1337 &= (7^nm)^b \mod 1337 \\
-&= (7^{nb}m^b) \mod 1337 \\\\
-&= ((7^{nb} \mod 1337) \cdot (m^b \mod 1337)) \mod 1337
+a^b \bmod 1337 &= ((7^{1140np + nq} \bmod 1337) \cdot (m^q \bmod 1337)) \bmod 1337 \\
+&= (7 \cdot (7^{1140np + nq - 1} \bmod 191) \cdot (m^q \bmod 1337)) \bmod 1337
 \end{aligned}
-\\]
+$$
+
+Note \\(\gcd(7, 191) = 1\\), and \\(\varphi(191) = 190\\), \\(1140 \bmod 190 = 0\\), so \\(7^{1140np} \bmod 191 = 7^{6 \cdot 190np} \bmod 191 = (7^6)^{\varphi(191)} \bmod 191 = 0\\)
+
+$$
+\begin{aligned}
+a^b \bmod 1337 &= (7 \cdot (7^{nq - 1} \bmod 191) \cdot (m^q \bmod 1337)) \bmod 1337 \\
+&= ((7^{nq} \bmod 1337) \cdot (m^q \bmod 1337)) \bmod 1337 \\
+&= 7^{nq}m^q \bmod 1337 \\
+&= (7^nm)^q \bmod 1337 \\
+&= a^q \bmod 1337 \\
+&= a^{b \bmod 1140} \bmod 1337
+\end{aligned}
+$$
 
 #  Pigeonhole Principle
 

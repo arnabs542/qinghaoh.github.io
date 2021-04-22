@@ -712,11 +712,58 @@ private void dfs(TreeNode node, int d) {
 }
 {% endhighlight %}
 
+# Postorder
+
+In postorder, we don't have to pass parent node as a parameter of dfs().
+
+[Delete Nodes And Return Forest][delete-nodes-and-return-forest]
+
+{% highlight java %}
+private List<TreeNode> list = new ArrayList<>();
+private Set<Integer> set = new HashSet<>();
+
+public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
+    for (int i : to_delete) {
+        set.add(i);
+    }
+
+    if (!set.contains(root.val)) {
+        list.add(root);
+    }
+
+    dfs(root);
+    return list;
+}
+
+private TreeNode dfs(TreeNode node) {
+    if (node == null) {
+        return null;
+    }
+
+    node.left = dfs(node.left);
+    node.right = dfs(node.right);
+
+    // postorder
+    if (set.contains(node.val)) {
+        if (node.left != null) {
+            list.add(node.left);
+        }
+        if (node.right != null) {
+            list.add(node.right);
+        }
+        return null;
+    }
+
+    return node;
+}
+{% endhighlight %}
+
 [all-nodes-distance-k-in-binary-tree]: https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/
 [binary-tree-maximum-path-sum]: https://leetcode.com/problems/binary-tree-maximum-path-sum/
 [binary-tree-right-side-view]: https://leetcode.com/problems/binary-tree-right-side-view/
 [convert-bst-to-greater-tree]: https://leetcode.com/problems/convert-bst-to-greater-tree/
 [count-good-nodes-in-binary-tree]: https://leetcode.com/problems/count-good-nodes-in-binary-tree/
+[delete-nodes-and-return-forest]: https://leetcode.com/problems/delete-nodes-and-return-forest/
 [diameter-of-binary-tree]: https://leetcode.com/problems/diameter-of-binary-tree/
 [diameter-of-n-ary-tree]: https://leetcode.com/problems/diameter-of-n-ary-tree/
 [find-bottom-left-tree-value]: https://leetcode.com/problems/find-bottom-left-tree-value/
