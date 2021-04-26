@@ -4,7 +4,7 @@ title:  "Topological Sorting"
 tags: graph
 ---
 
-[Topological sorting](https://en.wikipedia.org/wiki/Topological_sorting)
+[Topological sorting](https://en.wikipedia.org/wiki/Topological_sorting): In computer science, a topological sort or topological ordering of a directed graph is a linear ordering of its vertices such that for every directed edge `uv` from vertex `u` to vertex `v`, `u` comes before `v` in the ordering.
 
 # Kahn's Algorithm
 
@@ -47,11 +47,11 @@ public int[] findOrder(int numCourses, int[][] prerequisites) {
 }
 {% endhighlight %}
 
-# DFS
+# Cycle Detection
 
-A topological ordering is possible if and only if the graph has no directed cycles, that is, if it is a directed acyclic graph (DAG)
+A topological ordering is possible iff the graph has no directed cycles, that is, iff it is a directed acyclic graph (DAG).
 
-White-Gray-Black DFS
+** White-Gray-Black DFS **
 
 [Course Schedule II][course-schedule-ii]
 
@@ -92,13 +92,10 @@ private boolean dfs(int node) {
     // starts the recursion
     color[node] = GRAY;
 
-    boolean result = true;
     if (graph.containsKey(node)) {
         for (int neighbor : graph.get(node)) {
-            if (color[neighbor] == WHITE) {
-                result = result && dfs(neighbor);
-            } else if (color[neighbor] == GRAY) {
-                // detects cycle; stops
+            // detects cycle; stops
+            if ((color[neighbor] == WHITE && !dfs(neighbor)) || color[neighbor] == GRAY) {
                 return false;
             }
         }
@@ -107,7 +104,7 @@ private boolean dfs(int node) {
     // finishes the recursion
     color[node] = BLACK;
     order.add(node);
-    return result;
+    return true;
 }
 {% endhighlight %}
 

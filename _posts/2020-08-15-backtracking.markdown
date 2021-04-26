@@ -109,13 +109,29 @@ public List<List<Integer>> subsets(int[] nums) {
 }
 
 private void backtrack(List<List<Integer>> list, List<Integer> tmpList, int[] nums, int index) {
-    list.add(new ArrayList<>(tmpList));
-
-    for (int i = index; i < nums.length; i++) { 
-        tmpList.add(nums[i]);
-        backtrack(list, tmpList, nums, i + 1);
-        tmpList.remove(tmpList.size() - 1);
+    if (index == nums.length) {
+        list.add(new ArrayList<>(tmpList));
+        return;
     }
+
+    backtrack(list, tmpList, nums, index + 1);
+    tmpList.add(nums[index]);
+    backtrack(list, tmpList, nums, index + 1);
+    tmpList.remove(tmpList.size() - 1);
+}
+{% endhighlight %}
+
+{% highlight java %}
+private void backtrack(List<List<Integer>> list, List<Integer> tmpList, int[] nums, int index) {
+    if (index == nums.length) {
+        list.add(new ArrayList<>(tmpList));
+        return;
+    }
+
+    backtrack(list, tmpList, nums, index + 1);
+    tmpList.add(nums[index]);
+    backtrack(list, tmpList, nums, index + 1);
+    tmpList.remove(tmpList.size() - 1);
 }
 {% endhighlight %}
 
@@ -141,6 +157,33 @@ private void backtrack(List<List<Integer>> list, List<Integer> tmpList, int[] nu
         backtrack(list, tmpList, nums, i + 1);
         tmpList.remove(tmpList.size() - 1);
     }
+}
+{% endhighlight %}
+
+[Closest Dessert Cost][closest-dessert-cost]
+
+{% highlight java %}
+private int diff = 10001;
+
+public int closestCost(int[] baseCosts, int[] toppingCosts, int target) {
+    for (int b : baseCosts) {
+        backtrack(toppingCosts, 0, target - b);
+    }
+    return target - diff;
+}
+
+private void backtrack(int[] nums, int index, int t) {
+    if ((Math.abs(t) < Math.abs(diff)) || (Math.abs(t) == Math.abs(diff) && t > 0)) {
+        diff = t;
+    }
+
+    if (index == nums.length || t <= 0) {
+        return;
+    }
+
+    backtrack(nums, index + 1, t);
+    backtrack(nums, index + 1, t - nums[index]);
+    backtrack(nums, index + 1, t - 2 * nums[index]);
 }
 {% endhighlight %}
 
@@ -575,6 +618,7 @@ private int backtrack(int index, int[] debt) {
 
 [android-unlock-patterns]: https://leetcode.com/problems/android-unlock-patterns/
 [beautiful-arrangement]: https://leetcode.com/problems/beautiful-arrangement/
+[closest-dessert-cost]: https://leetcode.com/problems/closest-dessert-cost/
 [combination-sum]: https://leetcode.com/problems/combination-sum/
 [combination-sum-ii]: https://leetcode.com/problems/combination-sum-ii/
 [combination-sum-iii]: https://leetcode.com/problems/combination-sum-iii/

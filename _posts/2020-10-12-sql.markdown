@@ -210,7 +210,8 @@ FROM Activity a1
 JOIN Activity a2
     ON a1.event_date >= a2.event_date
     AND a1.player_id = a2.player_id
-GROUP BY a1.player_id, a1.event_date
+GROUP BY
+    a1.player_id, a1.event_date
 ;
 {% endhighlight %}
 
@@ -787,6 +788,39 @@ WHERE
 ;
 {% endhighlight %}
 
+# Multiple Joins
+
+[The Most Recent Three Orders][the-most-recent-three-orders]
+
+{% highlight sql %}
+SELECT
+    c.name AS customer_name,
+    o1.customer_id,
+    o1.order_id,
+    o1.order_date
+FROM
+    Customers c
+JOIN
+    Orders o1    
+    ON c.customer_id = o1.customer_id
+JOIN
+    Orders o2
+    ON o1.customer_id = o2.customer_id
+    AND o1.order_date <= o2.order_date
+GROUP BY
+    customer_name,
+    c.customer_id,
+    o1.order_id,
+    o1.order_date
+HAVING
+    COUNT(o2.order_date) <= 3
+ORDER BY
+    customer_name,
+    customer_id,
+    order_date DESC
+;
+{% endhighlight %}
+
 # Functions
 
 {% highlight sql %}
@@ -800,6 +834,23 @@ DATE_FORMAT(date,format)
 
 {% highlight sql %}
 YEAR(date)
+{% endhighlight %}
+
+[Comparison Operators](https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html)
+
+[Number of Calls Between Two Persons][number-of-calls-between-two-persons]
+
+{% highlight sql %}
+SELECT
+    LEAST(from_id,to_id) AS person1,
+    GREATEST(from_id,to_id) AS person2,
+    COUNT(*) AS call_count,
+    SUM(duration) AS total_duration
+FROM
+    Calls
+GROUP BY
+    person1, person2
+;
 {% endhighlight %}
 
 [actors-an-directors-who-cooperated-at-least-three-times]: https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
@@ -825,6 +876,7 @@ YEAR(date)
 [leetflex-banned-accounts]: https://leetcode.com/problems/leetflex-banned-accounts/
 [monthly-transactions-ii]: https://leetcode.com/problems/monthly-transactions-ii/
 [nth-highest-salary]: https://leetcode.com/problems/nth-highest-salary/
+[number-of-calls-between-two-persons]: https://leetcode.com/problems/number-of-calls-between-two-persons/
 [number-of-trusted-contacts-of-a-customer]: https://leetcode.com/problems/number-of-trusted-contacts-of-a-customer/
 [percentage-of-users-attended-a-contest]: https://leetcode.com/problems/percentage-of-users-attended-a-contest/
 [product-price-at-a-given-date]: https://leetcode.com/problems/product-price-at-a-given-date/
@@ -837,4 +889,5 @@ YEAR(date)
 [sales-person]: https://leetcode.com/problems/sales-person/
 [second-highest-salary]: https://leetcode.com/problems/second-highest-salary/
 [swap-salary]: https://leetcode.com/problems/swap-salary/
+[the-most-recent-three-orders]: https://leetcode.com/problems/the-most-recent-three-orders/
 [tree-node]: https://leetcode.com/problems/tree-node/

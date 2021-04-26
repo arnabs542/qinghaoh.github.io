@@ -4,7 +4,119 @@ title:  "Graph"
 tags: graph
 usemathjax: true
 ---
+# Connectivity
 
+## Bridge
+
+[Bridge](https://en.wikipedia.org/wiki/Bridge_%28graph_theory%29): In graph theory, a bridge, isthmus, cut-edge, or cut arc is an edge of a graph whose deletion increases the graph's number of connected components.
+
+Equivalently, an edge is a bridge iff it is not contained in any cycle.
+
+### Tarjan's bridge-finding algorithm
+
+Linear time.
+
+[Critical Connections in a Network][critical-connections-in-a-network]
+
+{% highlight java %}
+private List<List<Integer>> graph;
+private List<List<Integer>> bridges = new ArrayList<>();
+private int time = 0;
+
+// Tarjan's Algorithm
+public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {        
+    this.graph = new ArrayList<>(n);
+    for (int i = 0; i < n; i++) {
+        graph.add(new ArrayList<>());
+    }
+
+    for (List<Integer> e : connections) {
+        int s1 = e.get(0), s2 = e.get(1);
+        graph.get(s1).add(s2);
+        graph.get(s2).add(s1);
+    }
+
+    int[] dfn = new int[n];  // dfn[u]: the sequence number (timestamp) when node u is visited
+    int[] low = new int[n];  // low[u]: the timestamp of the earliest nodes in the stack to which the subtree of node u or node u can be traced (back edge)
+
+    dfs(dfn, low, 0, -1);
+    return bridges;
+}
+
+// preorder
+private void dfs(int[] dfn, int[] low, int node, int parent) {
+    if (dfn[node] > 0) {
+        return;
+    }
+
+    dfn[node] = low[node] = ++time;
+
+    for (int neighbor : graph.get(node)) {
+        if (neighbor == parent) {
+            continue;
+        }
+
+        // unvisited
+        if (dfn[neighbor] == 0) {
+            dfs(dfn, low, neighbor, node);
+        }
+
+        low[node] = Math.min(low[node], low[neighbor]);
+
+        // no back edge; critical
+        if (low[neighbor] > dfn[node]) {
+            bridges.add(Arrays.asList(node, neighbor));
+        }
+    }
+}
+{% endhighlight %}
+
+![Example](https://assets.leetcode.com/uploads/2019/09/03/1537_ex1_2.png) 
+```
+node: 0
+parent: -1
+dfn: 1,0,0,0
+low: 1,0,0,0
+
+node: 1
+parent: 0
+dfn: 1,2,0,0
+low: 1,2,0,0
+
+node: 2
+parent: 1
+dfn: 1,2,3,0
+low: 1,2,3,0
+
+After DFS:
+node: 2
+parent: 1
+dfn: 1,2,3,0
+low: 1,2,1,0
+
+node: 3
+parent: 1
+dfn: 1,2,3,4
+low: 1,1,1,4
+
+After DFS:
+node: 3
+parent: 1
+dfn: 1,2,3,4
+low: 1,1,1,4
+
+After DFS:
+node: 1
+parent: 0
+dfn: 1,2,3,4
+low: 1,1,1,4
+
+After DFS:
+node: 0
+parent: -1
+dfn: 1,2,3,4
+low: 1,1,1,4
+```
 # Directed Graph
 
 [Directed graph](https://en.wikipedia.org/wiki/Directed_graph)
@@ -293,6 +405,7 @@ private void visit(String node) {
 }
 {% endhighlight %}
 
+[critical-connections-in-a-network]: https://leetcode.com/problems/critical-connections-in-a-network/
 [evaluate-division]: https://leetcode.com/problems/evaluate-division/
 [find-the-celebrity]: https://leetcode.com/problems/find-the-celebrity/
 [find-the-town-judge]: https://leetcode.com/problems/find-the-town-judge/

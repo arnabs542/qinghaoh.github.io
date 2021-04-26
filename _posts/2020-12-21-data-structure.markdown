@@ -14,6 +14,11 @@ tag: data structure
 * LinkedHashMap
 * Double linked list + TreeMap<Node>
 
+[Design A Leaderboard][design-a-leaderboard]
+
+* Map
+* TreeMap
+
 [Design Phone Directory][design-phone-directory]
 
 {% highlight java %}
@@ -186,6 +191,7 @@ public void increment(int k, int val) {
 }
 {% endhighlight %}
 
+[design-a-leaderboard]: https://leetcode.com/problems/design-a-leaderboard/
 [design-a-stack-with-increment-operation]: https://leetcode.com/problems/design-a-stack-with-increment-operation/
 [design-hashmap]: https://leetcode.com/problems/design-phone-hashmap/
 [design-phone-directory]: https://leetcode.com/problems/design-phone-directory/

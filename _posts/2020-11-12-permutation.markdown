@@ -27,7 +27,7 @@ public String getPermutation(int n, int k) {
 
 [Next Permutation][next-permutation]
 
-[Generation in lexicographic order](https://en.wikipedia.org/wiki/Permutation#Generation_in_lexicographic_order)
+Algorithm: [Generation in lexicographic order](https://en.wikipedia.org/wiki/Permutation#Generation_in_lexicographic_order)
 
 {% highlight java %}
 public void nextPermutation(int[] nums) {

@@ -355,10 +355,10 @@ public int findKthPositive(int[] arr, int k) {
     int low = 0, high = arr.length;
     while (low < high) {
         int mid = (low + high) >>> 1;
-        // when there's no missing positive integer in index range [0, i]
+        // if there's no missing positive integer in index range [0, i]
         // arr[i] == i + 1
         //
-        // a[i] = arr[i] - i - 1
+        // let a[i] = arr[i] - i - 1
         // a[i] is the number of missing positive integers
         // a[i + 1] - a[i] == arr[i + 1] - (i + 1) - 1 - (arr[i] - i - 1)
         //                 == arr[i + 1] - arr[i] - 1 >= 0
@@ -376,6 +376,28 @@ public int findKthPositive(int[] arr, int k) {
 {% endhighlight %}
 
 [Missing Element in Sorted Array][missing-element-in-sorted-array]
+
+[Missing Number In Arithmetic Progression][missing-number-in-arithmetic-progression]
+
+{% highlight java %}
+public int missingNumber(int[] arr) {
+    int n = arr.length, d = (arr[n - 1] - arr[0]) / n, low = 0, high = n;
+
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+
+        if (arr[mid] == arr[0] + d * mid) {
+            // all numbers up to mid are present
+            low = mid + 1;
+        } else {
+            // a number is missing <= mid
+            high = mid;
+        }
+    }
+
+    return arr[0] + d * low;
+}
+{% endhighlight %}
 
 [H-Index II][h-index-ii]
 
@@ -631,6 +653,7 @@ if (insertionPoint < 0) {
 [maximum-font-to-fit-a-sentence-in-a-screen]: https://leetcode.com/problems/maximum-font-to-fit-a-sentence-in-a-screen/
 [minimum-number-of-days-to-make-m-bouquets]: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/
 [missing-element-in-sorted-array]: https://leetcode.com/problems/missing-element-in-sorted-array/
+[missing-number-in-arithmetic-progression]: https://leetcode.com/problems/missing-number-in-arithmetic-progression/
 [split-array-largest-sum]: https://leetcode.com/problems/split-array-largest-sum/
 [search-insert-position]: https://leetcode.com/problems/search-insert-position/
 [search-in-rotated-sorted-array]: https://leetcode.com/problems/search-in-rotated-sorted-array/

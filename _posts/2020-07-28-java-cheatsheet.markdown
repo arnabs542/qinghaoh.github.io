@@ -58,6 +58,8 @@ Comparator.comparing(String::length)
 * [default Comparator\<T\> reversed()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html#reversed())
 * [static \<T extends Comparable\<? super T\>\> Comparator\<T\> reverseOrder()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html#reverseOrder())
 
+`Comparator.reverseOrder()` is preferable over `Collections.reverseOrder()` because it enforces the type argument to be a subtype of `Comparable`, and thus type safe.
+
 # Deque
 [Deque](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Deque.html)
 Deques can also be used as LIFO (Last-In-First-Out) stacks. This interface should be used in preference to the legacy `Stack` class. When a deque is used as a stack, elements are pushed and popped from the beginning of the deque.
@@ -76,8 +78,8 @@ Deque<Integer> stack = new ArrayDeque<Integer>();
 * valueOf()
 
 # Integer
-* [MAX_VALUE](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#MAX_VALUE): 2^31-1 = 2147483647
-* [MIN_VALUE](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#MIN_VALUE): -2^31 = -2147483648
+* [MAX_VALUE](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#MAX_VALUE): 2^31-1 = 2147483647 ~= 2e9 (10 digits)
+* [MIN_VALUE](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#MIN_VALUE): -2^31 = -2147483648 ~= -2e9 (10 digits)
 * [public static int bitCount(int i)](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#bitCount-int-)
 * [public int intValue()](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#intValue--)
 * [public static int parseUnsignedInt(CharSequence s, int beginIndex, int endIndex, int radix) throws NumberFormatException](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html#parseUnsignedInt(java.lang.CharSequence,int,int,int))

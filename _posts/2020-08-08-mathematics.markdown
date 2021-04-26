@@ -257,6 +257,35 @@ public boolean checkPowersOfThree(int n) {
 }
 {% endhighlight %}
 
+# Dyanmical Systems
+
+[Attractor](https://en.wikipedia.org/wiki/Attractor): a set of numerical values toward which a system tends to evolve, for a wide variety of starting conditions of the system.
+
+[Robot Bounded In Circle][robot-bounded-in-circle]
+
+{% highlight java %}
+public boolean isRobotBounded(String instructions) {
+    // N, E, S, W
+    {% raw %}
+    int[][] directions = new int[][]{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    {% endraw %}
+    int x = 0, y = 0, d = 0;
+    for (char c : instructions.toCharArray()) {
+        if (c == 'L') {
+            d = (d + 3) % 4;
+        } else if (c == 'R') {
+            d = (d + 1) % 4;
+        } else {
+            x += directions[d][0];
+            y += directions[d][1];
+        }
+    }
+
+    // after at most 4 cycles, the limit cycle trajectory returns to the initial point
+    return (x == 0 && y == 0) || d != 0;
+}
+{% endhighlight %}
+
 [4-keys-keyboard]: https://leetcode.com/problems/4-keys-keyboard/
 [best-meeting-point]: https://leetcode.com/problems/best-meeting-point/
 [check-if-number-is-a-sum-of-powers-of-three]: https://leetcode.com/problems/check-if-number-is-a-sum-of-powers-of-three/
@@ -264,4 +293,5 @@ public boolean checkPowersOfThree(int n) {
 [handshakes-that-dont-cross]: https://leetcode.com/problems/handshakes-that-dont-cross/
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
 [powx-n]: https://leetcode.com/problems/powx-n/
+[robot-bounded-in-circle]: https://leetcode.com/problems/robot-bounded-in-circle/
 [sparse-matrix-multiplication]: https://leetcode.com/problems/sparse-matrix-multiplication/

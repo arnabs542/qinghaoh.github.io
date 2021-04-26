@@ -221,12 +221,15 @@ public int mctFromLeafValues(int[] arr) {
 public int largestRectangleArea(int[] heights) {
     // index of non-descreasing heights
     Deque<Integer> st = new ArrayDeque<>();
+    st.push(-1);  // makes width concise
+
     int area = 0;
     for (int i = 0; i <= heights.length; i++) {            
         int height = (i == heights.length ? 0 : heights[i]);
-        while (!st.isEmpty() && height < heights[st.peek()]) {
+        while (st.peek() >= 0 && height < heights[st.peek()]) {
+            // popped heights are no less than current height
             int h = heights[st.pop()];
-            int w = st.isEmpty() ? i : (i - 1) - st.peek();
+            int w = i - 1 - st.peek();
             area = Math.max(area, h * w);
         }
         st.push(i);
@@ -266,6 +269,8 @@ public int maximalRectangle(char[][] matrix) {
 
     for (int i = 0; i < m; i++) {
         Deque<Integer> st = new ArrayDeque<>();
+        st.push(-1);
+
         for (int j = 0; j <= n; j++) {
             // histogram height array in each row
             if (j < n && matrix[i][j] == '1') {
@@ -276,7 +281,7 @@ public int maximalRectangle(char[][] matrix) {
 
             while (!st.isEmpty() && height[j] < height[st.peek()]) {
                 int h = height[st.pop()];
-                int w = st.isEmpty() ? j : (j - 1) - st.peek();
+                int w = j - 1 - st.peek();
                 area = Math.max(area, h * w);
             }
             st.push(j);
@@ -290,6 +295,38 @@ public int maximalRectangle(char[][] matrix) {
 [Count Submatrices With All Ones][count-submatrices-with-all-ones]
 
 {% highlight java %}
+public int numSubmat(int[][] mat) {
+    int m = mat.length, n = mat[0].length;
+    int count = 0;
+    int[] height = new int[n + 1];
+
+    for (int i = 0; i < m; i++) {
+        Deque<Integer> st = new ArrayDeque<>();
+        st.push(-1);
+
+        int sum = 0;
+        for (int j = 0; j <= n; j++) {
+            // histogram height array in each row
+            if (j < n && mat[i][j] == 1) {
+                height[j]++;
+            } else {
+                height[j] = 0;
+            }
+
+            while (st.peek() >= 0 && height[j] < height[st.peek()]) {
+                int index = st.pop();
+                sum -= height[index] * (index - st.peek());
+            }
+
+            // height[j] as right boundary
+            sum += height[j] * (j - st.peek());
+            count += sum;
+            st.push(j);
+        }
+    }
+
+    return count;
+}
 {% endhighlight %}
 
 [Remove Duplicate Letters][remove-duplicate-letters]
