@@ -286,12 +286,24 @@ public boolean isRobotBounded(String instructions) {
 }
 {% endhighlight %}
 
+# Logarithm
+
+[Power of Three][power-of-three]
+
+{% highlight java %}
+public boolean isPowerOfThree(int n) {
+    // takes the decimal part
+    return (Math.log10(n) / Math.log10(3)) % 1 == 0;
+}
+{% endhighlight %}
+
 [4-keys-keyboard]: https://leetcode.com/problems/4-keys-keyboard/
 [best-meeting-point]: https://leetcode.com/problems/best-meeting-point/
 [check-if-number-is-a-sum-of-powers-of-three]: https://leetcode.com/problems/check-if-number-is-a-sum-of-powers-of-three/
 [count-sorted-vowel-strings]: https://leetcode.com/problems/count-sorted-vowel-strings/
 [handshakes-that-dont-cross]: https://leetcode.com/problems/handshakes-that-dont-cross/
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
+[power-of-three]: https://leetcode.com/problems/power-of-three/
 [powx-n]: https://leetcode.com/problems/powx-n/
 [robot-bounded-in-circle]: https://leetcode.com/problems/robot-bounded-in-circle/
 [sparse-matrix-multiplication]: https://leetcode.com/problems/sparse-matrix-multiplication/

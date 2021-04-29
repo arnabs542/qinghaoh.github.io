@@ -108,6 +108,108 @@ private boolean dfs(int node) {
 }
 {% endhighlight %}
 
+[Critical Connections in a Network][critical-connections-in-a-network]
+
+{% highlight java %}
+private List<List<Integer>> graph;
+private Set<List<Integer>> set;
+
+public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+    this.graph = new ArrayList<>(n);
+    for (int i = 0; i < n; i++) {
+        graph.add(new ArrayList<>());
+    }
+
+    for (List<Integer> e : connections) {
+        int s1 = e.get(0), s2 = e.get(1);
+        graph.get(s1).add(s2);
+        graph.get(s2).add(s1);
+    }
+
+    this.set = new HashSet<>(connections);
+
+    // the depth of a node during DFS
+    int[] rank = new int[n];
+    Arrays.fill(rank, -2);
+
+    dfs(rank, 0, 0);
+    return new ArrayList<>(set);
+}
+
+// returns min depth of all nodes in the subtree
+private int dfs(int[] rank, int node, int depth) {
+    if (rank[node] >= 0) {
+        return rank[node];
+    }
+
+    rank[node] = depth;
+
+    int min = depth;
+    for (int neighbor: graph.get(node)) {
+        // skips parent
+        // here's the reason why rank is initialized with -2, rather than -1:
+        // if depth == 0, then its child node will be skipped by mistake
+        if (rank[neighbor] == depth - 1) {
+            continue;
+        }
+
+        int minSub = dfs(rank, neighbor, depth + 1);
+        min = Math.min(min, minSub);
+
+        // cycle detected
+        if (minSub <= depth) {
+            // discards the edge (node, neighbor) in the cycle
+            set.remove(Arrays.asList(node, neighbor));
+            set.remove(Arrays.asList(neighbor, node));
+        }
+    }
+    return min;
+}
+{% endhighlight %}
+
+This algorith  is very similar to Tarjan's Algorithm. The meaning of `rank` and `dfn/low` is slightly different, but in essence they are closely related.
+
+![Example](https://assets.leetcode.com/uploads/2019/09/03/1537_ex1_2.png)
+
+```
+node: 0
+rank: 0,-2,-2,-2
+
+node: 1
+rank: 0,1,-2,-2
+
+node: 2
+rank: 0,1,2,-2
+
+neighbor: 0
+depth: 2
+minSub: 0
+rank: 0,1,2,-2
+
+neighbor: 2
+depth: 1
+minSub: 0
+rank: 0,1,2,-2
+
+node: 3
+rank: 0,1,2,2
+
+neighbor: 3
+depth: 1
+minSub: 2
+rank: 0,1,2,2
+
+neighbor: 1
+depth: 0
+minSub: 0
+rank: 0,1,2,2
+
+neighbor: 2
+depth: 0
+minSub: 2
+rank: 0,1,2,2
+```
+
 # Centroids
 
 [Minimum Height Trees][minimum-height-trees]
@@ -223,6 +325,7 @@ Longest path in a DAG can be solved by topological sorting.
 Another solution is DFS + memorization
 
 [course-schedule-ii]: https://leetcode.com/problems/course-schedule-ii/
+[critical-connections-in-a-network]: https://leetcode.com/problems/critical-connections-in-a-network/
 [longest-increasing-path-in-a-matrix]: https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
 [minimum-height-trees]: https://leetcode.com/problems/minimum-height-trees/
 [sequence-reconstruction]: https://leetcode.com/problems/sequence-reconstruction/

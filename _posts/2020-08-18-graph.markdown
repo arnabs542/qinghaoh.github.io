@@ -72,6 +72,7 @@ private void dfs(int[] dfn, int[] low, int node, int parent) {
 {% endhighlight %}
 
 ![Example](https://assets.leetcode.com/uploads/2019/09/03/1537_ex1_2.png) 
+
 ```
 node: 0
 parent: -1

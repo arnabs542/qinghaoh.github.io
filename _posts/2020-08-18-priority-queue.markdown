@@ -92,6 +92,7 @@ public int furthestBuilding(int[] heights, int bricks, int ladders) {
 }
 {% endhighlight %}
 
+[furthest-building-you-can-reach]: https://leetcode.com/problems/furthest-building-you-can-reach/
 [k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
 [kth-smallest-element-in-a-sorted-matrix]: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
 [maximize-sum-of-array-after-k-negations]: https://leetcode.com/problems/maximize-sum-of-array-after-k-negations/

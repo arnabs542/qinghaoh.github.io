@@ -149,5 +149,25 @@ public String[] spellchecker(String[] wordlist, String[] queries) {
 }
 {% endhighlight %}
 
+[Tuple with Same Product][tuple-with-same-product]
+
+{% highlight java %}
+public int tupleSameProduct(int[] nums) {
+    Map<Integer, Integer> map = new HashMap<>();
+    int count = 0;
+    for (int i = 0; i < nums.length; i++) {
+        for (int j = i + 1; j < nums.length; j++) {
+            int p = nums[i] * nums[j];
+            int c = map.getOrDefault(p, 0);
+            // acculumates the count so we don't need a second pass
+            count += c * 8;
+            map.put(p, c + 1);
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
 [making-file-names-unique]: https://leetcode.com/problems/making-file-names-unique/
+[tuple-with-same-product]: https://leetcode.com/problems/tuple-with-same-product/
 [vowel-spellchecker]: https://leetcode.com/problems/vowel-spellchecker/

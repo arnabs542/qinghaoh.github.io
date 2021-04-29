@@ -98,66 +98,69 @@ private int rob(int[] nums, int start, int end) {
 }
 {% endhighlight %}
 
-[Number of Dice Rolls With Target Sum][number-of-dice-rolls-with-target-sum]
+[Delete and Earn][delete-and-earn]
+
+{% highlight java %}
+public int deleteAndEarn(int[] nums) {
+    int[] sum = new int[10001];
+    for (int num : nums) {
+        sum[num] += num;
+    }
+
+    int take = 0, skip = 0;
+    for (int s : sum) {
+        int tmp = skip;
+        skip = Math.max(skip, take);
+        take = tmp + s;
+    }
+    return Math.max(take, skip);
+}
+{% endhighlight %}
+
+[Wiggle Subsequence][wiggle-subsequence]
+
+{% highlight java %}
+// max wiggle sequence length so far at index i
+    int up = 1, down = 1;
+    for (int i = 1; i < nums.length; i++) {
+        if (nums[i] > nums[i - 1]) {
+            up = down + 1;
+        } else if (nums[i] < nums[i - 1]) {
+            down = up + 1;
+        }
+    }
+    return Math.max(up, down);
+{% endhighlight %}
+
+[Number of Sets of K Non-Overlapping Line Segments][number-of-sets-of-k-non-overlapping-line-segments]
 
 {% highlight java %}
 private static final int MOD = (int)1e9 + 7;
 
-public int numRollsToTarget(int d, int f, int target) {
-    int[][] dp = new int[d + 1][target + 1];
-    dp[d][0] = 1;
-    for (int i = d - 1; i >= 0; i--) {
-        for (int j = 1; j <= f; j++) {
-            for (int k = 0; k < target; k++) {
-                if (j + k <= target) {
-                    dp[i][j + k] = (dp[i][j + k] + dp[i + 1][k]) % MOD;
-                }
-            }
-        }
+public int numberOfSets(int n, int k) {
+    // dp[][i][j]
+    // 0: lines don't start from i
+    // 1: lines start from i
+    int[][][] dp = new int[2][n][k + 1];
+    for (int j = 0; j < n; j++) {
+        dp[0][j][0] = 1;
+        dp[1][j][0] = 1;
     }
-    return dp[0][target];
-}
-{% endhighlight %}
 
-[Dice Roll Simulation][dice-roll-simulation]
-
-![Reduction](/assets/dice_roll_simulation.png)
-
-{% highlight java %}
-private final int MOD = (int)1e9 + 7;
-private final int SIDES = 6;
-
-public int dieSimulator(int n, int[] rollMax) {
-    // dp[i][j]: number of distinct sequences at i-th roll and the last number is j
-    // if j == SIDES, it's the total number of distinct sequences at i-th roll
-    int[][] dp = new int[n + 1][SIDES + 1];
-
-    // initialization
-    dp[0][SIDES] = 1;
-
-    for (int i = 1; i <= n; i++) {
-        for (int j = 0; j < SIDES; j++) {
-            // if there's no constraint
-            dp[i][j] = dp[i - 1][SIDES];
-
-            if (i - rollMax[j] > 0) {
-                // e.g. rollMax[1] = 2, and the rolls so far are: a, x, x, b
-                // if b == 1, then we should exclude all possible cases of a, 1, 1
-                // where a != 1
-                int reduction = dp[i - rollMax[j] - 1][SIDES] - dp[i - rollMax[j] - 1][j];
-                dp[i][j] = ((dp[i][j] - reduction) % MOD + MOD) % MOD;
-            }
-
-            dp[i][SIDES] = (dp[i][SIDES] + dp[i][j]) % MOD;              
+    for (int i = n - 2; i >= 0; i--) {
+        for (int j = 1; j <= k; j++) {
+            dp[0][i][j] = (dp[0][i + 1][j] + dp[1][i + 1][j]) % MOD;
+            dp[1][i][j] = (dp[1][i + 1][j] + dp[0][i][j - 1]) % MOD;
         }
     }
 
-    return dp[n][SIDES];
+    return (dp[0][0][k] + dp[1][0][k]) % MOD;
 }
 {% endhighlight %}
 
-[dice-roll-simulation]: https://leetcode.com/problems/dice-roll-simulation/
+[delete-and-earn]: https://leetcode.com/problems/delete-and-earn/
 [house-robber]: https://leetcode.com/problems/house-robber/
 [house-robber-ii]: https://leetcode.com/problems/house-robber-ii/
-[number-of-dice-rolls-with-target-sum]: https://leetcode.com/problems/number-of-dice-rolls-with-target-sum/
+[number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
 [paint-fence]: https://leetcode.com/problems/paint-fence/
+[wiggle-subsequence]: https://leetcode.com/problems/wiggle-subsequence/

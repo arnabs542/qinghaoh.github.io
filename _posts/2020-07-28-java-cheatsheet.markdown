@@ -84,6 +84,7 @@ Deque<Integer> stack = new ArrayDeque<Integer>();
 * [public int intValue()](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#intValue--)
 * [public static int parseUnsignedInt(CharSequence s, int beginIndex, int endIndex, int radix) throws NumberFormatException](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html#parseUnsignedInt(java.lang.CharSequence,int,int,int))
 * [public static String toBinaryString(int i)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html#toBinaryString(int))
+* [public static String toString(int i,int radix)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html#toString(int,int))
 
 {% highlight java %}
 MAX_VALUE + 1 == MIN_VALUE

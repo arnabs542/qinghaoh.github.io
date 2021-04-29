@@ -139,7 +139,55 @@ private Node dfs(Node node) {
 }
 {% endhighlight %}
 
+# Brute Force
+
+[Lexicographically Smallest String After Applying Operations][lexicographically-smallest-string-after-applying-operations]
+
+{% highlight java %}
+private String min;
+private int a, b;
+private Set<String> visited = new HashSet<>();
+
+public String findLexSmallestString(String s, int a, int b) {
+    this.min = s;
+    this.a = a;
+    this.b = b;
+
+    dfs(s);
+    return min;
+}
+
+private void dfs(String s) {
+    if (!visited.add(s)) {
+        return;
+    }
+
+    if (min.compareTo(s) > 0) {
+        min = s;
+    }
+
+    dfs(add(s));
+    dfs(rotate(s));
+}
+
+private String add(String s) {
+    char[] c = s.toCharArray();
+    for (int i = 1; i < c.length; i += 2) {
+        c[i] = (char)((c[i] - '0' + a) % 10 + '0');
+    }
+    return new String(c);
+}
+
+privat String rotate(String s) {
+    int n = s.length();
+    return s.substring(n - b) + s.substring(0, n - b);
+}
+{% endhighlight %}
+
+This solution includes all possibilities, and uses a set as termination condition.
+
 [clone-graph]: https://leetcode.com/problems/clone-graph/
 [keys-and-rooms]: https://leetcode.com/problems/keys-and-rooms/
+[lexicographically-smallest-string-after-applying-operations]: https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/
 [pyramid-transition-matrix]: https://leetcode.com/problems/pyramid-transition-matrix/
 [time-needed-to-inform-all-employees]: https://leetcode.com/problems/time-needed-to-inform-all-employees/

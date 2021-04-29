@@ -14,12 +14,13 @@ If `0 <= a[i] <= max`, where max is not too big, then we can use `int[] count = 
 
 {% highlight java %}
 public void rotate(int[] nums, int k) {
-    k %= nums.length;
+    int n = nums.length;
+    k %= n;
     int start = 0, count = 0;
-    while (count != nums.length) {
+    while (count != n) {
         int index = start, curr = nums[index];
         do {
-            index = (index + k) % nums.length;
+            index = (index + k) % n;
             int tmp = nums[index];
             nums[index] = curr;
             curr = tmp;

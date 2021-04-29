@@ -387,6 +387,8 @@ public int missingNumber(int[] arr) {
         int mid = (low + high) >>> 1;
 
         if (arr[mid] == arr[0] + d * mid) {
+            // it's easy to prove arr[i] - arr[0] - d * i is monotonic
+            // no matter whether d >= 0 or d < 0
             // all numbers up to mid are present
             low = mid + 1;
         } else {
