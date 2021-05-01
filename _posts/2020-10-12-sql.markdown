@@ -64,7 +64,8 @@ SELECT
 FROM
     weather
 JOIN
-    weather w ON DATEDIFF(weather.recordDate, w.recordDate) = 1
+    weather w
+    ON DATEDIFF(weather.recordDate, w.recordDate) = 1
         AND weather.Temperature > w.Temperature
 ;
 {% endhighlight %}
@@ -313,8 +314,6 @@ ROUND(
     2) AS accept_rate
 ;
 {% endhighlight %}
-
-Cross join: Cartesian Product
 
 [Sales Person][sales-person]
 
@@ -788,7 +787,36 @@ WHERE
 ;
 {% endhighlight %}
 
-# Multiple Joins
+# JOIN
+
+## CROSS JOIN
+
+Cartesian Product
+
+[All Valid Triplets That Can Represent a Country][all-valid-triplets-that-can-represent-a-country]
+
+{% highlight sql %}
+SELECT
+    sa.student_name AS member_a,
+    sb.student_name AS member_b,
+    sc.student_name AS member_c
+FROM
+    schoola sa
+CROSS JOIN
+    schoolb sb
+CROSS JOIN
+    schoolc sc
+WHERE
+    sa.student_name != sb.student_name
+    AND sa.student_name != sc.student_name
+    AND sb.student_name != sc.student_name
+    AND sa.student_id != sc.student_id
+    AND sb.student_id != sc.student_id
+    AND sa.student_id != sb.student_id
+;
+{% endhighlight %}
+
+## Multiple Joins
 
 [The Most Recent Three Orders][the-most-recent-three-orders]
 
@@ -853,8 +881,46 @@ GROUP BY
 ;
 {% endhighlight %}
 
+{% highlight sql %}
+COUNT(DISTINCT(*))
+{% endhighlight %}
+
+Specifies that `COUNT` returns the number of unique ***nonnull*** values.
+
+# Window Functions
+
+## RANK
+
+[The Most Frequently Ordered Products for Each Customer][the-most-frequently-ordered-products-for-each-customer]
+
+{% highlight sql %}
+SELECT
+    customer_id,
+    product_id,
+    product_name
+FROM
+    (SELECT
+        o.customer_id,
+        o.product_id,
+        p.product_name,
+        RANK() OVER (PARTITION BY customer_id ORDER BY COUNT(o.product_id) DESC) AS r
+    FROM
+        Orders o
+    JOIN
+        Products p
+        ON o.product_id = p.product_id
+    GROUP BY
+        customer_id, product_id) t
+WHERE
+    r = 1
+ORDER BY
+    customer_id, product_id
+;
+{% endhighlight %}
+
 [actors-an-directors-who-cooperated-at-least-three-times]: https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
 [ads-performance]: https://leetcode.com/problems/ads-performance/
+[all-valid-triplets-that-can-represent-a-country]: https://leetcode.com/problems/all-valid-triplets-that-can-represent-a-country/
 [calculate-salaries]: https://leetcode.com/problems/calculate-salaries/
 [classes-more-than-5-students]: https://leetcode.com/problems/classes-more-than-5-students/
 [consecutive-available-seats]: https://leetcode.com/problems/consecutive-available-seats/
@@ -889,5 +955,6 @@ GROUP BY
 [sales-person]: https://leetcode.com/problems/sales-person/
 [second-highest-salary]: https://leetcode.com/problems/second-highest-salary/
 [swap-salary]: https://leetcode.com/problems/swap-salary/
+[the-most-frequently-ordered-products-for-each-customer]: https://leetcode.com/problems/the-most-frequently-ordered-products-for-each-customer/
 [the-most-recent-three-orders]: https://leetcode.com/problems/the-most-recent-three-orders/
 [tree-node]: https://leetcode.com/problems/tree-node/

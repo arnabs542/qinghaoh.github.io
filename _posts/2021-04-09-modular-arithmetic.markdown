@@ -30,6 +30,8 @@ public int superPow(int a, int[] b) {
 
     // 1337 = 7 * 191
     // phi(1337) = phi(7) * phi(191) = 6 * 190 = 1140
+    //
+    // a ^ b mod 1337 = a ^ (b mod 1140) mod 1337
     int p = 0;
     for (int i : b) {
         p = (p * 10 + i) % 1140;
@@ -56,9 +58,17 @@ private int power(int a, int n, int mod) {
 }
 {% endhighlight %}
 
+***Case 1***
+
 If \\(\gcd(a, 1337) = 1\\),
 
-\\[a^b \bmod 1337 = a^{b \bmod \varphi(1337)} \bmod 1337 = a^{b \bmod 1140} \bmod 1337\\]
+\\[
+\begin{equation} \label{eq:1}
+a^b \bmod 1337 = a^{b \bmod \varphi(1337)} \bmod 1337 = a^{b \bmod 1140} \bmod 1337
+\end{equation}
+\\]
+
+***Case 2***
 
 If \\(a \bmod 7 = 0\\), let \\(a = 7^nm\\), \\(b = \varphi(1337)p + q\\), where \\(0 < q \le \varphi(1337)\\)
 
@@ -71,19 +81,26 @@ a^b \bmod 1337 &= (7^nm)^b \bmod 1337 \\
 \end{aligned}
 $$
 
-Since \\(\gcd(m, 1337) = 1\\), we know \\(m^\varphi(1337) \bmod 1337 = 1\\)
+Since \\(\gcd(m, 1337) = 1\\), we know \\(m^{\varphi(1337)} \bmod 1337 = 1\\)
 
 $$
 \begin{aligned}
-a^b \bmod 1337 &= ((7^{1140np + nq} \bmod 1337) \cdot (m^q \bmod 1337)) \bmod 1337 \\
-&= (7 \cdot (7^{1140np + nq - 1} \bmod 191) \cdot (m^q \bmod 1337)) \bmod 1337
+a^b \bmod 1337 = ((7^{1140np + nq} \bmod 1337) \cdot (m^q \bmod 1337)) \bmod 1337
 \end{aligned}
 $$
 
-Note \\(\gcd(7, 191) = 1\\), and \\(\varphi(191) = 190\\), \\(1140 \bmod 190 = 0\\), so \\(7^{1140np} \bmod 191 = 7^{6 \cdot 190np} \bmod 191 = (7^6)^{\varphi(191)} \bmod 191 = 0\\)
+Cancellation of common terms: If \\(k a ≡ k b (mod kn)\\), then \\(a ≡ b (mod n)\\)
 
 $$
 \begin{aligned}
+((7^{1140np + nq} \bmod 1337) \cdot (m^q \bmod 1337)) \bmod 1337 = (7 \cdot (7^{1140np + nq - 1} \bmod 191) \cdot (m^q \bmod 1337)) \bmod 1337
+\end{aligned}
+$$
+
+Note \\(\gcd(7, 191) = 1\\), and \\(\varphi(191) = 190\\), so \\(7^{1140np} \bmod 191 = 7^{6 \cdot 190np} \bmod 191 = (7^6np)^{\varphi(191)} \bmod 191 = 0\\)
+
+$$
+\begin{aligned} \label{eq:2}
 a^b \bmod 1337 &= (7 \cdot (7^{nq - 1} \bmod 191) \cdot (m^q \bmod 1337)) \bmod 1337 \\
 &= ((7^{nq} \bmod 1337) \cdot (m^q \bmod 1337)) \bmod 1337 \\
 &= 7^{nq}m^q \bmod 1337 \\
@@ -92,6 +109,12 @@ a^b \bmod 1337 &= (7 \cdot (7^{nq - 1} \bmod 191) \cdot (m^q \bmod 1337)) \bmod 
 &= a^{b \bmod 1140} \bmod 1337
 \end{aligned}
 $$
+
+We can see \eqref{eq:1} and \eqref{eq:2} have the same format.
+
+***Case 3***
+
+If \\(a \bmod 191 = 0\\), it's similar to the case above.
 
 #  Pigeonhole Principle
 

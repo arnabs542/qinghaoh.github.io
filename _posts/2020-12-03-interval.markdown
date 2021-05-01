@@ -270,10 +270,41 @@ private int jump(int[] nums) {
 }
 {% endhighlight %}
 
+# Intersection
+
+[Meeting Scheduler][meeting-scheduler]
+
+{% highlight java %}
+public List<Integer> minAvailableDuration(int[][] slots1, int[][] slots2, int duration) {
+    Arrays.sort(slots1, (a, b) -> a[0] - b[0]);
+    Arrays.sort(slots2, (a, b) -> a[0] - b[0]);
+
+    int i = 0, j = 0;
+    while (i < slots1.length && j < slots2.length) {
+        // finds the boundaries of the intersection
+        int left = Math.max(slots1[i][0], slots2[j][0]);
+        int right = Math.min(slots1[i][1], slots2[j][1]);
+
+        if (right - left >= duration) {
+            return Arrays.asList(left, left + duration);
+        }
+
+        // always moves the one that ends earlier
+        if (slots1[i][1] < slots2[j][1]) {
+            i++;
+        } else {
+            j++;
+        }
+    }
+    return Collections.EMPTY_LIST;
+}
+{% endhighlight %}
+
 [maximum-distance-in-arrays]: https://leetcode.com/problems/maximum-distance-in-arrays/
 [maximum-number-of-eaten-apples]: https://leetcode.com/problems/maximum-number-of-eaten-apples/
 [maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
 [meeting-rooms-ii]: https://leetcode.com/problems/meeting-rooms-ii/
+[meeting-scheduler]: https://leetcode.com/problems/meeting-scheduler/
 [merge-intervals]: https://leetcode.com/problems/merge-intervals/
 [minimum-number-of-arrows-to-burst-balloons]: https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/
 [non-overlapping-intervals]: https://leetcode.com/problems/non-overlapping-intervals/

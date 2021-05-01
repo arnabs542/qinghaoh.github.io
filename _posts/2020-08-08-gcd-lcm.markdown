@@ -49,5 +49,63 @@ public String gcdOfStrings(String str1, String str2) {
 
 $$ {lcm} (a,b)={\frac {|a\cdot b|}{\gcd(a,b)}} $$
 
+[Lexicographically Smallest String After Applying Operations][]
+
+{% highlight java %}
+public String findLexSmallestString(String s, int a, int b) {
+    int n = s.length();
+    String min = s, curr = s;
+
+    // lcm(b, n) / b
+    for (int i = 0; i < n / gcd(b, n); i++) {
+        curr = add(curr, a, b);
+        if (curr.compareTo(min) < 0) {
+            min = curr;
+        }
+        curr = rotate(curr, b);
+    }
+
+    return min;
+}
+
+// Gets the smallest possible head by adding a any number of times
+private char getSmallestHead(char c, int a) {
+    int i = c - '0';
+    return (char)((a == 5 ? Math.min(i, (i + 5) % 10) : (a % 2 == 0 ? i % 2 : 0)) + '0');
+}
+
+private String add(String s, int a, int b) {
+    char[] c = s.toCharArray();
+
+    // if b is even, only numbers at odd indices can be modified by the first operation (add)
+    int oddDiff = c[1] - getSmallestHead(c[1], a);
+
+    // if b is odd, numbers at even indices can be modified by the first operation (add), too
+    int evenDiff = b % 2 == 0 ? 0 : c[0] - getSmallestHead(c[0], a);
+
+    for (int i = 0; i < c.length; i++) {
+        int diff = i % 2 == 0 ? evenDiff : oddDiff;
+        c[i] = (char)((c[i] - '0' - diff + 10) % 10 + '0');
+    }
+
+    return new String(c);
+}
+
+private String rotate(String s, int b) {
+    int n = s.length();
+    return s.substring(n - b) + s.substring(0, n - b);
+}
+
+private int gcd(int a, int b) {
+    while (b != 0) {
+        int tmp = b;
+        b = a % b;
+        a = tmp;
+    }
+    return a;
+}
+{% endhighlight %}
+
 [greatest-common-divisor-of-strings]: https://leetcode.com/problems/greatest-common-divisor-of-strings/
+[lexicographically-smallest-string-after-applying-operations]: https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/
 [x-of-a-kind-in-a-deck-of-cards]: https://leetcode.com/problems/x-of-a-kind-in-a-deck-of-cards/
