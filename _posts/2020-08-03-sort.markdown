@@ -412,7 +412,9 @@ public void wiggleSort(int[] nums) {
 }
 {% endhighlight %}
 
-Index mapping:
+# Index Mapping
+
+[Wiggle Sort II][wiggle-sort-ii]
 
 {% highlight java %}
 public void wiggleSort(int[] nums) {
@@ -494,12 +496,34 @@ private void swap(int[] A, int i, int j) {
 }
 {% endhighlight %}
 
+[Maximum Width Ramp][maximum-width-ramp]
+
+{% highlight java %}
+public int maxWidthRamp(int[] A) {
+    int n = A.length;
+    Integer[] index = new Integer[n];
+    for (int i = 0; i < n; i++) {
+        index[i] = i;
+    }
+
+    Arrays.sort(index, Comparator.comparingInt(i -> A[i]));
+
+    int max = 0, minIndex = n;
+    for (int i : index) {
+        max = Math.max(max, i - minIndex);
+        minIndex = Math.min(minIndex, i);
+    }
+    return max;
+}
+{% endhighlight %}
+
 [campus-bikes]: https://leetcode.com/problems/campus-bikes/
 [car-pooling]: https://leetcode.com/problems/car-pooling/
 [count-of-smaller-numbers-after-self]: https://leetcode.com/problems/count-of-smaller-numbers-after-self/
 [create-target-array-in-the-given-order]: https://leetcode.com/problems/create-target-array-in-the-given-order/
 [find-lucky-integer-in-an-array]: https://leetcode.com/problems/find-lucky-integer-in-an-array/
 [h-index]: https://leetcode.com/problems/h-index/
+[maximum-width-ramp]: https://leetcode.com/problems/maximum-width-ramp/
 [sort-an-array]: https://leetcode.com/problems/sort-an-array/
 [sort-colors]: https://leetcode.com/problems/sort-colors/
 [special-array-with-x-elements-greater-than-or-equal-x]: https://leetcode.com/problems/special-array-with-x-elements-greater-than-or-equal-x/

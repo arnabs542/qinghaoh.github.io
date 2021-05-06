@@ -41,7 +41,7 @@ public void nextPermutation(int[] nums) {
     if (i >= 0) {
         // finds the largest index l greater than k such that a[k] < a[l]
         int j = nums.length - 1;
-        while (j >= 0 && nums[j] <= nums[i]) {
+        while (j > i && nums[j] <= nums[i]) {
             j--;
         }
         // swaps the value of a[k] with that of a[l]

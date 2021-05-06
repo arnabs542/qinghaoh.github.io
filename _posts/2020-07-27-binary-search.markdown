@@ -621,6 +621,36 @@ private boolean condition(String text, int w, int h, int[] fonts, int index, Fon
 }
 {% endhighlight %}
 
+[Maximum Width Ramp][maximum-width-ramp]
+
+{% highlight java %}
+public int maxWidthRamp(int[] A) {
+    // decreasing list
+    List<Integer> list = new ArrayList<>();
+    int max = 0;
+    for (int i = 0; i < A.length; i++) {
+        int n = list.size();
+        if (n == 0 || A[i] < A[list.get(n - 1)]) {
+            list.add(i);
+        } else {
+            // binary searches for the first element
+            // which is no greater than A[i]
+            int low = 0, high = n - 1;
+            while (low < high) {
+                int mid = (low + high) >>> 1;
+                if (A[list.get(mid)] <= A[i]) {
+                    high = mid;
+                } else {
+                    low = mid + 1;
+                }
+            }
+            max = Math.max(max, i - list.get(low));
+        }
+    }
+    return max;
+}
+{% endhighlight %}
+
 # Java
 ## Arrays
 [public static \<T\> int binarySearch(T\[\] a, int fromIndex, int toIndex, T key, Comparator\<? super T\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#binarySearch-T:A-int-int-T-java.util.Comparator-)
@@ -653,6 +683,7 @@ if (insertionPoint < 0) {
 [k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
 [magnetic-force-between-two-balls]: https://leetcode.com/problems/magnetic-force-between-two-balls/
 [maximum-font-to-fit-a-sentence-in-a-screen]: https://leetcode.com/problems/maximum-font-to-fit-a-sentence-in-a-screen/
+[maximum-width-ramp]: https://leetcode.com/problems/maximum-width-ramp/
 [minimum-number-of-days-to-make-m-bouquets]: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/
 [missing-element-in-sorted-array]: https://leetcode.com/problems/missing-element-in-sorted-array/
 [missing-number-in-arithmetic-progression]: https://leetcode.com/problems/missing-number-in-arithmetic-progression/

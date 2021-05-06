@@ -81,26 +81,6 @@ public int videoStitching(int[][] clips, int T) {
 }
 {% endhighlight %}
 
-[Jump Game II][jump-game-ii]
-
-{% highlight java %}
-public int jump(int[] nums) {
-    int i = 0, start = 0, end = 0, jumps = 0;
-    while (start < nums.length - 1) {
-        while (i < nums.length && i <= start) {
-            end = Math.max(i + nums[i], end);
-            i++;
-        }
-        if (start == end) {
-            return - 1;
-        }
-        start = end;
-        jumps++;
-    }
-    return jumps;
-}
-{% endhighlight %}
-
 [Broken Calculator][broken-calculator]
 
 {% highlight java %}
@@ -256,13 +236,31 @@ public int smallestFactorization(int a) {
 }
 {% endhighlight %}
 
+[Put Boxes Into the Warehouse I][put-boxes-into-the-warehouse-i]
+
+{% highlight java %}
+public int maxBoxesInWarehouse(int[] boxes, int[] warehouse) {
+    Arrays.sort(boxes);
+
+    int i = boxes.length - 1, j = 0, count = 0;
+    while (i >= 0 && j < warehouse.length) {
+        if (boxes[i] <= warehouse[j]) {
+            j++;
+            count++;
+        }
+        i--;
+    }
+    return count;
+}
+{% endhighlight %}
+
 [broken-calculator]: https://leetcode.com/problems/broken-calculator/
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [hand-of-straights]: https://leetcode.com/problems/hand-of-straights/
 [jump-game]: https://leetcode.com/problems/jump-game/
-[jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
 [maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
 [minimum-factorization]: https://leetcode.com/problems/minimum-factorization/
+[put-boxes-into-the-warehouse-i]: https://leetcode.com/problems/put-boxes-into-the-warehouse-i/
 [split-array-into-consecutive-subsequences]: https://leetcode.com/problems/split-array-into-consecutive-subsequences/
 [video-stitching]: https://leetcode.com/problems/video-stitching/
 [wiggle-sort]: https://leetcode.com/problems/wiggle-sort/

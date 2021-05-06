@@ -711,6 +711,8 @@ ORDER BY
 
 # Common Table Expressions (CTE)
 
+A temporary named result set.
+
 [Restaurant Growth][restaurant-growth]
 
 {% highlight sql %}
@@ -734,7 +736,46 @@ HAVING
 ;
 {% endhighlight %}
 
-### Recursive CTE
+[Suspicious Bank Accounts][suspicious-bank-accounts]
+
+{% highlight sql %}
+WITH income AS(
+    SELECT
+        a.account_id,
+        YEAR(t.day) * 12 + MONTH(t.day) AS month
+    FROM
+        Accounts a
+    LEFT JOIN
+        Transactions t
+        USING(account_id)
+    WHERE
+        type = 'Creditor'
+    GROUP BY
+        a.account_id,
+        DATE_FORMAT(t.day, "%Y-%m"),
+        max_income
+        HAVING SUM(amount) > max_income
+)
+
+SELECT
+    DISTINCT t1.account_id
+FROM
+    income t1
+JOIN
+    income t2
+    ON t1.account_id = t2.account_id
+    -- can be generalized to n consecutive months
+    AND t2.month - t1.month BETWEEN 0 AND 1
+GROUP BY
+    t1.account_id,
+    t1.month
+    HAVING COUNT(t2.month) >= 2
+ORDER BY
+    t1.account_id
+;
+{% endhighlight %}
+
+## Recursive CTE
 
 {% highlight sql %}
 WITH expression_name (column_list)
@@ -918,9 +959,37 @@ ORDER BY
 ;
 {% endhighlight %}
 
+## LEAD
+
+[Biggest Window Between Visits][biggest-window-between-visits]
+
+```
+LEAD(expr [, N[, default]]) [null_treatment] over_clause
+```
+
+Returns the value of expr from the row that leads (follows) the current row by `N` rows within its partition. If there is no such row, the return value is default. 
+
+{% highlight sql %}
+SELECT
+    user_id,
+    MAX(diff) AS biggest_window
+FROM
+    (SELECT
+        user_id,
+        DATEDIFF(LEAD(visit_date, 1, '2021-01-01') OVER(PARTITION BY user_id ORDER BY visit_date), visit_date) AS diff
+     FROM
+        userVisits) t
+GROUP BY
+    user_id
+ORDER BY
+    user_id
+;
+{% endhighlight %}
+
 [actors-an-directors-who-cooperated-at-least-three-times]: https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
 [ads-performance]: https://leetcode.com/problems/ads-performance/
 [all-valid-triplets-that-can-represent-a-country]: https://leetcode.com/problems/all-valid-triplets-that-can-represent-a-country/
+[biggest-window-between-visits]: https://leetcode.com/problems/biggest-window-between-visits/
 [calculate-salaries]: https://leetcode.com/problems/calculate-salaries/
 [classes-more-than-5-students]: https://leetcode.com/problems/classes-more-than-5-students/
 [consecutive-available-seats]: https://leetcode.com/problems/consecutive-available-seats/
@@ -954,6 +1023,7 @@ ORDER BY
 [sales-analysis-ii]: https://leetcode.com/problems/sales-analysis-ii/
 [sales-person]: https://leetcode.com/problems/sales-person/
 [second-highest-salary]: https://leetcode.com/problems/second-highest-salary/
+[suspicious-bank-accounts]: https://leetcode.com/problems/suspicious-bank-accounts/
 [swap-salary]: https://leetcode.com/problems/swap-salary/
 [the-most-frequently-ordered-products-for-each-customer]: https://leetcode.com/problems/the-most-frequently-ordered-products-for-each-customer/
 [the-most-recent-three-orders]: https://leetcode.com/problems/the-most-recent-three-orders/

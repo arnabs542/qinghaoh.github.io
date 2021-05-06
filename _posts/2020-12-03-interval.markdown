@@ -189,6 +189,34 @@ public int eatenApples(int[] apples, int[] days) {
 }
 {% endhighlight %}
 
+[Course Schedule III][course-schedule-iii]
+
+{% highlight java %}
+public int scheduleCourse(int[][] courses) {
+    // sorts by deadlines (greedy)
+    Arrays.sort(courses, (a, b) -> a[1] - b[1]);
+
+    // duration
+    // once a course fits in, it can be removed any time later;
+    // and the other courses that have been added into the heap would still fit
+    Queue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
+
+    int time = 0;
+    for (int[] c : courses) {
+        // adds current course
+        time += c[0];
+        pq.offer(c[0]);
+
+        // if time exceeds, removes the heap top
+        if (time > c[1]) {
+            time -= pq.poll();
+        }
+    }
+
+    return pq.size();
+}
+{% endhighlight %}
+
 [Maximum Distance in Arrays][maximum-distance-in-arrays]
 
 {% highlight java %}
@@ -300,6 +328,149 @@ public List<Integer> minAvailableDuration(int[][] slots1, int[][] slots2, int du
 }
 {% endhighlight %}
 
+# Data Structure
+
+[Exam Room][exam-room]
+
+PriorityQueue:
+
+{% highlight java %}
+// {start, end, priority, isValid}
+// isValid is for lazy deletion
+Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> -a[2]));
+
+// start: interval
+// end: interval
+Map<Integer, int[]> startMap, endMap;
+{% endhighlight %}
+
+TreeMap (no lazy deletion):
+
+{% highlight java %}
+private TreeSet<Interval> intervals = new TreeSet<>();
+// start: end
+// end: start
+private Map<Integer, Integer> ends = new HashMap<>(), starts = new HashMap<>();
+private int n;
+
+public ExamRoom(int N) {
+    this.n = N;
+
+    intervals.add(new Interval(0, N - 1, n));
+    ends.put(0, N - 1);
+    starts.put(N - 1, 0);
+}
+
+// O(log(n))
+public int seat() {
+    Interval i = intervals.pollLast();
+
+    int seat = i.getSeat();
+    intervals.add(new Interval(i.start, seat - 1, n));
+    intervals.add(new Interval(seat + 1, i.end, n));
+
+    ends.put(i.start, seat - 1);
+    starts.put(seat - 1, i.start);
+
+    ends.put(seat + 1, i.end);
+    starts.put(i.end, seat + 1);
+
+    return seat;
+}
+
+// O(log(n))
+public void leave(int p) {
+    // gets the start of the interval on p's left
+    // gets the end of the interval on p's right
+    int start = starts.get(p - 1), end = ends.get(p + 1);
+
+    // merges p's adjacent intervals
+    intervals.remove(new Interval(start, p - 1, n));
+    intervals.remove(new Interval(p + 1, end, n));
+    intervals.add(new Interval(start, end, n));
+
+    ends.put(start, end);
+    starts.put(end, start);
+
+    starts.remove(p - 1);
+    ends.remove(p + 1);
+}
+
+class Interval implements Comparable<Interval> {
+    int n;
+    int start, end;
+
+    Interval(int start, int end, int n) {
+        this.start = start;
+        this.end = end;
+        this.n = n;
+    }
+
+    // takes distance as priority
+    int getPriority() {
+        // edge case: left end
+        if (start == 0) {
+            return end;
+        }
+
+        // edge case: right end
+        if (end == n - 1) {
+            return n - 1 - start;
+        }
+
+        // if interval size is 0,
+        // assigns lowest priority to it
+        if (end < start) {
+            return -1;
+        }
+
+        return (end - start) / 2;
+    }
+
+    int getSeat() {
+        if (start == 0) {
+            return 0;
+        }
+
+        if (end == n - 1) {
+            return n - 1;
+        }
+
+        return (start + end) >>> 1;
+    }
+
+    @Override
+    public int compareTo(Interval i) {
+        int p1 = getPriority(), p2 = i.getPriority();
+        // if priorities are equal, pick the lowest number
+        return p1 == p2 ? i.start - start : p1 - p2;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Interval)) {
+            return false;
+        }
+
+        Interval interval = (Interval) o;
+        return start == interval.start &&
+                Objects.equals(end, interval.end) &&
+                Objects.equals(n, interval.n);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(start, end, n);
+    }
+}
+{% endhighlight %}
+
+[course-schedule-iii]: https://leetcode.com/problems/course-schedule-iii/
+[exam-room]: https://leetcode.com/problems/exam-room/
 [maximum-distance-in-arrays]: https://leetcode.com/problems/maximum-distance-in-arrays/
 [maximum-number-of-eaten-apples]: https://leetcode.com/problems/maximum-number-of-eaten-apples/
 [maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
