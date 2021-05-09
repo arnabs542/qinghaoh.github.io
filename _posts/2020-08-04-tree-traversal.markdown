@@ -410,6 +410,8 @@ public TreeNode constructFromPrePost(int[] pre, int[] post) {
 }
 {% endhighlight %}
 
+## BST
+
 [Construct Binary Search Tree from Preorder Traversal][construct-binary-search-tree-from-preorder-traversal]
 
 {% highlight java %}
@@ -429,6 +431,55 @@ public TreeNode build(int[] preorder, int high) {
     root.right = build(preorder, high);
     return root;
 }
+{% endhighlight %}
+
+[Convert Sorted List to Binary Search Tree][convert-sorted-list-to-binary-search-tree]
+
+{% highlight java %}
+private ListNode curr;
+
+public TreeNode sortedListToBST(ListNode head) {
+    // finds the size of the linked list
+    ListNode node = head;
+    int size = 0;
+    while (node != null) {
+        node = node.next;
+        size++;
+    }
+
+    this.curr = head;
+
+    return convertListToBst(0, size - 1);
+}
+
+// inorder
+private TreeNode convertListToBst(int low, int high) {
+    if (low > high) {
+        return null;
+    }
+
+    int mid = (low + high) >>> 1;
+
+    TreeNode left = convertListToBst(low, mid - 1);
+
+    TreeNode node = new TreeNode(curr.val);
+    node.left = left;
+
+    curr = curr.next;
+
+    node.right = convertListToBst(mid + 1, high);
+    return node;
+}
+{% endhighlight %}
+
+[Convert Sorted Array to Binary Search Tree][convert-sorted-array-to-binary-search-tree]
+
+{% highlight java %}
+    // no need for inorder and global variable
+    // because we can get current root directly by its index mid
+    TreeNode node = new TreeNode(num[mid]);
+    node.left = helper(num, low, mid - 1);
+    node.right = helper(num, mid + 1, high);
 {% endhighlight %}
 
 # Verification
@@ -610,6 +661,8 @@ public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
 [construct-binary-tree-from-inorder-and-postorder-traversal]: https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/
 [construct-binary-tree-from-preorder-and-inorder-traversal]: https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
 [construct-binary-tree-from-preorder-and-postorder-traversal]: https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/
+[convert-sorted-array-to-binary-search-tree]: https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/
+[convert-sorted-list-to-binary-search-tree]: https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/
 [find-largest-value-in-each-tree-row]: https://leetcode.com/problems/find-largest-value-in-each-tree-row/
 [flip-binary-tree-to-match-preorder-traversal]: https://leetcode.com/problems/flip-binary-tree-to-match-preorder-traversal/
 [inorder-successor-in-bst]: https://leetcode.com/problems/inorder-successor-in-bst/

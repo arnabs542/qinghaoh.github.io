@@ -74,6 +74,47 @@ private boolean isPrime(int x) {
 }
 {% endhighlight %}
 
+## Construction
+
+[Super Palindromes][super-palindromes]
+
+{% highlight java %}
+public int superpalindromesInRange(String left, String right) {
+    List<Long> palindromes = new ArrayList<>();
+    for (long i = 1; i <= 9; i++) {
+        palindromes.add(i);
+    }
+
+    // (10 ^ 18) ^ 0.5 = 10 ^ 9
+    // the upper limit of left half is 10 ^ (9 / 2 + 1)
+    for (long i = 1; i < 10000; i++) {
+        String l = Long.toString(i), r = new StringBuilder(l).reverse().toString();
+        // even
+        palindromes.add(Long.parseLong(l + r));
+        // odd
+        for (long d = 0; d < 10; d++) {
+            palindromes.add(Long.parseLong(l + d + r));
+        }
+    }
+
+    int count = 0;
+    long low = Long.parseLong(left), high = Long.parseLong(right);
+    for (long palindrome : palindromes) {
+        long square = palindrome * palindrome;
+        if (!isPalindrome(Long.toString(square))) {
+            continue;
+        }
+        if (low <= square && square <= high) {
+            count++;
+        }
+    }
+    return count;
+}
+
+private boolean isPalindrome(String s) {
+}
+{% endhighlight %}
+
 ## Greedy
 
 [Construct K Palindrome Strings][construct-k-palindrome-strings]
@@ -215,3 +256,4 @@ public int countPalindromicSubsequences(String S) {
 [palindrome-number]: https://leetcode.com/problems/palindrome-number/
 [palindromic-substring]: https://leetcode.com/problems/palindromic-substring/
 [prime-palindrome]: https://leetcode.com/problems/prime-palindrome/
+[super-palindromes]: https://leetcode.com/problems/super-palindromes/

@@ -92,8 +92,45 @@ public int furthestBuilding(int[] heights, int bricks, int ladders) {
 }
 {% endhighlight %}
 
+[Smallest Range Covering Elements from K Lists][smallest-range-covering-elements-from-k-lists]
+
+{% highlight java %}
+public int[] smallestRange(List<List<Integer>> nums) {
+    int[] range = new int[]{-(int)1e5, (int)1e5};
+    int end = -(int)1e5;
+
+    // coordinate {i, j} of an element in nums
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> nums.get(a[0]).get(a[1])));
+    for (int i = 0; i < nums.size(); i++) {
+        pq.offer(new int[]{i, 0});
+        end = Math.max(end, nums.get(i).get(0));
+    }
+
+    while (!pq.isEmpty()) {
+        int[] node = pq.poll();
+        int num = nums.get(node[0]).get(node[1]);
+
+        if (end - num < range[1] - range[0]) {
+            range[0] = num;
+            range[1] = end;
+        }
+
+        // returns if all elements of any list are visited
+        if (node[1] + 1 == nums.get(node[0]).size()) {
+            return range;
+        }
+
+        pq.offer(new int[]{node[0], node[1] + 1});
+        end = Math.max(end, nums.get(node[0]).get(node[1] + 1));
+    }
+
+    return range;
+}
+{% endhighlight %}
+
 [furthest-building-you-can-reach]: https://leetcode.com/problems/furthest-building-you-can-reach/
 [k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
 [kth-smallest-element-in-a-sorted-matrix]: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
 [maximize-sum-of-array-after-k-negations]: https://leetcode.com/problems/maximize-sum-of-array-after-k-negations/
 [minimize-deviation-in-array]: https://leetcode.com/problems/minimize-deviation-in-array/
+[smallest-range-covering-elements-from-k-lists]: https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/

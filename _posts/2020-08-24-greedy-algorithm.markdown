@@ -254,10 +254,33 @@ public int maxBoxesInWarehouse(int[] boxes, int[] warehouse) {
 }
 {% endhighlight %}
 
+[Maximum Binary String After Change][maximum-binary-string-after-change]
+
+{% highlight java %}
+public String maximumBinaryString(String binary) {
+    // we can always make the string contain at most one '0'
+    int ones = 0, zeros = 0, n = binary.length();
+    StringBuilder sb = new StringBuilder("1".repeat(n));
+    for (int i = 0; i < n; i++) {
+        if (binary.charAt(i) == '0') {
+            zeros++;
+        } else if (zeros == 0) {
+            // leading '1's
+            ones++;
+        }
+    }
+    if (ones < n) {
+        sb.setCharAt(ones + zeros - 1, '0');
+    }
+    return sb.toString();
+}
+{% endhighlight %}
+
 [broken-calculator]: https://leetcode.com/problems/broken-calculator/
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [hand-of-straights]: https://leetcode.com/problems/hand-of-straights/
 [jump-game]: https://leetcode.com/problems/jump-game/
+[maximum-binary-string-after-change]: https://leetcode.com/problems/maximum-binary-string-after-change/
 [maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
 [minimum-factorization]: https://leetcode.com/problems/minimum-factorization/
 [put-boxes-into-the-warehouse-i]: https://leetcode.com/problems/put-boxes-into-the-warehouse-i/

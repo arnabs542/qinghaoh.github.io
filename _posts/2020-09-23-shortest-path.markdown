@@ -1,11 +1,13 @@
 ---
 layout: post
-title:  "Dijkstra"
+title:  "Shortest Path"
 tags: graph
 ---
+# Dijkstra
+
 [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
 
-Dijkstra's Shortest Path First algorithm (SPF algorithm) is an algorithm for finding the shortest paths between nodes in a graph
+Dijkstra's Shortest Path First algorithm (SPF algorithm) is an algorithm for finding the shortest paths between nodes in a graph. A ***single*** node as the "source" node and finds shortest paths from the source to all other nodes in the graph, producing a shortest-path tree.
 
 ```
 function Dijkstra(Graph, source):
@@ -201,7 +203,38 @@ private int distance(int[] p1, int[] p2) {
 }
 {% endhighlight %}
 
+# Floyd-Warshall Algorithm
+
+[Floyd-Warshall algorithm](https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm) is an algorithm for finding shortest paths in a directed weighted graph with positive or negative edge weights (but with no negative cycles). A single execution of the algorithm will find the lengths (summed weights) of shortest paths between ***all*** pairs of vertices.
+
+[Course Schedule IV][course-schedule-iv]
+
+{% highlight java %}
+// Floyd–Warshall Algorithm
+public List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, int[][] queries) {
+    boolean[][] graph = new boolean[numCourses][numCourses];
+    for (int[] p : prerequisites) {
+        graph[p[0]][p[1]] = true;
+    }
+
+    for (int k = 0; k < numCourses; k++) {
+        for (int i = 0; i < numCourses; i++) {
+            for (int j = 0; j < numCourses; j++) {
+                graph[i][j] = graph[i][j] || (graph[i][k] && graph[k][j]);
+            }
+        }
+    }
+
+    List<Boolean> answer = new ArrayList<>();
+    for (int[] q : queries) {
+        answer.add(graph[q[0]][q[1]]);
+    }
+    return answer;
+}
+{% endhighlight %}
+
 [campus-bikes-ii]: https://leetcode.com/problems/campus-bikes-ii/
+[course-schedule-iv]: https://leetcode.com/problems/course-schedule-iv/
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [path-with-maximum-minimum-value]: https://leetcode.com/problems/path-with-maximum-minimum-value/
 [path-with-maximum-probability]: https://leetcode.com/problems/path-with-maximum-probability/

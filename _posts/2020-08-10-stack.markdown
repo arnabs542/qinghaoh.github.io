@@ -213,6 +213,29 @@ public int mctFromLeafValues(int[] arr) {
 }
 {% endhighlight %}
 
+[Maximum Width Ramp][maximum-width-ramp]
+
+{% highlight java %}
+public int largestRectangleArea(int[] heights) {
+    // index of non-descreasing heights
+    Deque<Integer> st = new ArrayDeque<>();
+    st.push(-1);  // makes width concise
+
+    int area = 0;
+    for (int i = 0; i <= heights.length; i++) {            
+        int height = (i == heights.length ? 0 : heights[i]);
+        while (st.peek() >= 0 && height < heights[st.peek()]) {
+            // popped heights are no less than current height
+            int h = heights[st.pop()];
+            int w = i - 1 - st.peek();
+            area = Math.max(area, h * w);
+        }
+        st.push(i);
+    }
+    return area;
+}
+{% endhighlight %}
+
 ## Histogram
 
 [Largest Rectangle in Histogram][largest-rectangle-in-histogram]
@@ -629,6 +652,7 @@ public String parseTernary(String expression) {
 [longest-valid-parentheses]: https://leetcode.com/problems/longest-valid-parentheses/
 [maximal-rectangle]: https://leetcode.com/problems/maximal-rectangle/
 [maximum-nesting-depth-of-two-valid-parentheses-strings]: https://leetcode.com/problems/maximum-nesting-depth-of-two-valid-parentheses-strings/
+[maximum-width-ramp]: https://leetcode.com/problems/maximum-width-ramp/
 [minimum-add-to-make-parentheses-valid]: https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/
 [minimum-cost-tree-from-leaf-values]: https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/
 [minimum-insertions-to-balance-a-parentheses-string]: https://leetcode.com/problems/minimum-insertions-to-balance-a-parentheses-string/

@@ -158,6 +158,59 @@ public int numberOfSets(int n, int k) {
 }
 {% endhighlight %}
 
+[Decode Ways][decode-ways]
+
+{% highlight java %}
+public int numDecodings(String s) {
+    int[] dp = new int[s.length() + 1];
+    dp[0] = 1;
+    dp[1] = s.charAt(0) == '0' ? 0 : 1;
+
+    for (int i = 2; i < dp.length; i++) {
+        // one digit
+        if (s.charAt(i - 1) != '0') {
+            dp[i] += dp[i - 1];
+        }
+
+        // two digits
+        int twoDigits = Integer.valueOf(s.substring(i - 2, i));
+        if (twoDigits >= 10 && twoDigits <= 26) {
+            dp[i] += dp[i - 2];
+        }
+    }
+
+    return dp[s.length()];
+}
+{% endhighlight %}
+
+Reduced to 1D:
+
+{% highlight java %}
+public int numDecodings(String s) {
+    if (s.charAt(0) == '0') {
+        return 0;
+    }
+
+    int oneBack = 1, twoBack = 1;
+    for (int i = 1; i < s.length(); i++) {
+        int current = 0;
+        if (s.charAt(i) != '0') {
+            current = oneBack;
+        }
+
+        int twoDigits = Integer.parseInt(s.substring(i - 1, i + 1));
+        if (twoDigits >= 10 && twoDigits <= 26) {
+            current += twoBack;
+        }
+
+        twoBack = oneBack;
+        oneBack = current;
+    }
+    return oneBack;
+}
+{% endhighlight %}
+
+[decode-ways]: https://leetcode.com/problems/decode-ways/
 [delete-and-earn]: https://leetcode.com/problems/delete-and-earn/
 [house-robber]: https://leetcode.com/problems/house-robber/
 [house-robber-ii]: https://leetcode.com/problems/house-robber-ii/
