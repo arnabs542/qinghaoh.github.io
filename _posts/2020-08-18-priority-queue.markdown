@@ -128,6 +128,49 @@ public int[] smallestRange(List<List<Integer>> nums) {
 }
 {% endhighlight %}
 
+[Construct Target Array With Multiple Sums][construct-target-array-with-multiple-sums]
+
+{% highlight java %}
+public boolean isPossible(int[] target) {
+    if (target.length == 1) {
+        return target[0] == 1;
+    }
+
+    Queue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
+    int sum = 0;
+    for (int t : target) {
+        sum += t;
+        pq.offer(t);
+    }
+
+    // the max num in the target array must have been chosen in the previous step
+    while (pq.peek() > 1) {
+        int num = pq.poll();
+        int rest = sum - num;
+
+        // target[i] >= 1
+        // so rest == 1 means there's only one rest "1"
+        if (rest == 1) {
+            return true;
+        }
+
+        // % prevents LTE
+        int remainder = num % rest;
+        // sum could overflow
+        // num < rest will not work when rest < 0
+        // so we use remainder == num
+        if (remainder == 0 || remainder == num) {
+            return false;
+        }
+
+        pq.offer(remainder);
+        sum = remainder + rest;
+    }
+    return true;
+}
+{% endhighlight %}
+
+[construct-target-array-with-multiple-sums]: https://leetcode.com/problems/construct-target-array-with-multiple-sums/
 [furthest-building-you-can-reach]: https://leetcode.com/problems/furthest-building-you-can-reach/
 [k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
 [kth-smallest-element-in-a-sorted-matrix]: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/

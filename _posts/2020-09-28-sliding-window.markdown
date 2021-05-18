@@ -426,6 +426,7 @@ public int numberOfSubstrings(String s) {
 # Fixed Size
 
 [Maximum Points You Can Obtain from Cards][maximum-points-you-can-obtain-from-cards]
+
 [Minimum Difference Between Largest and Smallest Value in Three Moves][minimum-difference-between-largest-and-smallest-value-in-three-moves]
 
 [Minimum Swaps to Group All 1's Together][minimum-swaps-to-group-all-1s-together]

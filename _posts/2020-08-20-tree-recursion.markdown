@@ -141,8 +141,7 @@ private int dfs(TreeNode node) {
         return 0;
     }
 
-    int left = Math.max(0, dfs(node.left));
-    int right = Math.max(0, dfs(node.right));
+    int left = Math.max(0, dfs(node.left)), right = Math.max(0, dfs(node.right));
 
     sum = Math.max(sum, node.val + left + right);
     return node.val + Math.max(left, right);

@@ -249,6 +249,8 @@ MySQL uses three-valued logic -- TRUE, FALSE and UNKNOWN. Anything compared to N
 
 # HAVING
 
+value = max
+
 [Customer Placing the Largest Number of Orders][customer-placing-the-largest-number-of-orders]
 
 {% highlight sql %}
@@ -619,35 +621,39 @@ IN
 ;
 {% endhighlight %}
 
-[Number of Trusted Contacts of a Customer][number-of-trusted-contacts-of-a-customer]
+[Get the Second Most Recent Activity][get-the-second-most-recent-activity]
 
 {% highlight sql %}
 SELECT
-    i.invoice_id,
-    cu.customer_name,
-    i.price,
-    COUNT(co.user_id) as contacts_cnt,
-    COUNT(cu2.email) as trusted_contacts_cnt
+    *
 FROM
-    invoices i
-JOIN
-    Customers cu
-ON
-    cu.customer_id = i.user_id
-LEFT JOIN
-    Contacts co
-ON
-    co.user_id = cu.customer_id
-LEFT JOIN
-    Customers cu2
-ON
-    cu2.email = co.contact_email
+    UserActivity
 GROUP BY
-    i.invoice_id, cu.customer_name, i.price
-ORDER BY
-    i.invoice_id
+    username
+HAVING
+    COUNT(*) = 1
+
+UNION
+
+SELECT
+    u1.*
+FROM
+    UserActivity u1
+LEFT JOIN
+    UserActivity u2
+    ON u1.username = u2.username AND u1.endDate < u2.endDate
+GROUP BY
+    u1.username, u1.endDate
+HAVING
+-- second most recent
+    COUNT(u2.endDate) = 1
 ;
 {% endhighlight %}
+
+## UNION ALL
+
+* UNION: only keeps unique records
+* UNION ALL: keeps all records, including duplicates
 
 [Monthly Transactions II][monthly-transactions-ii]
 
@@ -669,8 +675,7 @@ FROM
         Chargebacks c
     JOIN
         Transactions t
-    ON
-        c.trans_id = t.id
+        ON c.trans_id = t.id
 
 -- some trans_date exists in Chargebacks only
 -- so we need to UNION the two tables
@@ -802,6 +807,42 @@ ORDER BY
 ;
 {% endhighlight %}
 
+[Find the Quiet Students in All Exams][find-the-quiet-students-in-all-exams]
+
+{% highlight sql %}
+WITH cte AS(
+    SELECT
+        exam_id,
+        exam.student_id,
+        student_name, score,
+        RANK() OVER(PARTITION BY exam_id ORDER BY score) rank_asc,
+        RANK() OVER(PARTITION BY exam_id ORDER BY score DESC) rank_desc 
+    FROM
+        exam
+    LEFT JOIN
+        student
+        ON exam.student_id = student.student_id
+)
+
+SELECT
+    DISTINCT student_id,
+    student_name
+FROM
+    cte
+WHERE
+    student_id NOT IN (
+        SELECT
+            student_id
+        FROM
+            cte
+        WHERE
+            rank_asc = 1 or rank_desc = 1
+    )
+ORDER BY
+    student_id
+;
+{% endhighlight %}
+
 ## Recursive CTE
 
 {% highlight sql %}
@@ -886,6 +927,33 @@ WHERE
 
 ## Multiple Joins
 
+[Number of Trusted Contacts of a Customer][number-of-trusted-contacts-of-a-customer]
+
+{% highlight sql %}
+SELECT
+    i.invoice_id,
+    cu.customer_name,
+    i.price,
+    COUNT(co.user_id) as contacts_cnt,
+    COUNT(cu2.email) as trusted_contacts_cnt
+FROM
+    invoices i
+JOIN
+    Customers cu
+    ON cu.customer_id = i.user_id
+LEFT JOIN
+    Contacts co
+    ON co.user_id = cu.customer_id
+LEFT JOIN
+    Customers cu2
+    ON cu2.email = co.contact_email
+GROUP BY
+    i.invoice_id, cu.customer_name, i.price
+ORDER BY
+    i.invoice_id
+;
+{% endhighlight %}
+
 [The Most Recent Three Orders][the-most-recent-three-orders]
 
 {% highlight sql %}
@@ -914,6 +982,25 @@ ORDER BY
     customer_name,
     customer_id,
     order_date DESC
+;
+{% endhighlight %}
+
+## Implicit Join
+
+[Consecutive Numbers][consecutive-numbers]
+
+{% highlight sql %}
+SELECT DISTINCT
+    l1.Num AS ConsecutiveNums
+FROM
+    Logs l1,
+    Logs l2,
+    Logs l3
+WHERE
+    l1.Id = l2.Id - 1
+    AND l2.Id = l3.Id - 1
+    AND l1.Num = l2.Num
+    AND l2.Num = l3.Num
 ;
 {% endhighlight %}
 
@@ -1005,6 +1092,19 @@ WHERE
 ;
 {% endhighlight %}
 
+## DENSE_RANK
+
+[Rank Scores][rank-scores]
+
+{% highlight sql %}
+SELECT
+    score,
+    DENSE_RANK() OVER (ORDER BY Score DESC) AS `Rank`
+FROM
+    Scores
+;
+{% endhighlight %}
+
 ## LEAD
 
 [Biggest Window Between Visits][biggest-window-between-visits]
@@ -1013,7 +1113,7 @@ WHERE
 LEAD(expr [, N[, default]]) [null_treatment] over_clause
 ```
 
-Returns the value of expr from the row that leads (follows) the current row by `N` rows within its partition. If there is no such row, the return value is default. 
+Returns the value of expr from the row that leads (follows) the current row by `N` rows within its partition. If there is no such row, the return value is default. If `N` is not specified, the default is 1.
 
 {% highlight sql %}
 SELECT
@@ -1032,6 +1132,25 @@ ORDER BY
 ;
 {% endhighlight %}
 
+# LAG
+
+[Consecutive Numbers][consecutive-numbers]
+
+{% highlight sql %}
+SELECT
+    DISTINCT Num AS ConsecutiveNums
+FROM
+    (SELECT
+        Num,
+        LEAD(Num) OVER(ORDER BY id) AS lead_num,
+        LAG(Num) OVER(ORDER BY id) AS lag_num
+     FROM
+        Logs) t
+WHERE
+    Num = lead_num AND Num = lag_num;
+;
+{% endhighlight %}
+
 [active-businesses]: https://leetcode.com/problems/active-businesses/
 [actors-an-directors-who-cooperated-at-least-three-times]: https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
 [ads-performance]: https://leetcode.com/problems/ads-performance/
@@ -1040,6 +1159,7 @@ ORDER BY
 [calculate-salaries]: https://leetcode.com/problems/calculate-salaries/
 [classes-more-than-5-students]: https://leetcode.com/problems/classes-more-than-5-students/
 [consecutive-available-seats]: https://leetcode.com/problems/consecutive-available-seats/
+[consecutive-numbers]: https://leetcode.com/problems/consecutive-numbers/
 [countries-you-can-safely-invest-in]: https://leetcode.com/problems/countries-you-can-safely-invest-in/
 [customer-placing-the-largest-number-of-orders]: https://leetcode.com/problems/customer-placing-the-largest-number-of-orders/
 [customers-who-bought-all-products]: https://leetcode.com/problems/customers-who-bought-all-products/
@@ -1047,12 +1167,14 @@ ORDER BY
 [evaluate-boolean-expression]: https://leetcode.com/problems/evaluate-boolean-expression/
 [find-the-start-and-end-number-of-continuous-ranges]: https://leetcode.com/problems/find-the-start-and-end-number-of-continuous-ranges/
 [find-the-missing-ids]: https://leetcode.com/problems/find-the-missing-ids/
+[find-the-quiet-students-in-all-exams]: https://leetcode.com/problems/find-the-quiet-students-in-all-exams/
 [friend-requests-i-overall-acceptance-rate]: https://leetcode.com/problems/friend-requests-i-overall-acceptance-rate/
 [game-play-analysis-i]: https://leetcode.com/problems/game-play-analysis-i/
 [game-play-analysis-ii]: https://leetcode.com/problems/game-play-analysis-ii/
 [game-play-analysis-iii]: https://leetcode.com/problems/game-play-analysis-iii/
 [game-play-analysis-iv]: https://leetcode.com/problems/game-play-analysis-iv/
 [get-highest-answer-rate-question]: https://leetcode.com/problems/get-highest-answer-rate-question/
+[get-the-second-most-recent-activity]: https://leetcode.com/problems/get-the-second-most-recent-activity/
 [immediate-food-delivery-ii]: https://leetcode.com/problems/immediate-food-delivery-ii/
 [last-person-to-fit-in-the-elevator]: https://leetcode.com/problems/last-person-to-fit-in-the-elevator/
 [leetflex-banned-accounts]: https://leetcode.com/problems/leetflex-banned-accounts/
@@ -1063,6 +1185,7 @@ ORDER BY
 [number-of-trusted-contacts-of-a-customer]: https://leetcode.com/problems/number-of-trusted-contacts-of-a-customer/
 [percentage-of-users-attended-a-contest]: https://leetcode.com/problems/percentage-of-users-attended-a-contest/
 [product-price-at-a-given-date]: https://leetcode.com/problems/product-price-at-a-given-date/
+[rank-scores]: https://leetcode.com/problems/rank-scores/
 [rearrange-products-table]: https://leetcode.com/problems/rearrange-products-table/
 [reformat-department-table]: https://leetcode.com/problems/reformat-department-table/
 [restaurant-growth]: https://leetcode.com/problems/restaurant-growth/

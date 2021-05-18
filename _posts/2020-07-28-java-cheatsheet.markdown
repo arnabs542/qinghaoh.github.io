@@ -124,6 +124,10 @@ int k = (int) (Math.log10(n) + 1);
 # Object
 * [protected Object clone() throws CloneNotSupportedException](https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone--)
 
+# Priority Queue
+
+The Iterator provided in method `iterator()` and the Spliterator provided in method `spliterator()` are ***not*** guaranteed to traverse the elements of the priority queue in any particular order. If you need ordered traversal, consider using Arrays.sort(pq.toArray()).
+
 # Scanner
 
 https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Scanner.html

@@ -110,8 +110,50 @@ public int[] shortestToChar(String s, char c) {
 }
 {% endhighlight %}
 
+# Swapping
+
+[Swap Adjacent in LR String][swap-adjacent-in-lr-string]
+
+{% highlight java %}
+public boolean canTransform(String start, String end) {
+    int n = start.length();
+    // indexes of 'L' or 'R';
+    List<Integer> si = new ArrayList<>(), ei = new ArrayList<>();
+    for (int i = 0; i < n; i++) {
+        if (start.charAt(i) == 'L' || start.charAt(i) == 'R') {
+            si.add(i);
+        }
+        if (end.charAt(i) == 'L' || end.charAt(i) == 'R') {
+            ei.add(i);
+        }
+    }
+
+    if (si.size() != ei.size()) {
+        return false;
+    }
+
+    for (int i = 0; i < si.size(); i++) {
+        int sIndex = si.get(i), eIndex = ei.get(i);
+        char sc = start.charAt(sIndex), ec = end.charAt(eIndex);
+        if (sc != ec) {
+            return false;
+        }
+
+        if (sc == 'L' && sIndex < eIndex) {
+            return false;
+        }
+
+        if (sc == 'R' && sIndex > eIndex) {
+            return false;
+        }
+    }
+    return true;
+}
+{% endhighlight %}
+
 [first-missing-positive]: https://leetcode.com/problems/first-missing-positive/
 [reverse-words-in-a-string-ii]: https://leetcode.com/problems/reverse-words-in-a-string-ii/
 [rotate-array]: https://leetcode.com/problems/rotate-array/
 [shift-2d-grid]: https://leetcode.com/problems/shift-2d-grid/
 [shortest-distance-to-a-character]: https://leetcode.com/problems/shortest-distance-to-a-character/
+[swap-adjacent-in-lr-string]: https://leetcode.com/problems/swap-adjacent-in-lr-string/
