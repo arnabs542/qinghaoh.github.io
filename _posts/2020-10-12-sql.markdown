@@ -119,6 +119,45 @@ FROM Employee AS a JOIN Employee AS b
 ;
 {% endhighlight %}
 
+# IN
+
+[Customers Who Bought Products A and B but Not C][customers-who-bought-products-a-and-b-but-not-c]
+
+{% highlight sql %}
+SELECT
+    customer_id,
+    customer_name
+FROM
+    Customers
+WHERE
+    customer_id IN (
+    SELECT
+        customer_id
+    FROM
+        Orders
+    WHERE
+        product_name = 'A'
+    )
+    AND
+    customer_id IN (
+    SELECT
+        customer_id
+    FROM
+        Orders
+    WHERE
+        product_name = 'B'
+    )
+    AND customer_id NOT IN (
+    SELECT
+        customer_id
+    FROM
+        Orders
+    WHERE
+        product_name = 'C'
+    ) 
+;
+{% endhighlight %}
+
 # GROUP BY
 
 Multiple levels:
@@ -246,6 +285,35 @@ GROUP BY
 {% endhighlight %}
 
 MySQL uses three-valued logic -- TRUE, FALSE and UNKNOWN. Anything compared to NULL evaluates to the third value: UNKNOWN. That “anything” includes NULL itself! That’s why MySQL provides the IS NULL and IS NOT NULL operators to specifically check for NULL.
+
+# WHERE
+
+[The Most Recent Orders for Each Product][the-most-recent-orders-for-each-product]
+
+{% highlight sql %}
+SELECT
+    product_name,
+    p.product_id,
+    order_id,
+    order_date
+FROM
+    Products p
+JOIN
+    Orders o
+    ON p.product_id = o.product_id
+WHERE
+    (o.product_id, o.order_date) IN (
+        SELECT
+            product_id,
+            MAX(order_date) as order_date
+        FROM
+            Orders
+        GROUP BY
+            product_id)
+ORDER BY
+    product_name, product_id, order_id
+;
+{% endhighlight %}
 
 # HAVING
 
@@ -452,6 +520,8 @@ If **PARTITION BY** is not specified, the function treats all rows of the query 
 
 [Find the Start and End Number of Continuous Ranges][find-the-start-and-end-number-of-continuous-ranges]
 
+`ROW_NUMBER` numbers all rows sequentially (for example 1, 2, 3, 4, 5).
+
 {% highlight sql %}
 SELECT
     MIN(log_id) AS start_id, MAX(log_id) AS end_id
@@ -593,7 +663,8 @@ WHERE
 
 {% highlight sql %}
 SELECT
-    DISTINCT product_id, 10 as price
+    DISTINCT product_id,
+    10 AS price
 FROM
     Products
 GROUP BY
@@ -843,6 +914,55 @@ ORDER BY
 ;
 {% endhighlight %}
 
+[Number of Transactions per Visit][number-of-transactions-per-visit]
+
+{% highlight sql %}
+-- transactions per user per visist date
+WITH vt AS(
+    SELECT
+        v.user_id,
+        visit_date,
+        COUNT(t.transaction_date) AS transaction_count
+    FROM
+        Visits v
+    LEFT JOIN
+        Transactions t
+        ON v.visit_date = t.transaction_date AND v.user_id = t.user_id
+    GROUP BY
+        v.user_id,
+        visit_date),
+
+-- generates a table with numbers [0, row count of Transactions table]
+    row_nums AS(
+        SELECT
+            ROW_NUMBER() OVER () AS rn
+        FROM
+            Transactions 
+        UNION 
+        SELECT 0) 
+				 
+SELECT
+    rn AS transactions_count,
+    COUNT(vt.transaction_count) AS visits_count
+FROM
+    vt
+RIGHT JOIN
+    row_nums
+    ON transaction_count = rn
+WHERE
+    -- removes excessive row numbers
+    rn <= (
+        SELECT
+            MAX(transaction_count)
+        FROM
+            vt)
+GROUP BY
+    rn
+ORDER BY
+    rn
+;
+{% endhighlight %}
+
 ## Recursive CTE
 
 {% highlight sql %}
@@ -863,6 +983,33 @@ FROM   expression_name
 ![Flow chart](https://cdn.sqlservertutorial.net/wp-content/uploads/SQL-Server-Recursive-CTE-execution-flow.png)
 
 Ref: https://www.sqlservertutorial.net/sql-server-basics/sql-server-recursive-cte/
+
+[All People Report to the Given Manager][all-people-report-to-the-given-manager]
+
+{% highlight sql %}
+WITH RECURSIVE cte AS (
+    SELECT
+        employee_id
+    FROM
+        Employees
+    WHERE
+        manager_id = 1 AND employee_id != 1
+    UNION ALL
+    SELECT
+        e.employee_id
+    FROM
+        cte c
+    JOIN
+        Employees e
+        ON c.employee_id = e.manager_id
+)
+
+SELECT
+    employee_id
+FROM
+    cte
+;
+{% endhighlight %}
 
 [Find the Missing IDs][find-the-missing-ids]
 
@@ -1154,6 +1301,7 @@ WHERE
 [active-businesses]: https://leetcode.com/problems/active-businesses/
 [actors-an-directors-who-cooperated-at-least-three-times]: https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
 [ads-performance]: https://leetcode.com/problems/ads-performance/
+[all-people-report-to-the-given-manager]: https://leetcode.com/problems/all-people-report-to-the-given-manager/
 [all-valid-triplets-that-can-represent-a-country]: https://leetcode.com/problems/all-valid-triplets-that-can-represent-a-country/
 [biggest-window-between-visits]: https://leetcode.com/problems/biggest-window-between-visits/
 [calculate-salaries]: https://leetcode.com/problems/calculate-salaries/
@@ -1163,6 +1311,7 @@ WHERE
 [countries-you-can-safely-invest-in]: https://leetcode.com/problems/countries-you-can-safely-invest-in/
 [customer-placing-the-largest-number-of-orders]: https://leetcode.com/problems/customer-placing-the-largest-number-of-orders/
 [customers-who-bought-all-products]: https://leetcode.com/problems/customers-who-bought-all-products/
+[customers-who-bought-products-a-and-b-but-not-c]: https://leetcode.com/problems/customers-who-bought-products-a-and-b-but-not-c/
 [employees-earning-more-than-their-managers]: https://leetcode.com/problems/employees-earning-more-than-their-managers/
 [evaluate-boolean-expression]: https://leetcode.com/problems/evaluate-boolean-expression/
 [find-the-start-and-end-number-of-continuous-ranges]: https://leetcode.com/problems/find-the-start-and-end-number-of-continuous-ranges/
@@ -1182,6 +1331,7 @@ WHERE
 [monthly-transactions-ii]: https://leetcode.com/problems/monthly-transactions-ii/
 [nth-highest-salary]: https://leetcode.com/problems/nth-highest-salary/
 [number-of-calls-between-two-persons]: https://leetcode.com/problems/number-of-calls-between-two-persons/
+[number-of-transactions-per-visit]: https://leetcode.com/problems/number-of-transactions-per-visit/
 [number-of-trusted-contacts-of-a-customer]: https://leetcode.com/problems/number-of-trusted-contacts-of-a-customer/
 [percentage-of-users-attended-a-contest]: https://leetcode.com/problems/percentage-of-users-attended-a-contest/
 [product-price-at-a-given-date]: https://leetcode.com/problems/product-price-at-a-given-date/
@@ -1197,5 +1347,6 @@ WHERE
 [suspicious-bank-accounts]: https://leetcode.com/problems/suspicious-bank-accounts/
 [swap-salary]: https://leetcode.com/problems/swap-salary/
 [the-most-frequently-ordered-products-for-each-customer]: https://leetcode.com/problems/the-most-frequently-ordered-products-for-each-customer/
+[the-most-recent-orders-for-each-product]: https://leetcode.com/problems/the-most-recent-orders-for-each-product/
 [the-most-recent-three-orders]: https://leetcode.com/problems/the-most-recent-three-orders/
 [tree-node]: https://leetcode.com/problems/tree-node/

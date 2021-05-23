@@ -34,4 +34,18 @@ private List<String> findStrobogrammatic(int n, int root) {
 }
 {% endhighlight %}
 
+[Largest Merge Of Two Strings][largest-merge-of-two-strings]
+
+{% highlight java %}
+public String largestMerge(String word1, String word2) {
+    if (word1.length() == 0  || word2.length() == 0) {
+        return word1 + word2;
+    }
+
+    return word1.compareTo(word2) > 0 ?
+        word1.charAt(0) + largestMerge(word1.substring(1), word2) : word2.charAt(0) + largestMerge(word1, word2.substring(1));
+}
+{% endhighlight %}
+
+[largest-merge-of-two-strings]: https://leetcode.com/problems/largest-merge-of-two-strings/
 [strobogrammatic-number-ii]: https://leetcode.com/problems/strobogrammatic-number-ii/

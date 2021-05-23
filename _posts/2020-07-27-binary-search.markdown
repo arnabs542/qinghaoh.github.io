@@ -546,8 +546,41 @@ public int binarySearch(int[] arr) {
     return low;
 }
 
-// monotonically decreasing
+// f(x) is monotonically decreasing
 private boolean condition(int value) {
+    return f(x) >= 0;
+}
+{% endhighlight %}
+
+[Maximum Value at a Given Index in a Bounded Array][maximum-value-at-a-given-index-in-a-bounded-array]
+
+{% highlight java %}
+public int maxValue(int n, int index, int maxSum) {
+    int low = 0, high = maxSum;
+    while (low < high) {
+        int mid = low + (high - low + 1) / 2;
+        if (condition(mid, n, index, maxSum)) {
+            low = mid;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return low;
+}
+
+private boolean condition(int x, int n, int index, long maxSum) {
+    return sum(x, n, index) <= maxSum;
+}
+
+private long sum(int x, int n, int index) {
+    return f(x, index + 1) + f(x, n - index) - x;
+}
+
+// formula: (1 + n) * n / 2
+private long f(int x, int n) {
+    // x > n: 2,3,
+    // x < n: 1,1,1,2,3
+    return x > n ? (long)(x + (x - n + 1)) * n / 2 : (long)(1 + x) * x / 2 + (n - x);
 }
 {% endhighlight %}
 
@@ -683,6 +716,7 @@ if (insertionPoint < 0) {
 [k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
 [magnetic-force-between-two-balls]: https://leetcode.com/problems/magnetic-force-between-two-balls/
 [maximum-font-to-fit-a-sentence-in-a-screen]: https://leetcode.com/problems/maximum-font-to-fit-a-sentence-in-a-screen/
+[maximum-value-at-a-given-index-in-a-bounded-array]: https://leetcode.com/problems/maximum-value-at-a-given-index-in-a-bounded-array/
 [maximum-width-ramp]: https://leetcode.com/problems/maximum-width-ramp/
 [minimum-number-of-days-to-make-m-bouquets]: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/
 [missing-element-in-sorted-array]: https://leetcode.com/problems/missing-element-in-sorted-array/

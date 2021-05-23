@@ -10,11 +10,13 @@ n ^ n = 0
 2k ^ (2k + 1) = 1
 
 n &= -n 		// clears all but lsb
-n &= n - 1		// zeros out lsb
+n &= n - 1		// zeros out lsb, Brian Kernighan's Algorithm
 n & (n - 1) == 0  	// power of 2
 
 i = (i - 1) & superset	// enumerate all subsets
 ```
+
+# Brian Kernighan's Algorithm
 
 [Counting Bits][counting-bits]
 
@@ -25,6 +27,18 @@ public int[] countBits(int num) {
         result[i] = result[i & (i - 1)] + 1;
     }
     return result;
+}
+{% endhighlight %}
+
+[Bitwise AND of Numbers Range][bitwise-and-of-numbers-range]
+
+{% highlight java %}
+public int rangeBitwiseAnd(int left, int right) {
+    while (right > left) {
+        right &= (right - 1);
+    }
+
+    return right;
 }
 {% endhighlight %}
 
@@ -432,6 +446,7 @@ public boolean validUtf8(int[] data) {
 {% endhighlight %}
 
 [binary-number-with-alternating-bits]: https://leetcode.com/problems/binary-number-with-alternating-bits/
+[bitwise-and-of-numbers-range]: https://leetcode.com/problems/bitwise-and-of-numbers-range/
 [concatenation-of-consecutive-binary-numbers]: https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/
 [circular-permutation-in-binary-representation]: https://leetcode.com/problems/circular-permutation-in-binary-representation/
 [counting-bits]: https://leetcode.com/problems/counting-bits/

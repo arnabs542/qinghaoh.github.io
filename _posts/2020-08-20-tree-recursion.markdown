@@ -148,6 +148,59 @@ private int dfs(TreeNode node) {
 }
 {% endhighlight %}
 
+[Number of Good Leaf Nodes Pairs][number-of-good-leaf-nodes-pairs]
+
+{% highlight java %}
+private int distance = 0;
+private int pairs = 0;
+
+public int countPairs(TreeNode root, int distance) {
+    this.distance = distance;
+    dfs(root);
+    return pairs;
+}
+
+/**
+ * Gets the leaf node count array. Here's the definition for the array:
+ *   The leaf node count array contains (distance + 1) elements. The i-th element
+ *   denotes the count of leaf nodes which are i away from current node's parent.
+ *   The 0-th element of the array is not used.
+ * @param node node the root of the subtree
+ * @return left node count array
+ */
+private int[] dfs(TreeNode node) {
+    int[] count = new int[distance + 1];
+    if (node == null) {
+        return count;
+    }
+
+    if (node.left == node.right) {
+        count[1] = 1;
+        return count;
+    }
+
+    int[] left = dfs(node.left), right = dfs(node.right);
+
+    // prefix sum of right
+    int[] p = new int[right.length];
+    for (int i = 0; i < distance; i++) {
+        p[i + 1] = p[i] + right[i];
+    }
+
+    for (int i = 1; i < distance; i++) {
+        // p[distance - i + 1] = right[0] + right[1] + ... + right[distance - i]
+        // i.e. count of all right nodes where left[i] + right[j] <= distance
+        pairs += left[i] * p[distance - i + 1];
+    }
+
+    for (int i = 1; i < distance; i++) {
+        count[i + 1] = left[i] + right[i];
+    }
+
+    return count;
+}
+{% endhighlight %}
+
 [Find Distance in a Binary Tree][find-distance-in-a-binary-tree]
 
 {% highlight java %}
@@ -781,7 +834,52 @@ private TreeNode dfs(TreeNode node) {
 }
 {% endhighlight %}
 
+# Greedy
+
+[Binary Tree Cameras][binary-tree-cameras]
+
+{% highlight java %}
+private int count = 0;
+
+private enum Camera {
+    NOT_MONITORED,  // not monitored
+    HAS_CAMERA,     // has camera
+    MONITORED       // monitored, no camera
+};
+
+/*Return 0 if it's a leaf.
+Return 1 if it's a parent of a leaf, with a camera on this node.
+Return 2 if it's coverd, without a camera on this node.*/
+
+public int minCameraCover(TreeNode root) {
+    // installs cameras on parents of all leaves
+    // then removes all monitored nodes
+
+    // installs a camera at root if it's not monitored
+    return dfs(root) == Camera.NOT_MONITORED ? ++count : count;
+}
+
+public Camera dfs(TreeNode root) {
+    // if there's no node, it's already monitored
+    if (root == null) {
+        return Camera.MONITORED;
+    }
+
+    Camera left = dfs(root.left), right = dfs(root.right);
+
+    // if either child node is not monitored,
+    // installs a camera at the current node
+    if (left == Camera.NOT_MONITORED || right == Camera.NOT_MONITORED) {
+        count++;
+        return Camera.HAS_CAMERA;
+    }
+
+    return left == Camera.HAS_CAMERA || right == Camera.HAS_CAMERA ? Camera.MONITORED : Camera.NOT_MONITORED;
+}
+{% endhighlight %}
+
 [all-nodes-distance-k-in-binary-tree]: https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/
+[binary-tree-cameras]: https://leetcode.com/problems/binary-tree-cameras/
 [binary-tree-maximum-path-sum]: https://leetcode.com/problems/binary-tree-maximum-path-sum/
 [binary-tree-right-side-view]: https://leetcode.com/problems/binary-tree-right-side-view/
 [convert-bst-to-greater-tree]: https://leetcode.com/problems/convert-bst-to-greater-tree/
@@ -802,6 +900,7 @@ private TreeNode dfs(TreeNode node) {
 [maximum-difference-between-node-and-ancestor]: https://leetcode.com/problems/maximum-difference-between-node-and-ancestor/
 [minimum-absolute-difference-in-bst]: https://leetcode.com/problems/minimum-absolute-difference-in-bst/
 [n-ary-tree-level-order-traversal]: https://leetcode.com/problems/n-ary-tree-level-order-traversal/
+[number-of-good-leaf-nodes-pairs]: https://leetcode.com/problems/number-of-good-leaf-nodes-pairs/
 [path-sum-iii]: https://leetcode.com/problems/path-sum-iii/
 [pseudo-palindromic-paths-in-a-binary-tree]: https://leetcode.com/problems/pseudo-palindromic-paths-in-a-binary-tree/
 [second-minimum-node-in-a-binary-tree]: https://leetcode.com/problems/second-minimum-node-in-a-binary-tree/
