@@ -578,6 +578,51 @@ private int backtrack(int num, int level, boolean[] visited) {
 }
 {% endhighlight %}
 
+[Robot Room Cleaner][robot-room-cleaner]
+
+[Wall follower](https://en.wikipedia.org/wiki/Maze-solving_algorithm#Wall_follower)
+
+{% highlight java %}
+private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+private Robot robot;
+private Set<String> visited = new HashSet<>();
+
+public void cleanRoom(Robot robot) {
+    this.robot = robot;
+    backtrack(0, 0, 0);
+}
+
+private void backtrack(int row, int col, int d) {
+    visited.add(row + "#" + col);
+    robot.clean();
+
+    // clockwise : 0: 'up', 1: 'right', 2: 'down', 3: 'left'
+    for (int i = 0; i < 4; i++) {
+        int newD = (d + i) % 4;
+        int newRow = row + DIRECTIONS[newD][0];
+        int newCol = col + DIRECTIONS[newD][1];
+
+        // considers visited cells as virtual obstacles
+        if (!visited.contains(newRow + "#" + newCol) && robot.move()) {
+            backtrack(newRow, newCol, newD);
+            goBack();
+        }
+
+        // turns the robot following chosen direction : clockwise
+        robot.turnRight();
+    }
+}
+
+// goes back facing the same direction
+private void goBack() {
+    robot.turnRight();
+    robot.turnRight();
+    robot.move();
+    robot.turnRight();
+    robot.turnRight();
+}
+{% endhighlight %}
+
 # NP Complete
 
 [Optimal Account Balancing][optimal-account-balancing]
@@ -633,5 +678,6 @@ private int backtrack(int index, int[] debt) {
 [partition-to-k-equal-sum-subsets]: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
 [permutations]: https://leetcode.com/problems/permutations/
 [permutations-ii]: https://leetcode.com/problems/permutations-ii/
+[robot-room-cleaner]: https://leetcode.com/problems/robot-room-cleaner/
 [subsets]: https://leetcode.com/problems/subsets/
 [subsets-ii]: https://leetcode.com/problems/subsets-ii/

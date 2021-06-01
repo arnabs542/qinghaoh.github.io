@@ -132,6 +132,57 @@ public int minSwap(int[] A, int[] B) {
 }
 {% endhighlight %}
 
+# Deterministic Finite Automation
+
+[Deterministic finite automaton (DFA)](https://en.wikipedia.org/wiki/Deterministic_finite_automaton): a finite-state machine that accepts or rejects a given string of symbols, by running through a state sequence uniquely determined by the string.
+
+[Valid Number][valid-number]
+
+![DFA](https://leetcode.com/problems/valid-number/Figures/65/dfa.png)
+
+{% highlight java %}
+private static final List<Map<String, Integer>> dfa = List.of(
+    Map.of("digit", 1, "sign", 2, "dot", 3),
+    Map.of("digit", 1, "dot", 4, "exponent", 5), 
+    Map.of("digit", 1, "dot", 3), 
+    Map.of("digit", 4), 
+    Map.of("digit", 4, "exponent", 5),
+    Map.of("sign", 6, "digit", 7),
+    Map.of("digit", 7),
+    Map.of("digit", 7)
+);
+
+private static final Set<Integer> validFinalStates = Set.of(1, 4, 7);
+
+public boolean isNumber(String s) {
+    int currState = 0;
+    String group = null;
+
+    for (char c : s.toCharArray()) {
+        if (Character.isDigit(c)) {
+            group = "digit";
+        } else if (c == '+' || c == '-') {
+            group = "sign";
+        } else if (c == 'e' || c == 'E') {
+            group = "exponent";
+        } else if (c == '.') {
+            group = "dot";
+        } else {
+            return false;
+        }
+
+        if (!dfa.get(currState).containsKey(group)) {
+            return false;
+        }
+
+        currState = dfa.get(currState).get(group);
+    }
+
+    return validFinalStates.contains(currState);
+}
+{% endhighlight %}
+
 [best-time-to-buy-and-sell-stock-with-cooldown]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
 [best-time-to-buy-and-sell-stock-with-transaction-fee]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/
 [minimum-swaps-to-make-sequences-increasing]: https://leetcode.com/problems/minimum-swaps-to-make-sequences-increasing/
+[valid-number]: https://leetcode.com/problems/valid-number/

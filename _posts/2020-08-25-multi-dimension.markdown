@@ -169,6 +169,30 @@ public int[][] matrixBlockSum(int[][] mat, int K) {
 
 [Lonely Pixel I][lonely-pixel-i]
 
+[Maximum Side Length of a Square with Sum Less than or Equal to Threshold][maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold]
+
+{% highlight java %}
+public int maxSideLength(int[][] mat, int threshold) {
+    int m = mat.length, n = mat[0].length;
+    int[][] p = new int[m + 1][n + 1];  // prefix sum
+
+    int max = 0;
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            p[i + 1][j + 1] = p[i + 1][j] + p[i][j + 1] - p[i][j] + mat[i][j];
+            if (i - max >= 0 && j - max >= 0 && squareSum(p, i, j, max + 1) <= threshold) {
+                max++;
+            }
+        }
+    }
+    return max;
+}
+
+private int squareSum(int[][] p, int i, int j, int k) {
+    return p[i + 1][j + 1] - p[i + 1][j + 1 - k] - p[i + 1 - k][j + 1] + p[i + 1 - k][j + 1 - k];
+}
+{% endhighlight %}
+
 # 2D Prefix Sum
 
 2D -> 1D: Calculates prefix sum for each row, and then each column, or vice versa.
@@ -295,6 +319,7 @@ Regular DFS/BFS would also work.
 [largest-submatrix-with-rearrangements]: https://leetcode.com/problems/largest-submatrix-with-rearrangements/
 [lonely-pixel-i]: https://leetcode.com/problems/lonely-pixel-i/
 [matrix-block-sum]: https://leetcode.com/problems/matrix-block-sum/
+[maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold]: https://leetcode.com/problems/maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold/
 [maximal-square]: https://leetcode.com/problems/maximal-square/
 [number-of-enclaves]: https://leetcode.com/problems/number-of-enclaves/
 [number-of-submatrices-that-sum-to-target]: https://leetcode.com/problems/number-of-submatrices-that-sum-to-target/

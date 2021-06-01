@@ -106,5 +106,22 @@ private void insert(TrieNode root, String word, int index) {
 }
 {% endhighlight %}
 
+[Implement Trie II (Prefix Tree)][implement-trie-ii-prefix-tree]
+
+{% highlight java %}
+class TrieNode {
+    TrieNode[] children;
+    int prefixCount;
+    int wordCount;
+
+    TrieNode() {
+        children = new TrieNode[26];
+        prefixCount = -1;
+        count = -1;
+    }
+}
+{% endhighlight %}
+
+[implement-trie-ii-prefix-tree]: https://leetcode.com/problems/implement-trie-ii-prefix-tree/
 [index-pairs-of-a-string]: https://leetcode.com/problems/index-pairs-of-a-string/
 [prefix-and-suffix-search]: https://leetcode.com/problems/prefix-and-suffix-search/

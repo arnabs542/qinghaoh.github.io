@@ -528,6 +528,42 @@ private boolean condition(int[] nums, int s, int m) {
 }
 {% endhighlight %}
 
+[Search Suggestions System][search-suggestions-system]
+
+{% highlight java %}
+public List<List<String>> suggestedProducts(String[] products, String searchWord) {
+    Arrays.sort(products);
+
+    List<List<String>> result = new ArrayList<>();
+    for (int i = 1; i <= searchWord.length(); i++) {
+        int low = 0, high = products.length - 1;
+        String prefix = searchWord.substring(0, i);
+        while (low < high) {
+            int mid = (low + high) >>> 1;
+            if (condition(products, mid, prefix)) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        List<String> list = new ArrayList<>();
+        for (int j = low; j < Math.min(low + 3, products.length); j++) {
+            if (products[j].startsWith(prefix)) {
+                list.add(products[j]);
+            }
+        }
+        result.add(list);
+    }
+
+    return result;
+}
+
+private boolean condition(String[] products, int index, String prefix) {
+    return products[index].compareTo(prefix) >= 0;
+}
+{% endhighlight %}
+
 Similarly,
 
 Maximize `k`, s.t. `condition(k) == true`
@@ -547,7 +583,7 @@ public int binarySearch(int[] arr) {
 }
 
 // f(x) is monotonically decreasing
-private boolean condition(int value) {
+private boolean condition(int x) {
     return f(x) >= 0;
 }
 {% endhighlight %}
@@ -725,4 +761,5 @@ if (insertionPoint < 0) {
 [search-insert-position]: https://leetcode.com/problems/search-insert-position/
 [search-in-rotated-sorted-array]: https://leetcode.com/problems/search-in-rotated-sorted-array/
 [search-in-rotated-sorted-array-ii]: https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
+[search-suggestions-system]: https://leetcode.com/problems/search-suggestions-system/
 [the-k-weakest-rows-in-a-matrix]: https://leetcode.com/problems/the-k-weakest-rows-in-a-matrix/

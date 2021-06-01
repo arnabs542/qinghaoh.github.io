@@ -118,6 +118,107 @@ parent: -1
 dfn: 1,2,3,4
 low: 1,1,1,4
 ```
+# Travelling Salesman Problem
+
+[Travelling salesman problem (TSP)](https://en.wikipedia.org/wiki/Travelling_salesman_problem): "Given a list of cities and the distances between each pair of cities, what is the shortest possible route that visits each city exactly once and returns to the origin city?" It is an *** NP-hard *** problem.
+
+[Held-Karp algorithm](https://en.wikipedia.org/wiki/Held%E2%80%93Karp_algorithm)
+
+Complexity:
+
+* Time: `O(n ^ 2 * 2 ^ n)`
+
+[Find the Shortest Superstring][find-the-shortest-superstring]
+
+{% highlight java %}
+public String shortestSuperstring(String[] words) {
+    int n = words.length;
+
+    // TSP: NP-hard
+    // graph[i][j]: length of string to append when A[i] is followed by A[j]
+    int[][] graph = new int[n][n];
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            graph[i][j] = getDistance(words[i], words[j]);
+            graph[j][i] = getDistance(words[j], words[i]);
+        }
+    }
+
+    // Held–Karp algorithm
+    // dp[i][j]: min length
+    // path[i][j]: the node before j
+    //  - i: bit mask, subset
+    //  - j: last node travelled
+    int[][] dp = new int[1 << n][n], path = new int[1 << n][n];
+    int last = -1, min = Integer.MAX_VALUE;
+
+    // iterates all combinations/subsets of the nodes
+    for (int i = 1; i < (1 << n); i++) {
+        Arrays.fill(dp[i], Integer.MAX_VALUE);
+
+        // for each node
+        for (int j = 0; j < n; j++) {
+            // if the node (j) is in the subset
+            if ((i & (1 << j)) > 0) {
+                // the subset without the node (j)
+                int prev = i - (1 << j);
+
+                // if the node (j) is the only node in subset
+                if (prev == 0) {
+                    dp[i][j] = words[j].length();
+                } else {
+                    // for all the possible nodes before the node (j)
+                    for (int k = 0; k < n; k++) {
+                        // if k is valid and the length could be reduced
+                        if (dp[prev][k] < Integer.MAX_VALUE && dp[prev][k] + graph[k][j] < dp[i][j]) {
+                            dp[i][j] = dp[prev][k] + graph[k][j];
+                            path[i][j] = k;
+                        }
+                    }
+                }
+            }
+
+            // subset contains all nodes
+            if (i == (1 << n) - 1 && dp[i][j] < min) {
+                min = dp[i][j];
+                last = j;
+            }
+        }
+    }
+
+    // restores the path
+    StringBuilder sb = new StringBuilder();
+    int set = (1 << n) - 1;
+    Deque<Integer> st = new ArrayDeque<>();
+    while (set > 0) {
+        st.push(last);
+        int tmp = set;
+        set -= (1 << last);
+        last = path[tmp][last];
+    }
+
+    // constructs the result
+    int i = st.pop();
+    sb.append(words[i]);
+    while (!st.isEmpty()) {
+        int j = st.pop();
+        sb.append(words[j].substring(words[j].length() - graph[i][j]));
+        i = j;
+    }
+    return sb.toString();
+}
+
+private int getDistance(String a, String b) {
+    // no string in words is a substirng of another string in words
+    for (int i = 1; i < a.length(); i++) {
+        if (b.startsWith(a.substring(i))) {
+            return b.length() - a.length() + i;
+        }
+    }
+    return b.length();
+}
+{% endhighlight %}
+
 # Directed Graph
 
 [Directed graph](https://en.wikipedia.org/wiki/Directed_graph)
@@ -409,6 +510,7 @@ private void visit(String node) {
 [critical-connections-in-a-network]: https://leetcode.com/problems/critical-connections-in-a-network/
 [evaluate-division]: https://leetcode.com/problems/evaluate-division/
 [find-the-celebrity]: https://leetcode.com/problems/find-the-celebrity/
+[find-the-shortest-superstring]: https://leetcode.com/problems/find-the-shortest-superstring/
 [find-the-town-judge]: https://leetcode.com/problems/find-the-town-judge/
 [graph-valid-tree]: https://leetcode.com/problems/graph-valid-tree/
 [is-graph-bipartite]: https://leetcode.com/problems/is-graph-bipartite/
