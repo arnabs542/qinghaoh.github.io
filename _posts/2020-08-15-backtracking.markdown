@@ -583,7 +583,9 @@ private int backtrack(int num, int level, boolean[] visited) {
 [Wall follower](https://en.wikipedia.org/wiki/Maze-solving_algorithm#Wall_follower)
 
 {% highlight java %}
+{% raw %}
 private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+{% endraw %}
 private Robot robot;
 private Set<String> visited = new HashSet<>();
 
