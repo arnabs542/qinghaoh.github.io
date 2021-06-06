@@ -147,6 +147,40 @@ if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
 
 Look how it's transformed to [Longest Common Subsequence][longest-common-subsequence]!
 
+[Interleaving String][interleaving-string]
+
+{% highlight java %}
+public boolean isInterleave(String s1, String s2, String s3) {
+    int n1 = s1.length(), n2 = s2.length();
+    if (s3.length() != n1 + n2) {
+        return false;
+    }
+
+    // dp[i][j]: s1.substring(0, i) and s2.substring(0, j)
+    boolean dp[][] = new boolean[n1 + 1][n2 + 1];
+    dp[0][0] = true;
+
+    for (int j = 0; j < n2; j++) {
+        dp[0][j + 1] = dp[0][j] && s2.charAt(j) == s3.charAt(j);
+    }
+
+    for (int i = 0; i < n1; i++) {
+        dp[i + 1][0] = dp[i][0] && s1.charAt(i) == s3.charAt(i);
+    }
+
+    for (int i = 0; i < n1; i++) {
+        for (int j = 0; j < n2; j++) {
+            dp[i + 1][j + 1] = (dp[i][j + 1] && s1.charAt(i) == s3.charAt(i + j + 1)) || (dp[i + 1][j] && s2.charAt(j) == s3.charAt(i + j + 1));
+        }
+    }
+
+    return dp[n1][n2];
+}
+{% endhighlight %}
+
+{% highlight java %}
+{% endhighlight %}
+
 [Min Cost Climbing Stairs][min-cost-climbing-stairs]
 
 {% highlight java %}
@@ -313,6 +347,7 @@ public int minimumTotal(List<List<Integer>> triangle) {
 [dungeon-game]: https://leetcode.com/problems/dungeon-game/
 [edit-distance]: https://leetcode.com/problems/edit-distance/
 [greatest-sum-divisible-by-three]: https://leetcode.com/problems/greatest-sum-divisible-by-three/
+[interleaving-string]: https://leetcode.com/problems/interleaving-string/
 [longest-common-subsequence]: https://leetcode.com/problems/longest-common-subsequence/
 [longest-string-chain]: https://leetcode.com/problems/longest-string-chain/
 [min-cost-climbing-stairs]: https://leetcode.com/problems/min-cost-climbing-stairs/

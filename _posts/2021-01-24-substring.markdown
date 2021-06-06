@@ -26,6 +26,54 @@ public int longestRepeatingSubstring(String S) {
 }
 {% endhighlight %}
 
+[Encode String with Shortest Length][encode-string-with-shortest-length]
+
+{% highlight java %}
+// O(n ^ 4)
+public String encode(String s) {
+    int n = s.length();
+
+    // dp[i][j]: s.substring(i, j + 1) in encoded form
+    String[][] dp = new String[n][n];
+
+    for (int len = 0; len < n; len++) {
+        for (int i = 0; i < n - len; i++) {
+            int j = i + len;
+            String sub = s.substring(i, j + 1);     // length == (len + 1)
+            dp[i][j] = sub;
+
+            // when String length is less than 5, encoding won't shorten it
+            if (len > 3) {
+                // splits the substring
+                for (int k = i; k < j; k++) {
+                    if (dp[i][k].length() + dp[k + 1][j].length() < dp[i][j].length()) {
+                        dp[i][j] = dp[i][k] + dp[k + 1][j];
+                    }
+                }
+
+                // checks if the substring contains repeatable substrings
+                for (int k = 0; k < sub.length(); k++) {
+                    String repeatableSub = sub.substring(0, k + 1);   // length == k + 1
+                    // the first condition sometimes shortcuts so replaceAll is not called in every iteration
+                    if (sub.length() % repeatableSub.length() == 0 
+                       && sub.replaceAll(repeatableSub, "").length() == 0) {
+                          String decodedString = sub.length() / repeatableSub.length() + "[" + dp[i][i + k] + "]";
+                        if (decodedString.length() < dp[i][j].length()) {
+                            dp[i][j] = decodedString;
+                        }
+
+                        // shorter repeated pattern is always better than longer one
+                        // e.g. 4[ab] is bettter than 2[abab]
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return dp[0][n - 1];
+}
+{% endhighlight %}
 # String Matching
 
 [Rabin-Karp algorithm](https://en.wikipedia.org/wiki/Rabin%E2%80%93Karp_algorithm): a string-searching algorithm that uses hashing to find an exact match of a pattern string in a text. It uses a rolling hash to quickly filter out positions of the text that cannot match the pattern, and then checks for a match at the remaining positions.
@@ -155,6 +203,7 @@ private void doStamp(int pos) {
 }
 {% endhighlight %}
 
+[encode-string-with-shortest-length]: https://leetcode.com/problems/encode-string-with-shortest-length/
 [longest-duplicate-substring]: https://leetcode.com/problems/longest-duplicate-substring/
 [longest-repeating-substring]: https://leetcode.com/problems/longest-repeating-substring/
 [stamping-the-sequence]: https://leetcode.com/problems/stamping-the-sequence/

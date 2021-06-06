@@ -507,6 +507,70 @@ private void visit(String node) {
 }
 {% endhighlight %}
 
+# Dynamic Programming
+
+[The Most Similar Path in a Graph][the-most-similar-path-in-a-graph]
+
+{% highlight java %}
+public List<Integer> mostSimilar(int n, int[][] roads, String[] names, String[] targetPath) {
+    List<Integer>[] graph = new ArrayList[n];
+    for (int i = 0; i < n; i++) {
+        graph[i] = new ArrayList<>();
+    }
+
+    for (int[] r : roads) {
+        graph[r[0]].add(r[1]);
+        graph[r[1]].add(r[0]);
+    }
+
+    int m = targetPath.length;
+
+    // dp[i][j]: min edit distance for the path ending at node j compared to target path t[0] -> t[i]
+    int[][] dp = new int[m][n];
+
+    // initialization. max is bounded by the target path length m
+    for (int[] r : dp) {
+        Arrays.fill(r, m);
+    }
+
+    for (int j = 0; j < n; j++) {
+        dp[0][j] = names[j].equals(targetPath[0]) ? 0 : 1;
+    }
+
+    // stores the previous neighbor which has min edit distance
+    int[][] prev = new int[m][n];
+    for (int i = 1; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            for (int neighbor : graph[j]) {
+                if (dp[i - 1][neighbor] < dp[i][j]) {
+                    dp[i][j] = dp[i - 1][neighbor];
+                    prev[i][j] = neighbor;
+                }
+            }
+            dp[i][j] += (names[j].equals(targetPath[i]) ? 0 : 1);
+        }
+    }
+
+    List<Integer> path = new ArrayList<>();
+    path.add(0);
+
+    // finds min dp[m - 1][j]
+    int min = m;
+    for (int j = 0; j < n; j++) {
+        if (dp[m - 1][j] < min) {
+            min = dp[m - 1][j];
+            path.set(0, j);
+        }
+    }
+
+    // restores the path
+    for (int i = m - 1; i > 0; i--) {
+        path.add(0, prev[i][path.get(0)]);
+    }
+    return path;
+}
+{% endhighlight %}
+
 [critical-connections-in-a-network]: https://leetcode.com/problems/critical-connections-in-a-network/
 [evaluate-division]: https://leetcode.com/problems/evaluate-division/
 [find-the-celebrity]: https://leetcode.com/problems/find-the-celebrity/
@@ -516,3 +580,4 @@ private void visit(String node) {
 [is-graph-bipartite]: https://leetcode.com/problems/is-graph-bipartite/
 [knight-dialer]: https://leetcode.com/problems/knight-dialer/
 [reconstruct-itinerary]: https://leetcode.com/problems/reconstruct-itinerary/
+[the-most-similar-path-in-a-graph]: https://leetcode.com/problems/the-most-similar-path-in-a-graph/

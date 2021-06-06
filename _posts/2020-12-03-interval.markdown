@@ -330,6 +330,24 @@ public List<Integer> minAvailableDuration(int[][] slots1, int[][] slots2, int du
 
 # Data Structure
 
+[Seat Reservation Manager][seat-reservation-manager]
+
+{% highlight java %}
+private Queue<Integer> unreserved = new PriorityQueue<>();
+private int maxReserved = 0;
+
+public SeatManager(int n) {
+}
+
+public int reserve() {
+    return unreserved.isEmpty() ? ++maxReserved : unreserved.poll();
+}
+
+public void unreserve(int seatNumber) {
+    unreserved.offer(seatNumber);
+}
+{% endhighlight %}
+
 [Exam Room][exam-room]
 
 PriorityQueue:
@@ -479,4 +497,5 @@ class Interval implements Comparable<Interval> {
 [merge-intervals]: https://leetcode.com/problems/merge-intervals/
 [minimum-number-of-arrows-to-burst-balloons]: https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/
 [non-overlapping-intervals]: https://leetcode.com/problems/non-overlapping-intervals/
+[seat-reservation-manager]: https://leetcode.com/problems/seat-reservation-manager/
 [video-stitching]: https://leetcode.com/problems/video-stitching/

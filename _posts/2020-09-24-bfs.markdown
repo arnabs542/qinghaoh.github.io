@@ -216,28 +216,32 @@ public void wallsAndGates(int[][] rooms) {
 private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 {% endraw %}
 public boolean hasPath(int[][] maze, int[] start, int[] destination) {
+    int m = maze.length, n = maze[0].length;
+
+    // stores "stop points"
     Queue<int[]> q = new LinkedList<>();
     q.offer(start);
 
-    boolean[][] visited = new boolean[maze.length][maze[0].length];
+    boolean[][] visited = new boolean[m][n];
     visited[start[0]][start[1]] = true;
 
     while (!q.isEmpty()) {
         int[] p = q.poll();
+        // stops AT destination
         if (p[0] == destination[0] && p[1] == destination[1]) {
             return true;
         }
 
         for (int[] d: DIRECTIONS) {
             int r = p[0] + d[0], c = p[1] + d[1];
-            // stops rolling until hitting a wall 
-            while (r >= 0 && c >= 0 && r < maze.length && c < maze[0].length && maze[r][c] == 0) {
+            // keeps rolling until hitting a wall 
+            while (r >= 0 && c >= 0 && r < m && c < n && maze[r][c] == 0) {
                 r += d[0];
                 c += d[1];
             }
-
             r -= d[0];
             c -= d[1];
+
             if (!visited[r][c]) {
                 q.offer(new int[]{r, c});
                 visited[r][c] = true;

@@ -203,6 +203,35 @@ public int minScoreTriangulation(int[] values) {
 
         }
     }
+{% endhighlight %}
+
+[Burst Balloons][burst-balloons]
+
+{% highlight java %}
+public int maxCoins(int[] nums) {
+    int n = nums.length;
+
+    // dp[i][j]: max coins after bursting ballons in the range [nums[i], nums[j]]
+    //   and the rest balloons are NOT bursted. (reverse thinking)
+    int[][] dp = new int[n][n];
+
+    for (int len = 1; len <= n; len++) {
+        for (int left = 0; left + len - 1 < n; left++) {
+            int right = left + len - 1;
+            // reverse thinking: finds the balloon that's last to burst
+            // every element of the range [left, right] could be the last balloon to burst
+            for (int i = left; i <= right; i++){
+                int leftNum = (left == 0) ? 1 : nums[left - 1];
+                int rightNum = (right == n - 1) ? 1 : nums[right + 1];
+
+                int leftSum = (i == left) ? 0 : dp[left][i - 1];
+                int rightSum = (i == right) ? 0 : dp[i + 1][right];
+                dp[left][right] = Math.max(dp[left][right], leftNum * nums[i] * rightNum + leftSum + rightSum);
+            }
+        }
+    }
+
+    return dp[0][n - 1];
 }
 {% endhighlight %}
 
@@ -254,6 +283,7 @@ public boolean canPartitionKSubsets(int[] nums, int k) {
 }
 {% endhighlight %}
 
+[burst-balloons]: https://leetcode.com/problems/burst-balloons/
 [largest-sum-of-averages]: https://leetcode.com/problems/largest-sum-of-averages/
 [maximum-score-from-performing-multiplication-operations]: https://leetcode.com/problems/maximum-score-from-performing-multiplication-operations/
 [minimum-score-triangulation-of-polygon]: https://leetcode.com/problems/minimum-score-triangulation-of-polygon/

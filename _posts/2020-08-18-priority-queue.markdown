@@ -170,10 +170,43 @@ public boolean isPossible(int[] target) {
 }
 {% endhighlight %}
 
+# Greedy
+
+[Maximum Performance of a Team][maximum-performance-of-a-team]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int maxPerformance(int n, int[] speed, int[] efficiency, int k) {
+    int[][] engineer = new int[n][2];
+    for (int i = 0; i < n; i++) {
+        engineer[i] = new int[] {efficiency[i], speed[i]};
+    }
+
+    // sorts efficiency in decreasing order
+    Arrays.sort(engineer, (a, b) -> b[0] - a[0]);
+
+    Queue<Integer> pq = new PriorityQueue<>(k, (a, b) -> a - b);
+    long max = 0, sum = 0;
+    for (int[] e : engineer) {
+        pq.offer(e[1]);
+        sum += e[1];
+        // keeps pq size as k
+        if (pq.size() > k) {
+            sum -= pq.poll();
+        }
+        max = Math.max(max, sum * e[0]);
+    }
+
+    return (int)(max % MOD);
+}
+{% endhighlight %}
+
 [construct-target-array-with-multiple-sums]: https://leetcode.com/problems/construct-target-array-with-multiple-sums/
 [furthest-building-you-can-reach]: https://leetcode.com/problems/furthest-building-you-can-reach/
 [k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
 [kth-smallest-element-in-a-sorted-matrix]: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
 [maximize-sum-of-array-after-k-negations]: https://leetcode.com/problems/maximize-sum-of-array-after-k-negations/
+[maximum-performance-of-a-team]: https://leetcode.com/problems/maximum-performance-of-a-team/
 [minimize-deviation-in-array]: https://leetcode.com/problems/minimize-deviation-in-array/
 [smallest-range-covering-elements-from-k-lists]: https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/

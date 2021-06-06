@@ -397,6 +397,54 @@ private boolean backtrack(int[] nums, int index, int target) {
 }
 {% endhighlight %}
 
+[Construct the Lexicographically Largest Valid Sequence][construct-the-lexicographically-largest-valid-sequence]
+
+{% highlight java %}
+public int[] constructDistancedSequence(int n) {
+    int[] seq = new int[n * 2 - 1];
+    backtrack(seq, 0, new boolean[n]);
+    return seq;
+}
+
+private boolean backtrack(int[] seq, int index, boolean[] visited) {
+    if (index == seq.length) {
+        return true;
+    }
+
+    // this index is already assigned
+    if (seq[index] != 0) {
+        return backtrack(seq, index + 1, visited);
+    }
+
+    int n = visited.length;
+    // starts from n to find the lexicographically largest sequence
+    for (int i = n; i > 0; i--) {
+        if (!visited[i - 1]) {
+            visited[i - 1] = true;
+            seq[index] = i;
+
+            if (i == 1) {
+                // early termination
+                if (backtrack(seq, index + 1, visited)) {
+                    return true;
+                }
+            } else if (index + i < seq.length && seq[index + i] == 0) {
+                seq[i + index] = i;
+                if (backtrack(seq, index + 1, visited)) {
+                    return true;
+                }
+                seq[index + i] = 0;
+            }
+
+            seq[index] = 0;
+            visited[i - 1] = false;
+        }
+    }
+
+    return false;
+}
+{% endhighlight %}
+
 [Generalized Abbreviation][generalized-abbreviation]
 
 {% highlight java %}
@@ -669,6 +717,7 @@ private int backtrack(int index, int[] debt) {
 [combination-sum]: https://leetcode.com/problems/combination-sum/
 [combination-sum-ii]: https://leetcode.com/problems/combination-sum-ii/
 [combination-sum-iii]: https://leetcode.com/problems/combination-sum-iii/
+[construct-the-lexicographically-largest-valid-sequence]: https://leetcode.com/problems/construct-the-lexicographically-largest-valid-sequence/
 [factor-combinations]: https://leetcode.com/problems/factor-combinations/
 [generalized-abbreviation]: https://leetcode.com/problems/generalized-abbreviation/
 [letter-tile-possibilities]: https://leetcode.com/problems/letter-tile-possibilities/
