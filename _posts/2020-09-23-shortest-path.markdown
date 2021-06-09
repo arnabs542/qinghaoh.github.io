@@ -85,6 +85,74 @@ public double maxProbability(int n, int[][] edges, double[] succProb, int start,
 
 DFS will underflow or LTE.
 
+[The Maze III][the-maze-iii]
+
+{% highlight java %}
+{% raw %}
+private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+{% endraw %}
+private static final char[] INSTRUCTIONS = {'d', 'r', 'u', 'l'};
+
+class Point implements Comparable<Point> {
+    int row, col, distance;
+    String instruction;
+
+    Point(int row, int col, int distance, String instruction) {
+        this.row = row;
+        this.col = col;
+        this.distance = distance;
+        this.instruction = instruction;
+    }
+
+    @Override
+    public int compareTo(Point o) {
+        return this.distance == o.distance ? this.instruction.compareTo(o.instruction) : this.distance - o.distance;
+    }
+}
+
+public String findShortestWay(int[][] maze, int[] ball, int[] hole) {
+    int m = maze.length, n = maze[0].length;
+    boolean[][] visited = new boolean[m][n];
+
+    Queue<Point> pq = new PriorityQueue<>();
+    pq.offer(new Point(ball[0], ball[1], 0, ""));
+
+    while (!pq.isEmpty()) {
+        Point p = pq.poll();
+        if (p.row == hole[0] && p.col == hole[1]) {
+            return p.instruction;
+        }
+
+        visited[p.row][p.col] = true;
+
+        for (int i = 0; i < DIRECTIONS.length; i++) {
+            int[] d = DIRECTIONS[i];
+            int r = p.row + d[0], c = p.col + d[1];
+            int distance = p.distance;
+
+            // keeps rolling until hitting a wall or the hole
+            while (r >= 0 && r < m && c >= 0 && c < n && maze[r][c] == 0) {
+                distance++;
+                if (r == hole[0] && c == hole[1]) {
+                    r += d[0];
+                    c += d[1];
+                    break;
+                }
+                r += d[0];
+                c += d[1];
+            }
+            r -= d[0];
+            c -= d[1];
+
+            if (!visited[r][c]) {
+                pq.offer(new Point(r, c, distance, p.instruction + INSTRUCTIONS[i]));
+            }
+        }
+    }
+    return "impossible";
+}
+{% endhighlight %}
+
 ## Within K Steps
 
 [Cheapest Flights Within K Stops][cheapest-flights-within-k-stops]
@@ -240,3 +308,4 @@ public List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, 
 [path-with-maximum-probability]: https://leetcode.com/problems/path-with-maximum-probability/
 [path-with-minimum-effort]: https://leetcode.com/problems/path-with-minimum-effort/
 [swim-in-rising-water]: https://leetcode.com/problems/swim-in-rising-water/
+[the-maze-iii]: https://leetcode.com/problems/the-maze-iii/

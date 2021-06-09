@@ -55,10 +55,45 @@ public int nthSuperUglyNumber(int n, int[] primes) {
     for (int i = 1; i < n; i++) {
         ugly[i] = Integer.MAX_VALUE;
         for (int j = 0; j < m; j++) {
+            // finds all j whose current value equals the previous ugly number
             if (ugly[power[j]] * primes[j] == ugly[i - 1]) {
                 power[j]++;
             }
+
+            // finds and assigns the min value to the current ugly number
             ugly[i] = Math.min(ugly[i], ugly[power[j]] * primes[j]);
+        }
+    }
+
+    return ugly[n - 1];
+}
+{% endhighlight %}
+
+Priority Queue:
+
+{% highlight java %}
+public int nthSuperUglyNumber(int n, int[] primes) {
+    int[] ugly = new int[n];
+    ugly[0] = 1;
+
+    // for bucket primes[i]
+    // {base ^ (power + 1), power, i}
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+
+    for (int i = 0; i < primes.length; i++) {
+        pq.offer(new int[] {primes[i], 0, i});
+    }
+
+    for (int i = 1; i < n; i++){
+        int top = pq.peek()[0];
+        ugly[i] = top;
+
+        // updates all nodes whose value equals top
+        while (pq.peek()[0] == top){
+            int[] node = pq.poll();
+            node[0] = primes[node[2]] * ugly[node[1]];
+            node[1]++;
+            pq.offer(node);
         }
     }
 

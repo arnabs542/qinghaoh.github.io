@@ -170,6 +170,52 @@ public boolean isPossible(int[] target) {
 }
 {% endhighlight %}
 
+[The Skyline Problem][the-skyline-problem]
+
+{% highlight java %}
+public List<List<Integer>> getSkyline(int[][] buildings) {
+    List<int[]> heights = new ArrayList<>();
+    for (int[] b: buildings) {
+        // height at start is stored as negative
+        heights.add(new int[]{b[0], -b[2]});
+        // height at start is stored as positive
+        heights.add(new int[]{b[1], b[2]});
+    }
+
+    Collections.sort(heights, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
+
+    TreeMap<Integer, Integer> map = new TreeMap<>(Collections.reverseOrder());
+    // a trick to deal with last building in a block
+    map.put(0, 1);
+
+    List<List<Integer>> list = new ArrayList<>();
+    int prev = 0;
+    for (int[] h: heights) {
+        if (h[1] < 0) {
+            // if it's start, puts/increments the height to map
+            map.put(-h[1], map.getOrDefault(-h[1], 0) + 1);
+        } else {
+            // if it's end, removes/decrements the height from map
+            int count = map.get(h[1]);
+            if (count == 1) {
+                map.remove(h[1]);
+            } else {
+                map.put(h[1], count - 1);
+            }
+        }
+
+        // gets the max height
+        int curr = map.firstKey();
+        // no consecutive horizontal lines of equal height
+        if (prev != curr) {
+            list.add(Arrays.asList(h[0], curr));
+            prev = curr;
+        }
+    }
+    return list;
+}
+{% endhighlight %}
+
 # Greedy
 
 [Maximum Performance of a Team][maximum-performance-of-a-team]
@@ -210,3 +256,4 @@ public int maxPerformance(int n, int[] speed, int[] efficiency, int k) {
 [maximum-performance-of-a-team]: https://leetcode.com/problems/maximum-performance-of-a-team/
 [minimize-deviation-in-array]: https://leetcode.com/problems/minimize-deviation-in-array/
 [smallest-range-covering-elements-from-k-lists]: https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/
+[the-skyline-problem]: https://leetcode.com/problems/the-skyline-problem/

@@ -37,6 +37,8 @@ public boolean isPalindrome(int x) {
 }
 {% endhighlight %}
 
+## Construction
+
 [Prime Palindrome][prime-palindrome]
 
 A positive integer (in decimal notation) is divisible by 11 iff the difference of the sum of the digits in even-numbered positions and the sum of digits in odd-numbered positions is divisible by 11.
@@ -47,10 +49,10 @@ public int primePalindrome(int N) {
         return 11;
     }
 
-    // even digit palindrome is divisible by 11
+    // palindrome with even number of digits is divisible by 11
     // x has at most 5 digits
     for (int x = 1; x < 100000; x++) {
-        // builds odd digit palindrome
+        // builds palindrome with odd number of digits
         String s = String.valueOf(x), r = new StringBuilder(s).reverse().toString();
         int k = Integer.valueOf(s + r.substring(1));
         if (k >= N && isPrime(k)) {
@@ -73,8 +75,6 @@ private boolean isPrime(int x) {
     return true;
 }
 {% endhighlight %}
-
-## Construction
 
 [Super Palindromes][super-palindromes]
 
@@ -121,10 +121,13 @@ private boolean isPalindrome(String s) {
 
 {% highlight java %}
 public boolean canConstruct(String s, int k) {
+    // bit vector
     int odd = 0;
     for (char c : s.toCharArray()) {
         odd ^= 1 << (c - 'a');
     }
+
+    // if a bit is 1, it must be the center of a palindrome
     return s.length() >= k && Integer.bitCount(odd) <= k;
 }
 {% endhighlight %}

@@ -313,9 +313,41 @@ Regular DFS/BFS would also work.
 
 [Largest Submatrix With Rearrangements][largest-submatrix-with-rearrangements]
 
+# Linear Transformation
+
+[Image Overlap][image-overlap]
+
+{% highlight java %}
+public int largestOverlap(int[][] img1, int[][] img2) {
+    int n = img1.length;
+    int count = 0;
+    // linear transformation
+    int[][] vectors = new int[2 * n][2 * n];
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            // focuses on cells with ones
+            if (img1[i][j] == 0) {
+                continue;
+            }
+
+            for (int r = 0; r < n; r++) {
+                for (int c = 0; c < n; c++) {
+                    // focuses on cells with ones
+                    if (img2[r][c] == 1) {
+                        count = Math.max(count, ++vectors[n + i - r][n + j - c]);
+                    }
+                }
+            }
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
 [diagonal-traverse-ii]: https://leetcode.com/problems/diagonal-traverse-ii/
 [edit-distance]: https://leetcode.com/problems/edit-distance/
 [find-positive-integer-solution-for-a-given-equation]: https://leetcode.com/problems/find-positive-integer-solution-for-a-given-equation/
+[image-overlap]: https://leetcode.com/problems/image-overlap/
 [largest-submatrix-with-rearrangements]: https://leetcode.com/problems/largest-submatrix-with-rearrangements/
 [lonely-pixel-i]: https://leetcode.com/problems/lonely-pixel-i/
 [matrix-block-sum]: https://leetcode.com/problems/matrix-block-sum/

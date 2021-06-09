@@ -74,7 +74,41 @@ public String encode(String s) {
     return dp[0][n - 1];
 }
 {% endhighlight %}
+
 # String Matching
+
+## KMP
+
+[Knuth–Morris–Pratt (KMP) algorithm](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm)
+
+[Shortest Palindrome][shortest-palindrome]
+
+{% highlight java %}
+// KMP
+// O(n + k)
+public String shortestPalindrome(String s) {
+    // finds the longest palindrome substring that starts from index 0
+    int n = s.length();
+    String r = new StringBuilder(s).reverse().toString();
+    String str = s + "#" + r;
+
+    // partial match table
+    int[] table = new int[str.length()];
+    int i = 1, index = 0;
+    while (i < str.length()) {
+        if (str.charAt(index) == str.charAt(i)) {
+            table[i++] = ++index;
+        } else {
+            if (index > 0) {
+                index = table[index - 1];
+            } else {
+                i++;
+            }
+        }
+    }
+    return new StringBuilder(s.substring(table[table.length - 1])).reverse().toString() + s;
+}
+{% endhighlight %}
 
 [Rabin-Karp algorithm](https://en.wikipedia.org/wiki/Rabin%E2%80%93Karp_algorithm): a string-searching algorithm that uses hashing to find an exact match of a pattern string in a text. It uses a rolling hash to quickly filter out positions of the text that cannot match the pattern, and then checks for a match at the remaining positions.
 
@@ -206,4 +240,5 @@ private void doStamp(int pos) {
 [encode-string-with-shortest-length]: https://leetcode.com/problems/encode-string-with-shortest-length/
 [longest-duplicate-substring]: https://leetcode.com/problems/longest-duplicate-substring/
 [longest-repeating-substring]: https://leetcode.com/problems/longest-repeating-substring/
+[shortest-palindrome]: https://leetcode.com/problems/shortest-palindrome/
 [stamping-the-sequence]: https://leetcode.com/problems/stamping-the-sequence/
