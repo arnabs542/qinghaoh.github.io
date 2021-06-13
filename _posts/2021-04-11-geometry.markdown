@@ -135,8 +135,89 @@ public int minAreaRect(int[][] points) {
 }
 {% endhighlight %}
 
+# Dihedral Group
+
+[Dihedral group](https://en.wikipedia.org/wiki/Dihedral_group): the group of symmetries of a regular polygon, which includes rotations and reflections.
+
+[Number of Distinct Islands II][number-of-distinct-islands-ii]
+
+{% highlight java %}
+{% raw %}
+private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+private static final int[][] TRANSFORMATIONS = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+{% endraw %}
+private int[][] grid;
+private int m, n;
+private boolean[][] visited;
+
+
+public int numDistinctIslands2(int[][] grid) {
+    this.grid = grid;
+    this.m = grid.length;
+    this.n = grid[0].length;
+    this.visited = new boolean[m][n];
+
+    Set<String> islands = new HashSet<>();
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (grid[i][j] == 1 && !visited[i][j]) {
+                List<int[]> cells = new ArrayList<>();
+                dfs(i, j, cells);
+                islands.add(norm(cells));
+            }
+        }
+    }
+    return islands.size();
+}
+
+private void dfs(int i, int j, List<int[]> cells) {
+    if (i < 0 || i == m || j < 0 || j == n || grid[i][j] == 0 || visited[i][j]) {
+        return;
+    }
+
+    visited[i][j] = true;
+    cells.add(new int[]{i, j});
+
+    for (int[] d : DIRECTIONS) {
+        dfs(i + d[0], j + d[1], cells);
+    }
+}
+
+private String norm(List<int[]>cells) {
+    List<String> forms = new ArrayList<>();
+    // generates 8 different transformations:
+    //  (x, y), (x, -y), (-x, y), (-x, -y)
+    //  (y, x), (-y, x), (y, -x), (-y, -x)
+    for (int[] t : TRANSFORMATIONS) {
+        List<int[]> list1 = new ArrayList<>(), list2 = new ArrayList<>();
+        for (int[] c : cells){
+            list1.add(new int[]{c[0] * t[0], c[1] * t[1]});
+            list2.add(new int[]{c[1] * t[1], c[0] * t[0]});
+        }
+        forms.add(getKey(list1));
+        forms.add(getKey(list2));
+    }
+
+    // sorts the keys and uses the first one as the representative
+    Collections.sort(forms);
+    return forms.get(0);
+}
+
+private String getKey(List<int[]> cells) {
+    Collections.sort(cells, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
+
+    StringBuilder sb = new StringBuilder();
+    for (int[] c : cells) {
+        // (x - x0, y - y0)
+        sb.append((c[0] - cells.get(0)[0]) + "#" + (c[1] - cells.get(0)[1]) + "#");
+    }
+    return sb.toString();
+}
+{% endhighlight %}
+
 [circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
 [convex-polygon]: https://leetcode.com/problems/convex-polygon/
 [escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/
 [minimum-area-rectangle]: https://leetcode.com/problems/minimum-area-rectangle/
 [minimum-area-rectangle-ii]: https://leetcode.com/problems/minimum-area-rectangle-ii/
+[number-of-distinct-islands-ii]: https://leetcode.com/problems/number-of-distinct-islands-ii/

@@ -248,6 +248,36 @@ public int maxPerformance(int n, int[] speed, int[] efficiency, int k) {
 }
 {% endhighlight %}
 
+## "BFS"
+
+[Minimum Number of Refueling Stops][minimum-number-of-refueling-stops]
+
+{% highlight java %}
+public int minRefuelStops(int target, int startFuel, int[][] stations) {
+    // max heap of gas station liters
+    Queue<Integer> pq = new PriorityQueue(Collections.reverseOrder());
+
+    int i = 0, stops = 0;
+    while (startFuel < target) {  // needs refueling
+        // enqueues the liters of reachable stations
+        while (i < stations.length && stations[i][0] <= startFuel) {
+            pq.offer(stations[i++][1]);
+        }
+
+        // no stations to provide gas
+        if (pq.isEmpty()) {
+            return -1;
+        }
+
+        // refuels with the max liters
+        startFuel += pq.poll();
+        stops++;
+    }
+
+    return stops;
+}
+{% endhighlight %}
+
 [construct-target-array-with-multiple-sums]: https://leetcode.com/problems/construct-target-array-with-multiple-sums/
 [furthest-building-you-can-reach]: https://leetcode.com/problems/furthest-building-you-can-reach/
 [k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
@@ -255,5 +285,6 @@ public int maxPerformance(int n, int[] speed, int[] efficiency, int k) {
 [maximize-sum-of-array-after-k-negations]: https://leetcode.com/problems/maximize-sum-of-array-after-k-negations/
 [maximum-performance-of-a-team]: https://leetcode.com/problems/maximum-performance-of-a-team/
 [minimize-deviation-in-array]: https://leetcode.com/problems/minimize-deviation-in-array/
+[minimum-number-of-refueling-stops]: https://leetcode.com/problems/minimum-number-of-refueling-stops/
 [smallest-range-covering-elements-from-k-lists]: https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/
 [the-skyline-problem]: https://leetcode.com/problems/the-skyline-problem/

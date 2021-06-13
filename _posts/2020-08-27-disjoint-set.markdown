@@ -107,6 +107,8 @@ private double query(String s1, String s2) {
 }
 {% endhighlight %}
 
+# Number of Connected Componenets
+
 [Number of Connected Components in an Undirected Graph][number-of-connected-components-in-an-undirected-graph]
 
 {% highlight java %}
@@ -124,6 +126,76 @@ public int countComponents(int n, int[][] edges) {
 }
 {% endhighlight %}
 
+[Regions Cut By Slashes][regions-cut-by-slashes]
+
+{% highlight java %}
+private int[] parent;
+private int regions, n;
+
+// splits each square into 4 triangles
+private enum Triangle {
+    TOP,
+    RIGHT,
+    BOTTOM,
+    LEFT
+}
+public int regionsBySlashes(String[] grid) {
+    this.n = grid.length;
+    this.regions = n * n * 4;  // total number of triangles
+    this.parent = new int[n * n * 4];
+
+    for (int i = 0; i < regions; i++) {
+        parent[i] = i;
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            // vertical
+            if (i > 0) {
+                union(indexOf(i - 1, j, Triangle.BOTTOM), indexOf(i, j, Triangle.TOP));
+            }
+
+            // horizontal
+            if (j > 0) {
+                union(indexOf(i, j - 1, Triangle.RIGHT), indexOf(i, j, Triangle.LEFT));
+            }
+
+            char c = grid[i].charAt(j);
+            // '\\' or ' '
+            if (c != '/') {
+                union(indexOf(i, j, Triangle.TOP), indexOf(i, j, Triangle.RIGHT));
+                union(indexOf(i, j, Triangle.BOTTOM), indexOf(i, j, Triangle.LEFT));
+            }
+
+            // '/' or ' '
+            if (c != '\\') {
+                union(indexOf(i, j, Triangle.TOP), indexOf(i, j, Triangle.LEFT));
+                union(indexOf(i, j, Triangle.BOTTOM), indexOf(i, j, Triangle.RIGHT));
+            }
+        }
+    }
+    return regions;
+}
+
+private int find(int u) {
+    return parent[u] == u ? u : find(parent[u]);
+}
+
+private void union(int u, int v) {
+    int uset = find(u), vset = find(v);
+
+    if (uset != vset) {
+        parent[uset] = vset;
+        regions--;
+    }
+}
+
+private int indexOf(int i, int j, Triangle t) {
+    return (i * n + j) * 4 + t.ordinal();
+}
+{% endhighlight %}
+
 [evaluate-division]: https://leetcode.com/problems/evaluate-division/
 [number-of-connected-components-in-an-undirected-graph]: https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
 [redundant-connection]: https://leetcode.com/problems/redundant-connection/
+[regions-cut-by-slashes]: https://leetcode.com/problems/regions-cut-by-slashes/

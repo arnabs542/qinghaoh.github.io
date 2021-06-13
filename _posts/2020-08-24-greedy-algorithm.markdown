@@ -244,6 +244,7 @@ public int maxBoxesInWarehouse(int[] boxes, int[] warehouse) {
 
     int i = boxes.length - 1, j = 0, count = 0;
     while (i >= 0 && j < warehouse.length) {
+        // all following boxes will fit in warehouse[j]
         if (boxes[i] <= warehouse[j]) {
             j++;
             count++;

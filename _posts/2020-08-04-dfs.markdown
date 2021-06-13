@@ -139,6 +139,26 @@ private Node dfs(Node node) {
 }
 {% endhighlight %}
 
+# Pattern Signature
+
+[Number of Distinct Islands][number-of-distinct-islands]
+
+{% highlight java %}
+pattern.append(index);
+for (int k = 0; k < DIRECTIONS.length; k++) {
+    int[] d = DIRECTIONS[k];
+    dfs(i + d[0], j + d[1], (char)('0' + k), pattern);
+}
+pattern.append('#');
+{% endhighlight %}
+
+![Patterns](/assets/number_of_distinct_islands.png)
+
+```
+#0#1##
+#03###
+```
+
 # Brute Force
 
 [Lexicographically Smallest String After Applying Operations][lexicographically-smallest-string-after-applying-operations]
@@ -189,5 +209,6 @@ This solution includes all possibilities, and uses a set as termination conditio
 [clone-graph]: https://leetcode.com/problems/clone-graph/
 [keys-and-rooms]: https://leetcode.com/problems/keys-and-rooms/
 [lexicographically-smallest-string-after-applying-operations]: https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/
+[number-of-distinct-islands]: https://leetcode.com/problems/number-of-distinct-islands/
 [pyramid-transition-matrix]: https://leetcode.com/problems/pyramid-transition-matrix/
 [time-needed-to-inform-all-employees]: https://leetcode.com/problems/time-needed-to-inform-all-employees/

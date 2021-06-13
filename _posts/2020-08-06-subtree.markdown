@@ -14,7 +14,11 @@ tags: tree
 {% highlight java %}
 private TreeNode lca = null;
 
+// Relax the condition so the problem can be solved recursively:
+//   - if only p (or q) exists, returns p (or q)
+//   - if neither p or q exists, returns null
 public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    // LCA is found, returns early
     if (lca != null) {
         return null;
     }
