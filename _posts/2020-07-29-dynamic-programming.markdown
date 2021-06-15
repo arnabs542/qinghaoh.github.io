@@ -7,21 +7,23 @@ tag: dynamic programming
 
 {% highlight java %}
 public int minDistance(String word1, String word2) {
+    int n1 = word1.length(), n2 = word2.length();
+
     // dp[i][j]: word1.substring(0, i) -> word2.substring(0, j)
-    int[][] dp = new int[word1.length() + 1][word2.length() + 1];
+    int[][] dp = new int[n1 + 1][n2 + 1];
 
     // word1.substring(0, i) -> empty string
-    for (int i = 1; i <= word1.length(); i++) {
+    for (int i = 1; i <= n1; i++) {
         dp[i][0] = i;
     }
 
     // empty string -> word2.substring(0, j)
-    for (int j = 1; j <= word2.length(); j++) {
+    for (int j = 1; j <= n2; j++) {
         dp[0][j] = j;
     }
 
-    for (int i = 1; i <= word1.length(); i++) {
-        for (int j = 1; j <= word2.length(); j++) {
+    for (int i = 1; i <= n1; i++) {
+        for (int j = 1; j <= n2; j++) {
             if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
                 dp[i][j] = dp[i - 1][j - 1];
             } else {
@@ -31,7 +33,7 @@ public int minDistance(String word1, String word2) {
             }
         }
     }
-    return dp[word1.length()][word2.length()];
+    return dp[n1][n2];
 }
 {% endhighlight %}
 
@@ -54,16 +56,16 @@ Rolling array optimization:
 
 {% highlight java %}
 public int minDistance(String word1, String word2) {
-    int[] pre = new int[word2.length() + 1];
-    int[] cur = new int[word2.length() + 1];
+    int n1 = word1.length(), n2 = word2.length();
+    int[] pre = new int[n2 + 1], cur = new int[n2 + 1];
 
-    for (int j = 1; j <= word2.length(); j++) {
+    for (int j = 1; j <= n2; j++) {
         pre[j] = j;
     }
 
-    for (int i = 1; i <= word1.length(); i++) {
+    for (int i = 1; i <= n1; i++) {
         cur[0] = i;
-        for (int j = 1; j <= word2.length(); j++) {
+        for (int j = 1; j <= n2; j++) {
             if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
                 cur[j] = pre[j - 1];
             } else {
@@ -74,7 +76,7 @@ public int minDistance(String word1, String word2) {
         pre = cur;
         cur = tmp;
     }
-    return pre[word2.length()];
+    return pre[n2];
 }
 {% endhighlight %}
 
@@ -82,17 +84,17 @@ public int minDistance(String word1, String word2) {
 * `pre[j] -> cur[j]`
 {% highlight java %}
 public int minDistance(String word1, String word2) {
-    int pre = 0;
-    int[] cur = new int[word2.length() + 1];
+    int pre = 0, n1 = word1.length(), n2 = word2.length();
+    int[] cur = new int[n2 + 1];
 
-    for (int j = 1; j <= word2.length(); j++) {
+    for (int j = 1; j <= n2; j++) {
         cur[j] = j;
     }
 
-    for (int i = 1; i <= word1.length(); i++) {
+    for (int i = 1; i <= n1; i++) {
         pre = cur[0];
         cur[0] = i;
-        for (int j = 1; j <= word2.length(); j++) {
+        for (int j = 1; j <= n2; j++) {
             int tmp = cur[j];
             if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
                 cur[j] = pre;
@@ -102,7 +104,7 @@ public int minDistance(String word1, String word2) {
             pre = tmp;
         }
     }
-    return cur[word2.length()];
+    return cur[n2];
 }
 {% endhighlight %}
 
@@ -178,7 +180,26 @@ public boolean isInterleave(String s1, String s2, String s3) {
 }
 {% endhighlight %}
 
+Reduced to 1D:
+
 {% highlight java %}
+boolean dp[] = new boolean[n2 + 1];
+dp[0] = true;
+
+// initializes first row
+for (int j = 0; j < n2; j++) {
+    dp[j + 1] = dp[j] && s2.charAt(j) == s3.charAt(j);
+}
+
+for (int i = 0; i < n1; i++) {
+    // initializes first column in this row
+    dp[0] = dp[0] && s1.charAt(i) == s3.charAt(i);
+    for (int j = 0; j < n2; j++) {
+        dp[j + 1] = (dp[j + 1] && s1.charAt(i) == s3.charAt(i + j + 1)) || (dp[j] && s2.charAt(j) == s3.charAt(i + j + 1));
+    }
+}
+
+return dp[n2];
 {% endhighlight %}
 
 [Min Cost Climbing Stairs][min-cost-climbing-stairs]

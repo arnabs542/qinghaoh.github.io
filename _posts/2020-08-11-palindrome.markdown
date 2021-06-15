@@ -115,6 +115,55 @@ private boolean isPalindrome(String s) {
 }
 {% endhighlight %}
 
+[Palindrome Pairs][palindrome-pairs]
+
+{% highlight java %}
+public List<List<Integer>> palindromePairs(String[] words) {
+    Map<String, Integer> map = new HashMap<>();
+    for (int i = 0; i < words.length; i++) {
+        map.put(words[i], i);
+    }
+
+    // finds all "word - reverse(word)" pairs
+    // this case is handled separately to avoid duplicates
+    List<List<Integer>> list = new ArrayList<>();
+    for(int i = 0; i < words.length; i++){
+        int index = map.getOrDefault(new StringBuilder(words[i]).reverse().toString(), i);
+        if (index != i) {
+            list.add(Arrays.asList(i, index));
+        }
+    }
+
+    for (int i = 0; i < words.length; i++) {
+        String w = words[i];
+        for (int j = 0; j <= w.length(); j++) {
+            // s1.substring(0, j) is palindrome
+            // s1.substring(j + 1) == reverse(s2) => (s2, s1)
+            if (j > 0 && isPalindrome(w.substring(0, j))) {
+                int index = map.getOrDefault(new StringBuilder(w.substring(j)).reverse().toString(), i);
+                if (index != i) {
+                    list.add(Arrays.asList(index, i));
+                }
+            }
+
+            // s1.substring(j + 1) is palindrome
+            // s1.substring(0, j) == reverse(s2) => (s1, s2)
+            if (j < w.length() && isPalindrome(w.substring(j))) {
+                int index = map.getOrDefault(new StringBuilder(w.substring(0, j)).reverse().toString(), i);
+                if (index != i) {
+                    list.add(Arrays.asList(i, index));
+                }
+            }
+        }
+    }
+
+    return list;
+}
+
+private boolean isPalindrome(String s) {
+}
+{% endhighlight %}
+
 ## Greedy
 
 [Construct K Palindrome Strings][construct-k-palindrome-strings]
@@ -257,6 +306,7 @@ public int countPalindromicSubsequences(String S) {
 [longest-palindromic-subsequence]: https://leetcode.com/problems/longest-palindromic-subsequence/
 [longest-palindromic-substring]: https://leetcode.com/problems/longest-palindromic-substring/
 [palindrome-number]: https://leetcode.com/problems/palindrome-number/
+[palindrome-pairs]: https://leetcode.com/problems/palindrome-pairs/
 [palindromic-substring]: https://leetcode.com/problems/palindromic-substring/
 [prime-palindrome]: https://leetcode.com/problems/prime-palindrome/
 [super-palindromes]: https://leetcode.com/problems/super-palindromes/

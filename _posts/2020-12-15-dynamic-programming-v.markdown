@@ -120,7 +120,8 @@ public int deleteAndEarn(int[] nums) {
 [Wiggle Subsequence][wiggle-subsequence]
 
 {% highlight java %}
-// max wiggle sequence length so far at index i
+public int wiggleMaxLength(int[] nums) {
+    // max wiggle sequence length so far at index i
     int up = 1, down = 1;
     for (int i = 1; i < nums.length; i++) {
         if (nums[i] > nums[i - 1]) {
@@ -130,7 +131,33 @@ public int deleteAndEarn(int[] nums) {
         }
     }
     return Math.max(up, down);
+}
 {% endhighlight %}
+
+[Flip String to Monotone Increasing][flip-string-to-monotone-increasing]
+
+{% highlight java %}
+public int minFlipsMonoIncr(String s) {
+    // count of '1's and flips so far
+    // to make [0...i] monotone increasing
+    int one = 0, flip = 0;
+    for (int i = 0; i < s.length(); i++) {
+        // [0...i] is monotone increasing
+        if (s.charAt(i) == '1') {
+            one++;
+        } else {
+            flip++;
+        }
+
+        // either flips all '1's
+        // or keeps as is
+        flip = Math.min(one, flip);
+    }
+    return flip;
+}
+{% endhighlight %}
+
+Similar: [Minimum Deletions to Make String Balanced][minimum-deletions-to-make-string-balanced]
 
 [Number of Sets of K Non-Overlapping Line Segments][number-of-sets-of-k-non-overlapping-line-segments]
 
@@ -212,8 +239,10 @@ public int numDecodings(String s) {
 
 [decode-ways]: https://leetcode.com/problems/decode-ways/
 [delete-and-earn]: https://leetcode.com/problems/delete-and-earn/
+[flip-string-to-monotone-increasing]: https://leetcode.com/problems/flip-string-to-monotone-increasing/
 [house-robber]: https://leetcode.com/problems/house-robber/
 [house-robber-ii]: https://leetcode.com/problems/house-robber-ii/
+[minimum-deletions-to-make-string-balanced]: https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
 [paint-fence]: https://leetcode.com/problems/paint-fence/
 [wiggle-subsequence]: https://leetcode.com/problems/wiggle-subsequence/

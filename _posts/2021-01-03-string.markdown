@@ -3,13 +3,93 @@ layout: post
 title:  "String"
 tags: string
 ---
+# Transformation
+
+[String Transforms Into Another String][string-transforms-into-another-string]
+
+{% highlight java %}
+public boolean canConvert(String str1, String str2) {
+    if (str1.equals(str2)) {
+        return true;
+    }
+
+    Map<Character, Character> map = new HashMap<>();
+    for (int i = 0; i < str1.length(); i++) {
+        char c1 = str1.charAt(i), c2 = str2.charAt(i);
+        if (map.getOrDefault(c1, c2) != c2) {
+            return false;
+        }
+
+        map.put(c1, c2);
+    }
+
+    // checks if there's an available temporary char
+    return new HashSet<Character>(map.values()).size() < 26;
+}
+{% endhighlight %}
+
+Case 1:
+
+```
+"aca" -> "cec"
+key      value
+a    ->    c
+c    ->    e
+```
+There's no cycle, so we substitue the key with the value backwards in `str1`:
+```
+"aca" -> "aea" -> "cec"
+```
+
+Case 2:
+
+```
+"ace" -> "cea"
+key      value
+a    ->    c
+c    ->    e
+e    ->    a
+```
+There's a cycle, so we need to insert a temporary char to break the cycle, then convert `str1` backwards in two steps:
+```
+a -> x
+
+"ace" -> "xce"
+
+x -> c
+c -> e
+e -> a
+
+"xce" -> "xca" -> "xea" -> "cea"
+```
 # Lydon Word
 
 A [Lyndon word](https://en.wikipedia.org/wiki/Lyndon_word) is a nonempty string that is strictly smaller in lexicographic order than all of its rotations.
 
-[Largest Subarray Length K][largest-subarray-length-k]
+Lyndon factorization: https://cp-algorithms.com/string/lyndon_factorization.html
+
+[Orderly Queue][orderly-queue]
 
 {% highlight java %}
+// Lyndon word
+// Duval Algorithm
+int n = s.length(), index = 0, i = 0;
+while (i < n) {
+    index = i;
+    int j = i + 1, m = i;
+    while (j < n && s.charAt(m) <= s.charAt(j)) {
+        if (s.charAt(m) < s.charAt(j)) {
+            m = i;
+        } else {
+            m++;
+        }
+        j++;
+    }
+    while (i <= m) {
+        i += j - m;
+    }
+}
+return s.substring(index) + s.substring(0, index);
 {% endhighlight %}
 
 [Sentence Screen Fitting][sentence-screen-fitting]
@@ -78,5 +158,6 @@ public String decodeAtIndex(String S, int K) {
 For example, `s = "leet2code3", k = 10`
 
 [decoded-string-at-index]: https://leetcode.com/problems/decoded-string-at-index/
-[largest-subarray-length-k]: https://leetcode.com/problems/largest-subarray-length-k/
+[orderly-queue]: https://leetcode.com/problems/orderly-queue/
 [sentence-screen-fitting]: https://leetcode.com/problems/sentence-screen-fitting/
+[string-transforms-into-another-string]: https://leetcode.com/problems/string-transforms-into-another-string/

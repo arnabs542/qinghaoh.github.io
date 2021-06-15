@@ -110,6 +110,10 @@ public int[] shortestToChar(String s, char c) {
 }
 {% endhighlight %}
 
+### Pre-computed
+
+[Shortest Distance to Target Color][shortest-distance-to-target-color]
+
 # Swapping
 
 [Swap Adjacent in LR String][swap-adjacent-in-lr-string]
@@ -183,4 +187,5 @@ public int longestConsecutive(int[] nums) {
 [rotate-array]: https://leetcode.com/problems/rotate-array/
 [shift-2d-grid]: https://leetcode.com/problems/shift-2d-grid/
 [shortest-distance-to-a-character]: https://leetcode.com/problems/shortest-distance-to-a-character/
+[shortest-distance-to-target-color]: https://leetcode.com/problems/shortest-distance-to-target-color/
 [swap-adjacent-in-lr-string]: https://leetcode.com/problems/swap-adjacent-in-lr-string/

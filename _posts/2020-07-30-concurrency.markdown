@@ -164,7 +164,21 @@ try {
 }
 {% endhighlight %}
 
-## Synchronized
+## Intrinsic Lock
+
+* Enforces exclusive access to an object's state
+* Establishes *happens-before* relationships that are essential to visibility.
+
+Every object has an intrinsic lock associated with it.
+
+### Synchronized Methods
+
+[Fizz Buzz Multithreaded][fizz-buzz-multithreaded]
+
+{% highlight java %}
+{% endhighlight %}
+
+### Synchronized Statements
 
 [Traffic Light Controlled Intersection][traffic-light-controlled-intersection]
 
@@ -226,6 +240,7 @@ private Stream<String> crawl(String startUrl, HtmlParser parser, Set<String> vis
 }
 {% endhighlight %}
 
+[fizz-buzz-multithreaded]: https://leetcode.com/problems/fizz-buzz-multithreaded/
 [print_in_order]: https://leetcode.com/problems/print-in-order/
 [semaphore]: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Semaphore.html
 [the-dining-philosophers]: https://leetcode.com/problems/the-dining-philosophers/

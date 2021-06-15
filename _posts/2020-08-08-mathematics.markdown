@@ -297,11 +297,42 @@ public boolean isPowerOfThree(int n) {
 }
 {% endhighlight %}
 
+# Absolute Value
+
+[Maximum of Absolute Value Expression][maximum-of-absolute-value-expression]
+
+{% highlight java %}
+public int maxAbsValExpr(int[] arr1, int[] arr2) {
+    int n = arr1.length;
+    // linear combinations
+    int[] c1 = new int[n], c2 = new int[n], c3 = new int[n], c4 = new int[n];
+
+    for (int i = 0; i < n; i++) {
+        c1[i] = arr1[i] + arr2[i] + i;
+        c2[i] = arr1[i] + arr2[i] - i;
+        c3[i] = arr1[i] - arr2[i] + i;
+        c4[i] = arr1[i] - arr2[i] - i;
+    }
+
+    int max = Integer.MIN_VALUE;
+    for (int[] c : new int[][]{c1, c2, c3, c4}) {
+        max = Math.max(max, maxDiff(c));
+    }
+    return max;
+}
+
+private int maxDiff(int[] c) {
+    Arrays.sort(c);
+    return c[c.length - 1] - c[0];
+}
+{% endhighlight %}
+
 [4-keys-keyboard]: https://leetcode.com/problems/4-keys-keyboard/
 [best-meeting-point]: https://leetcode.com/problems/best-meeting-point/
 [check-if-number-is-a-sum-of-powers-of-three]: https://leetcode.com/problems/check-if-number-is-a-sum-of-powers-of-three/
 [count-sorted-vowel-strings]: https://leetcode.com/problems/count-sorted-vowel-strings/
 [handshakes-that-dont-cross]: https://leetcode.com/problems/handshakes-that-dont-cross/
+[maximum-of-absolute-value-expression]: https://leetcode.com/problems/maximum-of-absolute-value-expression/
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
 [power-of-three]: https://leetcode.com/problems/power-of-three/
 [powx-n]: https://leetcode.com/problems/powx-n/

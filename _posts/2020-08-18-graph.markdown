@@ -435,6 +435,67 @@ private void dfs(int node) {
 
 Another solution is by disjoint set.
 
+# Matching
+
+[Matching](https://en.wikipedia.org/wiki/Matching_(graph_theory)): a matching or independent edge set in an undirected graph is a set of edges without common vertices.
+
+A maximum matching (also known as maximum-cardinality matching) is a matching that contains the largest possible number of edges. 
+
+Time complexity: \\(O(\|V\|^3)\\)
+
+[Maximum Number of Accepted Invitations][maximum-number-of-accepted-invitations]
+
+{% highlight java %}
+private int[][] grid;
+private int m, n;
+
+// Hungarian Algorithm
+public int maximumInvitations(int[][] grid) {
+    this.grid = grid;
+    this.m = grid.length;
+    this.n = grid[0].length;
+
+    // matching[j]: the boy that invites the j-th girl
+    int[] matching = new int[n];
+    Arrays.fill(matching, -1);
+
+    int count = 0;
+    for (int i = 0; i < m; i++) {
+        if (dfs(i, matching, new boolean[n])) {
+            count++;
+        }
+    }
+    return count;
+}
+
+/**
+ * Checks if there's a matching for the given boy.
+ * @parameter i the index of the boy
+ * @parameter isAsked indicates whether each girl is already asked for invitation by the boy
+ * @return true if there's a girl that the boy invites, otherwise false
+ */
+private boolean dfs(int i, int[] matching, boolean[] isAsked) {
+    for (int j = 0; j < n; j++) {
+        // skips the girl if she cannot be invited
+        // or is already asked by the boy
+        if (grid[i][j] == 0 || isAsked[j]) {
+            continue;
+        }
+
+        // marks the girl as asked
+        isAsked[j] = true;
+
+        // if the girl is not yet invited
+        // or her boy can be matched to another girl
+        if (matching[j] == -1 || dfs(matching[j], matching, isAsked)) {
+            matching[j] = i;
+            return true;
+        }
+    }
+    return false;
+}
+{% endhighlight %}
+
 # Bipartite
 
 [Is Graph Bipartite][is-graph-bipartite]
@@ -579,5 +640,6 @@ public List<Integer> mostSimilar(int n, int[][] roads, String[] names, String[] 
 [graph-valid-tree]: https://leetcode.com/problems/graph-valid-tree/
 [is-graph-bipartite]: https://leetcode.com/problems/is-graph-bipartite/
 [knight-dialer]: https://leetcode.com/problems/knight-dialer/
+[maximum-number-of-accepted-invitations]: https://leetcode.com/problems/maximum-number-of-accepted-invitations/
 [reconstruct-itinerary]: https://leetcode.com/problems/reconstruct-itinerary/
 [the-most-similar-path-in-a-graph]: https://leetcode.com/problems/the-most-similar-path-in-a-graph/

@@ -80,10 +80,6 @@ public int findMaxLength(int[] nums) {
 }
 {% endhighlight %}
 
-### Pre-computed
-
-[Shortest Distance to Target Color][shortest-distance-to-target-color]
-
 ## Variants
 ### Exclusive Or
 
@@ -150,5 +146,4 @@ public ListNode removeZeroSumSublists(ListNode head) {
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
 [product-of-the-last-k-numbers]: https://leetcode.com/problems/product-of-the-last-k-numbers/
 [remove-zero-sum-consecutive-nodes-from-linked-list]: https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/
-[shortest-distance-to-target-color]: https://leetcode.com/problems/shortest-distance-to-target-color/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/
