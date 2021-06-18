@@ -12,10 +12,6 @@ usemathjax: true
 T={\frac {1}{2}}{\big |}(x_{A}-x_{C})(y_{B}-y_{A})-(x_{A}-x_{B})(y_{C}-y_{A}){\big |}
 \\]
 
-[Taxicab geometry](https://en.wikipedia.org/wiki/Taxicab_geometry)
-
-Taxicab metric = \\(l_1\\) distance = \\(l_1\\) norm = $Manhattan distance
-
 [Triangle inequality](https://en.wikipedia.org/wiki/Triangle_inequality#Normed_vector_space)
 
 In a normed vector space $$ V $$, one of the defining properties of the norm is the triangle inequality:
@@ -150,7 +146,6 @@ private int[][] grid;
 private int m, n;
 private boolean[][] visited;
 
-
 public int numDistinctIslands2(int[][] grid) {
     this.grid = grid;
     this.m = grid.length;
@@ -215,9 +210,42 @@ private String getKey(List<int[]> cells) {
 }
 {% endhighlight %}
 
+# Manhattan Distance
+
+[Taxicab geometry](https://en.wikipedia.org/wiki/Taxicab_geometry)
+
+Taxicab metric = \\(l_1\\) distance = \\(l_1\\) norm = Manhattan distance
+
+[Maximum of Absolute Value Expression][maximum-of-absolute-value-expression]
+
+{% highlight java %}
+public int maxAbsValExpr(int[] arr1, int[] arr2) {
+    int max = 0, n = arr1.length;
+    int[] coefficients = {-1, 1};
+
+    // |x[i] - x[j]| + |y[i] - y[j]| + |i - j| = f(j) - f(i)
+    //   where f(i) = p * x[i] + q * y[i] + i
+    //   with p = 1 or -1, q = 1 or -1
+    for (int p : coefficients) {
+        for (int q : coefficients) {
+            // origin point
+            int origin = p * arr1[0] + q * arr2[0] + 0;
+            // computes the Manhattan distance to the origin point
+            for (int i = 1; i < n; ++i) {
+                int value = p * arr1[i] + q * arr2[i] + i;
+                max = Math.max(max, value - origin);
+                origin = Math.min(origin, value);
+            }
+        }
+    }
+    return max;
+}
+{% endhighlight %}
+
 [circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
 [convex-polygon]: https://leetcode.com/problems/convex-polygon/
 [escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/
+[maximum-of-absolute-value-expression]: https://leetcode.com/problems/maximum-of-absolute-value-expression/
 [minimum-area-rectangle]: https://leetcode.com/problems/minimum-area-rectangle/
 [minimum-area-rectangle-ii]: https://leetcode.com/problems/minimum-area-rectangle-ii/
 [number-of-distinct-islands-ii]: https://leetcode.com/problems/number-of-distinct-islands-ii/

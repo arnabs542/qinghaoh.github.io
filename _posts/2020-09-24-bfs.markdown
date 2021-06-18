@@ -258,6 +258,52 @@ public boolean hasPath(int[][] maze, int[] start, int[] destination) {
 boolean[][] visited -> int[][] distance
 {% endhighlight %}
 
+[Trapping Rain Water II][trapping-rain-water-ii]
+
+{% highlight java %}
+{% raw %}
+private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+{% endraw %}
+public int trapRainWater(int[][] heightMap) {
+    int m = heightMap.length, n = heightMap[0].length;
+
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[2]));
+    boolean[][] visited = new boolean[m][n];
+
+    // enqueues boarder cells
+    for (int i = 0; i < m; i++) {
+        pq.offer(new int[] {i, 0, heightMap[i][0]});
+        pq.offer(new int[] {i, n - 1, heightMap[i][n - 1]});
+        visited[i][0] = visited[i][n - 1] = true;
+    }
+
+    for (int j = 1; j < n - 1; j++) {
+        pq.offer(new int[] {0, j, heightMap[0][j]});
+        pq.offer(new int[] {m - 1, j, heightMap[m - 1][j]});
+        visited[0][j] = visited[m - 1][j] = true;
+    }
+
+    int volume = 0;
+    while (!pq.isEmpty()) {
+        // picks the cell with lowest height
+        int[] cell = pq.poll();
+        for (int[] d : DIRECTIONS) {
+            int i = cell[0] + d[0], j = cell[1] + d[1];
+            if (i < 0 || i == m || j < 0 || j == n || visited[i][j]) {
+                continue;
+            }
+
+            // collects the water it can trap
+            volume += Math.max(0, cell[2] - heightMap[i][j]);
+            // updates the height
+            pq.offer(new int[] {i, j, Math.max(heightMap[i][j], cell[2])});
+            visited[i][j] = true;
+        }
+    }
+    return volume;
+}
+{% endhighlight %}
+
 # In-place BFS
 
 [Rotting Oranges][rotting-oranges]
@@ -416,5 +462,6 @@ public int[][] highestPeak(int[][] isWater) {
 [rotting-oranges]: https://leetcode.com/problems/rotting-oranges/
 [the-maze]: https://leetcode.com/problems/the-maze/
 [the-maze-ii]: https://leetcode.com/problems/the-maze-ii/
+[trapping-rain-water-ii]: https://leetcode.com/problems/trapping-rain-water-ii/
 [walls-and-gates]: https://leetcode.com/problems/walls-and-gates/
 [word-ladder]: https://leetcode.com/problems/word-ladder/

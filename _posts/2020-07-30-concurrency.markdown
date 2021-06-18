@@ -171,11 +171,76 @@ try {
 
 Every object has an intrinsic lock associated with it.
 
+A thread can acquire a lock that it already owns. Allowing a thread to acquire the same lock more than once enables *reentrant synchronization*. This describes a situation where synchronized code, directly or indirectly, invokes a method that also contains synchronized code, and both sets of code use the same lock.
+
+* [Object wait()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#wait()): Causes the current thread to wait until it is awakened, typically by being notified or interrupted.
+* [Object notify()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#notify()): Wakes up a single thread that is waiting on this object's monitor. If any threads are waiting on this object, one of them is chosen to be awakened. The choice is arbitrary and occurs at the discretion of the implementation.
+* [Thread interrupt()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Thread.html#interrupt()): Interrupts this thread. If this thread is blocked in an invocation of the wait(), join() or sleep(long), or sleep(long, int), then its interrupt status will be cleared and it will receive an InterruptedException.
+
+![Thread Life Cycle](http://www.btechsmartclass.com/java/java_images/java-thread-life-cycle.png)
+
 ### Synchronized Methods
 
 [Fizz Buzz Multithreaded][fizz-buzz-multithreaded]
 
 {% highlight java %}
+private int n, curr = 1;
+
+public FizzBuzz(int n) {
+    this.n = n;
+}
+
+// printFizz.run() outputs "fizz".
+public synchronized void fizz(Runnable printFizz) throws InterruptedException {
+    while (curr <= n) {
+        if (curr % 3 != 0 || curr % 5 == 0) {
+            wait();
+            continue;
+        }
+        printFizz.run();
+        curr++;
+        notifyAll();
+    }
+}
+
+// printBuzz.run() outputs "buzz".
+public synchronized void buzz(Runnable printBuzz) throws InterruptedException {
+    while (curr <= n) {
+        if (curr % 5 != 0 || curr % 3 == 0) {
+            wait();
+            continue;
+        }
+        printBuzz.run();
+        curr++;
+        notifyAll();
+    }
+}
+
+// printFizzBuzz.run() outputs "fizzbuzz".
+public synchronized void fizzbuzz(Runnable printFizzBuzz) throws InterruptedException {
+    while (curr <= n) {
+        if (curr % 15 != 0) {
+            wait();
+            continue;
+        }
+        printFizzBuzz.run();
+        curr++;
+        notifyAll();
+    }
+}
+
+// printNumber.accept(x) outputs "x", where x is an integer.
+public synchronized void number(IntConsumer printNumber) throws InterruptedException {
+    while (curr <= n) {
+        if (curr % 3 == 0 || curr % 5 == 0) {
+            wait();
+            continue;
+        }
+        printNumber.accept(curr);
+        curr++;
+        notifyAll();
+    }
+}
 {% endhighlight %}
 
 ### Synchronized Statements

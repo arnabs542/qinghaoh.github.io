@@ -495,6 +495,35 @@ ORDER BY id
 ;
 {% endhighlight %}
 
+# Aggregate Functions
+
+## GROUP_CONCAT
+
+{% highlight sql %}
+GROUP_CONCAT([DISTINCT] expr [,expr ...]
+             [ORDER BY {unsigned_integer | col_name | expr}
+                 [ASC | DESC] [,col_name ...]]
+             [SEPARATOR str_val])
+{% endhighlight %}
+
+The default separator between values in a group is comma (,)
+
+[Group Sold Products By The Date][group-sold-products-by-the-date]
+
+{% highlight sql %}
+SELECT
+    sell_date,
+    COUNT(DISTINCT product) AS num_sold,
+    GROUP_CONCAT(DISTINCT product ORDER BY product) AS products
+FROM
+    Activities
+GROUP BY
+    sell_date
+ORDER BY
+    sell_date
+;
+{% endhighlight %}
+
 # OVER
 
 [Calculate Salaries][calculate-salaries]
@@ -815,6 +844,45 @@ ORDER BY
 {% endhighlight %}
 
 # Common Table Expressions (CTE)
+
+[Create a Session Bar Chart][create-a-session-bar-chart]
+
+{% highlight sql %}
+WITH cte AS (
+    SELECT
+        '[0-5>' AS bin,
+        0 AS min_duration,
+        5 * 60 AS max_duration
+    UNION ALL
+    SELECT
+        '[5-10>' AS bin,
+        5 * 60 AS min_duration,
+        10 * 60 AS max_duration
+    UNION ALL
+    SELECT
+        '[10-15>' AS bin,
+        10 * 60 AS min_duration,
+        15 * 60 AS max_duration
+    UNION ALL
+    SELECT
+        '15 or more' AS bin,
+        15 * 60 as min_duration,
+        ~0 AS max_duration
+)
+
+SELECT
+    cte.bin,
+    COUNT(s.session_id) AS total
+FROM
+    cte
+LEFT JOIN
+    Sessions s
+    ON s.duration >= min_duration 
+        AND s.duration < max_duration				 
+GROUP BY
+    cte.bin
+;
+{% endhighlight %}
 
 A temporary named result set.
 
@@ -1313,6 +1381,7 @@ WHERE
 [consecutive-available-seats]: https://leetcode.com/problems/consecutive-available-seats/
 [consecutive-numbers]: https://leetcode.com/problems/consecutive-numbers/
 [countries-you-can-safely-invest-in]: https://leetcode.com/problems/countries-you-can-safely-invest-in/
+[create-a-session-bar-chart]: https://leetcode.com/problems/create-a-session-bar-chart/
 [customer-placing-the-largest-number-of-orders]: https://leetcode.com/problems/customer-placing-the-largest-number-of-orders/
 [customers-who-bought-all-products]: https://leetcode.com/problems/customers-who-bought-all-products/
 [customers-who-bought-products-a-and-b-but-not-c]: https://leetcode.com/problems/customers-who-bought-products-a-and-b-but-not-c/
@@ -1328,6 +1397,7 @@ WHERE
 [game-play-analysis-iv]: https://leetcode.com/problems/game-play-analysis-iv/
 [get-highest-answer-rate-question]: https://leetcode.com/problems/get-highest-answer-rate-question/
 [get-the-second-most-recent-activity]: https://leetcode.com/problems/get-the-second-most-recent-activity/
+[group-sold-products-by-the-date]: https://leetcode.com/problems/group-sold-products-by-the-date/
 [immediate-food-delivery-ii]: https://leetcode.com/problems/immediate-food-delivery-ii/
 [last-person-to-fit-in-the-elevator]: https://leetcode.com/problems/last-person-to-fit-in-the-elevator/
 [leetflex-banned-accounts]: https://leetcode.com/problems/leetflex-banned-accounts/

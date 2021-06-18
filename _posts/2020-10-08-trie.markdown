@@ -117,7 +117,7 @@ class TrieNode {
     TrieNode() {
         children = new TrieNode[26];
         prefixCount = -1;
-        count = -1;
+        wordCount = -1;
     }
 }
 {% endhighlight %}

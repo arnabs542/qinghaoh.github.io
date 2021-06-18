@@ -119,7 +119,29 @@ public int maxScoreSightseeingPair(int[] A) {
 }
 {% endhighlight %}
 
+[Number of Subarrays with Bounded Maximum][number-of-subarrays-with-bounded-maximum]
+
+{% highlight java %}
+public int numSubarrayBoundedMax(int[] nums, int left, int right) {
+    int count = 0;
+    int dp = 0;  // number of valid sub-array ending with the current num
+    int prev = -1;  // index of the last our of range num
+    for (int i = 0; i < nums.length; i++) {
+        if (nums[i] < left) {
+            count += dp;
+        } else if (nums[i] > right) {
+            dp = 0;
+            prev = i;
+        } else {
+            count += dp = i - prev;
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
 [best-sightseeing-pair]: https://leetcode.com/problems/best-sightseeing-pair/
 [best-time-to-buy-and-sell-stock]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
 [maximum-subarray-sum-after-one-operation]: https://leetcode.com/problems/maximum-subarray-sum-after-one-operation/
 [maximum-subarray-sum-with-one-deletion]: https://leetcode.com/problems/maximum-subarray-sum-with-one-deletion/
+[number-of-subarrays-with-bounded-maximum]: https://leetcode.com/problems/number-of-subarrays-with-bounded-maximum/
