@@ -843,6 +843,37 @@ ORDER BY
 ;
 {% endhighlight %}
 
+## Median
+
+[Find Median Given Frequency of Numbers][find-median-given-frequency-of-numbers]
+
+{% highlight sql %}
+SELECT
+    AVG(Number) AS median
+FROM
+    Numbers n
+WHERE
+    -- let m = freq(x)
+    -- (m + l) - (m - r) = l - r
+    --   if l == r, x is median
+    --   if l != r, x is median as long as m covers the diff
+    Frequency >= ABS(
+        -- m + l, where l is freq(numbers < x)
+        (SELECT
+            SUM(Frequency)
+         FROM
+            Numbers
+         WHERE
+            Number <= n.Number) -
+        -- m + r, where r is freq(numbers > x)
+        (SELECT
+            SUM(Frequency)
+         FROM
+            Numbers
+         WHERE
+            Number >= n.Number))
+{% endhighlight %}
+
 # Common Table Expressions (CTE)
 
 [Create a Session Bar Chart][create-a-session-bar-chart]
@@ -1221,11 +1252,19 @@ WHERE
 ;
 {% endhighlight %}
 
-# Functions
+# String Functions
 
 {% highlight sql %}
 LEFT(str,len)
 {% endhighlight %}
+
+{% highlight sql %}
+CHAR_LENGTH(str)
+{% endhighlight %}
+
+Returns the length of the string str, measured in characters. A multibyte character counts as a single character. This means that for a string containing five 2-byte characters, `LENGTH()` returns 10, whereas `CHAR_LENGTH()` returns 5.
+
+# Date and Time Functions
 
 {% highlight sql %}
 DATE_FORMAT(date,format)
@@ -1387,6 +1426,7 @@ WHERE
 [customers-who-bought-products-a-and-b-but-not-c]: https://leetcode.com/problems/customers-who-bought-products-a-and-b-but-not-c/
 [employees-earning-more-than-their-managers]: https://leetcode.com/problems/employees-earning-more-than-their-managers/
 [evaluate-boolean-expression]: https://leetcode.com/problems/evaluate-boolean-expression/
+[find-median-given-frequency-of-numbers]: https://leetcode.com/problems/find-median-given-frequency-of-numbers/
 [find-the-start-and-end-number-of-continuous-ranges]: https://leetcode.com/problems/find-the-start-and-end-number-of-continuous-ranges/
 [find-the-missing-ids]: https://leetcode.com/problems/find-the-missing-ids/
 [find-the-quiet-students-in-all-exams]: https://leetcode.com/problems/find-the-quiet-students-in-all-exams/

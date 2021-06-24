@@ -453,9 +453,68 @@ public int[][] highestPeak(int[][] isWater) {
 }
 {% endhighlight %}
 
+# BFS + DFS
+
+[Minimum Cost to Make at Least One Valid Path in a Grid][minimum-cost-to-make-at-least-one-valid-path-in-a-grid]
+
+{% highlight java %}
+{% raw %}
+// index = grid[i][j] - 1
+private static final int[][] DIRECTIONS = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+{% endraw %}
+private int[][] grid, cost;
+private int m, n, level = 0;
+private Queue<int[]> q = new LinkedList<>();  // {r, c}
+
+public int minCost(int[][] grid) {
+    this.grid = grid;
+    this.m = grid.length;
+    this.n = grid[0].length;
+    this.cost = new int[m][n];
+
+    for (int i = 0; i < m; i++) {
+        Arrays.fill(cost[i], -1);
+    }
+
+    // finds all reachable cells
+    dfs(0, 0);
+
+    while (!q.isEmpty()) {
+        level++;
+        for (int i = q.size(); i > 0; i--) {
+            int[] cell = q.poll();
+            int r = cell[0], c = cell[1];
+
+            // modifies the sign to all possible directions
+            for (int[] d : DIRECTIONS) {
+                dfs(r + d[0], c + d[1]);
+            }
+        }
+    }
+    return cost[m - 1][n - 1];
+}
+
+private void dfs(int r, int c) {
+    if (r < 0 || r == m || c < 0 || c == n || cost[r][c] >= 0) {
+        return;
+    }
+
+    cost[r][c] = level;
+
+    // adds newly visited cell to the level
+    q.offer(new int[]{r, c});
+
+    // only one sign can be modified,
+    // so just follow the sign and do not modify it
+    int[] d = DIRECTIONS[grid[r][c] - 1];
+    dfs(r + d[0], c + d[1]);
+}
+{% endhighlight %}
+
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
 [map-of-highest-peak]: https://leetcode.com/problems/map-of-highest-peak/
+[minimum-cost-to-make-at-least-one-valid-path-in-a-grid]: https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/
 [minimum-jumps-to-reach-home]: https://leetcode.com/problems/minimum-jumps-to-reach-home/
 [minimum-knight-moves]: https://leetcode.com/problems/minimum-knight-moves/
 [nested-list-weight-sum-ii]: https://leetcode.com/problems/nested-list-weight-sum-ii/

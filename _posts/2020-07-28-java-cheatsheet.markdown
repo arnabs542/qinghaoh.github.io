@@ -170,7 +170,9 @@ private int gcd(int a, int b) {
 # String
 * [public String(char\[\]  value, int offset, int count)](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#String-char:A-int-int-)
 * [public boolean contains(CharSequence s)](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#contains-java.lang.CharSequence-)
+* [public int indexOf(String str, int fromIndex)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#indexOf(java.lang.String,int))
 * [public static String join(CharSequence delimiter, CharSequence... elements)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#join(java.lang.CharSequence,java.lang.CharSequence...))
+* [public int lastIndexOf(int ch, int fromIndex)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#lastIndexOf(int,int)): searching *backward* starting at the specified index.
 * [public String repeat(int count)](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html#repeat(int))
 * [public String replace(char oldChar, char newChar)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#replace(char,char))
 * [public String replaceAll(String regex, String replacement)](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#replaceAll-java.lang.String-java.lang.String-)

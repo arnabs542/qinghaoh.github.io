@@ -206,8 +206,11 @@ privat String rotate(String s) {
 
 This solution includes all possibilities, and uses a set as termination condition.
 
+[Lexicographical Numbers][lexicographical-numbers]
+
 [clone-graph]: https://leetcode.com/problems/clone-graph/
 [keys-and-rooms]: https://leetcode.com/problems/keys-and-rooms/
+[lexicographical-numbers]: https://leetcode.com/problems/lexicographical-numbers/
 [lexicographically-smallest-string-after-applying-operations]: https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/
 [number-of-distinct-islands]: https://leetcode.com/problems/number-of-distinct-islands/
 [pyramid-transition-matrix]: https://leetcode.com/problems/pyramid-transition-matrix/

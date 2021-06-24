@@ -212,8 +212,42 @@ public int maxKilledEnemies(char[][] grid) {
 
 [Longest Line of Consecutive One in Matrix][longest-line-of-consecutive-one-in-matrix]
 
+[Out of Boundary Paths][out-of-boundary-paths]
+
+{% highlight java %}
+{% raw %}
+private static final int[][] DIRECTIONS = new int[][]{{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+{% endraw %}
+private static final int MOD = (int)1e9 + 7;
+
+public int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
+    int[][] dp = new int[m][n];
+    dp[startRow][startColumn] = 1;
+
+    int count = 0;
+    for (int k = 1; k <= maxMove; k++) {
+        int[][] tmp = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int[] d : DIRECTIONS) {
+                    int r = i + d[0], c = j + d[1];
+                    if (r < 0 || r == m || c < 0 || c == n) {
+                        count = (count + dp[i][j]) % MOD;
+                    } else {
+                        tmp[r][c] = (tmp[r][c] + dp[i][j]) % MOD;
+                    }
+                }
+            }
+        }
+        dp = tmp;
+    }
+    return count;
+}
+{% endhighlight %}
+
 [bomb-enemy]: https://leetcode.com/problems/bomb-enemy/
 [largest-plus-sign]: https://leetcode.com/problems/largest-plus-sign/
 [longest-line-of-consecutive-one-in-matrix]: https://leetcode.com/problems/longest-line-of-consecutive-one-in-matrix/
 [maximal-rectangle]: https://leetcode.com/problems/maximal-rectangle/
 [maximal-square]: https://leetcode.com/problems/maximal-square/
+[out-of-boundary-paths]: https://leetcode.com/problems/out-of-boundary-paths/

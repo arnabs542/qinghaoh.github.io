@@ -330,6 +330,81 @@ public int findNthDigit(int n) {
 }
 {% endhighlight %}
 
+[Convert Integer to the Sum of Two No-Zero Integers][convert-integer-to-the-sum-of-two-no-zero-integers]
+
+{% highlight java %}
+public int[] getNoZeroIntegers(int n) {
+    int a = 0, b = 0, step = 1;
+
+    // from LSB to MSB
+    while (n > 0) {
+        int d = n % 10;
+        n /= 10;
+
+        // views 0 as 10, 1 as 11 (with carry)
+        // if n == 0, there was only one digit left,
+        // so we can't assume carry,
+        // and that's handled by the else statement
+        if ((d == 0 || d == 1) && n > 0) {
+            a += step * (1 + d);
+            b += step * 9;
+            n--;  // handles carry
+        } else {
+            a += step * 1;
+            b += step * (d - 1);
+        }
+        step *= 10;
+    }
+
+    return new int[]{a, b};
+}
+{% endhighlight %}
+
+[Remove Comments][remove-comments]
+
+{% highlight java %}
+public List<String> removeComments(String[] source) {
+    List<String> list = new ArrayList<>();
+    StringBuilder sb = new StringBuilder();     
+    boolean isBlockComments = false;
+    for (String s : source) {
+        // processes each char
+        for (int i = 0; i < s.length(); i++) {
+            if (isBlockComments) {
+                // "*/"
+                if (s.charAt(i) == '*' && i < s.length() - 1 && s.charAt(i + 1) == '/') {
+                    isBlockComments = false;
+                    i++;
+                }
+            } else {
+                // "//"
+                if (s.charAt(i) == '/' && i < s.length() - 1 && s.charAt(i + 1) == '/') {
+                    break;
+                }
+
+                // "/*"
+                if (s.charAt(i) == '/' && i < s.length() - 1 && s.charAt(i + 1) == '*') {
+                    isBlockComments = true;
+                    i++;
+                } else {
+                    sb.append(s.charAt(i));
+                }
+            }
+        }
+
+        // to reach this point,
+        // either it's in a line comment, or all chars in this line are processed
+        // adds the chars in the String builder only if it's not in a block comment
+        if (!isBlockComments && sb.length() > 0) {
+            list.add(sb.toString());
+            sb.setLength(0);
+        }
+    }
+    return list;
+}
+{% endhighlight %}
+
+[convert-integer-to-the-sum-of-two-no-zero-integers]: https://leetcode.com/problems/convert-integer-to-the-sum-of-two-no-zero-integers/
 [count-number-of-teams]: https://leetcode.com/problems/count-number-of-teams/
 [count-of-matches-in-tournament]: https://leetcode.com/problems/count-of-matches-in-tournament/
 [heaters]: https://leetcode.com/problems/heaters/
@@ -341,6 +416,7 @@ public int findNthDigit(int n) {
 [number-of-steps-to-reduce-a-number-in-binary-representation-to-one]: https://leetcode.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one/
 [number-of-students-unable-to-eat-lunch]: https://leetcode.com/problems/number-of-students-unable-to-eat-lunch/
 [rabbits-in-forest]: https://leetcode.com/problems/rabbits-in-forest/
+[remove-comments]: https://leetcode.com/problems/remove-comments/
 [reverse-integer]: https://leetcode.com/problems/reverse-integer/
 [similar-rgb-color]: https://leetcode.com/problems/similar-rgb-color/
 [sum-of-all-odd-length-subarrays]: https://leetcode.com/problems/sum-of-all-odd-length-subarrays/

@@ -38,7 +38,7 @@ Comparison with BFS:
 
 |       | BFS  | Dijkstra |
 |-------| ------------- | ------------- |
-| graph | unweighted  | weighted  |
+| graph | unweighted  | weighted (non-negative) |
 | queue | queue  | priority queue  |
 | time complexity | O(V + E) | O(V + Elog(V)) |
 
@@ -84,6 +84,82 @@ public double maxProbability(int n, int[][] edges, double[] succProb, int start,
 {% endhighlight %}
 
 DFS will underflow or LTE.
+
+[Number of Restricted Paths From First to Last Node][number-of-restricted-paths-from-first-to-last-node]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+private List<int[]>[] graph;
+private int[] dist, memo;
+private int n;
+
+public int countRestrictedPaths(int n, int[][] edges) {
+    this.n = n;
+    this.graph = new List[n + 1];
+    for (int i = 1; i <= n; i++) {
+        graph[i] = new ArrayList<>();
+    }
+
+    // u : {v, weight}
+    for (int[] e : edges) {
+        graph[e[0]].add(new int[]{e[1], e[2]});
+        graph[e[1]].add(new int[]{e[0], e[2]});
+    }
+
+    this.dist = new int[n + 1];
+    Arrays.fill(dist, Integer.MAX_VALUE);
+    dist[n] = 0;
+
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+    int[] node = new int[]{n, 0};
+    pq.offer(node);
+
+    while (!pq.isEmpty()) {
+        node = pq.poll();
+
+        // there's a node in the queue that's processed and more preferred
+        // so this node can be discarded
+        if (dist[node[0]] < node[1]) {
+            continue;
+        }
+
+        for (var e : graph[node[0]]) {
+            int neighbor = e[0];
+            if (dist[node[0]] + e[1] < dist[neighbor]) {
+                dist[neighbor] = dist[node[0]] + e[1];
+                pq.offer(new int[]{neighbor, dist[neighbor]});
+            }
+        }
+    }
+
+    this.memo = new int[n + 1];
+    Arrays.fill(memo, -1);
+
+    return dfs(1);
+}
+
+private int dfs(int node) {
+    if (node == n) {
+        return 1;
+    }
+
+    if (memo[node] >= 0) {
+        return memo[node];
+    }
+
+    int count = 0;
+    for (var e : graph[node]) {
+        int neighbor = e[0];
+        // on the restricted path, dist is monotonically increasing
+        // so there's no cycle
+        if (dist[neighbor] < dist[node]) {
+            count = (count + dfs(neighbor)) % MOD;
+        }
+    }
+
+    return memo[node] = count;
+}
+{% endhighlight %}
 
 [The Maze III][the-maze-iii]
 
@@ -304,6 +380,7 @@ public List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, 
 [campus-bikes-ii]: https://leetcode.com/problems/campus-bikes-ii/
 [course-schedule-iv]: https://leetcode.com/problems/course-schedule-iv/
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
+[number-of-restricted-paths-from-first-to-last-node]: https://leetcode.com/problems/number-of-restricted-paths-from-first-to-last-node/
 [path-with-maximum-minimum-value]: https://leetcode.com/problems/path-with-maximum-minimum-value/
 [path-with-maximum-probability]: https://leetcode.com/problems/path-with-maximum-probability/
 [path-with-minimum-effort]: https://leetcode.com/problems/path-with-minimum-effort/

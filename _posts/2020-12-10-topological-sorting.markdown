@@ -51,24 +51,27 @@ public int[] findOrder(int numCourses, int[][] prerequisites) {
 
 A topological ordering is possible iff the graph has no directed cycles, that is, iff it is a directed acyclic graph (DAG).
 
-** White-Gray-Black DFS **
+**White-Gray-Black DFS**
 
 [Course Schedule II][course-schedule-ii]
 
 {% highlight java %}
-private final int WHITE = 1;  // node is not processed yet
-private final int GRAY = 2;  // node is being processed
-private final int BLACK = 3;  // node and all its descendants are processed
 private Map<Integer, List<Integer>> graph;
-private int[] color;
+private Color[] color;
 private List<Integer> order;
 
+private enum Color {
+    WHITE,  // node is not processed yet
+    GRAY,  // node is being processed
+    BLACK  // node and all its descendants are processed
+}
+
 public int[] findOrder(int numCourses, int[][] prerequisites) {        
-    color = new int[numCourses];
+    color = new Color[numCourses];
     order = new ArrayList<>();
 
-    // By default all nodes are WHITE
-    Arrays.fill(color, WHITE);
+    // by default all nodes are WHITE
+    Arrays.fill(color, Color.WHITE);
 
     graph = new HashMap<>();
     for (int[] p : prerequisites) {
@@ -77,7 +80,7 @@ public int[] findOrder(int numCourses, int[][] prerequisites) {
 
     // dfs unprocessed node
     for (int i = 0; i < numCourses; i++) {
-        if (color[i] == WHITE) {
+        if (color[i] == Color.WHITE) {
             if (!dfs(i)) {
                 return new int[0];
             }
@@ -90,19 +93,19 @@ public int[] findOrder(int numCourses, int[][] prerequisites) {
 
 private boolean dfs(int node) {
     // starts the recursion
-    color[node] = GRAY;
+    color[node] = Color.GRAY;
 
     if (graph.containsKey(node)) {
         for (int neighbor : graph.get(node)) {
             // detects cycle; stops
-            if ((color[neighbor] == WHITE && !dfs(neighbor)) || color[neighbor] == GRAY) {
+            if ((color[neighbor] == Color.WHITE && !dfs(neighbor)) || color[neighbor] == Color.GRAY) {
                 return false;
             }
         }
     }
 
     // finishes the recursion
-    color[node] = BLACK;
+    color[node] = Color.BLACK;
     order.add(node);
     return true;
 }
