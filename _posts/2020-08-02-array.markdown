@@ -3,12 +3,12 @@ layout: post
 title:  "Array"
 tags: array
 ---
-## Buckets
+# Buckets
 Count each element in an array `int[] a`.
 
 If `0 <= a[i] <= max`, where max is not too big, then we can use `int[] count = new int[max + 1]` as buckets, instead of `Map<Integer, Integer>` 
 
-## Rotation
+# Rotation
 
 [First Missing Positive][first-missing-positive]
 
@@ -181,6 +181,37 @@ public int longestConsecutive(int[] nums) {
 }
 {% endhighlight %}
 
+# Two Passes
+
+[Candy][candy]
+
+{% highlight java %}
+public int candy(int[] ratings) {
+    int n = ratings.length;
+    int[] candies = new int[n];
+    // gives everyone one candy
+    Arrays.fill(candies, 1);
+
+    // left -> right
+    for (int i = 1; i < n; i++) {
+        if (ratings[i] > ratings[i - 1]) {
+            candies[i] = candies[i - 1] + 1;
+        }
+    }
+
+    int sum = candies[n - 1];
+    // right -> left
+    for (int i = n - 2; i >= 0; i--) {
+        if (ratings[i] > ratings[i + 1]) {
+            candies[i] = Math.max(candies[i], candies[i + 1] + 1);
+        }
+        sum += candies[i];
+    }
+    return sum;
+}
+{% endhighlight %}
+
+[candy]: https://leetcode.com/problems/candy/
 [first-missing-positive]: https://leetcode.com/problems/first-missing-positive/
 [longest-consecutive-sequence]: https://leetcode.com/problems/longest-consecutive-sequence/
 [reverse-words-in-a-string-ii]: https://leetcode.com/problems/reverse-words-in-a-string-ii/

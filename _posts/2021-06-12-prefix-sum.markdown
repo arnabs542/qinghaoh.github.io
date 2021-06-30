@@ -81,6 +81,19 @@ public int findMaxLength(int[] nums) {
 {% endhighlight %}
 
 ## Variants
+### Multi-dimension
+
+[Sum of Beauty of All Substrings][sum-of-beauty-of-all-substrings]
+
+{% highlight java %}
+int[][] p = new int[26][n + 1];
+for (int i = 0; i < n; i++) {
+    for (int k = 0; k < p.length; k++) {
+        p[k][i + 1] = p[k][i] + (k == s.charAt(i) - 'a' ? 1 : 0);
+    }
+}
+{% endhighlight %}
+
 ### Exclusive Or
 
 [Count Triplets That Can Form Two Arrays of Equal XOR][count-triplets-that-can-form-two-arrays-of-equal-xor]
@@ -147,3 +160,4 @@ public ListNode removeZeroSumSublists(ListNode head) {
 [product-of-the-last-k-numbers]: https://leetcode.com/problems/product-of-the-last-k-numbers/
 [remove-zero-sum-consecutive-nodes-from-linked-list]: https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/
+[sum-of-beauty-of-all-substrings]: https://leetcode.com/problems/sum-of-beauty-of-all-substrings/

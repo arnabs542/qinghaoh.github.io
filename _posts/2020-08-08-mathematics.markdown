@@ -327,10 +327,59 @@ private int maxDiff(int[] c) {
 }
 {% endhighlight %}
 
+# Mnimax
+
+[Egg Drop With 2 Eggs and N Floors][egg-drop-with-2-eggs-and-n-floors]
+
+{% highlight java %}
+public int twoEggDrop(int n) {
+    // minimax
+    //
+    // suppose the optimal answer is x,
+    // then the first number chosen cannot exceed x.
+    // the second guess cannot exceed (x - 1)
+    // ...
+    // 1 + 2 + ... + x >= n
+    return (int) Math.ceil((Math.sqrt(1 + 8 * n) - 1) / 2);
+}
+{% endhighlight %}
+
+Another solution is recursion:
+
+{% highlight java %}
+private int[][] memo;
+
+public int twoEggDrop(int n) {
+    int eggs = 2;
+    this.memo = new int[n + 1][eggs + 1];
+
+    return drop(n, eggs);
+}
+
+private int drop(int n, int eggs) {
+    if (eggs == 1 || n <= 1) {
+        return n;
+    }
+
+    if (memo[n][eggs] > 0) {
+        return memo[n][eggs];
+    }
+
+    int min = n;
+    for (int i = 1; i <= n; i++) {
+        // break, not break
+        min = Math.min(min, 1 + Math.max(drop(i - 1, eggs - 1), drop(n - i, eggs)));
+    }
+
+    return memo[n][eggs] = min;
+}
+{% endhighlight %}
+
 [4-keys-keyboard]: https://leetcode.com/problems/4-keys-keyboard/
 [best-meeting-point]: https://leetcode.com/problems/best-meeting-point/
 [check-if-number-is-a-sum-of-powers-of-three]: https://leetcode.com/problems/check-if-number-is-a-sum-of-powers-of-three/
 [count-sorted-vowel-strings]: https://leetcode.com/problems/count-sorted-vowel-strings/
+[egg-drop-with-2-eggs-and-n-floors]: https://leetcode.com/problems/egg-drop-with-2-eggs-and-n-floors/
 [handshakes-that-dont-cross]: https://leetcode.com/problems/handshakes-that-dont-cross/
 [maximum-of-absolute-value-expression]: https://leetcode.com/problems/maximum-of-absolute-value-expression/
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/

@@ -33,14 +33,13 @@ private int find(int u) {
 }
 
 private boolean union(int u, int v) {
-    int uset = find(u);
-    int vset = find(v);
+    int pu = find(u), pv = find(v);
 
-    if (uset == vset) {
+    if (pu == pv) {
         return false;
     }
 
-    parent[uset] = vset;
+    parent[pu] = pv;
     return true;
 }
 {% endhighlight %}
@@ -81,14 +80,13 @@ private String find(String u) {
 
 // u / v = value
 private void union(String u, String v, double value) {
-    String uset = find(u);
-    String vset = find(v);
+    String pu = find(u), pv = find(v);
 
-    parent.put(vset, uset);
-    // ratio = uset / vset
+    parent.put(pv, pu);
+    // ratio = pu / pv
     //   = u * ratio(u) / (v * ratio(v))
     //   = value * ratio(u) / ratio(v)
-    ratio.put(vset, value * ratio.get(u) / ratio.get(v));
+    ratio.put(pv, value * ratio.get(u) / ratio.get(v));
 }
 
 private double query(String s1, String s2) {
@@ -123,6 +121,116 @@ public int countComponents(int n, int[][] edges) {
     }
 
     return n;
+}
+{% endhighlight %}
+
+[Most Stones Removed with Same Row or Column][most-stones-removed-with-same-row-or-column]
+
+{% highlight java %}
+private Map<Integer, Integer> parent = new HashMap<>();
+private int count = 0;
+
+// counts the connected components
+public int removeStones(int[][] stones) {
+    for (int[] s : stones) {
+        // ~ to distinguish r and c
+        union(s[0], ~s[1]);
+    }
+    return stones.length - count;
+}
+
+private int find(int u) {
+    // a new component
+    if (parent.putIfAbsent(u, u) == null) {
+        count++;
+    }
+
+    // if u is not root
+    if (u != parent.get(u)) {
+        parent.put(u, find(parent.get(u)));
+    }
+
+    return parent.get(u);
+}
+
+private void union(int u, int v) {
+    int pu = find(u), pv = find(v);
+    if (pu != pv) {
+        parent.put(pu, pv);
+        count--;
+    }
+}
+{% endhighlight %}
+
+[Rank Transform of a Matrix][rank-transform-of-a-matrix]
+
+{% highlight java %}
+public int[][] matrixRankTransform(int[][] matrix) {
+    int m = matrix.length, n = matrix[0].length;
+
+    // matrix[i][j] : disjoint set
+    Map<Integer, DisjointSet> disjointSets = new HashMap<>();
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            int v = matrix[i][j];
+            disjointSets.putIfAbsent(v, new DisjointSet(m + n));
+
+            // unions its row and col to the group
+            disjointSets.get(v).union(i, j + m);
+        }
+    }
+
+    // matrix[i][j] : map of groups
+    // within each group, the members share the map key as the disjoint set root,
+    // which means they are connected
+    Map<Integer, Map<Integer, List<int[]>>> groups = new TreeMap<>();
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            int v = matrix[i][j];
+            groups.computeIfAbsent(v, k -> new HashMap<>())
+                .computeIfAbsent(disjointSets.get(v).find(i), r -> new ArrayList<>())
+                .add(new int[]{i, j});
+        }
+    }
+
+    int[][] answer = new int[m][n];
+    int[] rowMax = new int[m], colMax = new int[n];
+    for (var v : groups.values()) {
+        // updates by connected cells with same value
+        for (var cells : v.values()) {
+            int rank = 1;
+            for (int[] c : cells) {
+                rank = Math.max(rank, Math.max(rowMax[c[0]], colMax[c[1]]) + 1);
+            }
+
+            for (int[] c : cells) {
+                answer[c[0]][c[1]] = rank;
+                rowMax[c[0]] = Math.max(rowMax[c[0]], answer[c[0]][c[1]]);
+                colMax[c[1]] = Math.max(colMax[c[1]], answer[c[0]][c[1]]);
+            }
+        }
+    }
+    return answer;
+}
+
+class DisjointSet {
+    int[] parent;
+
+    public DisjointSet(int n) {
+        parent = new int[n];
+        Arrays.fill(parent, -1);
+    }
+
+    public int find(int u) {
+        return parent[u] < 0 ? u : find(parent[u]);
+    }
+
+    public void union(int u, int v) {
+        int pu = find(u), pv = find(v);
+        if (pu != pv) {
+            parent[pu] = pv;
+        }
+    }
 }
 {% endhighlight %}
 
@@ -196,6 +304,8 @@ private int indexOf(int i, int j, Triangle t) {
 {% endhighlight %}
 
 [evaluate-division]: https://leetcode.com/problems/evaluate-division/
+[most-stones-removed-with-same-row-or-column]: https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
 [number-of-connected-components-in-an-undirected-graph]: https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
+[rank-transform-of-a-matrix]: https://leetcode.com/problems/rank-transform-of-a-matrix/
 [redundant-connection]: https://leetcode.com/problems/redundant-connection/
 [regions-cut-by-slashes]: https://leetcode.com/problems/regions-cut-by-slashes/

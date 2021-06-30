@@ -282,12 +282,84 @@ public int longestSubsequence(int[] arr, int difference) {
 }
 {% endhighlight %}
 
+# Buckets
+
+[Number of Matching Subsequences][number-of-matching-subsequences]
+
+{% highlight java %}
+public int numMatchingSubseq(String s, String[] words) {
+    int count = 0;
+    List<Deque<Character>>[] buckets = new List[26];
+    for (int i = 0; i < 26; i++) {
+        buckets[i] = new ArrayList();
+    }
+
+    // adds words to buckets based on the first letter
+    for (String w : words) {
+        Deque<Character> q = new ArrayDeque<>();
+        for (char c: w.toCharArray()) {
+            q.offer(c);
+        }
+        buckets[w.charAt(0) - 'a'].add(q);
+    }
+
+    for (char c : s.toCharArray()) {
+        List<Deque<Character>> list = buckets[c - 'a'];
+        buckets[c - 'a'] = new ArrayList();
+        for (Deque<Character> q : list) {
+            // O(1) removes the first letter
+            q.pollFirst();
+
+            if (q.size() == 0) {  // no more letters
+                count++;
+            } else {
+                buckets[q.peekFirst() - 'a'].add(q);
+            }
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
+For example, `s = "abcde", words = ["a","bb","acd","ace"]`
+
+```
+'a':  ["(a)", "(a)cd", "(a)ce"]
+'b':  ["(b)b"]
+```
+```
+'b':  ["(b)b"]
+'c':  ["a(c)d", "a(c)e"]
+count: 1
+```
+```
+'b':  ["b(b)"]
+'c':  ["a(c)d", "a(c)e"]
+count: 1
+```
+```
+'b':  ["b(b)"]
+'d':  ["ac(d)"]
+'e':  ["ac(e)"]
+count: 1
+```
+```
+'b':  ["b(b)"]
+'e':  ["ac(e)"]
+count: 2
+```
+```
+'b':  ["b(b)"]
+count: 3
+```
+
 [largest-divisible-subset]: https://leetcode.com/problems/largest-divisible-subset/
 [length-of-longest-fibonacci-subsequence]: https://leetcode.com/problems/length-of-longest-fibonacci-subsequence/
 [longest-arithmetic-subsequence]: https://leetcode.com/problems/longest-arithmetic-subsequence/
 [longest-arithmetic-subsequence-of-given-difference]: https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
 [longest-increasing-subsequence]: https://leetcode.com/problems/longest-increasing-subsequence/
 [is-subsequence]: https://leetcode.com/problems/is-subsequence/
+[number-of-matching-subsequences]: https://leetcode.com/problems/number-of-matching-subsequences/
 [russian-doll-envelopes]: https://leetcode.com/problems/russian-doll-envelopes/
 [shortest-common-subsequence]: https://leetcode.com/problems/shortest-common-subsequence/
 [smallest-range-ii]: https://leetcode.com/problems/smallest-range-ii/

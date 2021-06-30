@@ -29,6 +29,25 @@ public int videoStitching(int[][] clips, int T) {
 
 # Greedy
 
+[Maximum Length of Pair Chain][maximum-length-of-pair-chain]
+
+{% highlight java %}
+public int findLongestChain(int[][] pairs) {
+    Arrays.sort(pairs, (a, b) -> a[1] - b[1]);
+
+    int tail = Integer.MIN_VALUE, max = 0;
+    for (int[] p: pairs) {
+        if (tail < p[0]) {
+            tail = p[1];
+            max++;
+        }
+    }
+    return max;
+}
+{% endhighlight %}
+
+Another solution is LIS DIP.
+
 ## Interval Scheduling
 
 ### Interval Scheduling Maximization Problem (ISMP)
@@ -490,6 +509,7 @@ class Interval implements Comparable<Interval> {
 [course-schedule-iii]: https://leetcode.com/problems/course-schedule-iii/
 [exam-room]: https://leetcode.com/problems/exam-room/
 [maximum-distance-in-arrays]: https://leetcode.com/problems/maximum-distance-in-arrays/
+[maximum-length-of-pair-chain]: https://leetcode.com/problems/maximum-length-of-pair-chain/
 [maximum-number-of-eaten-apples]: https://leetcode.com/problems/maximum-number-of-eaten-apples/
 [maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
 [meeting-rooms-ii]: https://leetcode.com/problems/meeting-rooms-ii/

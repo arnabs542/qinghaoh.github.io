@@ -722,7 +722,7 @@ public int maxWidthRamp(int[] A) {
 
 # Java
 ## Arrays
-[public static \<T\> int binarySearch(T\[\] a, int fromIndex, int toIndex, T key, Comparator\<? super T\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#binarySearch-T:A-int-int-T-java.util.Comparator-)
+[public static \<T\> int binarySearch(T\[\] a, int fromIndex, int toIndex, T key, Comparator\<? super T\> c)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#binarySearch(T%5B%5D,int,int,T,java.util.Comparator))
 
 If the range contains multiple elements equal to the specified object, there is no guarantee which one will be found.
 
@@ -737,7 +737,7 @@ if (insertionPoint < 0) {
 {% endhighlight %}
 
 ## Collections
-[public static \<T\> int binarySearch(List\<? extends T\> list, T key, Comparator\<? super T\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#binarySearch-java.util.List-T-java.util.Comparator-)
+[public static \<T\> int binarySearch(List\<? extends T\> list, T key, Comparator\<? super T\> c)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collections.html#binarySearch(java.util.List,T,java.util.Comparator))
 
 [binary-search]: https://leetcode.com/problems/binary-search/
 [find-k-closest-elements]: https://leetcode.com/problems/find-k-closest-elements/

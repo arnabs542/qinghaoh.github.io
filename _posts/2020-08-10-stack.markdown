@@ -62,7 +62,7 @@ Deque<Integer> st = new ArrayDeque<>();
 for (int i = 0; i < nums.length; i++) {
     // monotonically increasing stack
     // non-strict
-    while (!st.isEmpty() && num[st.peek()] > nums[i]) {
+    while (!st.isEmpty() && nums[st.peek()] > nums[i]) {
         st.pop();
     }
     prev[i] = st.isEmpty() ? -1 : st.peek();
@@ -79,7 +79,7 @@ Deque<Integer> st = new ArrayDeque<>();
 for (int i = 0; i < nums.length; i++) {
     // monotonically increasing stack
     // strict
-    while (!st.isEmpty() && num[st.peek()] > nums[i]) {
+    while (!st.isEmpty() && nums[st.peek()] > nums[i]) {
         next[st.pop()] = i;
     }
     st.push(i);
@@ -90,11 +90,12 @@ for (int i = 0; i < nums.length; i++) {
 
 {% highlight java %}
 public int[] finalPrices(int[] prices) {
-    int[] result = Arrays.copyOf(prices, prices.length);
+    int n = prices.length;
+    int[] result = Arrays.copyOf(prices, n);
 
     // next less element
     Deque<Integer> st = new ArrayDeque<>();
-    for (int i = 0; i < result.length; i++) {
+    for (int i = 0; i < n; i++) {
         while (!st.isEmpty() && result[st.peek()] >= result[i]) {
             result[st.pop()] -= result[i];
         }
@@ -216,23 +217,24 @@ public int mctFromLeafValues(int[] arr) {
 [Maximum Width Ramp][maximum-width-ramp]
 
 {% highlight java %}
-public int largestRectangleArea(int[] heights) {
-    // index of non-descreasing heights
+public int maxWidthRamp(int[] A) {
+    // decreasing stack
     Deque<Integer> st = new ArrayDeque<>();
-    st.push(-1);  // makes width concise
-
-    int area = 0;
-    for (int i = 0; i <= heights.length; i++) {            
-        int height = (i == heights.length ? 0 : heights[i]);
-        while (st.peek() >= 0 && height < heights[st.peek()]) {
-            // popped heights are no less than current height
-            int h = heights[st.pop()];
-            int w = i - 1 - st.peek();
-            area = Math.max(area, h * w);
+    int max = 0, n = A.length;
+    for (int i = 0; i < n; i++) {
+        if (st.isEmpty() || A[i] < A[st.peek()]) {
+            st.push(i);
         }
-        st.push(i);
     }
-    return area;
+
+    for (int i = n - 1; i > max; i--) {
+        while (!st.isEmpty() && A[i] >= A[st.peek()]) {
+            // i is the largest index with A[i] >= stack top
+            // so it's safe to pop
+            max = Math.max(max, i - st.pop());
+        }
+    }
+    return max;
 }
 {% endhighlight %}
 

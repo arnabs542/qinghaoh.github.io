@@ -30,13 +30,15 @@ SET sex = CHAR(ASCII('f') ^ ASCII('m') ^ ASCII(sex));
 
 {% highlight sql %}
 SELECT
-    contest_id, ROUND(COUNT(DISTINCT user_id) / (SELECT COUNT(*) FROM Users) * 100, 2) AS percentage
+    contest_id,
+    ROUND(COUNT(DISTINCT user_id) / (SELECT COUNT(*) FROM Users) * 100, 2) AS percentage
 FROM
     Register
 GROUP BY
     contest_id
 ORDER BY
-    percentage DESC, contest_id
+    percentage DESC,
+    contest_id
 ;
 {% endhighlight %}
 
@@ -380,15 +382,41 @@ HAVING
 ;
 {% endhighlight %}
 
+[Customer Order Frequency][customer-order-frequency]
+
+{% highlight sql %}
+SELECT
+    customer_id,
+    name
+FROM
+    Customers
+JOIN
+    Orders
+    USING(customer_id)
+JOIN
+    Product
+    USING(product_id)
+GROUP BY
+    customer_id
+    HAVING
+        SUM(IF(LEFT(order_date, 7) = '2020-06', quantity, 0) * price) >= 100
+        AND SUM(IF(LEFT(order_date, 7) = '2020-07', quantity, 0) * price) >= 100
+;
+{% endhighlight %}
+
 [Consecutive Available Seats][consecutive-available-seats]
 
 {% highlight sql %}
-SELECT DISTINCT c1.seat_id
-FROM cinema c1
-JOIN cinema c2
+SELECT
+    DISTINCT c1.seat_id
+FROM
+    cinema c1
+JOIN
+    cinema c2
     ON ABS(c1.seat_id - c2.seat_id) = 1
     AND c1.free = 1 AND c2.free = 1
-ORDER BY c1.seat_id;
+ORDER BY
+    c1.seat_id;
 ;
 {% endhighlight %}
 
@@ -485,17 +513,93 @@ HAVING COUNT(DISTINCT product_key) =
 [Tree Node][tree-node]
 
 {% highlight sql %}
-SELECT id,
+SELECT
+    id,
     CASE WHEN p_id IS NULL THEN 'Root'
          WHEN id IN (SELECT p_id FROM tree) THEN 'Inner'
          ELSE 'Leaf'
     END AS Type
-FROM tree
-ORDER BY id
+FROM
+    tree
+ORDER BY
+    id
 ;
 {% endhighlight %}
 
 # Aggregate Functions
+
+## AVG
+
+[Ads Performance][ads-performance]
+
+{% highlight sql %}
+SELECT
+    ad_id,
+    IFNULL(
+        ROUND(
+-- AVG() does not consider NULL values
+            AVG(
+                CASE WHEN action = 'Clicked' THEN 1
+                WHEN action = 'Viewed' THEN 0
+                ELSE NULL END) * 100,
+            2),
+        0) AS ctr
+FROM
+    Ads
+GROUP BY
+    ad_id
+ORDER BY
+    ctr DESC, ad_id
+;
+{% endhighlight %}
+
+### OVER Clause
+
+[SELECT - OVER Clause (Transact-SQL)](https://docs.microsoft.com/en-us/sql/t-sql/queries/select-over-clause-transact-sql?view=sql-server-ver15)
+
+[Hopper Company Queries III][hopper-company-queries-iii]
+
+{% highlight sql %}
+WITH recursive cte AS (
+    SELECT
+        1 AS month
+    UNION ALL
+    SELECT
+        month + 1 AS month
+    FROM
+        cte
+    WHERE
+        month < 12
+)
+
+SELECT
+    t1.month,
+    ROUND(AVG(IFNULL(t2.monthly_distance, 0)) OVER(ORDER BY month ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING), 2) AS average_ride_distance,
+    ROUND(AVG(IFNULL(t2.monthly_duration, 0)) OVER(ORDER BY month ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING), 2) AS average_ride_duration
+FROM
+    cte t1
+LEFT JOIN
+    (SELECT
+        MONTH(r.requested_at) AS month,
+        SUM(a.ride_distance) AS monthly_distance,
+        SUM(ride_duration) AS monthly_duration
+     FROM
+        rides r
+     JOIN
+        acceptedrides a
+        ON r.ride_id = a.ride_id
+     WHERE
+        YEAR(r.requested_at) = 2020
+     GROUP BY
+        month
+    ) t2
+    ON t1.month = t2.month
+ORDER BY
+    t1.month
+LIMIT
+    10
+;
+{% endhighlight %}
 
 ## GROUP_CONCAT
 
@@ -818,31 +922,6 @@ LIMIT 1
 ;
 {% endhighlight %}
 
-# AVG
-
-[Ads Performance][ads-performance]
-
-{% highlight sql %}
-SELECT
-    ad_id,
-    IFNULL(
-        ROUND(
--- AVG() does not consider NULL values
-            AVG(
-                CASE WHEN action = 'Clicked' THEN 1
-                WHEN action = 'Viewed' THEN 0
-                ELSE NULL END) * 100,
-            2),
-        0) AS ctr
-FROM
-    Ads
-GROUP BY
-    ad_id
-ORDER BY
-    ctr DESC, ad_id
-;
-{% endhighlight %}
-
 ## Median
 
 [Find Median Given Frequency of Numbers][find-median-given-frequency-of-numbers]
@@ -986,7 +1065,8 @@ WITH cte AS(
     SELECT
         exam_id,
         exam.student_id,
-        student_name, score,
+        student_name,
+        score,
         RANK() OVER(PARTITION BY exam_id ORDER BY score) rank_asc,
         RANK() OVER(PARTITION BY exam_id ORDER BY score DESC) rank_desc 
     FROM
@@ -1409,6 +1489,22 @@ WHERE
 ;
 {% endhighlight %}
 
+# Regular Expressions
+
+[Find Users With Valid E-Mails][find-users-with-valid-e-mails]
+
+{% highlight sql %}
+SELECT
+    user_id,
+    name,
+    mail
+FROM
+    Users
+WHERE
+    REGEXP_LIKE(mail, '^[A-Za-z]+[A-Za-z0-9\_\.\-]*@leetcode\.com')
+;
+{% endhighlight %}
+
 [active-businesses]: https://leetcode.com/problems/active-businesses/
 [actors-an-directors-who-cooperated-at-least-three-times]: https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
 [ads-performance]: https://leetcode.com/problems/ads-performance/
@@ -1421,6 +1517,7 @@ WHERE
 [consecutive-numbers]: https://leetcode.com/problems/consecutive-numbers/
 [countries-you-can-safely-invest-in]: https://leetcode.com/problems/countries-you-can-safely-invest-in/
 [create-a-session-bar-chart]: https://leetcode.com/problems/create-a-session-bar-chart/
+[customer-order-frequency]: https://leetcode.com/problems/customer-order-frequency/
 [customer-placing-the-largest-number-of-orders]: https://leetcode.com/problems/customer-placing-the-largest-number-of-orders/
 [customers-who-bought-all-products]: https://leetcode.com/problems/customers-who-bought-all-products/
 [customers-who-bought-products-a-and-b-but-not-c]: https://leetcode.com/problems/customers-who-bought-products-a-and-b-but-not-c/
@@ -1430,6 +1527,7 @@ WHERE
 [find-the-start-and-end-number-of-continuous-ranges]: https://leetcode.com/problems/find-the-start-and-end-number-of-continuous-ranges/
 [find-the-missing-ids]: https://leetcode.com/problems/find-the-missing-ids/
 [find-the-quiet-students-in-all-exams]: https://leetcode.com/problems/find-the-quiet-students-in-all-exams/
+[find-users-with-valid-e-mails]: https://leetcode.com/problems/find-users-with-valid-e-mails/
 [friend-requests-i-overall-acceptance-rate]: https://leetcode.com/problems/friend-requests-i-overall-acceptance-rate/
 [game-play-analysis-i]: https://leetcode.com/problems/game-play-analysis-i/
 [game-play-analysis-ii]: https://leetcode.com/problems/game-play-analysis-ii/
@@ -1438,6 +1536,7 @@ WHERE
 [get-highest-answer-rate-question]: https://leetcode.com/problems/get-highest-answer-rate-question/
 [get-the-second-most-recent-activity]: https://leetcode.com/problems/get-the-second-most-recent-activity/
 [group-sold-products-by-the-date]: https://leetcode.com/problems/group-sold-products-by-the-date/
+[hopper-company-queries-iii]: https://leetcode.com/problems/hopper-company-queries-iii/
 [immediate-food-delivery-ii]: https://leetcode.com/problems/immediate-food-delivery-ii/
 [last-person-to-fit-in-the-elevator]: https://leetcode.com/problems/last-person-to-fit-in-the-elevator/
 [leetflex-banned-accounts]: https://leetcode.com/problems/leetflex-banned-accounts/
