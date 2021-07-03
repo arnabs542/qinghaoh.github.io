@@ -307,6 +307,8 @@ Another solution is by Trie.
 
 # Gray Code
 
+[Gray code](https://en.wikipedia.org/wiki/Gray_code): an ordering of the binary numeral system such that two successive values differ in only one bit (binary digit).
+
 [Circular Permutation in Binary Representation][circular-permutation-in-binary-representation]
 
 {% highlight java %}

@@ -367,6 +367,63 @@ public void unreserve(int seatNumber) {
 }
 {% endhighlight %}
 
+[Range Module][range-module]
+
+{% highlight java %}
+class RangeModule {
+    private TreeMap<Integer, Integer> intervals = new TreeMap<>();  // [left, right)
+
+    public RangeModule() {
+
+    }
+
+    public void addRange(int left, int right) {
+        Integer start = intervals.floorKey(left), end = intervals.floorKey(right);
+
+        // the current interval overlaps with start interval
+        if (start != null && intervals.get(start) >= left) {
+            left = start;
+        }
+
+        // the current interval overlaps with end interval
+        if (end != null && intervals.get(end) > right) {
+            right = intervals.get(end);
+        }
+
+        intervals.put(left, right);
+
+        // clears intervals in between
+        intervals.subMap(left, false, right, true).clear();
+    }
+
+    public boolean queryRange(int left, int right) {
+        Integer start = intervals.floorKey(left);
+        return start != null && intervals.get(start) >= right;
+    }
+
+    public void removeRange(int left, int right) {
+        Integer start = intervals.floorKey(left), end = intervals.floorKey(right);
+
+        // the current interval overlaps with end interval
+        if (end != null && intervals.get(end) > right) {
+            intervals.put(right, intervals.get(end));
+        }
+
+        // the current interval overlaps with start interval
+        // if start == end,
+        //   this block could possibly override the right end of the interval,
+        //   so this case must be handled after the above one.
+        //   (notice right != start, so the above case won't impact this case)
+        if (start != null && intervals.get(start) > left) {
+            intervals.put(start, left);
+        }
+
+        // clears intervals in between
+        intervals.subMap(left, true, right, false).clear();
+    }
+}
+{% endhighlight %}
+
 [Exam Room][exam-room]
 
 PriorityQueue:
@@ -517,5 +574,6 @@ class Interval implements Comparable<Interval> {
 [merge-intervals]: https://leetcode.com/problems/merge-intervals/
 [minimum-number-of-arrows-to-burst-balloons]: https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/
 [non-overlapping-intervals]: https://leetcode.com/problems/non-overlapping-intervals/
+[range-module]: https://leetcode.com/problems/range-module/
 [seat-reservation-manager]: https://leetcode.com/problems/seat-reservation-manager/
 [video-stitching]: https://leetcode.com/problems/video-stitching/

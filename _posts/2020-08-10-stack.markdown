@@ -57,12 +57,13 @@ public int[] mostCompetitive(int[] nums, int k) {
 #### Previous Less Element
 
 {% highlight java %}
-int[] prev = new int[nums.length];
 Deque<Integer> st = new ArrayDeque<>();
-for (int i = 0; i < nums.length; i++) {
+int[] prev = new int[n];
+
+for (int i = 0; i < n; i++) {
     // monotonically increasing stack
     // non-strict
-    while (!st.isEmpty() && nums[st.peek()] > nums[i]) {
+    while (!st.isEmpty() && nums[i] < nums[st.peek()]) {
         st.pop();
     }
     prev[i] = st.isEmpty() ? -1 : st.peek();
@@ -73,18 +74,25 @@ for (int i = 0; i < nums.length; i++) {
 #### Next Less Element
 
 {% highlight java %}
-int[] next = new int[nums.length];
-Arrays.fill(next, -1);
 Deque<Integer> st = new ArrayDeque<>();
+int[] next = new int[n];
+Arrays.fill(next, -1);
+
 for (int i = 0; i < nums.length; i++) {
     // monotonically increasing stack
     // strict
-    while (!st.isEmpty() && nums[st.peek()] > nums[i]) {
+    while (!st.isEmpty() && nums[i] < nums[st.peek()]) {
         next[st.pop()] = i;
     }
     st.push(i);
 }
 {% endhighlight %}
+
+|                | Previous < | Previous <= |  Next <  |  Next <=  | 
+|----------------|------------|-------------|----------|-----------|
+|Monotonic Stack | Increasing | Increasing  |Increasing|Increasing |
+|Stack Strictness|   Strict   | Non-strict  |Non-strict|  Strict   |
+|   Condition    |a[i] <= top | a[i] < top  |a[i] < top|a[i] <= top|
 
 [Final Prices With a Special Discount in a Shop][final-prices-with-a-special-discount-in-a-shop]
 
@@ -188,6 +196,12 @@ public int sumSubarrayMins(int[] A) {
 {% endhighlight %}
 
 Similarly, with Monotonically Increasing Stack, we can get Previous Greater Element or Next Greater Element.
+
+|                | Previous > | Previous >= |  Next >  |  Next >=  | 
+|----------------|------------|-------------|----------|-----------|
+|Monotonic Stack | Decreasing | Decreasing  |Decreasing|Decreasing |
+|Stack Strictness|   Strict   | Non-strict  |Non-strict|  Strict   |
+|   Condition    |a[i] >= top | a[i] > top  |a[i] > top|a[i] >= top|
 
 [Minimum Cost Tree From Leaf Values][minimum-cost-tree-from-leaf-values]
 

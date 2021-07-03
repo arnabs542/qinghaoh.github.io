@@ -479,6 +479,46 @@ public List<Integer> findAnagrams(String s, String p) {
 }
 {% endhighlight %}
 
+[Minimum Number of Flips to Make the Binary String Alternating][minimum-number-of-flips-to-make-the-binary-string-alternating]
+
+{% highlight java %}
+public int minFlips(String s) {
+    // sliding window
+    // cyclic problem: s += s
+    int n = s.length();
+    // flips needed to become "0101..." and "1010..." respectively
+    int flips0 = 0, flips1 = 0;
+    int flips = n;
+
+    for (int i = 0; i < 2 * n; i++) {
+        // the expected char at i-th index of "0101..."
+        char c = (char)('0' + i % 2);
+
+        if (c != s.charAt(i % n)) {
+            flips0++;
+        } else {
+            flips1++;
+        }
+
+        // i is the end of the window
+        if (i >= n) {
+            // i % n is outside of the window
+            // decrements if it was flipped before
+            c = (char)('0' + (i % n) % 2);
+
+            if (c != s.charAt(i % n)) {
+                flips0--;
+            } else {
+                flips1--;
+            }
+
+            flips = Math.min(flips, Math.min(flips0, flips1));
+        }
+    }
+    return flips;
+}
+{% endhighlight %}
+
 ## Exact
 
 [Minimum Operations to Reduce X to Zero][minimum-operations-to-reduce-x-to-zero]
@@ -522,6 +562,7 @@ Similar to: [Maximum Size Subarray Sum Equals k][maximum-size-subarray-sum-equal
 [maximum-points-you-can-obtain-from-cards]: https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
 [minimum-difference-between-largest-and-smallest-value-in-three-moves]: https://leetcode.com/problems/minimum-difference-between-largest-and-smallest-value-in-three-moves/
+[minimum-number-of-flips-to-make-the-binary-string-alternating]: https://leetcode.com/problems/minimum-number-of-flips-to-make-the-binary-string-alternating/
 [minimum-operations-to-reduce-x-to-zero]: https://leetcode.com/problems/minimum-operations-to-reduce-x-to-zero/
 [minimum-size-subarray-sum]: https://leetcode.com/problems/minimum-size-subarray-sum/
 [minimum-swaps-to-group-all-1s-together]: https://leetcode.com/problems/minimum-swaps-to-group-all-1s-together/

@@ -354,13 +354,13 @@ FROM
     Sales
 GROUP BY
     seller_id
-HAVING SUM(price) >= ALL(
-    SELECT
-        SUM(price)
-    FROM
-        Sales
-    GROUP BY
-        seller_id)
+    HAVING SUM(price) >= ALL(
+        SELECT
+            SUM(price)
+        FROM
+            Sales
+        GROUP BY
+            seller_id)
 ;
 {% endhighlight %}
 
@@ -377,8 +377,8 @@ ON
     p.product_id = s.product_id 
 GROUP BY
     s.buyer_id 
-HAVING
-    SUM(p.product_name = 'S8') > 0 AND SUM(p.product_name = 'iPhone') = 0;
+    HAVING
+        SUM(p.product_name = 'S8') > 0 AND SUM(p.product_name = 'iPhone') = 0;
 ;
 {% endhighlight %}
 
@@ -401,6 +401,37 @@ GROUP BY
     HAVING
         SUM(IF(LEFT(order_date, 7) = '2020-06', quantity, 0) * price) >= 100
         AND SUM(IF(LEFT(order_date, 7) = '2020-07', quantity, 0) * price) >= 100
+;
+{% endhighlight %}
+
+[Investments in 2016][investments-in-2016]
+
+{% highlight sql %}
+SELECT
+    SUM(insurance.TIV_2016) AS TIV_2016
+FROM
+    insurance
+WHERE
+    TIV_2015 IN
+    (
+        SELECT
+            TIV_2015
+        FROM
+            insurance
+        GROUP BY
+            TIV_2015
+            HAVING COUNT(*) > 1
+    )
+    AND CONCAT(LAT, LON) IN
+    (
+        SELECT
+            CONCAT(LAT, LON)
+        FROM
+            insurance
+        GROUP BY
+            LAT, LON
+            HAVING COUNT(*) = 1
+    )
 ;
 {% endhighlight %}
 
@@ -650,35 +681,6 @@ FROM
 {% endhighlight %}
 
 If **PARTITION BY** is not specified, the function treats all rows of the query result set as a single partition.
-
-[Find the Start and End Number of Continuous Ranges][find-the-start-and-end-number-of-continuous-ranges]
-
-`ROW_NUMBER` numbers all rows sequentially (for example 1, 2, 3, 4, 5).
-
-{% highlight sql %}
-SELECT
-    MIN(log_id) AS start_id,
-    MAX(log_id) AS end_id
-FROM
-    (SELECT
-        log_id,
-        ROW_NUMBER() OVER(ORDER BY log_id) AS num
-     FROM
-        Logs) l
-GROUP BY
-    log_id - num
-;
-{% endhighlight %}
-
-```
-log_id, num, difference
-1, 1, 0
-2, 2, 0
-3, 3, 0
-7, 4, 3
-8, 5, 3
-10, 6, 4
-```
 
 [Nth Highest Salary][nth-highest-salary]
 
@@ -1339,6 +1341,14 @@ LEFT(str,len)
 {% endhighlight %}
 
 {% highlight sql %}
+LOWER()
+{% endhighlight %}
+
+{% highlight sql %}
+TRIM()
+{% endhighlight %}
+
+{% highlight sql %}
 CHAR_LENGTH(str)
 {% endhighlight %}
 
@@ -1437,9 +1447,31 @@ WHERE
 {% highlight sql %}
 SELECT
     score,
-    DENSE_RANK() OVER (ORDER BY Score DESC) AS `Rank`
+    DENSE_RANK() OVER (ORDER BY score DESC) AS `rank`
 FROM
-    Scores
+    scores
+;
+{% endhighlight %}
+
+[Group Employees of the Same Salary][group-employees-of-the-same-salary]
+
+{% highlight sql %}
+SELECT *,
+    DENSE_RANK() OVER(ORDER BY salary) team_id
+FROM
+    Employees
+WHERE
+    salary NOT IN(
+        SELECT
+            salary
+        FROM
+            Employees
+        GROUP BY
+            salary
+        HAVING COUNT(*) = 1)
+ORDER BY
+    team_id,
+    employee_id
 ;
 {% endhighlight %}
 
@@ -1470,7 +1502,7 @@ ORDER BY
 ;
 {% endhighlight %}
 
-# LAG
+## LAG
 
 [Consecutive Numbers][consecutive-numbers]
 
@@ -1486,6 +1518,55 @@ FROM
         Logs) t
 WHERE
     Num = lead_num AND Num = lag_num;
+;
+{% endhighlight %}
+
+## ROW_NUMBER
+
+[Find the Start and End Number of Continuous Ranges][find-the-start-and-end-number-of-continuous-ranges]
+
+`ROW_NUMBER` numbers all rows sequentially (for example 1, 2, 3, 4, 5).
+
+{% highlight sql %}
+SELECT
+    MIN(log_id) AS start_id,
+    MAX(log_id) AS end_id
+FROM
+    (SELECT
+        log_id,
+        ROW_NUMBER() OVER(ORDER BY log_id) AS num
+     FROM
+        Logs) l
+GROUP BY
+    log_id - num
+;
+{% endhighlight %}
+
+```
+log_id, num, difference
+1, 1, 0
+2, 2, 0
+3, 3, 0
+7, 4, 3
+8, 5, 3
+10, 6, 4
+```
+
+[Students Report By Geography][students-report-by-geography]
+
+{% highlight sql %}
+SELECT
+    -- MAX considers only non-null values
+    MAX(CASE WHEN continent = 'America' THEN name END) AS America,
+    MAX(CASE WHEN continent = 'Asia' THEN name END) AS Asia,
+    MAX(CASE WHEN continent = 'Europe' THEN name END) AS Europe
+FROM
+    (SELECT *,
+        ROW_NUMBER() OVER(PARTITION BY continent ORDER BY name) AS row_id
+     FROM
+        student) t
+GROUP BY
+    row_id
 ;
 {% endhighlight %}
 
@@ -1535,9 +1616,11 @@ WHERE
 [game-play-analysis-iv]: https://leetcode.com/problems/game-play-analysis-iv/
 [get-highest-answer-rate-question]: https://leetcode.com/problems/get-highest-answer-rate-question/
 [get-the-second-most-recent-activity]: https://leetcode.com/problems/get-the-second-most-recent-activity/
+[group-employees-of-the-same-salary]: https://leetcode.com/problems/group-employees-of-the-same-salary/
 [group-sold-products-by-the-date]: https://leetcode.com/problems/group-sold-products-by-the-date/
 [hopper-company-queries-iii]: https://leetcode.com/problems/hopper-company-queries-iii/
 [immediate-food-delivery-ii]: https://leetcode.com/problems/immediate-food-delivery-ii/
+[investments-in-2016]: https://leetcode.com/problems/investments-in-2016/
 [last-person-to-fit-in-the-elevator]: https://leetcode.com/problems/last-person-to-fit-in-the-elevator/
 [leetflex-banned-accounts]: https://leetcode.com/problems/leetflex-banned-accounts/
 [median-employee-salary]: https://leetcode.com/problems/median-employee-salary/
@@ -1557,6 +1640,7 @@ WHERE
 [sales-analysis-ii]: https://leetcode.com/problems/sales-analysis-ii/
 [sales-person]: https://leetcode.com/problems/sales-person/
 [second-highest-salary]: https://leetcode.com/problems/second-highest-salary/
+[students-report-by-geography]: https://leetcode.com/problems/students-report-by-geography/
 [suspicious-bank-accounts]: https://leetcode.com/problems/suspicious-bank-accounts/
 [swap-salary]: https://leetcode.com/problems/swap-salary/
 [the-most-frequently-ordered-products-for-each-customer]: https://leetcode.com/problems/the-most-frequently-ordered-products-for-each-customer/

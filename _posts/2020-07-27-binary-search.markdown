@@ -181,25 +181,6 @@ private int findMinIndex(int[] nums) {
 
 [Search in Rotated Sorted Array II][search-in-rotated-sorted-array-ii]
 
-[Find K Closest Elements][find-k-closest-elements]
-
-Search for the first index from which the `k`-element sliding window starts.
-
-{% highlight java %}
-public List<Integer> findClosestElements(int[] arr, int k, int x) {
-    int low = 0, high = arr.length - k;
-    while (low < high) {
-        int mid = (low + high) >>> 1;
-        if (x - arr[mid] > arr[mid + k] - x) {
-            low = mid + 1;
-        } else {
-            high = mid;
-        }
-    }
-    return Arrays.stream(arr, low, low + k).boxed().collect(Collectors.toList());
-}
-{% endhighlight %}
-
 # Generalization
 
 @zhijun_liao
@@ -561,6 +542,25 @@ public List<List<String>> suggestedProducts(String[] products, String searchWord
 
 private boolean condition(String[] products, int index, String prefix) {
     return products[index].compareTo(prefix) >= 0;
+}
+{% endhighlight %}
+
+[Find K Closest Elements][find-k-closest-elements]
+
+Search for the first index from which the `k`-element sliding window starts.
+
+{% highlight java %}
+public List<Integer> findClosestElements(int[] arr, int k, int x) {
+    int low = 0, high = arr.length - k;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (arr[mid + k] - x >= x - arr[mid]) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return Arrays.stream(arr, low, low + k).boxed().collect(Collectors.toList());
 }
 {% endhighlight %}
 

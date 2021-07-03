@@ -84,6 +84,46 @@ private void reverse(char[] s, int start, int end) {
 }
 {% endhighlight %}
 
+[Minimum Number of Flips to Make the Binary String Alternating][minimum-number-of-flips-to-make-the-binary-string-alternating]
+
+{% highlight java %}
+public int minFlips(String s) {
+    int n = s.length();
+    // [parity][binary char]
+    int[][] count = new int[2][2]; 
+    for (int i = 0; i < s.length(); i++) {
+        count[i % 2][s.charAt(i) - '0']++;
+    }
+
+    // '0' at odd + '1' at even
+    // '0' at even + '1' at odd
+    int flips = Math.min(count[1][0] + count[0][1], count[0][0] + count[1][1]);
+
+    if (n % 2 == 0) {
+        // the only two cases are both covered already
+        return flips;
+    }
+
+    // rotates the String
+    // i is the original index of the char currently at the start
+    for (int i = 0; i < n; i++) {
+        // removes the first char
+        // swaps the parity of all the following (n - 1) chars
+        // n is odd so (n - 1) is even - they are in pairs
+        int[] tmp = count[0];
+        count[0] = count[1];
+        count[1] = tmp;
+
+        // since n is odd
+        count[1][s.charAt(i) - '0']--;  // removes the first char
+        count[0][s.charAt(i) - '0']++;  // appends the first char to the end
+
+        flips = Math.min(flips, Math.min(count[1][0] + count[0][1], count[0][0] + count[1][1]));
+    }
+    return flips;
+}
+{% endhighlight %}
+
 # Distance
 
 [Shortest Distance to a Character][shortest-distance-to-a-character]
@@ -214,6 +254,7 @@ public int candy(int[] ratings) {
 [candy]: https://leetcode.com/problems/candy/
 [first-missing-positive]: https://leetcode.com/problems/first-missing-positive/
 [longest-consecutive-sequence]: https://leetcode.com/problems/longest-consecutive-sequence/
+[minimum-number-of-flips-to-make-the-binary-string-alternating]: https://leetcode.com/problems/minimum-number-of-flips-to-make-the-binary-string-alternating/
 [reverse-words-in-a-string-ii]: https://leetcode.com/problems/reverse-words-in-a-string-ii/
 [rotate-array]: https://leetcode.com/problems/rotate-array/
 [shift-2d-grid]: https://leetcode.com/problems/shift-2d-grid/
