@@ -59,6 +59,45 @@ public int movesToMakeZigzag(int[] nums) {
 }
 {% endhighlight %}
 
+[Candy][candy]
+
+{% highlight java %}
+public int candy(int[] ratings) {
+    // steps of continuous up and down respectively
+    int up = 0, down = 0, peak = 0, count = 1;
+    for (int i = 1; i < ratings.length; i++) {
+        // each child gets at least one candy
+        count++;
+
+        if (ratings[i - 1] < ratings[i]) {
+            peak = ++up;
+            down = 0;
+            count += up;
+        } else if (ratings[i - 1] > ratings[i])  {
+            up = 0;
+            down++;
+            // gives peak one more candy if down > peak
+            count += down + (peak >= down ? -1 : 0);
+        } else {
+            peak = up = down = 0;
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
+For example, `[0, 1, 10, 9, 8, 7]`
+
+```
+i = 1, up = 1, down = 0, peak = 1, count = 3
+i = 2, up = 2, down = 0, peak = 2, count = 6
+i = 3, up = 0, down = 1, peak = 2, count = 7
+i = 4, up = 0, down = 2, peak = 2, count = 9
+i = 5, up = 0, down = 3, peak = 2, count = 13
+
+```
+
 [best-time-to-buy-and-sell-stock-ii]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
+[candy]: https://leetcode.com/problems/candy/
 [decrease-elements-to-make-array-zigzag]: https://leetcode.com/problems/decrease-elements-to-make-array-zigzag/
 [find-permutation]: https://leetcode.com/problems/find-permutation/

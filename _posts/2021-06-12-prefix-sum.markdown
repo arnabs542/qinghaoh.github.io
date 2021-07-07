@@ -154,8 +154,61 @@ public ListNode removeZeroSumSublists(ListNode head) {
 }
 {% endhighlight %}
 
+[Maximum Absolute Sum of Any Subarray][maximum-absolute-sum-of-any-subarray]
+
+```
+abs(subarray) = p[i] - p[j] <= max(p) - min(p)
+```
+
+## Bounded Sum
+
+[Max Sum of Rectangle No Larger Than K][max-sum-of-rectangle-no-larger-than-k]
+
+{% highlight java %}
+public int maxSumSubmatrix(int[][] matrix, int k) {
+    // 2D Kadane's algorithm
+    int m = matrix.length, n = matrix[0].length;
+    int max = Integer.MIN_VALUE;
+
+    // finds the rectangle with maxSum <= k in O(logN) time
+    TreeSet<Integer> set = new TreeSet<>();
+
+    // assumes the number of rows is larger than columns
+    for (int r1 = 0; r1 < n; r1++) {
+        // accumulate sums for rows in [r1, r2]
+        int[] nums = new int[m];
+        for (int r2 = r1; r2 < n; r2++) {
+            for (int i = 0; i < m; i++) {
+                nums[i] += matrix[i][r2];
+            }
+
+            // stores prefix sums
+            set.clear();
+            set.add(0);  // p[0]
+
+            int prefixSum = 0;
+            for (int num : nums) {
+                prefixSum += num;
+                // finds the max targetSum which satifies
+                // sum == prefixSum - targetSum <= k
+                // i.e. targetSum >= prefixSum - k
+                Integer targetSum = set.ceiling(prefixSum - k);
+                if (targetSum != null) {
+                    max = Math.max(max, prefixSum - targetSum);
+                }
+                set.add(prefixSum);
+            }
+        }
+    }
+
+    return max;
+}
+{% endhighlight %}
+
 [contiguous-array]: https://leetcode.com/problems/contiguous-array/
 [count-triplets-that-can-form-two-arrays-of-equal-xor]: https://leetcode.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/
+[max-sum-of-rectangle-no-larger-than-k]: https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/
+[maximum-absolute-sum-of-any-subarray]: https://leetcode.com/problems/maximum-absolute-sum-of-any-subarray/
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
 [product-of-the-last-k-numbers]: https://leetcode.com/problems/product-of-the-last-k-numbers/
 [remove-zero-sum-consecutive-nodes-from-linked-list]: https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/

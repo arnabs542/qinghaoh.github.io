@@ -149,6 +149,8 @@ public int numRollsToTarget(int d, int f, int target) {
 }
 {% endhighlight %}
 
+# Cumulative Sum
+
 [Dice Roll Simulation][dice-roll-simulation]
 
 ![Reduction](/assets/dice_roll_simulation.png)
@@ -186,8 +188,55 @@ public int dieSimulator(int n, int[] rollMax) {
 }
 {% endhighlight %}
 
+[K Inverse Pairs Array][k-inverse-pairs-array]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int kInversePairs(int n, int k) {
+    // total number of displacements == number of inverse pairs
+    //
+    // e.g. a0 = [1, 2, 3, 4]
+    // 1) left shifts 2 by 1 position
+    //   [2, 1, 3, 4], #inv == 1
+    // 2) left shits 2 by 1 position and then 4 by 2 positions
+    //   [2, 4, 1, 3], #inv == 3
+    //
+    // dp[n - 1][] -> dp[n][]:
+    // appends the new number to the end
+    // e.g. [2, 4, 1, 3] -> [2, 4, 1, 3, 5]
+    // it adds no inverse pairs
+    // then left shifts 5 to achieve k
+    //
+    int[][] dp = new int[n + 1][k + 1];
+    for (int i = 1; i <= n; i++) {
+        // there's only one array with no inverse pairs
+        dp[i][0] = 1;
+        for (int j = 1; j <= k; j++) {
+            // p is the number of displacements
+            for (int p = 0; p <= Math.min(j, i - 1); p++) {
+                dp[i][j] = (dp[i][j] + dp[i - 1][j - p]) % MOD;
+            }
+        }
+    }
+    return dp[n][k];
+}
+{% endhighlight %}
+
+{% highlight java %}
+for (int i = 1; i <= n; i++) {
+    dp[i][0] = 1;
+    for (int j = 1; j <= k; j++) {
+        int val = (dp[i - 1][j] + MOD - ((j - i) >= 0 ? dp[i - 1][j - i] : 0)) % MOD;
+        dp[i][j] = (dp[i][j - 1] + val) % MOD;
+    }
+}
+return ((dp[n][k] + MOD - (k > 0 ? dp[n][k - 1] : 0)) % MOD);
+{% endhighlight %}
+
 [best-time-to-buy-and-sell-stock-iii]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/
 [best-time-to-buy-and-sell-stock-iv]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/
 [best-time-to-buy-and-sell-stock-with-cooldown]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
 [dice-roll-simulation]: https://leetcode.com/problems/dice-roll-simulation/
+[k-inverse-pairs-array]: https://leetcode.com/problems/k-inverse-pairs-array/
 [number-of-dice-rolls-with-target-sum]: https://leetcode.com/problems/number-of-dice-rolls-with-target-sum/

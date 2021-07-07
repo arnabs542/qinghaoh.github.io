@@ -160,6 +160,8 @@ public int shortest(String word1, String word2) {
 }
 {% endhighlight %}
 
+# Unique Characters
+
 [Count Unique Characters of All Substrings of a Given String][count-unique-characters-of-all-substrings-of-a-given-string]
 
 {% highlight java %}
@@ -186,6 +188,44 @@ public int uniqueLetterString(String s) {
         sum = (sum + (s.length() - index[c][1]) * (index[c][1] - index[c][0]) % MOD) % MOD;
     }
     return sum;
+}
+{% endhighlight %}
+
+[Count Substrings That Differ by One Character][count-substrings-that-differ-by-one-character]
+
+{% highlight java %}
+public int countSubstrings(String s, String t) {
+    int count = 0 ;
+    // each unmatched pair (i, j) is counted once and only once
+    // e.g.
+    //  - (s[2], t[2]) is in the first loop
+    //  - (s[2], t[5]) is in the first loop
+    //  - (s[2], t[1]) is in the second loop
+    for (int i = 0; i < s.length(); i++) {
+        count += helper(s, t, i, 0);
+    }
+
+    for (int j = 1; j < t.length(); j++) {
+        count += helper(s, t, 0, j);
+    }
+    return count;
+}
+
+// i and j are starting indexes of s and t respectively
+private int helper(String s, String t, int i, int j) {
+    int count = 0, prev = 0, curr = 0;
+    while (i < s.length() && j < t.length()) {
+        curr++;
+        // e.g. UMMUMMMMU
+        // the number of substrings which contains the middle 'U' as the only unmatched char
+        // == (2 + 1) * (4 + 1) == 15
+        if (s.charAt(i++) != t.charAt(j++)) {
+            prev = curr;
+            curr = 0;
+        }
+        count += prev;
+    }
+    return count;
 }
 {% endhighlight %}
 
@@ -295,6 +335,7 @@ LL.RR.LLRRLL..
 ```
 [backspace-string-compare]: https://leetcode.com/problems/backspace-string-compare/
 [container-with-most-water]: https://leetcode.com/problems/container-with-most-water/
+[count-substrings-that-differ-by-one-character]: https://leetcode.com/problems/count-substrings-that-differ-by-one-character/
 [count-unique-characters-of-all-substrings-of-a-given-string]: https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/
 [intersection-of-three-sorted-arrays]: https://leetcode.com/problems/intersection-of-three-sorted-arrays/
 [number-of-subsequences-that-satisfy-the-given-sum-condition]: https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/

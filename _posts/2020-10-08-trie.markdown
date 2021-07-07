@@ -10,7 +10,7 @@ tag: trie
 {% highlight java %}
 public int[][] indexPairs(String text, String[] words) {
     TrieNode root = new TrieNode();
-    for (String w: words) {
+    for (String w : words) {
         insert(root, w);
     }
 
@@ -47,7 +47,7 @@ class TrieNode {
 
 private void insert(TrieNode root, String word) {        
     TrieNode node = root;
-    for (char c: word.toCharArray()) {
+    for (char c : word.toCharArray()) {
         if (node.children[c - 'a'] == null) {
             node.children[c - 'a'] = new TrieNode();
         }

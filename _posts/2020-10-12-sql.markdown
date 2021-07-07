@@ -490,11 +490,14 @@ WHERE o.sales_id IS NULL
 [Actors and Directors Who Cooperated At Least Three Times][actors-and-directors-who-cooperated-at-least-three-times]
 
 {% highlight sql %}
-SELECT actor_id,
+SELECT
+    actor_id,
     director_id
-FROM ActorDirector
-GROUP BY actor_id, director_id
-HAVING COUNT(actor_id) >= 3
+FROM
+    ActorDirector
+GROUP BY
+    actor_id, director_id
+    HAVING COUNT(actor_id) >= 3
 ;
 {% endhighlight %}
 
@@ -504,10 +507,14 @@ HAVING COUNT(actor_id) >= 3
 SELECT
     ROUND(COUNT(t2.player_id) / COUNT(t1.player_id), 2) AS fraction
 FROM
-    (SELECT player_id, MIN(event_date) AS first_login
-     FROM Activity
-     GROUP BY player_id) t1
-LEFT JOIN Activity t2
+    (SELECT
+         player_id, MIN(event_date) AS first_login
+     FROM
+         Activity
+     GROUP BY
+         player_id) t1
+LEFT JOIN
+    Activity t2
     ON t1.player_id = t2.player_id AND t1.first_login = t2.event_date - 1
 ;
 {% endhighlight %}
@@ -1337,15 +1344,26 @@ WHERE
 # String Functions
 
 {% highlight sql %}
+CONCAT(str1,str2,...)
+{% endhighlight %}
+
+{% highlight sql %}
 LEFT(str,len)
 {% endhighlight %}
 
 {% highlight sql %}
-LOWER()
+LOWER(str)
 {% endhighlight %}
 
 {% highlight sql %}
-TRIM()
+SUBSTR(str,pos)
+SUBSTR(str FROM pos)
+SUBSTR(str,pos,len)
+SUBSTR(str FROM pos FOR len)
+{% endhighlight %}
+
+{% highlight sql %}
+TRIM(str)
 {% endhighlight %}
 
 {% highlight sql %}
@@ -1521,6 +1539,39 @@ WHERE
 ;
 {% endhighlight %}
 
+[Find Interview Candidates][find-interview-candidates]
+
+{% highlight sql %}
+WITH cte AS (
+    SELECT
+        user_id,
+        name,
+        mail,
+        contest_id,
+        user_id = gold_medal AS gold,
+        user_id = silver_medal AS silver,
+        user_id = bronze_medal AS bronze,
+        LAG(contest_id, 2) OVER (PARTITION BY user_id ORDER BY contest_id) AS lagged_contest_id
+    FROM
+        Users
+    LEFT JOIN
+        Contests
+        ON user_id = gold_medal OR user_id = silver_medal OR user_id = bronze_medal
+)
+
+SELECT
+    name,
+    mail
+FROM
+    cte
+GROUP BY
+    user_id
+    -- contest_id is consecutive in Contests
+    -- so whenever the lag difference is 2, there must be 3 consecutive wins
+    HAVING SUM(gold) >= 3 OR SUM(contest_id - lagged_contest_id = 2) >= 1
+;
+{% endhighlight %}
+
 ## ROW_NUMBER
 
 [Find the Start and End Number of Continuous Ranges][find-the-start-and-end-number-of-continuous-ranges]
@@ -1587,7 +1638,7 @@ WHERE
 {% endhighlight %}
 
 [active-businesses]: https://leetcode.com/problems/active-businesses/
-[actors-an-directors-who-cooperated-at-least-three-times]: https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
+[actors-and-directors-who-cooperated-at-least-three-times]: https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
 [ads-performance]: https://leetcode.com/problems/ads-performance/
 [all-people-report-to-the-given-manager]: https://leetcode.com/problems/all-people-report-to-the-given-manager/
 [all-valid-triplets-that-can-represent-a-country]: https://leetcode.com/problems/all-valid-triplets-that-can-represent-a-country/
@@ -1604,6 +1655,7 @@ WHERE
 [customers-who-bought-products-a-and-b-but-not-c]: https://leetcode.com/problems/customers-who-bought-products-a-and-b-but-not-c/
 [employees-earning-more-than-their-managers]: https://leetcode.com/problems/employees-earning-more-than-their-managers/
 [evaluate-boolean-expression]: https://leetcode.com/problems/evaluate-boolean-expression/
+[find-interview-candidates]: https://leetcode.com/problems/find-interview-candidates/
 [find-median-given-frequency-of-numbers]: https://leetcode.com/problems/find-median-given-frequency-of-numbers/
 [find-the-start-and-end-number-of-continuous-ranges]: https://leetcode.com/problems/find-the-start-and-end-number-of-continuous-ranges/
 [find-the-missing-ids]: https://leetcode.com/problems/find-the-missing-ids/

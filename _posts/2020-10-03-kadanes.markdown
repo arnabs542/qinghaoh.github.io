@@ -5,17 +5,17 @@ tag: subarray
 ---
 [Kadane's algorithm](https://en.wikipedia.org/wiki/Maximum_subarray_problem#Kadane's_algorithm)
 
-Maximum subarray problem
+*Maximum subarray problem*
 
 # Template
 
 {% highlight java %}
 public int maxSubarray(int[] nums) {
-    int max = 0, curr = 0;
+    int max = 0, currSum = 0;
     for (int num : nums) {
-        // curr is the max sum ending at num
-        curr = Math.max(0, curr + num);
-        max = Math.max(max, curr);
+        // currSum is the max sum ending at num
+        currSum = Math.max(0, currSum + num);
+        max = Math.max(max, currSum);
     }
     return max;
 }
@@ -124,17 +124,21 @@ public int maxScoreSightseeingPair(int[] A) {
 {% highlight java %}
 public int numSubarrayBoundedMax(int[] nums, int left, int right) {
     int count = 0;
-    int dp = 0;  // number of valid sub-array ending with the current num
-    int prev = -1;  // index of the last our of range num
+    int dp = 0;  // number of valid subarrays ending at nums[i]
+    int prev = -1;  // index of the last num which is > right
     for (int i = 0; i < nums.length; i++) {
-        if (nums[i] < left) {
-            count += dp;
-        } else if (nums[i] > right) {
+        if (nums[i] > right) {
             dp = 0;
             prev = i;
-        } else {
-            count += dp = i - prev;
+        } else if (nums[i] >= left) {
+            // all nums in (prev, i] is in range
+            dp = i - prev;
         }
+
+        // if nums[i] < left, appends it to the current dp array,
+        // and it won't change the max of the dp array
+        // so dp[i] == dp[i - 1] (nums[]i] itself is out of range)
+        count += dp;
     }
     return count;
 }
