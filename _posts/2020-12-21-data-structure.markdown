@@ -19,6 +19,19 @@ tag: data structure
 * Map
 * TreeMap
 
+[Find Median from Data Stream][find-median-from-data-stream]
+
+{% highlight java %}
+// two heaps
+if (left.size() == right.size()) {
+    right.offer(num);
+    left.offer(right.poll());
+} else {
+    left.offer(num);
+    right.offer(left.poll());
+}
+{% endhighlight %}
+
 [Design Phone Directory][design-phone-directory]
 
 {% highlight java %}
@@ -195,6 +208,7 @@ public void increment(int k, int val) {
 [design-a-stack-with-increment-operation]: https://leetcode.com/problems/design-a-stack-with-increment-operation/
 [design-hashmap]: https://leetcode.com/problems/design-phone-hashmap/
 [design-phone-directory]: https://leetcode.com/problems/design-phone-directory/
+[find-median-from-data-stream]: https://leetcode.com/problems/find-median-from-data-stream/
 [lru-cache]: https://leetcode.com/problems/lru-cache/
 [max-stack]: https://leetcode.com/problems/max-stack/
 [maximum-frequency-stack]: https://leetcode.com/problems/maximum-frequency-stack/

@@ -223,15 +223,34 @@ public int kInversePairs(int n, int k) {
 }
 {% endhighlight %}
 
+If `j >= i - 1`,
+```
+dp[i][j] = dp[i - 1][j] + dp[i - 1][j - 1] + ... + dp[i - 1][j - i + 1]
+```
+
+Therefore if `j >= i`,
+```
+dp[i][j - 1] = dp[i - 1][j - 1] + dp[i - 1][j - 2] + ... + dp[i - 1][j - i]
+```
+```
+dp[i][j] - dp[i][j - 1] = dp[i - 1][j] - dp[i - 1][j - i]
+dp[i][j] = dp[i][j - 1] + dp[i - 1][j] - dp[i - 1][j - i]
+```
+
 {% highlight java %}
+int[][] dp = new int[n + 1][k + 1];
+dp[0][0] = 1;
 for (int i = 1; i <= n; i++) {
+    // there's only one array with no inverse pairs
     dp[i][0] = 1;
     for (int j = 1; j <= k; j++) {
-        int val = (dp[i - 1][j] + MOD - ((j - i) >= 0 ? dp[i - 1][j - i] : 0)) % MOD;
-        dp[i][j] = (dp[i][j - 1] + val) % MOD;
+        dp[i][j] = (dp[i][j - 1] + dp[i - 1][j]) % MOD;
+        if (j - i >= 0) {
+            dp[i][j] = (dp[i][j] - dp[i - 1][j - i] + MOD) % MOD; 
+        }
     }
 }
-return ((dp[n][k] + MOD - (k > 0 ? dp[n][k - 1] : 0)) % MOD);
+return dp[n][k];
 {% endhighlight %}
 
 [best-time-to-buy-and-sell-stock-iii]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/

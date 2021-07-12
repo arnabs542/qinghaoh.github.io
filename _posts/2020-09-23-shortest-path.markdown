@@ -377,6 +377,74 @@ public List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, 
 }
 {% endhighlight %}
 
+# Expansion
+
+[Shortest Bridge][shortest-bridge]
+
+{% highlight java %}
+{% raw %}
+private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+{% endraw %}
+public int shortestBridge(int[][] grid) {
+    int n = grid.length;
+
+    // paints one island to 2
+    for (int i = 0; i < n; i++) {
+        int j = 0;
+        while (j < n) {
+            if (paint(grid, i, j)) {
+                break;
+            }
+            j++;
+        }
+        if (j < n) {
+            break;
+        }
+    }
+
+    int label = 2;
+    while (true) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == label) {
+                    for (int[] d : DIRECTIONS) {
+                        if (expand(grid, i + d[0], j + d[1], label)) {
+                            return label - 2;
+                        }
+                    }
+                }
+            }
+        }
+        label++;
+    }
+}
+
+private boolean paint(int[][] grid, int i, int j) {
+    if (i < 0 || j < 0 || i == grid.length || j == grid.length || grid[i][j] != 1) {
+        return false;
+    }
+
+    grid[i][j] = 2;
+    for (int[] d : DIRECTIONS) {
+        paint(grid, i + d[0], j + d[1]);
+    }
+    return true;
+}
+
+private boolean expand(int[][] grid, int i, int j, int label) {
+    if (i < 0 || j < 0 || i == grid.length || j == grid.length) {
+        return false;
+    }
+
+    if (grid[i][j] == 0) {
+        grid[i][j] = label + 1;
+    }
+
+    // returns true if it reaches the other island
+    return grid[i][j] == 1;
+}
+{% endhighlight %}
+
 [campus-bikes-ii]: https://leetcode.com/problems/campus-bikes-ii/
 [course-schedule-iv]: https://leetcode.com/problems/course-schedule-iv/
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
@@ -384,5 +452,6 @@ public List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, 
 [path-with-maximum-minimum-value]: https://leetcode.com/problems/path-with-maximum-minimum-value/
 [path-with-maximum-probability]: https://leetcode.com/problems/path-with-maximum-probability/
 [path-with-minimum-effort]: https://leetcode.com/problems/path-with-minimum-effort/
+[shortest-bridge]: https://leetcode.com/problems/shortest-bridge/
 [swim-in-rising-water]: https://leetcode.com/problems/swim-in-rising-water/
 [the-maze-iii]: https://leetcode.com/problems/the-maze-iii/

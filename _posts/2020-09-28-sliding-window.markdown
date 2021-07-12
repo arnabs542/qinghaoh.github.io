@@ -479,6 +479,42 @@ public List<Integer> findAnagrams(String s, String p) {
 }
 {% endhighlight %}
 
+[K Empty Slots][k-empty-slots]
+
+{% highlight java %}
+public int kEmptySlots(int[] bulbs, int k) {
+    int n = bulbs.length;
+    // days[i]: the day when bulbs[i] is turned on (1-indexed)
+    int[] days =  new int[n];
+    for (int i = 0; i < n; i++) {
+        days[bulbs[i] - 1] = i + 1;
+    }
+
+    // sliding window
+    // the goal is find a fixed window in days, whose length is (k + 2)
+    // and for all indexes in between (exclusively), days[index] > endpoints
+    int min = Integer.MAX_VALUE;
+    int left = 0, right = k + 1;
+    for (int i = 0; right < n; i++) {
+        // current days[i] is valid, continue
+        if (days[i] > days[left] && days[i] > days[right]) {
+            continue;
+        }
+
+        // reaches the right endpoint
+        // since all previous number are valid, this is a candidate minimum
+        if (i == right) {
+            min = Math.min(min, Math.max(days[left], days[right]));
+        }
+
+        // not valid, slides the window
+        left = i;
+        right = k + 1 + i;
+    }
+    return min == Integer.MAX_VALUE ? -1 : min;
+}
+{% endhighlight %}
+
 [Minimum Number of Flips to Make the Binary String Alternating][minimum-number-of-flips-to-make-the-binary-string-alternating]
 
 {% highlight java %}
@@ -554,6 +590,7 @@ Similar to: [Maximum Size Subarray Sum Equals k][maximum-size-subarray-sum-equal
 [find-k-th-smallest-pair-distance]: https://leetcode.com/problems/find-k-th-smallest-pair-distance/
 [fruit-into-baskets]: https://leetcode.com/problems/fruit-into-baskets/
 [get-equal-substrings-within-budget]: https://leetcode.com/problems/get-equal-substrings-within-budget/
+[k-empty-slots]: https://leetcode.com/problems/k-empty-slots/
 [longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit]: https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/
 [longest-repeating-character-replacement]: https://leetcode.com/problems/longest-repeating-character-replacement/
 [longest-substring-with-at-most-k-distinct-characters]: https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/

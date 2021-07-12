@@ -133,30 +133,29 @@ FROM
     Customers
 WHERE
     customer_id IN (
-    SELECT
-        customer_id
-    FROM
-        Orders
-    WHERE
-        product_name = 'A'
-    )
-    AND
-    customer_id IN (
-    SELECT
-        customer_id
-    FROM
-        Orders
-    WHERE
-        product_name = 'B'
-    )
+        SELECT
+            customer_id
+        FROM
+            Orders
+        WHERE
+            product_name = 'A'
+        )
+    AND customer_id IN (
+        SELECT
+            customer_id
+        FROM
+            Orders
+        WHERE
+            product_name = 'B'
+        )
     AND customer_id NOT IN (
-    SELECT
-        customer_id
-    FROM
-        Orders
-    WHERE
-        product_name = 'C'
-    ) 
+        SELECT
+            customer_id
+        FROM
+            Orders
+        WHERE
+            product_name = 'C'
+        )
 ;
 {% endhighlight %}
 
@@ -598,7 +597,7 @@ ORDER BY
 [Hopper Company Queries III][hopper-company-queries-iii]
 
 {% highlight sql %}
-WITH recursive cte AS (
+WITH RECURSIVE cte AS (
     SELECT
         1 AS month
     UNION ALL
@@ -1156,7 +1155,7 @@ ORDER BY
 ## Recursive CTE
 
 {% highlight sql %}
-WITH expression_name (column_list)
+WITH RECURSIVE expression_name (column_list)
 AS
 (
     -- Anchor member
@@ -1170,36 +1169,9 @@ SELECT *
 FROM   expression_name
 {% endhighlight %}
 
-![Flow chart](https://cdn.sqlservertutorial.net/wp-content/uploads/SQL-Server-Recursive-CTE-execution-flow.png)
+![Flow chart](https://www.sqlservertutorial.net/wp-content/uploads/SQL-Server-Recursive-CTE-execution-flow.png)
 
 Ref: https://www.sqlservertutorial.net/sql-server-basics/sql-server-recursive-cte/
-
-[All People Report to the Given Manager][all-people-report-to-the-given-manager]
-
-{% highlight sql %}
-WITH RECURSIVE cte AS (
-    SELECT
-        employee_id
-    FROM
-        Employees
-    WHERE
-        manager_id = 1 AND employee_id != 1
-    UNION ALL
-    SELECT
-        e.employee_id
-    FROM
-        cte c
-    JOIN
-        Employees e
-        ON c.employee_id = e.manager_id
-)
-
-SELECT
-    employee_id
-FROM
-    cte
-;
-{% endhighlight %}
 
 [Find the Missing IDs][find-the-missing-ids]
 
@@ -1230,6 +1202,62 @@ WHERE
             customer_id
         FROM
             Customers)
+;
+{% endhighlight %}
+
+[Find the Subtasks That Did Not Execute][find-the-subtasks-that-did-not-execute]
+
+{% highlight sql %}
+WITH RECURSIVE cte AS (
+    SELECT
+        task_id,
+        subtasks_count
+    FROM
+        Tasks
+    UNION ALL
+    SELECT
+        task_id,
+        subtasks_count - 1
+    FROM
+        cte
+    WHERE
+        subtasks_count > 1
+)
+
+SELECT
+    task_id,
+    subtasks_count AS subtask_id
+FROM
+    cte
+WHERE
+    (task_id, subtasks_count) NOT IN (SELECT * FROM Executed)
+;
+{% endhighlight %}
+
+[All People Report to the Given Manager][all-people-report-to-the-given-manager]
+
+{% highlight sql %}
+WITH RECURSIVE cte AS (
+    SELECT
+        employee_id
+    FROM
+        Employees
+    WHERE
+        manager_id = 1 AND employee_id != 1
+    UNION ALL
+    SELECT
+        e.employee_id
+    FROM
+        cte c
+    JOIN
+        Employees e
+        ON c.employee_id = e.manager_id
+)
+
+SELECT
+    employee_id
+FROM
+    cte
 ;
 {% endhighlight %}
 
@@ -1660,6 +1688,7 @@ WHERE
 [find-the-start-and-end-number-of-continuous-ranges]: https://leetcode.com/problems/find-the-start-and-end-number-of-continuous-ranges/
 [find-the-missing-ids]: https://leetcode.com/problems/find-the-missing-ids/
 [find-the-quiet-students-in-all-exams]: https://leetcode.com/problems/find-the-quiet-students-in-all-exams/
+[find-the-subtasks-that-did-not-execute]: https://leetcode.com/problems/find-the-subtasks-that-did-not-execute/
 [find-users-with-valid-e-mails]: https://leetcode.com/problems/find-users-with-valid-e-mails/
 [friend-requests-i-overall-acceptance-rate]: https://leetcode.com/problems/friend-requests-i-overall-acceptance-rate/
 [game-play-analysis-i]: https://leetcode.com/problems/game-play-analysis-i/

@@ -55,6 +55,23 @@ int g = (-5) % (-3);  // -2
 int h = (-5) / (-3);  // 1
 {% endhighlight %}
 
+[floorDiv](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html#floorDiv(int,int))
+
+Returns the largest (closest to positive infinity) int value that is less than or equal to the algebraic quotient.
+
+Special case:
+
+{% highlight java %}
+floorDiv(Integer.MIN_VALUE, -1) == Integer.MIN_VALUE
+{% endhighlight %}
+
+Examples:
+
+{% highlight java %}
+floorDiv(4, 3) == 1
+floorDiv(-4, 3) == -2
+{% endhighlight %}
+
 [floorMod](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html#floorMod(int,int))
 
 {% highlight java %}

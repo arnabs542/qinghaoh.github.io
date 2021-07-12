@@ -149,6 +149,22 @@ if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
 
 Look how it's transformed to [Longest Common Subsequence][longest-common-subsequence]!
 
+[Maximum Length of Repeated Subarray][maximum-length-of-repeated-subarray]
+
+{% highlight java %}
+// dp[i][j]: max length of repeated subarray ending with nums1[i - 1] and nums2[j - 1]
+int[][] dp = new int[n1 + 1][n2 + 1];
+for (int i = 0; i <= n1; i++) {
+    for (int j = 0;j <= n2; j++) {
+        if (i == 0 || j == 0){
+            dp[i][j] = 0;
+        } else if (nums1[i - 1] == nums2[j - 1]) {
+            max = Math.max(max, dp[i][j] = dp[i - 1][j - 1] + 1);
+        }
+    }
+}
+{% endhighlight %}
+
 [Interleaving String][interleaving-string]
 
 {% highlight java %}
@@ -371,6 +387,7 @@ public int minimumTotal(List<List<Integer>> triangle) {
 [interleaving-string]: https://leetcode.com/problems/interleaving-string/
 [longest-common-subsequence]: https://leetcode.com/problems/longest-common-subsequence/
 [longest-string-chain]: https://leetcode.com/problems/longest-string-chain/
+[maximum-length-of-repeated-subarray]: https://leetcode.com/problems/maximum-length-of-repeated-subarray/
 [min-cost-climbing-stairs]: https://leetcode.com/problems/min-cost-climbing-stairs/
 [minimum-ascii-delete-sum-for-two-strings]: https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/
 [paint-house-ii]: https://leetcode.com/problems/paint-house-ii/

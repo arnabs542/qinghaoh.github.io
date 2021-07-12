@@ -189,7 +189,9 @@ public int numberOfSets(int n, int k) {
 
 {% highlight java %}
 public int numDecodings(String s) {
-    int[] dp = new int[s.length() + 1];
+    int n = s.length();
+    // dp[i]: number of ways ending at s[i - 1]
+    int[] dp = new int[n + 1];
     dp[0] = 1;
     dp[1] = s.charAt(0) == '0' ? 0 : 1;
 
@@ -206,7 +208,7 @@ public int numDecodings(String s) {
         }
     }
 
-    return dp[s.length()];
+    return dp[n];
 }
 {% endhighlight %}
 
@@ -220,18 +222,18 @@ public int numDecodings(String s) {
 
     int oneBack = 1, twoBack = 1;
     for (int i = 1; i < s.length(); i++) {
-        int current = 0;
+        int curr = 0;
         if (s.charAt(i) != '0') {
-            current = oneBack;
+            curr = oneBack;
         }
 
         int twoDigits = Integer.parseInt(s.substring(i - 1, i + 1));
         if (twoDigits >= 10 && twoDigits <= 26) {
-            current += twoBack;
+            curr += twoBack;
         }
 
         twoBack = oneBack;
-        oneBack = current;
+        oneBack = curr;
     }
     return oneBack;
 }

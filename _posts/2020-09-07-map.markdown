@@ -85,6 +85,13 @@ Collections.max(map.entrySet(), Map.Entry.comparingByValue()).getKey();
 * [default boolean remove(Object key, Object value)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html#remove(java.lang.Object,java.lang.Object))
 * [V put(K key, V value)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html#put(K,V))
   * Returns the previous value associated with key, or null if there was no mapping for key.
+* [default V replace(K key, V value)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html#replace(K,V))
+{% highlight java %}
+ if (map.containsKey(key)) {
+     return map.put(key, value);
+ } else
+     return null;
+{% endhighlight %}
 
 # Map.Entry
 * [static \<K,V extends Comparable\<? super V\>\> Comparator\<Map.Entry\<K,V\>\> comparingByValue()](https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html#comparingByValue--)
@@ -168,6 +175,51 @@ public int tupleSameProduct(int[] nums) {
 }
 {% endhighlight %}
 
+# Buckets
+
+[Contains Duplicate III][contains-duplicate-iii]
+
+{% highlight java %}
+public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+    Map<Long, Long> buckets = new HashMap<>();
+    // capacity of each bucket
+    long capacity = (long)t + 1;
+
+    for (int i = 0; i < nums.length; ++i) {
+        long bucket = Math.floorDiv(nums[i], capacity);
+
+        // checks if the bucket already contains a number
+        if (buckets.containsKey(bucket)) {
+            return true;
+        }
+
+        // checks the neighbor buckets
+        if (buckets.containsKey(bucket - 1) && Math.abs(nums[i] - buckets.get(bucket - 1)) < capacity) {
+            return true;
+        }
+
+        if (buckets.containsKey(bucket + 1) && Math.abs(nums[i] - buckets.get(bucket + 1)) < capacity) {
+            return true;
+        }
+
+        buckets.put(bucket, (long)nums[i]);
+
+        // removes out-of-window buckets
+        if (i >= k) {
+            buckets.remove(Math.floorDiv(nums[i - k], capacity));
+        }
+    }
+
+    return false;
+}
+{% endhighlight %}
+
+# TreeMap
+
+[Depth of BST Given Insertion Order][depth-of-bst-given-insertion-order]
+
+[contains-duplicate-iii]: https://leetcode.com/problems/contains-duplicate-iii/
+[depth-of-bst-given-insertion-order]: https://leetcode.com/problems/depth-of-bst-given-insertion-order/
 [making-file-names-unique]: https://leetcode.com/problems/making-file-names-unique/
 [tuple-with-same-product]: https://leetcode.com/problems/tuple-with-same-product/
 [vowel-spellchecker]: https://leetcode.com/problems/vowel-spellchecker/

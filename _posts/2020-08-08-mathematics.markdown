@@ -93,7 +93,7 @@ public int[][] multiply(int[][] A, int[][] B) {
 [Best Meeting Point][best-meeting-point]
 
 * Mean minimizes total distance for Euclidian distance
-* Median minimzes total distance for absolute deviation
+* Median minimizes total distance for absolute deviation
 * Mode minimizes distance for indicator function
 
 {% highlight java %}
