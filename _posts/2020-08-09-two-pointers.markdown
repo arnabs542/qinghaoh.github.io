@@ -260,6 +260,32 @@ public boolean isOneEditDistance(String s, String t) {
 }
 {% endhighlight %}
 
+[Maximum Score of a Good Subarray][maximum-score-of-a-good-subarray]
+
+{% highlight java %}
+public int maximumScore(int[] nums, int k) {
+    int n = nums.length, i = k, j = k;
+    int score = nums[k], min = nums[k];
+    while (i > 0 || j < n - 1) {
+        if (i == 0) {
+            j++;
+        } else if (j == n - 1) {
+            i--;
+        } else if (nums[i - 1] < nums[j + 1]) {
+            // invariant:
+            // the current subarray always has the highest score
+            // among all subarrays of the same size
+            j++;
+        } else {
+            i--;
+        }
+        min = Math.min(min, Math.min(nums[i], nums[j]));
+        score = Math.max(score, min * (j - i + 1));
+    }
+    return score;
+}
+{% endhighlight %}
+
 # Three Pointers
 
 [Intersection of Three Sorted Arrays][intersection-of-three-sorted-arrays]
@@ -338,6 +364,7 @@ LL.RR.LLRRLL..
 [count-substrings-that-differ-by-one-character]: https://leetcode.com/problems/count-substrings-that-differ-by-one-character/
 [count-unique-characters-of-all-substrings-of-a-given-string]: https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/
 [intersection-of-three-sorted-arrays]: https://leetcode.com/problems/intersection-of-three-sorted-arrays/
+[maximum-score-of-a-good-subarray]: https://leetcode.com/problems/maximum-score-of-a-good-subarray/
 [number-of-subsequences-that-satisfy-the-given-sum-condition]: https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/
 [one-edit-distance]: https://leetcode.com/problems/one-edit-distance/
 [push-dominoes]: https://leetcode.com/problems/push-dominoes/

@@ -3,6 +3,25 @@ layout: post
 title:  "Interval"
 ---
 
+[Check if All the Integers in a Range Are Covered][check-if-all-the-integers-in-a-range-are-covered]
+
+{% highlight java %}
+public boolean isCovered(int[][] ranges, int left, int right) {
+    Arrays.sort(ranges, Comparator.comparingInt(r -> r[0]));
+
+    for (int[] r : ranges) {
+        if (left >= r[0] && left <= r[1]) {
+            // [left, r[1]] is covered
+            left = r[1] + 1;
+
+            // now left is the first integer that's uncovered
+        }
+    }
+
+    return left > right;
+}
+{% endhighlight %}
+
 [Video Stitching][video-stitching]
 
 {% highlight java %}
@@ -563,6 +582,7 @@ class Interval implements Comparable<Interval> {
 }
 {% endhighlight %}
 
+[check-if-all-the-integers-in-a-range-are-covered]: https://leetcode.com/problems/check-if-all-the-integers-in-a-range-are-covered/
 [course-schedule-iii]: https://leetcode.com/problems/course-schedule-iii/
 [exam-room]: https://leetcode.com/problems/exam-room/
 [maximum-distance-in-arrays]: https://leetcode.com/problems/maximum-distance-in-arrays/

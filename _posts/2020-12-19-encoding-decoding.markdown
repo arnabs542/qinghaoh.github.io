@@ -215,10 +215,32 @@ private String dfs(TreeNode node) {
 }
 {% endhighlight %}
 
+[Isomorphic Strings][isomorphic-strings]
+
+{% highlight java %}
+public boolean isIsomorphic(String s, String t) {
+    return transform(s).equals(transform(t));
+}
+
+private String transform(String s) {
+    Map<Character, Integer> indexMapping = new HashMap<>();
+    StringJoiner sj = new StringJoiner("#");
+
+    for (int i = 0; i < s.length(); i++) {
+        char c = s.charAt(i);
+        indexMapping.putIfAbsent(c, i);
+        sj.add(Integer.toString(indexMapping.get(c)));
+    }
+
+    return sj.toString();
+}
+{% endhighlight %}
+
 [construct-binary-tree-from-string]: https://leetcode.com/problems/construct-binary-tree-from-string/
 [encode-and-decode-strings]: https://leetcode.com/problems/encode-and-decode-strings/
 [encode-and-decode-tinyurl]: https://leetcode.com/problems/encode-and-decode-tinyurl/
 [encode-n-ary-tree-to-binary-tree]: https://leetcode.com/problems/encode-n-ary-tree-to-binary-tree/
 [find-duplicate-subtrees]: https://leetcode.com/problems/find-duplicate-subtrees/
+[isomorphic-strings]: https://leetcode.com/problems/isomorphic-strings/
 [serialize-and-deserialize-binary-tree]: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
 [serialize-and-deserialize-n-ary-tree]: https://leetcode.com/problems/serialize-and-deserialize-n-ary-tree/

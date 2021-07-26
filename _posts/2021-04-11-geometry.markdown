@@ -242,6 +242,125 @@ public int maxAbsValExpr(int[] arr1, int[] arr2) {
 }
 {% endhighlight %}
 
+# Circle
+
+## Smallest Circle Problem
+
+[Smallest-circle problem](https://en.wikipedia.org/wiki/Smallest-circle_problem): computing the smallest circle that contains all of a given set of points in the Euclidean plane.
+
+[Circum Circle Cartesian equation](https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates):
+
+Circumcenter:
+\\[\frac{\mathbf{S}}{a}\\]
+
+Circumradius:
+\\[\sqrt{\frac{b}{a} + \frac{\|\mathbf{S}\|^2}{a ^ 2}}\\]
+
+{% highlight java %}
+public double[] outerTrees(int[][] trees) {
+    return welzl(trees, new ArrayList<>(), 0);
+}
+
+// Welzl's algorithm
+private double[] welzl(int[][] p, List<int[]> r, int offset) {
+    if (offset == p.length || r.size() == 3) {
+        return trivial(r);
+    }
+
+    double[] circle = welzl(p, r, offset + 1);
+
+    if (isInside(circle, p[offset])) {
+        return circle;
+    }
+
+    // backtrack
+    r.add(p[offset]);
+    circle = welzl(p, r, offset + 1);
+    r.remove(r.size() - 1);
+    return circle;
+}
+
+private double[] trivial(List<int[]> r) {
+    if (r.isEmpty()) {
+        return null;
+    }
+
+    if (r.size() == 1) {
+        return new double[] {r.get(0)[0], r.get(0)[1], 0};
+    }
+
+    if (r.size() == 2) {
+        return computeCircle2(r.get(0), r.get(1));
+    }
+
+    // if one angle is obtuse
+    // - (r[0], r[1])
+    // - (r[0], r[2])
+    // - (r[1], r[2])
+    for (int i = 0; i < 2; i++) {
+        for (int j = i + 1; j < 3; j++) {
+            double[] c = computeCircle2(r.get(i), r.get(j));
+            if (isInside(c, r.get(3 - i - j))) {
+                return c;
+            }
+        }
+    }
+
+    // circumscribed circle
+    return computeCircumscribedCircle(r.get(0), r.get(1), r.get(2));
+}
+
+// Compute the circle whose diameter is [p1, p2]
+private double[] computeCircle2(int[] p1, int[] p2) {
+    double x1 = p1[0], y1 = p1[1], x2 = p2[0], y2 = p2[1];
+    double r2 = squaredDistance(p1, p2);
+    return new double[] {(x1 + x2) / 2, (y1 + y2) / 2, Math.sqrt(r2) / 2};
+}
+
+private double[] computeCircumscribedCircle(int[] p1, int[] p2, int[] p3) {
+    int a2 = squaredDistance(p1), b2 = squaredDistance(p2), c2 = squaredDistance(p3);
+    {% raw %}
+    double sx = 0.5 * det(new double[][]{{a2, p1[1], 1}, {b2, p2[1], 1}, {c2, p3[1], 1}});
+    double sy = 0.5 * det(new double[][]{{p1[0], a2, 1}, {p2[0], b2, 1}, {p3[0], c2, 1}});
+    double a = det(new double[][]{{p1[0], p1[1], 1}, {p2[0], p2[1], 1}, {p3[0], p3[1], 1}});
+    {% endraw %}
+
+    double[] center = new double[]{sx / a, sy / a};
+    double r2 = squaredDistance(center, p1);
+    return new double[] {center[0], center[1], Math.sqrt(r2)};
+}
+
+private boolean isInside(double[] circle, int[] point) {
+    if (circle == null) {
+        return false;
+    }
+
+    return squaredDistance(circle, point) <= circle[2] * circle[2];
+}
+
+// Squared Euclidean distance
+private int squaredDistance(int[] p1, int[] p2) {
+    return (p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]);
+}
+
+private int squaredDistance(int[] p) {
+    return p[0] * p[0] + p[1] * p[1];
+}
+
+private double squaredDistance(double[] p1, int[] p2) {
+    return (p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]);
+}
+
+// Determinant of 3 x 3 matrix
+private double det(double[][] a) {
+    double x = (a[1][1] * a[2][2]) - (a[2][1] * a[1][2]);
+    double y = (a[1][0] * a[2][2]) - (a[2][0] * a[1][2]);
+    double z = (a[1][0] * a[2][1]) - (a[2][0] * a[1][1]);
+
+    return a[0][0] * x - a[0][1] * y + a[0][2] * z;
+}
+{% endhighlight %}
+
 [circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
 [convex-polygon]: https://leetcode.com/problems/convex-polygon/
 [escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/

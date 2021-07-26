@@ -88,6 +88,64 @@ public int[][] multiply(int[][] A, int[][] B) {
 }
 {% endhighlight %}
 
+[Non-negative Integers without Consecutive Ones][non-negative-integers-without-consecutive-ones]
+
+{% highlight java %}
+public int findIntegers(int n) {
+    // Fibonacci
+    // f[i]: the number of integers whose binary representation is not more than i bits
+    //   and do not contain cosecutive ones
+    int[] f = new int[32];
+    f[0] = 1;
+    f[1] = 2;
+
+    // e.g. i == 5
+    // [00000 - 11111] = [00000 - 01111] and [10000 - 10111]
+    //   (any integer >= 11000 is not allowed)
+    //   [00000 - 01111] => [0000 - 1111] = f[4]
+    //   [10000 - 10111] => [000 - 111] = f[3]
+    // therefore, f[5] == f[4] + f[3]
+    for (int i = 2; i < f.length; i++) {
+        f[i] = f[i - 1] + f[i - 2];
+    }
+
+    // 2 ^ 30 > 10 ^ 9
+    // scans from MSB to LSB
+    int i = 30, sum = 0, prev = 0;
+    while (i >= 0) {
+        if ((n & (1 << i)) != 0) {
+            // sets current bit to zero
+            // so the following range is [000...0, 011...1] = f[i]
+            sum += f[i];
+
+            // two consecutive ones appears
+            if (prev == 1) {
+                // removes n itself
+                sum--;
+                break;
+            }
+            prev = 1;
+        } else {
+            prev = 0;
+        }
+        i--;
+    }
+
+    // adds extra 1 if there are no consecutive ones in n
+    return sum + 1;
+}
+{% endhighlight %}
+
+```
+1011010
+
+1st bit: 0000000 - 0111111 -> f[6]
+3rd bit: 1000000 - 1001111 -> f[4]
+4th bit: 1010000 - 1010111 -> f[3]
+
+anything greater than 1010111 will not be allowed
+```
+
 # Median
 
 [Best Meeting Point][best-meeting-point]
@@ -382,6 +440,7 @@ private int drop(int n, int eggs) {
 [egg-drop-with-2-eggs-and-n-floors]: https://leetcode.com/problems/egg-drop-with-2-eggs-and-n-floors/
 [handshakes-that-dont-cross]: https://leetcode.com/problems/handshakes-that-dont-cross/
 [maximum-of-absolute-value-expression]: https://leetcode.com/problems/maximum-of-absolute-value-expression/
+[non-negative-integers-without-consecutive-ones]: https://leetcode.com/problems/non-negative-integers-without-consecutive-ones/
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
 [power-of-three]: https://leetcode.com/problems/power-of-three/
 [powx-n]: https://leetcode.com/problems/powx-n/

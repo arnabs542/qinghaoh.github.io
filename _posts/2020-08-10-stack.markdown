@@ -405,11 +405,9 @@ public String removeDuplicateLetters(String s) {
 [132 Pattern][132-pattern]
 
 {% highlight java %}
-private int MIN = (int)(-1e9);
-
 public boolean find132pattern(int[] nums) {
     Deque<Integer> st = new ArrayDeque<>();
-    int mid = MIN;
+    int mid = Integer.MIN_VALUE;
     for (int i = nums.length - 1; i >= 0; i--) {
         if (nums[i] < mid) {
             return true;

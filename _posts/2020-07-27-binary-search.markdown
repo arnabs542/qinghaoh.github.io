@@ -103,6 +103,7 @@ if (nums[mid] < target) {
 To understand the corner cases, test your code with these examples: `[0]`, `[0, 1]`, `[0, 1, 2]` and `[0, 1, 2, 3]`.
 
 # Variants
+
 [Find Minimum in Rotated Sorted Array][find-minimum-in-rotated-sorted-array]
 
 {% highlight java %}
@@ -180,6 +181,57 @@ private int findMinIndex(int[] nums) {
 {% endhighlight %}
 
 [Search in Rotated Sorted Array II][search-in-rotated-sorted-array-ii]
+
+## Local Monotocity
+
+[Find Peak Element][find-peak-element]
+
+{% highlight java %}
+public int findPeakElement(int[] nums) {
+    int low = 0, high = nums.length - 1;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (nums[mid] > nums[mid + 1]) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return low;
+}
+{% endhighlight %}
+
+[Find a Peak Element II][find-a-peak-element-ii]
+
+{% highlight java %}
+public int[] findPeakGrid(int[][] mat) {
+    // binary search on columns
+    int low = 0, high = mat[0].length - 1;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+
+        int row = findMaxRow(mat, mid);
+        if (mat[row][mid] > mat[row][mid + 1]) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    return new int[]{findMaxRow(mat, low), low};
+}
+
+// finds the max row in column mid
+private int findMaxRow(int[][] mat, int col) {
+    int row = 0;
+    for (int i = 0; i < mat.length; i++) {
+        if (mat[i][col] > mat[row][col]) {
+            row = i;
+        }
+    }
+    return row;
+}
+{% endhighlight %}
 
 # Generalization
 
@@ -743,6 +795,8 @@ if (insertionPoint < 0) {
 [find-k-closest-elements]: https://leetcode.com/problems/find-k-closest-elements/
 [find-minimum-in-rotated-sorted-array]: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
 [find-minimum-in-rotated-sorted-array-ii]: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/
+[find-peak-element]: https://leetcode.com/problems/find-peak-element/
+[find-a-peak-element-ii]: https://leetcode.com/problems/find-a-peak-element-ii/
 [first-bad-version]: https://leetcode.com/problems/first-bad-version/
 [fixed-point]: https://leetcode.com/problems/fixed-point/
 [h-index-ii]: https://leetcode.com/problems/h-index-ii/

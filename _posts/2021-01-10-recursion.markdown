@@ -11,7 +11,7 @@ public List<String> findStrobogrammatic(int n) {
     return findStrobogrammatic(n, n);
 }
 
-private List<String> findStrobogrammatic(int n, int root) {
+private List<String> findStrobogrammatic(int n, int initialN) {
     if (n == 0) {
         return new ArrayList<>(Arrays.asList(""));
     }
@@ -21,8 +21,8 @@ private List<String> findStrobogrammatic(int n, int root) {
     }
 
     List<String> list = new ArrayList<>();
-    for (String s : findStrobogrammatic(n - 2, root)) {
-        if (n != root) {
+    for (String s : findStrobogrammatic(n - 2, initialN)) {
+        if (n != initialN) {
             list.add("0" + s + "0");
         }
         list.add("1" + s + "1");
