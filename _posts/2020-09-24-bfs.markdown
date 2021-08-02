@@ -182,9 +182,12 @@ public int depthSumInverse(List<NestedInteger> nestedList) {
 private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 {% endraw %}
 public void wallsAndGates(int[][] rooms) {
+    int m = rooms.length, n = rooms[0].length;
     Queue<int[]> q = new LinkedList<>();
-    for (int i = 0; i < rooms.length; i++) {
-        for (int j = 0; j < rooms[i].length; j++) {
+
+    // enqueues all gates
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
             if (rooms[i][j] == 0) {
                 q.offer(new int[]{i, j});
             }
@@ -196,7 +199,8 @@ public void wallsAndGates(int[][] rooms) {
         int r = p[0], c = p[1];
         for (int[] d : DIRECTIONS) {
             int i = r + d[0], j = c + d[1];
-            if (i < 0 || i >= rooms.length || j < 0 || j >= rooms[i].length || rooms[i][j] != Integer.MAX_VALUE) {
+            // Integer.MAX_VALUE marks unvisited cells
+            if (i < 0 || i >= m || j < 0 || j >= n || rooms[i][j] != Integer.MAX_VALUE) {
                 continue;
             }
 
@@ -511,6 +515,10 @@ private void dfs(int r, int c) {
 }
 {% endhighlight %}
 
+# Shape Transformation
+
+[Sliding Puzzle][sliding-puzzle]
+
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
 [map-of-highest-peak]: https://leetcode.com/problems/map-of-highest-peak/
@@ -519,6 +527,7 @@ private void dfs(int r, int c) {
 [minimum-knight-moves]: https://leetcode.com/problems/minimum-knight-moves/
 [nested-list-weight-sum-ii]: https://leetcode.com/problems/nested-list-weight-sum-ii/
 [rotting-oranges]: https://leetcode.com/problems/rotting-oranges/
+[sliding-puzzle]: https://leetcode.com/problems/sliding-puzzle/
 [the-maze]: https://leetcode.com/problems/the-maze/
 [the-maze-ii]: https://leetcode.com/problems/the-maze-ii/
 [trapping-rain-water-ii]: https://leetcode.com/problems/trapping-rain-water-ii/

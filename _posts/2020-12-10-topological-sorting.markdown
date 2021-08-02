@@ -251,6 +251,16 @@ public List<Integer> findMinHeightTrees(int n, int[][] edges) {
         for (int leaf : leaves) {
             int neighbor = tree.get(leaf).iterator().next();
             tree.get(neighbor).remove(leaf);
+
+            // when the neighbor has 1 edge, there are two possibilities
+            // - after this for-loop, the neighbor will be the only remaining node.
+            //   that means the node is the only centroid.
+            //   adding it to the newLeaves list won't affect the result,
+            //   because the while-loop condition n > 2 will not be met.
+            //   the centroid is added to the newLeaves list even though the for-loop is not complete.
+            // - after this for-loop, more than 1 node will be left.
+            //   this occurs at any round of 2-centroid case, or any round but the last of 1-centroid case.
+            //   the node is added to the newLeaves list at the last iteration of the for-loop
             if (tree.get(neighbor).size() == 1) {
                 newLeaves.add(neighbor);
             }
@@ -262,6 +272,8 @@ public List<Integer> findMinHeightTrees(int n, int[][] edges) {
 {% endhighlight %}
 
 [Tree Diameter][tree-diameter]
+
+[Count Subtrees With Max Distance Between Cities][count-subtrees-with-max-distance-between-cities]
 
 # Uniqueness
 
@@ -327,6 +339,7 @@ Longest path in a DAG can be solved by topological sorting.
 
 Another solution is DFS + memorization
 
+[count-subtrees-with-max-distance-between-cities]: https://leetcode.com/problems/count-subtrees-with-max-distance-between-cities/
 [course-schedule-ii]: https://leetcode.com/problems/course-schedule-ii/
 [critical-connections-in-a-network]: https://leetcode.com/problems/critical-connections-in-a-network/
 [longest-increasing-path-in-a-matrix]: https://leetcode.com/problems/longest-increasing-path-in-a-matrix/

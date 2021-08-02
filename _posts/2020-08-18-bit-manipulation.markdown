@@ -13,7 +13,8 @@ n &= -n 		// clears all but lsb
 n &= n - 1		// zeros out lsb, Brian Kernighan's Algorithm
 n & (n - 1) == 0  	// power of 2
 
-i = (i - 1) & superset	// enumerate all subsets
+// enumerate all subsets
+for (int s = superset; s > 0; s = (s - 1) & superset)
 ```
 
 # Brian Kernighan's Algorithm

@@ -385,7 +385,7 @@ private int maxDiff(int[] c) {
 }
 {% endhighlight %}
 
-# Mnimax
+# Minimax
 
 [Egg Drop With 2 Eggs and N Floors][egg-drop-with-2-eggs-and-n-floors]
 
@@ -433,6 +433,33 @@ private int drop(int n, int eggs) {
 }
 {% endhighlight %}
 
+# Sequence
+
+[Reach a Number][reach-a-number]
+
+{% highlight java %}
+public int reachNumber(int target) {
+    // puts + and - signs on 1, 2, ..., k so that the sum == target
+    // symmetry
+    target = Math.abs(target);
+
+    int step = 0, sum = 0;
+    while (sum < target) {
+        step++;
+        sum += step;
+    }
+
+    // switching the sign of i will introduce a 2 * i delta
+    // so the delta must be even
+    while ((sum - target) % 2 != 0) {
+        step++;
+        sum += step;
+    }
+
+    return step;
+}
+{% endhighlight %}
+
 [4-keys-keyboard]: https://leetcode.com/problems/4-keys-keyboard/
 [best-meeting-point]: https://leetcode.com/problems/best-meeting-point/
 [check-if-number-is-a-sum-of-powers-of-three]: https://leetcode.com/problems/check-if-number-is-a-sum-of-powers-of-three/
@@ -444,5 +471,6 @@ private int drop(int n, int eggs) {
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
 [power-of-three]: https://leetcode.com/problems/power-of-three/
 [powx-n]: https://leetcode.com/problems/powx-n/
+[reach-a-number]: https://leetcode.com/problems/reach-a-number/
 [robot-bounded-in-circle]: https://leetcode.com/problems/robot-bounded-in-circle/
 [sparse-matrix-multiplication]: https://leetcode.com/problems/sparse-matrix-multiplication/

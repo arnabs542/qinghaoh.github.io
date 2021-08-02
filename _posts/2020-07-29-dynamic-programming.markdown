@@ -311,56 +311,6 @@ public int minCostII(int[][] costs) {
 }
 {% endhighlight %}
 
-[Dungeon Game][dungeon-game]
-
-{% highlight java %}
-public int calculateMinimumHP(int[][] dungeon) {
-    int m = dungeon.length, n = dungeon[0].length;
-
-    int[][] dp = new int[m][n];
-    dp[m - 1][n - 1] = Math.max(1 - dungeon[m - 1][n - 1], 1);
-
-    // last column
-    for (int i = m - 2; i >= 0; i--) {
-        dp[i][n - 1] = Math.max(dp[i + 1][n - 1] - dungeon[i][n - 1], 1);
-    }
-
-    // last row
-    for (int j = n - 2; j >= 0; j--) {
-        dp[m - 1][j] = Math.max(dp[m - 1][j + 1] - dungeon[m - 1][j], 1);
-    }
-
-    for (int i = m - 2; i >= 0; i--) {
-        for (int j = n - 2; j >= 0; j--) {
-            int down = Math.max(dp[i + 1][j] - dungeon[i][j], 1);
-            int right = Math.max(dp[i][j + 1] - dungeon[i][j], 1);
-            dp[i][j] = Math.min(right, down);
-        }
-    }
-
-    return health[0][0];
-}
-{% endhighlight %}
-
-[Triangle][triangle]
-
-{% highlight java %}
-public int minimumTotal(List<List<Integer>> triangle) {
-    int n = triangle.size();
-    // bottom level
-    Integer[] dp = triangle.get(n - 1).toArray(new Integer[0]);
-
-    // from bottom to top
-    for (int i = n - 2; i >= 0; i--) {
-        for (int j = 0; j <= i; j++) {
-            dp[j] = Math.min(dp[j], dp[j + 1]) + triangle.get(i).get(j);
-        }
-    }
-
-    return dp[0];
-}
-{% endhighlight %}
-
 [Longest String Chain][longest-string-chain]
 
 {% highlight java %}
@@ -381,7 +331,6 @@ public int minimumTotal(List<List<Integer>> triangle) {
 {% endhighlight %}
 
 [delete-operation-for-two-strings]: https://leetcode.com/problems/delete-operation-for-two-strings/
-[dungeon-game]: https://leetcode.com/problems/dungeon-game/
 [edit-distance]: https://leetcode.com/problems/edit-distance/
 [greatest-sum-divisible-by-three]: https://leetcode.com/problems/greatest-sum-divisible-by-three/
 [interleaving-string]: https://leetcode.com/problems/interleaving-string/
@@ -391,5 +340,4 @@ public int minimumTotal(List<List<Integer>> triangle) {
 [min-cost-climbing-stairs]: https://leetcode.com/problems/min-cost-climbing-stairs/
 [minimum-ascii-delete-sum-for-two-strings]: https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/
 [paint-house-ii]: https://leetcode.com/problems/paint-house-ii/
-[triangle]: https://leetcode.com/problems/triangle/
 [uncrossed-lines]: https://leetcode.com/problems/uncrossed-lines/

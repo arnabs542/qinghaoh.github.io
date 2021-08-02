@@ -123,6 +123,32 @@ FROM Employee AS a JOIN Employee AS b
 
 # IN
 
+[Highest Grade For Each Student][highest-grade-for-each-student]
+
+{% highlight sql %}
+SELECT
+    student_id,
+    MIN(course_id) AS course_id,
+    grade
+FROM
+    Enrollments
+WHERE
+    (student_id, grade) IN
+    (SELECT
+        student_id,
+        MAX(grade)
+    FROM
+        Enrollments
+    GROUP BY
+        student_id)
+GROUP BY
+    student_id,
+    grade
+ORDER BY
+    student_id
+;
+{% endhighlight %}
+
 [Customers Who Bought Products A and B but Not C][customers-who-bought-products-a-and-b-but-not-c]
 
 {% highlight sql %}
@@ -184,7 +210,7 @@ WHERE
 GROUP BY
     business_id
 HAVING
-    COUNT(DISTINCT(t.event_type)) > 1
+    COUNT(DISTINCT t.event_type) > 1
 ;
 {% endhighlight %}
 
@@ -1060,7 +1086,7 @@ JOIN
 GROUP BY
     t1.account_id,
     t1.month
-    HAVING COUNT(t2.month) >= 2
+    HAVING COUNT(DISTINCT t2.month) = 2
 ORDER BY
     t1.account_id
 ;
@@ -1474,7 +1500,7 @@ GROUP BY
 {% endhighlight %}
 
 {% highlight sql %}
-COUNT(DISTINCT(*))
+COUNT(DISTINCT *)
 {% endhighlight %}
 
 Specifies that `COUNT` returns the number of unique ***nonnull*** values.
@@ -1742,6 +1768,7 @@ WHERE
 [get-the-second-most-recent-activity]: https://leetcode.com/problems/get-the-second-most-recent-activity/
 [group-employees-of-the-same-salary]: https://leetcode.com/problems/group-employees-of-the-same-salary/
 [group-sold-products-by-the-date]: https://leetcode.com/problems/group-sold-products-by-the-date/
+[highest-grade-for-each-student]: https://leetcode.com/problems/highest-grade-for-each-student/
 [hopper-company-queries-iii]: https://leetcode.com/problems/hopper-company-queries-iii/
 [immediate-food-delivery-ii]: https://leetcode.com/problems/immediate-food-delivery-ii/
 [investments-in-2016]: https://leetcode.com/problems/investments-in-2016/

@@ -351,6 +351,62 @@ private int distance(int[] p1, int[] p2) {
 
 [Floyd-Warshall algorithm](https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm) is an algorithm for finding shortest paths in a directed weighted graph with positive or negative edge weights (but with no negative cycles). A single execution of the algorithm will find the lengths (summed weights) of shortest paths between ***all*** pairs of vertices.
 
+[Count Subtrees With Max Distance Between Cities][count-subtrees-with-max-distance-between-cities]
+
+{% highlight java %}
+public int[] countSubgraphsForEachDiameter(int n, int[][] edges) {
+    // Floyd-Warshall
+    int[][] tree = new int[n][n];
+    for (int[] t : tree) {
+        Arrays.fill(t, n);
+    }
+
+    for (int[] e : edges) {
+        int i = e[0] - 1, j = e[1] - 1;
+        tree[i][j] = tree[j][i] = 1;
+    }
+
+    for (int k = 0; k < n; k++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                tree[i][j] = Math.min(tree[i][j], tree[i][k] + tree[k][j]);
+            }
+        }
+    }
+
+    int[] result = new int[n - 1];
+    // bit mask
+    for (int state = 1; state < (1 << n); state++) {
+        int k = Integer.bitCount(state);
+        // number of edges in state
+        int e = 0;
+        // shortest path of all pairs in state
+        int d = 0;
+        for (int i = 0; i < n; i++) {
+            if (isBitSet(state, i)) {
+                for (int j = i + 1; j < n; j++) {
+                    if (isBitSet(state, j)) {
+                        e += tree[i][j] == 1 ? 1 : 0;
+                        d = Math.max(d, tree[i][j]);
+                    }
+                }
+            }
+        }
+
+        // e == k - 1 means state is a subtree
+        if (e == k - 1 && d > 0) {
+            result[d - 1]++;
+        }
+    }
+
+    return result;
+}
+
+private boolean isBitSet(int i, int b) {
+    return (i & (1 << b)) != 0;
+}
+{% endhighlight %}
+
 [Course Schedule IV][course-schedule-iv]
 
 {% highlight java %}
@@ -377,7 +433,7 @@ public List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, 
 }
 {% endhighlight %}
 
-# Expansion
+# Paint and Expansion
 
 [Shortest Bridge][shortest-bridge]
 
@@ -392,7 +448,7 @@ public int shortestBridge(int[][] grid) {
     for (int i = 0; i < n; i++) {
         int j = 0;
         while (j < n) {
-            if (paint(grid, i, j)) {
+            if (paint(grid, i, j, 2)) {
                 break;
             }
             j++;
@@ -402,42 +458,42 @@ public int shortestBridge(int[][] grid) {
         }
     }
 
-    int label = 2;
+    int color = 2;
     while (true) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                if (grid[i][j] == label) {
+                if (grid[i][j] == color) {
                     for (int[] d : DIRECTIONS) {
-                        if (expand(grid, i + d[0], j + d[1], label)) {
-                            return label - 2;
+                        if (expand(grid, i + d[0], j + d[1], color)) {
+                            return color - 2;
                         }
                     }
                 }
             }
         }
-        label++;
+        color++;
     }
 }
 
-private boolean paint(int[][] grid, int i, int j) {
+private boolean paint(int[][] grid, int i, int j, int color) {
     if (i < 0 || j < 0 || i == grid.length || j == grid.length || grid[i][j] != 1) {
         return false;
     }
 
-    grid[i][j] = 2;
+    grid[i][j] = color;
     for (int[] d : DIRECTIONS) {
-        paint(grid, i + d[0], j + d[1]);
+        paint(grid, i + d[0], j + d[1], color);
     }
     return true;
 }
 
-private boolean expand(int[][] grid, int i, int j, int label) {
+private boolean expand(int[][] grid, int i, int j, int color) {
     if (i < 0 || j < 0 || i == grid.length || j == grid.length) {
         return false;
     }
 
     if (grid[i][j] == 0) {
-        grid[i][j] = label + 1;
+        grid[i][j] = color + 1;
     }
 
     // returns true if it reaches the other island
@@ -445,9 +501,82 @@ private boolean expand(int[][] grid, int i, int j, int label) {
 }
 {% endhighlight %}
 
+[Making A Large Island][making-a-large-island]
+
+{% highlight java %}
+{% raw %}
+private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+{% endraw %}
+public int largestIsland(int[][] grid) {
+    // color : island size
+    Map<Integer, Integer> map = new HashMap<>();
+    // images the grid is surrounded by water (color 0)
+    map.put(0, 0);
+
+    // paints each island with a unique color
+    int n = grid.length;
+    int color = 2;  // color starts at 2
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (grid[i][j] == 1) {
+                map.put(color, paint(grid, i, j, color));
+                color++;
+            }
+        }
+    }
+
+    // initially, if all cells are 1, they will be painted to 2
+    // and the size of island 2 will be the final result,
+    // since on operation can be performed.
+    // otherwise, we initialize max to 0
+    int max = map.getOrDefault(2, 0);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            // operation
+            if (grid[i][j] == 0) {
+                // set of islands (including water) surrounding the current 0
+                Set<Integer> set = new HashSet<>();
+                for (int[] d : DIRECTIONS) {
+                    int r = i + d[0], c = j + d[1];
+                    if (r < 0 || r == n || c < 0 || c == n) {
+                        set.add(0);
+                    } else {
+                        set.add(grid[r][c]);
+                    }
+                }
+
+                int size = 1;
+                for (int island : set) {
+                    size += map.get(island);
+                }
+                max = Math.max(max, size);
+            }
+        }
+    }
+    return max;
+}
+
+private int paint(int[][] grid, int i, int j, int color) {
+    // grid[i][j] != 1 means it's either water or another island
+    if (i < 0 || j < 0 || i == grid.length || j == grid.length || grid[i][j] != 1) {
+        return 0;
+    }
+
+    grid[i][j] = color;
+
+    int size = 1;
+    for (int[] d : DIRECTIONS) {
+        size += paint(grid, i + d[0], j + d[1], color);
+    }
+    return size;
+}
+{% endhighlight %}
+
 [campus-bikes-ii]: https://leetcode.com/problems/campus-bikes-ii/
+[count-subtrees-with-max-distance-between-cities]: https://leetcode.com/problems/count-subtrees-with-max-distance-between-cities/
 [course-schedule-iv]: https://leetcode.com/problems/course-schedule-iv/
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
+[making-a-large-island]: https://leetcode.com/problems/making-a-large-island/
 [number-of-restricted-paths-from-first-to-last-node]: https://leetcode.com/problems/number-of-restricted-paths-from-first-to-last-node/
 [path-with-maximum-minimum-value]: https://leetcode.com/problems/path-with-maximum-minimum-value/
 [path-with-maximum-probability]: https://leetcode.com/problems/path-with-maximum-probability/

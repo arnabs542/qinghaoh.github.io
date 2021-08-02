@@ -361,6 +361,28 @@ private double det(double[][] a) {
 }
 {% endhighlight %}
 
+# Rectangle
+
+[Strange Printer II][strange-printer-ii]
+
+Find the indexes of four edges.
+
+{% highlight java %}
+// {up, left, down, right}
+Map<Integer, int[]> edges = new HashMap<>();
+
+for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+        edges.putIfAbsent(targetGrid[i][j], new int[]{m, n, -1, -1});
+        int[] p = edges.get(targetGrid[i][j]);
+        p[0] = Math.min(p[0], i);
+        p[1] = Math.min(p[1], j);
+        p[2] = Math.max(p[2], i);
+        p[3] = Math.max(p[3], j);
+    }
+}
+{% endhighlight %}
+
 [circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
 [convex-polygon]: https://leetcode.com/problems/convex-polygon/
 [escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/
@@ -368,3 +390,4 @@ private double det(double[][] a) {
 [minimum-area-rectangle]: https://leetcode.com/problems/minimum-area-rectangle/
 [minimum-area-rectangle-ii]: https://leetcode.com/problems/minimum-area-rectangle-ii/
 [number-of-distinct-islands-ii]: https://leetcode.com/problems/number-of-distinct-islands-ii/
+[strange-printer-ii]: https://leetcode.com/problems/strange-printer-ii/

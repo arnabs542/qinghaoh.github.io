@@ -3,6 +3,173 @@ layout: post
 title:  "Dynamic Programming IV"
 tag: dynamic programming
 ---
+[Minimum Path Sum][minimum-path-sum]
+
+{% highlight java %}
+public int minPathSum(int[][] grid) {
+    int m = grid.length, n = grid[0].length;
+    int[][] dp = new int[m][n];
+
+    dp[m - 1][n - 1] = grid[m - 1][n - 1];
+
+    for (int j = n - 2; j >= 0; j--) {
+        dp[m - 1][j] = dp[m - 1][j + 1] + grid[m - 1][j];
+    }
+
+    for (int i = m - 2; i >= 0; i--) {
+        dp[i][n - 1] = dp[i + 1][n - 1] + grid[i][n - 1];
+    }
+
+    for (int i = m - 2; i >= 0; i--) {
+        for (int j = n - 2; j >= 0; j--) {
+            dp[i][j] = Math.min(dp[i + 1][j], dp[i][j + 1]) + grid[i][j];
+        }
+    }
+
+    return dp[0][0];
+}
+{% endhighlight %}
+
+Reduce to 1D:
+
+{% highlight java %}
+int[] dp = new int[n];
+
+dp[n - 1] = grid[m - 1][n - 1];
+
+// last row
+for (int j = n - 2; j >= 0; j--) {
+    dp[j] = dp[j + 1] + grid[m - 1][j];
+}
+
+for (int i = m - 2; i >= 0; i--) {
+    // last column
+    dp[n - 1] += grid[i][n - 1];
+
+    for (int j = n - 2; j >= 0; j--) {
+        dp[j] = Math.min(dp[j], dp[j + 1]) + grid[i][j];
+    }
+}
+
+return dp[0];
+{% endhighlight %}
+
+[Maximum Number of Points with Cost][maximum-number-of-points-with-cost]
+
+The most straight forward formula:
+
+{% highlight java %}
+for (int i = 1; i < m; i++) {
+    long[] next = new long[n];
+    for (int j = 0; j < n; j++) {
+        next[j] = points[i][j];
+        long d = dp[j];
+
+        // dp[i - 1][k] +/- k is computed repeatedly
+        for (int k = 0; k < n; k++) {
+            d = Math.max(d, dp[k] - Math.abs(j - k));
+        }
+        next[j] += d;
+    }
+    dp = next;
+}
+{% endhighlight %}
+
+To eliminate the duplicate computations:
+
+{% highlight java %}
+public long maxPoints(int[][] points) {
+    int m = points.length, n = points[0].length;
+    long[] dp = new long[n];
+
+    for (int j = 0; j < n; j++) {
+        dp[j] = points[0][j];
+    }
+
+    for (int i = 1; i < m; i++) {
+        // finds the max of dp[k] +/- k
+        long[] left = new long[n], right = new long[n];
+
+        // assumes the max is on the left side of current
+        // dp[j] = max(dp[k] + k) + points[i][j] - j for all 0 <= k <= j
+        left[0] = dp[0];
+        for (int j = 1; j < n; j++) {
+            left[j] = Math.max(left[j - 1], dp[j] + j);
+        }
+
+        // assumes the max is on the right side of current
+        // dp[j] = max(dp[k] - k) + points[i][j] + j for all j <= k < n
+        right[n - 1] = dp[n - 1] - n + 1;
+        for (int j = n - 2; j >= 0; j--) {
+            right[j] = Math.max(right[j + 1], dp[j] - j);
+        }
+
+        long[] next = new long[n];
+        for (int j = 0; j < n; j++) {
+            next[j] = Math.max(left[j] + points[i][j] - j, right[j] + points[i][j] + j);
+        }
+
+        dp = next;
+    }
+
+    long max = 0;
+    for (long i : dp) {
+        max = Math.max(max, i);
+    }
+    return max;
+}
+{% endhighlight %}
+
+[Dungeon Game][dungeon-game]
+
+{% highlight java %}
+public int calculateMinimumHP(int[][] dungeon) {
+    int m = dungeon.length, n = dungeon[0].length;
+
+    int[][] dp = new int[m][n];
+    dp[m - 1][n - 1] = Math.max(1 - dungeon[m - 1][n - 1], 1);
+
+    // last column
+    for (int i = m - 2; i >= 0; i--) {
+        dp[i][n - 1] = Math.max(dp[i + 1][n - 1] - dungeon[i][n - 1], 1);
+    }
+
+    // last row
+    for (int j = n - 2; j >= 0; j--) {
+        dp[m - 1][j] = Math.max(dp[m - 1][j + 1] - dungeon[m - 1][j], 1);
+    }
+
+    for (int i = m - 2; i >= 0; i--) {
+        for (int j = n - 2; j >= 0; j--) {
+            int down = Math.max(dp[i + 1][j] - dungeon[i][j], 1);
+            int right = Math.max(dp[i][j + 1] - dungeon[i][j], 1);
+            dp[i][j] = Math.min(right, down);
+        }
+    }
+
+    return health[0][0];
+}
+{% endhighlight %}
+
+[Triangle][triangle]
+
+{% highlight java %}
+public int minimumTotal(List<List<Integer>> triangle) {
+    int n = triangle.size();
+    // bottom level
+    Integer[] dp = triangle.get(n - 1).toArray(new Integer[0]);
+
+    // from bottom to top
+    for (int i = n - 2; i >= 0; i--) {
+        for (int j = 0; j <= i; j++) {
+            dp[j] = Math.min(dp[j], dp[j + 1]) + triangle.get(i).get(j);
+        }
+    }
+
+    return dp[0];
+}
+{% endhighlight %}
+
 [Maximal Square][maximal-square]
 
 {% highlight java %}
@@ -246,8 +413,12 @@ public int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
 {% endhighlight %}
 
 [bomb-enemy]: https://leetcode.com/problems/bomb-enemy/
+[dungeon-game]: https://leetcode.com/problems/dungeon-game/
 [largest-plus-sign]: https://leetcode.com/problems/largest-plus-sign/
 [longest-line-of-consecutive-one-in-matrix]: https://leetcode.com/problems/longest-line-of-consecutive-one-in-matrix/
 [maximal-rectangle]: https://leetcode.com/problems/maximal-rectangle/
 [maximal-square]: https://leetcode.com/problems/maximal-square/
+[maximum-number-of-points-with-cost]: https://leetcode.com/problems/maximum-number-of-points-with-cost/
+[minimum-path-sum]: https://leetcode.com/problems/minimum-path-sum/
 [out-of-boundary-paths]: https://leetcode.com/problems/out-of-boundary-paths/
+[triangle]: https://leetcode.com/problems/triangle/

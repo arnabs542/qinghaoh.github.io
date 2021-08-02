@@ -239,6 +239,99 @@ public int numDecodings(String s) {
 }
 {% endhighlight %}
 
+[Number of Ways to Paint N × 3 Grid][number-of-ways-to-paint-n-3-grid]
+
+{% highlight java %}
+public int numDecodings(String s) {
+    if (s.charAt(0) == '0') {
+        return 0;
+    }
+
+    int oneBack = 1, twoBack = 1;
+    for (int i = 1; i < s.length(); i++) {
+        int curr = 0;
+        if (s.charAt(i) != '0') {
+            curr = oneBack;
+        }
+
+        int twoDigits = Integer.parseInt(s.substring(i - 1, i + 1));
+        if (twoDigits >= 10 && twoDigits <= 26) {
+            curr += twoBack;
+        }
+
+        twoBack = oneBack;
+        oneBack = curr;
+    }
+    return oneBack;
+}
+{% endhighlight %}
+
+[Painting a Grid With Three Different Colors][painting-a-grid-with-three-different-colors]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+private int m, n;
+// memo[j][mask]: the number of ways in the j-th column,
+//   while the mask is for the m rows in the previous column.
+//   It only stores result when r == 0
+private int[][] memo;
+
+public int colorTheGrid(int m, int n) {
+    this.m = m;
+    this.n = n;
+    // for each row, the color is stored in 2 bits
+    this.memo = new int[n][1 << (m * 2)];
+
+    return dfs(0, 0, 0, 0);
+}
+
+
+private int dfs(int r, int c, int prev, int curr) {
+    // found a valid way
+    if (c == n) {
+        return 1;
+    }
+
+    if (r == 0 && memo[c][prev] > 0) {
+        return memo[c][prev];
+    }
+
+    // completes the current column
+    // proceeds to the next column
+    if (r == m) {
+        return dfs(0, c + 1, curr, 0);
+    }
+
+    int count = 0;
+    // color mask:
+    // - r: 1
+    // - g: 2
+    // - b: 3
+    for (int color = 1; color <= 3; color++) {
+        // - same row in the previous column
+        // - same column in the previous row (or the first row)
+        if (getColor(prev, r) != color && (r == 0 || getColor(curr, r - 1) != color)) {
+            // current row picks this color
+            // then dfs the next row in the same column
+            count = (count + dfs(r + 1, c, prev, setColor(curr, r, color))) % MOD;
+        }
+    }
+
+    if (r == 0) {
+        memo[c][prev] = count;
+    }
+    return count;
+}
+
+private int getColor(int mask, int pos) {
+    return (mask >> (pos * 2)) & 0b11;
+}
+
+private int setColor(int mask, int pos, int color) {
+    return mask | (color << (pos * 2));
+}
+{% endhighlight %}
+
 [decode-ways]: https://leetcode.com/problems/decode-ways/
 [delete-and-earn]: https://leetcode.com/problems/delete-and-earn/
 [flip-string-to-monotone-increasing]: https://leetcode.com/problems/flip-string-to-monotone-increasing/
@@ -246,5 +339,7 @@ public int numDecodings(String s) {
 [house-robber-ii]: https://leetcode.com/problems/house-robber-ii/
 [minimum-deletions-to-make-string-balanced]: https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
+[number-of-ways-to-paint-n-3-grid]: https://leetcode.com/problems/number-of-ways-to-paint-n-3-grid/
 [paint-fence]: https://leetcode.com/problems/paint-fence/
+[painting-a-grid-with-three-different-colors]: https://leetcode.com/problems/painting-a-grid-with-three-different-colors/
 [wiggle-subsequence]: https://leetcode.com/problems/wiggle-subsequence/

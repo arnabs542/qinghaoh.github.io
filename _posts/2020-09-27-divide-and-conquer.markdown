@@ -129,26 +129,26 @@ public String longestNiceSubstring(String s) {
 [Beautiful Array][beautiful-array]
 
 {% highlight java %}
-public int[] beautifulArray(int N) {
+public int[] beautifulArray(int n) {
     List<Integer> list = new ArrayList<>();
     list.add(1);
 
     // properties:
     // if A is a beautiful array, then
-    //  * A + c is a beautiful array
-    //  * c * A is a beautiful array
-    //  * deletion: A is still a beautiful array after deleting some elements in it
-    while (list.size() < N) {
+    //  - A + c is a beautiful array
+    //  - c * A is a beautiful array
+    //  - deletion: A is still a beautiful array after deleting some elements in it
+    while (list.size() < n) {
         List<Integer> tmp = new ArrayList<>();
         // divide and conquer
         // divides the numbers into two parts: odd + even, because odd + even = odd != 2 * x
         for (int i : list) {
-            if (i * 2 - 1 <= N) {
+            if (i * 2 - 1 <= n) {
                 tmp.add(i * 2 - 1);
             }
         }
         for (int i : list) {
-            if (i * 2 <= N) {
+            if (i * 2 <= n) {
                 tmp.add(i * 2);
             }
         }
@@ -159,12 +159,13 @@ public int[] beautifulArray(int N) {
 {% endhighlight %}
 
 ```
-N = 10
+n = 10
 
 [1]
 [1,2]
 [1,3,2,4]
 [1,5,3,7,2,6,4,8]
+[1,9,5,3,7,2,10,6,4,8]
 ```
 
 It's easy to come up with a recursive version.

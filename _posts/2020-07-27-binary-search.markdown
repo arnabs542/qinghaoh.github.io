@@ -672,6 +672,39 @@ private long f(int x, int n) {
 }
 {% endhighlight %}
 
+[Maximum Number of Removable Characters][maximum-number-of-removable-characters]
+
+{% highlight java %}
+public int maximumRemovals(String s, String p, int[] removable) {
+    int low = 0, high = removable.length;
+    while (low < high) {
+        int mid = low + (high - low + 1) / 2;
+        if (condition(s, p, removable, mid)) {
+            low = mid;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return low;
+}
+
+private boolean condition(String s, String p, int[] removable, int k) {
+    Set<Integer> set = new HashSet<>();
+    for (int i = 0; i < k; i++) {
+        set.add(removable[i]);
+    }
+
+    int i = 0, j = 0;
+    while (i < s.length() && j < p.length()) {
+        if (!set.contains(i) && s.charAt(i) == p.charAt(j)) {
+            j++;
+        }
+        i++;
+    }
+    return j == p.length();
+}
+{% endhighlight %}
+
 [Magnetic Force Between Two Balls][magnetic-force-between-two-balls]
 
 {% highlight java %}
@@ -772,6 +805,74 @@ public int maxWidthRamp(int[] A) {
 }
 {% endhighlight %}
 
+# Fraction
+
+[Maximum Average Subarray II][maximum-average-subarray-ii]
+
+{% highlight java %}
+private static final double MAX_ERROR = 1e-5;
+
+public double findMaxAverage(int[] nums, int k) {
+    int n = nums.length;
+    double min = nums[0], max = nums[0];
+    for (int num : nums) {
+        if (num < min) {
+            min = num;
+        }
+        if (num > max) {
+            max = num;
+        }
+    }
+
+    // binary search the max avg between min and max
+    while (min + MAX_ERROR < max) {
+        double mid = min + (max - min) / 2.0;
+        if (hasAvgAbove(nums, k, mid)) {
+            min = mid;
+        } else {
+            max = mid;
+        }
+    }
+    return min;
+}
+
+// Checks if there exists a subarray of nums whose length >= k
+// and its average >= target
+private boolean hasAvgAbove(int[] nums, int k, double target) {
+    // avg(nums[i...j])
+    // => (nums[i] + nums[i + 1] + ... + nums[j]) / (j - i + 1) >= target
+    // => nums[i] + nums[i + 1] + ... + nums[j] >= target * (j - i + 1)
+    // => (nums[i] - target) + (nums[i + 1] - target) + ... + (nums[j] - target) >= 0
+    //
+    // sum is monotonically decreasing (in terms of target)
+    double sum = 0, outOfWindowSum = 0;
+    for (int i = 0; i < k; i++) {
+        sum += nums[i] - target;
+    }
+
+    // sliding window
+    int i = k;
+    while (i < nums.length) {
+        if (sum >= 0) {
+            return true;
+        }
+
+        sum += nums[i] - target;
+        outOfWindowSum += nums[i - k] - target;
+
+        // if out-of-windows sum is negative, subtract it
+        if (outOfWindowSum < 0) {
+            sum -= outOfWindowSum;
+            outOfWindowSum = 0;
+        }
+
+        i++;
+    }
+
+    return sum >= 0;
+}
+{% endhighlight %}
+
 # Java
 ## Arrays
 [public static \<T\> int binarySearch(T\[\] a, int fromIndex, int toIndex, T key, Comparator\<? super T\> c)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#binarySearch(T%5B%5D,int,int,T,java.util.Comparator))
@@ -805,7 +906,9 @@ if (insertionPoint < 0) {
 [kth-smallest-element-in-a-sorted-matrix]: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
 [k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
 [magnetic-force-between-two-balls]: https://leetcode.com/problems/magnetic-force-between-two-balls/
+[maximum-average-subarray-ii]: https://leetcode.com/problems/maximum-average-subarray-ii/
 [maximum-font-to-fit-a-sentence-in-a-screen]: https://leetcode.com/problems/maximum-font-to-fit-a-sentence-in-a-screen/
+[maximum-number-of-removable-characters]: https://leetcode.com/problems/maximum-number-of-removable-characters/
 [maximum-value-at-a-given-index-in-a-bounded-array]: https://leetcode.com/problems/maximum-value-at-a-given-index-in-a-bounded-array/
 [maximum-width-ramp]: https://leetcode.com/problems/maximum-width-ramp/
 [minimum-number-of-days-to-make-m-bouquets]: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/

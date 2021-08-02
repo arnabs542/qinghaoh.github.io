@@ -13,10 +13,13 @@ Use StringBuilder as a stack.
 public String removeKdigits(String num, int k) {
     StringBuilder sb = new StringBuilder();
     for (char c : num.toCharArray()) {
-        while (sb.length() > 0 && sb.charAt(sb.length() - 1) > c && k > 0) {
+        // monotonically increasing stack
+        while (sb.length() > 0 && c < sb.charAt(sb.length() - 1) && k > 0) {
             sb.deleteCharAt(sb.length() - 1);
             k--;
         }
+
+        // if c == '0', all elements in the stack are '0'
         if (sb.length() == 0 && c == '0') {
             continue;
         }
@@ -49,6 +52,95 @@ public int[] mostCompetitive(int[] nums, int k) {
         }   
     }
     return stack;
+}
+{% endhighlight %}
+
+[Create Maximum Number][create-maximum-number]
+
+{% highlight java %}
+public int[] maxNumber(int[] nums1, int[] nums2, int k) {
+    int n1 = nums1.length, n2 = nums2.length;
+    int[] result = new int[k];
+    // picks i digits from nums1
+    // picks (k - i) digits from nums2
+    // 0 <= i <= k
+    // 0 <= i <= n1
+    // 0 <= k - i <= n2 => i >= k - n2
+    for (int i = Math.max(0, k - n2); i <= Math.min(k, n1); i++) {
+        int[] candidate = merge(maxArray(nums1, i), maxArray(nums2, k - i), k);
+        if (isGreaterThanOrEqualTo(candidate, 0, result, 0)) {
+            result = candidate;
+        }
+    }
+    return result;
+}
+
+private int[] merge(int[] nums1, int[] nums2, int k) {
+    int[] result = new int[k];
+    int i = 0, j = 0, index = 0;
+    while (index < k) {
+        result[index++] = isGreaterThanOrEqualTo(nums1, i, nums2, j) ? nums1[i++] : nums2[j++];
+    }
+    return result;
+}
+
+// Check if nums1[i:] >= nums2[j:]
+private boolean isGreaterThanOrEqualTo(int[] nums1, int i, int[] nums2, int j) {
+    int n1 = nums1.length, n2 = nums2.length;
+    while (i < n1 && j < n2 && nums1[i] == nums2[j]) {
+        i++;
+        j++;
+    }
+    return j == n2 || (i < n1 && nums1[i] >= nums2[j]);
+}
+
+/**
+ * Creates the maximum number of length k from digits of the array.
+ * @param nums number represented as an array
+ * @param k length of the result number
+ * @return the maximum number represented as an array
+ */
+private int[] maxArray(int[] nums, int k) {
+    int n = nums.length;
+    Deque<Integer> st = new ArrayDeque<Integer>();
+    for (int i = 0; i < n; i++) {
+        // monotonically decreasing stack
+        // st.size + n - i > k means if we push all the remaining digits to the stack
+        // the stack size will be greater than k
+        // so we need to pop the stack to make room
+        while (st.size() + n - i > k && !st.isEmpty() && nums[i] > st.peek()) {
+            st.pop();
+        }
+        if (st.size() < k) {
+            st.push(nums[i]);
+        }
+    }
+
+    int[] result = new int[k];
+    for (int i = k - 1; i >= 0; i--) {
+        result[i] = st.pop();
+    }
+    return result;
+}
+{% endhighlight %}
+
+Use array as a stack:
+
+{% highlight java %}
+private int[] maxArray(int[] nums, int k) {
+    int n = nums.length;
+    // this array is used as a stack, too
+    int[] result = new int[k];
+    for (int i = 0, j = 0; i < n; i++) {
+        while (n - i + j > k && j > 0 && nums[i] > result[j - 1]) {
+            j--;
+        }
+
+        if (j < k) {
+            result[j++] = nums[i];
+        }
+    }
+    return result;
 }
 {% endhighlight %}
 
@@ -659,6 +751,7 @@ public String parseTernary(String expression) {
 
 [132-pattern]: https://leetcode.com/problems/132-pattern/
 [count-submatrices-with-all-ones]: https://leetcode.com/problems/count-submatrices-with-all-ones/
+[create-maximum-number]: https://leetcode.com/problems/create-maximum-number/
 [final-prices-with-a-special-discount-in-a-shop]: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/
 [find-the-most-competitive-subsequence]: https://leetcode.com/problems/find-the-most-competitive-subsequence/
 [flatten-nested-list-iterator]: https://leetcode.com/problems/flatten-nested-list-iterator/

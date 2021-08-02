@@ -122,6 +122,58 @@ class TrieNode {
 }
 {% endhighlight %}
 
+# Prefix Sum
+
+[Map Sum Pairs][map-sum-pairs]
+
+{% highlight java %}
+// key : val
+private Map<String, Integer> map = new HashMap<>();
+private TrieNode root = new TrieNode();
+
+/** Initialize your data structure here. */
+public MapSum() {
+
+}
+
+public void insert(String key, int val) {
+    int delta = val - map.getOrDefault(key, 0);
+    map.put(key, val);
+
+    TrieNode node = root;
+    node.sum += delta;
+    for (char c: key.toCharArray()) {
+        node.children.putIfAbsent(c, new TrieNode());
+        node = node.children.get(c);
+        node.sum += delta;
+    }
+}
+
+public int sum(String prefix) {
+    TrieNode node = root;
+    for (char c: prefix.toCharArray()) {
+        node = node.children.get(c);
+        if (node == null) {
+            return 0;
+        }
+    }
+    return node.sum;
+}
+
+class TrieNode {
+    Map<Character, TrieNode> children;
+    // sum of all the pairs' value whose key starts with the prefix
+    // where prefix is from root to this node
+    int sum;
+
+    TrieNode() {
+        children = new HashMap();
+        sum = 0;
+    }
+}
+{% endhighlight %}
+
 [implement-trie-ii-prefix-tree]: https://leetcode.com/problems/implement-trie-ii-prefix-tree/
 [index-pairs-of-a-string]: https://leetcode.com/problems/index-pairs-of-a-string/
+[map-sum-pairs]: https://leetcode.com/problems/map-sum-pairs/
 [prefix-and-suffix-search]: https://leetcode.com/problems/prefix-and-suffix-search/
