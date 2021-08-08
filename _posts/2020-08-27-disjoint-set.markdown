@@ -105,6 +105,163 @@ private double query(String s1, String s2) {
 }
 {% endhighlight %}
 
+# Path Compression
+
+[Checking Existence of Edge Length Limited Paths][checking-existence-of-edge-length-limited-paths]
+
+Offline queries:
+
+{% highlight java %}
+private int[] parents;
+
+public boolean[] distanceLimitedPathsExist(int n, int[][] edgeList, int[][] queries) {
+    int m = queries.length;
+    Integer[] index = new Integer[m];
+    for (int i = 0; i < m; i++) {
+        index[i] = i;
+    }
+
+    // sorts queries index by limit
+    Arrays.sort(index, Comparator.comparingInt(i -> queries[i][2]));
+
+    // sorts edgeList by distance
+    Arrays.sort(edgeList, Comparator.comparingInt(e -> e[2]));
+
+    // union-find
+    this.parents = new int[n];
+    Arrays.fill(parents, -1);
+
+    boolean[] answer = new boolean[m];
+    int i = 0, j = 0;
+    while (j < m) {
+        int[] q = queries[index[j]];
+        // unions all nodes whose edge distance < q[2]
+        // when q is updated, the existing disjoint sets remain the same
+        // we just need to add new edges to the proper set
+        while (i < edgeList.length && edgeList[i][2] < q[2]) {
+            union(edgeList[i][0], edgeList[i][1]);
+            i++;
+        }
+
+        // true if q nodes are in the same set
+        if (find(q[0]) == find(q[1])) {
+            answer[index[j]] = true;
+        }
+
+        j++;
+    }
+    return answer;
+}
+
+private int find(int u) {
+    // path compression
+    int p = parents[u];
+    if (p < 0) {
+        return u;
+    }
+    return parents[u] = find(p);
+}
+
+private void union(int u, int v) {
+    int pu = find(u), pv = find(v);
+    if (pu != pv) {
+        parents[pu] = pv;
+    }
+}
+{% endhighlight %}
+
+[Checking Existence of Edge Length Limited Paths II][checking-existence-of-edge-length-limited-paths-ii]
+
+Online queries:
+
+{% highlight java %}
+// snapshost[i]: for the i-th element, {snapId, val}
+private List<int[]>[] snapshots;
+private List<Integer> snapTime = new ArrayList<>();
+private int snapId = 0;
+
+public DistanceLimitedPathsExist(int n, int[][] edgeList) {
+    this.snapshots = new List[n];
+    for (int i = 0; i < n; i++) {
+        snapshots[i] = new ArrayList<>();
+        snapshots[i].add(new int[]{0, -1});
+    }
+
+    // sorts edgeList by distance
+    Arrays.sort(edgeList, Comparator.comparingInt(e -> e[2]));
+
+    // builds snapshots before any query
+    // the dis are sorted in ascending order
+    // so groups are growing
+    int dis = 0;
+    for (int[] e : edgeList) {
+        // every time distance is increased, it's a snapshot
+        if (e[2] > dis) {
+            snapTime.add(dis);
+            dis = e[2];
+            snap();
+        }
+        union(e[0], e[1], snapId);
+    }
+    snapTime.add(dis);
+    snap();
+}
+
+// id is the snapshot id
+private int find(int u, int id) {
+    // no path compression
+    int p = get(u, id);
+    return p < 0 ? u : find(p, id);
+}
+
+// id is the snapshot id
+private void union(int u, int v, int id) {
+    int pu = find(u, id), pv = find(v, id);
+    // no path compression
+    // because nodes other than u and v are not updated in this snapshot
+    // otherwise there may be too many updates in one snapshot and impact performance
+    if (pu != pv) {
+        set(pu, pv);
+    }
+}
+
+// 1146. Snapshot Array
+private int get(int index, int id) {
+    int pos = Collections.binarySearch(snapshots[index], new int[]{id, 0}, Comparator.comparingInt(a -> a[0]));
+    if (pos < 0) {
+        pos = ~pos - 1;
+    }
+    return snapshots[index].get(pos)[1];
+}
+
+private void set(int index, int val) {
+    List<int[]> snapshot = snapshots[index];
+    int size = snapshot.size();
+    if (snapshot.get(size - 1)[0] == snapId) {  // overwrite
+        snapshot.get(size - 1)[1] = val;
+    } else {  // create
+        snapshot.add(new int[]{snapId, val});
+    }
+}
+
+// snapshot means potential updates on the parent of some nodes
+private int snap() {
+    return snapId++;
+}
+
+public boolean query(int p, int q, int limit) {
+    // finds the first snapshot whose dis is strictly less than limit
+    int id = Collections.binarySearch(snapTime, limit - 1);
+    if (id < 0) {
+        // the values of snapshot 0 is 0 <= limit - 1
+        // so the insertion point can't be 0
+        // ~id - 1 >= 0
+        id = ~id - 1;
+    }
+    return find(p, id) == find(q, id);
+}
+{% endhighlight %}
+
 # Number of Connected Componenets
 
 [Number of Connected Components in an Undirected Graph][number-of-connected-components-in-an-undirected-graph]
@@ -303,6 +460,8 @@ private int indexOf(int i, int j, Triangle t) {
 }
 {% endhighlight %}
 
+[checking-existence-of-edge-length-limited-paths]: https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/
+[checking-existence-of-edge-length-limited-paths-ii]: https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths-ii/
 [evaluate-division]: https://leetcode.com/problems/evaluate-division/
 [most-stones-removed-with-same-row-or-column]: https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
 [number-of-connected-components-in-an-undirected-graph]: https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/

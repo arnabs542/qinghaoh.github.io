@@ -3,6 +3,7 @@ layout: post
 title:  "MST"
 tags: mst
 ---
+A spanning tree `T` of an undirected graph `G` is a subgraph that is a tree which includes all of the vertices of `G`.
 
 A minimum spanning tree (MST) or minimum weight spanning tree is a spanning tree whose sum of edge weights is as small as possible.
 

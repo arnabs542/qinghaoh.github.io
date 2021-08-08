@@ -216,6 +216,47 @@ public List<List<Integer>> getSkyline(int[][] buildings) {
 }
 {% endhighlight %}
 
+[Minimum Cost to Hire K Workers][minimum-cost-to-hire-k-workers]
+
+{% highlight java %}
+public double mincostToHireWorkers(int[] quality, int[] wage, int k) {
+    int n = quality.length;
+    Integer[] index = new Integer[n];
+    for (int i = 0; i < n; i++) {
+        index[i] = i;
+    }
+
+    // expect[i] = wage[i] / quality[i]
+    // when expect[i] > expect[j],
+    // if we pay j-th worker quality[j] * expect[i] = wage[j] / expect[j] * expect[i] > wage[j]
+    // he will be more than happy
+    Arrays.sort(index, Comparator.comparingDouble(i -> (double)wage[i] / quality[i]));
+
+    // uses max heap to find the min quality sum with k workers
+    Queue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder());
+    double min = Double.MAX_VALUE, qSum = 0;
+    // at least one worker will be paid their minimum wage expectation
+    for (int i : index) {
+        qSum += quality[i];
+        pq.offer(quality[i]);
+
+        // removes the max quality to make the window size k
+        // it's possible the quality of the current worker i is removed
+        // and later we still use his expect[i]
+        // but it's OK - the same window is computed with a smaller expectation in the last iteration
+        if (pq.size() > k) {
+            qSum -= pq.poll();
+        }
+
+        // expect[i] is the max in the k-length window
+        if (pq.size() == k) {
+            min = Math.min(min, qSum * wage[i] / quality[i]);
+        }
+    }
+    return min;
+}
+{% endhighlight %}
+
 # Greedy
 
 [Maximum Performance of a Team][maximum-performance-of-a-team]
@@ -284,6 +325,7 @@ public int minRefuelStops(int target, int startFuel, int[][] stations) {
 [kth-smallest-element-in-a-sorted-matrix]: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
 [maximize-sum-of-array-after-k-negations]: https://leetcode.com/problems/maximize-sum-of-array-after-k-negations/
 [maximum-performance-of-a-team]: https://leetcode.com/problems/maximum-performance-of-a-team/
+[minimum-cost-to-hire-k-workers]: https://leetcode.com/problems/minimum-cost-to-hire-k-workers/
 [minimize-deviation-in-array]: https://leetcode.com/problems/minimize-deviation-in-array/
 [minimum-number-of-refueling-stops]: https://leetcode.com/problems/minimum-number-of-refueling-stops/
 [smallest-range-covering-elements-from-k-lists]: https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/

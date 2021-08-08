@@ -383,6 +383,42 @@ for (int i = 0; i < m; i++) {
 }
 {% endhighlight %}
 
+# 3-D
+
+[Building Boxes][building-boxes]
+
+To build the extra boxes:
+
+@SuperWhw:
+
+![Building Boxes](https://assets.leetcode.com/users/images/801a52cc-d98e-49f5-81a2-3a1c7af3f263_1611461140.1280658.png)
+
+{% highlight java %}
+public int minimumBoxes(int n) {
+    // sum = 1 + (1 + 2) + (1 + 2 + 3) + ... + (1 + 2 + ... + j)
+    int sum = 0, i = 0, j = 0;
+    while (sum < n) {
+        sum += i += ++j;
+    }
+
+    if (sum == n) {
+        return i;
+    }
+
+    // build extra boxes
+    sum -= i;
+    i -= j;
+    j = 0;
+
+    while (sum < n) {
+        sum += ++j;
+    }
+
+    return i + j;
+}
+{% endhighlight %}
+
+[building-boxes]: https://leetcode.com/problems/building-boxes/
 [circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
 [convex-polygon]: https://leetcode.com/problems/convex-polygon/
 [escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/

@@ -189,11 +189,10 @@ public boolean canConstruct(String s, int k) {
 
 {% highlight java %}
 public int countSubstrings(String s) {
-    int count = 0;
-    for (int center = 0; center <= 2 * s.length() - 1; center++) {
-        int left = center / 2;
-        int right = left + center % 2;
-        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+    int n = s.length(), count = 0;
+    for (int center = 0; center <= 2 * n - 1; center++) {
+        int left = center / 2, right = left + center % 2;
+        while (left >= 0 && right < n && s.charAt(left) == s.charAt(right)) {
             count++;
             left--;
             right++;
@@ -208,13 +207,14 @@ public int countSubstrings(String s) {
 {% highlight java %}
 public String longestPalindrome(String s) {
     String result = "";
-    int max = 0;
-    for (int center = 0; center <= 2 * s.length() - 1; center++) {
+    int n = s.length(), max = 0;
+    for (int center = 0; center <= 2 * n - 1; center++) {
         int left = center / 2, right = left + center % 2;
-        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+        while (left >= 0 && right < n && s.charAt(left) == s.charAt(right)) {
             left--;
             right++;
         }
+
         if (right - left - 1 > max) {
             max = right - left - 1;
             result = s.substring(left + 1, right);

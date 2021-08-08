@@ -78,21 +78,26 @@ private void merge(int[] nums, int low, int high) {
 
 [Count of Smaller Numbers After Self][count-of-smaller-numbers-after-self]
 
+The smaller numbers on the right of a number are exactly those that jump from its right to its left during a stable sort.
+
+`counts[i]` = count of `nums[j] - nums[i] < 0` with `j > i`
+
 {% highlight java %}
 private int[] counts;
 
 public List<Integer> countSmaller(int[] nums) {
-    counts = new int[nums.length];
+    int n = nums.length;
+    this.counts = new int[n];
 
     // nums[index[i]] is the element at position i in the virtual sorted array
     // so that the order of nums remains the same
-    int[] index = new int[nums.length];
-    for (int i = 0; i < index.length; i++) {
+    int[] index = new int[n];
+    for (int i = 0; i < n; i++) {
         index[i] = i;
     }
 
-    // sorts index by the its corresponding element in nums: nums[index[i]]
-    mergeSort(nums, index, 0, nums.length - 1);
+    // sorts index by the corresponding elements in nums: nums[index[i]]
+    mergeSort(nums, index, 0, n - 1);
     return Arrays.stream(counts).boxed().collect(Collectors.toList());
 }
 
@@ -110,15 +115,18 @@ private void merge(int[] nums, int[] index, int low, int high) {
     int i = low, j = mid + 1;
     int[] tmp = new int[high - low + 1];
 
-    // counts right elements nums[index[j]] that are less than the current left element nums[index[i]]
+    // count of right elements that are strictly less than the current left element
+    // nums[index[j]] < nums[index[i]]
     int count = 0;
     for (int k = 0; k < tmp.length; k++) {
         if (i <= mid && (j > high || nums[index[i]] <= nums[index[j]])) {
+            // all elements strictly less than nums[index[i]] have been counted
+            // in the else clause
+            // adds the count to the same position in the final result array
             counts[index[i]] += count;
             tmp[k] = index[i++];
         } else {
-            // nums[index[i]] > nums[index[j]]
-            if (i <= mid) {
+            if (i <= mid) {  // nums[index[i]] > nums[index[j]]
                 count++;
             }
             tmp[k] = index[j++];
@@ -145,6 +153,77 @@ index: [1,0,3,2] -> [3,1,0,2]
 counts: [1,0,1,0] -> [2,1,1,0]
 ```
 
+[Count of Range Sum][count-of-range-sum]
+
+`count` = count of `lower <= p[j] - p[i] <= higher` with `j > i`
+
+{% highlight java %}
+private int lower, upper;
+
+// 315. Count of Smaller Numbers After Self
+public int countRangeSum(int[] nums, int lower, int upper) {
+    this.lower = lower;
+    this.upper = upper;
+
+    int n = nums.length;
+    long[] p = new long[n + 1];
+    for (int i = 0; i < n; i++) {
+        p[i + 1] = p[i] + nums[i];
+    }
+
+    return mergeSort(p, 0, n);
+}
+
+private int mergeSort(long[] p, int low, int high) {
+    int count = 0;
+    if (low < high) {
+        int mid = (low + high) >>> 1;
+        count += mergeSort(p, low, mid);
+        count += mergeSort(p, mid + 1, high);
+        count += merge(p, low, high);
+    }
+    return count;
+}
+
+private int merge(long[] p, int low, int high) {
+    int mid = (low + high) >>> 1;
+    long[] tmp = new long[high - low + 1];
+
+    int count = 0;
+
+    // finds the j, k index in the right array
+    int j = mid + 1, k = mid + 1;
+    // index is for the tmp array
+    int index = 0, rightIndex = mid + 1;
+    for (int i = low; i <= mid; i++) {
+        // k is the first index satisfies sums[k] - sums[i] >= lower
+        while (k <= high && p[k] - p[i] < lower) {
+            k++;
+        }
+
+        // j is the first index satisfies sums[j] - sums[i] > upper
+        while (j <= high && p[j] - p[i] <= upper) {
+            j++;
+        }
+
+        // merge
+        while (rightIndex <= high && p[rightIndex] < p[i]) {
+            tmp[index++] = p[rightIndex++];
+        }
+        tmp[index++] = p[i];
+
+        // then the number of p in [lower, upper] is j - k
+        count += j - k;
+    }
+
+    // tmp was assigned up to rightIndex
+    // the remaining right array of p was not modified
+    // so we only need to copy (rightIndex - low) length
+    System.arraycopy(tmp, 0, p, low, rightIndex - low);
+    return count;
+}
+{% endhighlight %}
+
 [Create Target Array in the Given Order][create-target-array-in-the-given-order]
 
 {% highlight java %}
@@ -159,7 +238,7 @@ public int[] createTargetArray(int[] nums, int[] index) {
         pos[i] = i;
     }
 
-    // sorts pos by the its corresponding element in index: index[pos[i]]
+    // sorts pos by the corresponding elements in index: index[pos[i]]
     mergeSort(index, pos, 0, nums.length - 1);
 
     int[] target = new int[nums.length];
@@ -596,6 +675,7 @@ public int maxWidthRamp(int[] A) {
 
 [campus-bikes]: https://leetcode.com/problems/campus-bikes/
 [car-pooling]: https://leetcode.com/problems/car-pooling/
+[count-of-range-sum]: https://leetcode.com/problems/count-of-range-sum/
 [count-of-smaller-numbers-after-self]: https://leetcode.com/problems/count-of-smaller-numbers-after-self/
 [create-target-array-in-the-given-order]: https://leetcode.com/problems/create-target-array-in-the-given-order/
 [find-lucky-integer-in-an-array]: https://leetcode.com/problems/find-lucky-integer-in-an-array/

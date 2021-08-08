@@ -54,5 +54,31 @@ public int minSteps(int n) {
 }
 {% endhighlight %}
 
+[Integer Break][integer-break]
+
+{% highlight java %}
+public int integerBreak(int n) {
+    if (n < 4) {
+        return n - 1;
+    }
+
+    int prod = 1;
+    // if the maximum product contains a factor f >= 4
+    // then we can replace it with factors 2 and (f - 2) without losing optimality
+    // as 2 * (f - 2) = 2 * f - 4 >= f
+    // we never need a factor >= 4
+    // i.e. we only need factors 1, 2 and 3
+    //
+    // 1 is wasteful
+    // 3 * 3 > 2 * 2 * 2, so we never use 2 more than twice.
+    while (n > 4) {
+        prod *= 3;
+        n -= 3;
+    }
+    return prod *= n;
+}
+{% endhighlight %}
+
 [2-keys-keyboard]: https://leetcode.com/problems/2-keys-keyboard/
 [count-primes]: https://leetcode.com/problems/count-primes/
+[integer-break]: https://leetcode.com/problems/integer-break/

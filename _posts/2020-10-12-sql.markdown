@@ -214,6 +214,8 @@ HAVING
 ;
 {% endhighlight %}
 
+# CASE Statement
+
 [Reformat Department Table][reformat-department-table]
 
 {% highlight sql %}
@@ -261,6 +263,72 @@ JOIN
     Variables v2
 ON
     e.right_operand = v2.name
+;
+{% endhighlight %}
+
+[Team Scores in Football Tournament][team-scores-in-football-tournament]
+
+{% highlight sql %}
+SELECT
+    team_id,
+    team_name,
+    IFNULL(
+        SUM(CASE WHEN team_id = host_team AND host_goals > guest_goals THEN 3
+            WHEN team_id = guest_team AND guest_goals > host_goals THEN 3
+            WHEN team_id = host_team AND host_goals < guest_goals THEN 0
+            WHEN team_id = guest_team AND guest_goals < host_goals THEN 0
+            WHEN guest_goals = host_goals THEN 1
+            END), 0) AS num_points
+FROM
+    Teams
+LEFT JOIN
+    Matches
+    ON team_id = host_team OR team_id = guest_team
+GROUP BY
+    team_id
+ORDER BY
+    num_points DESC,
+    team_id
+;
+{% endhighlight %}
+
+[League Statistics][league-statistics]
+
+{% highlight sql %}
+SELECT
+    team_name,
+    COUNT(*) AS matches_played,
+    SUM(CASE WHEN home_goals > away_goals THEN 3
+        WHEN home_goals = away_goals THEN 1
+        ELSE 0 END) AS points,
+    SUM(home_goals) AS goal_for,
+    SUM(away_goals) AS goal_against,
+    SUM(home_goals) - SUM(away_goals) AS goal_diff
+FROM
+    -- views away team as home team
+    (SELECT
+        home_team_id,
+        home_team_goals AS home_goals,
+        away_team_goals AS away_goals
+     FROM
+        matches
+     UNION ALL
+     SELECT
+        away_team_id AS home_team_id,
+        away_team_goals AS home_goals,
+        home_team_goals AS away_goals
+     FROM
+        matches
+	 ) m
+JOIN
+    teams
+    ON home_team_id = team_id
+GROUP BY
+    team_name
+ORDER BY
+    points DESC,
+    goal_diff DESC,
+    team_name
 ;
 {% endhighlight %}
 
@@ -1328,6 +1396,23 @@ FROM
 
 # JOIN
 
+[Grand Slam Titles][grand-slam-titles]
+
+{% highlight sql %}
+SELECT
+    player_id,
+    player_name,
+    SUM(player_id = Wimbledon) + SUM(player_id = Fr_open) + SUM(player_id = US_open) + SUM(player_id = Au_open) AS grand_slams_count
+FROM
+    Players
+JOIN
+    Championships
+    ON player_id = Wimbledon OR player_id = Fr_open OR player_id = US_open OR player_id=Au_open
+GROUP BY
+    player_id
+;
+{% endhighlight %}
+
 ## CROSS JOIN
 
 Cartesian Product
@@ -1355,7 +1440,7 @@ WHERE
 ;
 {% endhighlight %}
 
-## Multiple Joins
+## Multiple JOINs
 
 [Number of Trusted Contacts of a Customer][number-of-trusted-contacts-of-a-customer]
 
@@ -1766,6 +1851,7 @@ WHERE
 [game-play-analysis-iv]: https://leetcode.com/problems/game-play-analysis-iv/
 [get-highest-answer-rate-question]: https://leetcode.com/problems/get-highest-answer-rate-question/
 [get-the-second-most-recent-activity]: https://leetcode.com/problems/get-the-second-most-recent-activity/
+[grand-slam-titles]: https://leetcode.com/problems/grand-slam-titles/
 [group-employees-of-the-same-salary]: https://leetcode.com/problems/group-employees-of-the-same-salary/
 [group-sold-products-by-the-date]: https://leetcode.com/problems/group-sold-products-by-the-date/
 [highest-grade-for-each-student]: https://leetcode.com/problems/highest-grade-for-each-student/
@@ -1774,6 +1860,7 @@ WHERE
 [investments-in-2016]: https://leetcode.com/problems/investments-in-2016/
 [last-person-to-fit-in-the-elevator]: https://leetcode.com/problems/last-person-to-fit-in-the-elevator/
 [leetflex-banned-accounts]: https://leetcode.com/problems/leetflex-banned-accounts/
+[league-statistics]: https://leetcode.com/problems/league-statistics/
 [median-employee-salary]: https://leetcode.com/problems/median-employee-salary/
 [monthly-transactions-ii]: https://leetcode.com/problems/monthly-transactions-ii/
 [nth-highest-salary]: https://leetcode.com/problems/nth-highest-salary/
@@ -1794,6 +1881,7 @@ WHERE
 [students-report-by-geography]: https://leetcode.com/problems/students-report-by-geography/
 [suspicious-bank-accounts]: https://leetcode.com/problems/suspicious-bank-accounts/
 [swap-salary]: https://leetcode.com/problems/swap-salary/
+[team-scores-in-football-tournament]: https://leetcode.com/problems/team-scores-in-football-tournament/
 [the-most-frequently-ordered-products-for-each-customer]: https://leetcode.com/problems/the-most-frequently-ordered-products-for-each-customer/
 [the-most-recent-orders-for-each-product]: https://leetcode.com/problems/the-most-recent-orders-for-each-product/
 [the-most-recent-three-orders]: https://leetcode.com/problems/the-most-recent-three-orders/

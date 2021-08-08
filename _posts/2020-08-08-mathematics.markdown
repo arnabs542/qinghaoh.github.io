@@ -151,7 +151,7 @@ anything greater than 1010111 will not be allowed
 [Best Meeting Point][best-meeting-point]
 
 * Mean minimizes total distance for Euclidian distance
-* Median minimizes total distance for absolute deviation
+* Median minimizes total distance for absolute deviation: \\[D_{i}=\|x_{i}-m(X)\|\\]
 * Mode minimizes distance for indicator function
 
 {% highlight java %}
@@ -181,6 +181,71 @@ public int minDistance1D(List<Integer> points) {
         d += Math.abs(p - median);
     }
     return d;
+}
+{% endhighlight %}
+
+[Allocate Mailboxes][allocate-mailboxes]
+
+{% highlight java %}
+private static final int MAX = 100 * 10000;
+
+public int minDistance(int[] houses, int k) {
+    int n = houses.length;
+
+    Arrays.sort(houses);
+
+    // finds the median of houses[i] to houses[j]
+    // calculates the distance
+    int[][] distance = new int[n + 1][n + 1];
+    for (int i = 0; i < n; i++) {
+        for (int j = i; j < n; j++) {
+            for (int m = i; m <= j; m++) {
+                distance[i][j] += Math.abs(houses[(i + j) / 2] - houses[m]);
+            }
+        }
+    }
+
+    // dp[m][i]: minimum total distance of m mailboxes starting from i-th house
+    int[][] dp = new int[k + 1][n + 1];
+
+    // initializes dp table boarders with max
+    Arrays.fill(dp[0], MAX);
+    for (int i = 1; i <= k; i++) {
+        dp[i][n] = MAX;
+    }
+
+    // initializes dp[0][n] with 0
+    dp[0][n] = 0;
+
+    for (int i = n - 1; i >= 0; i--) {
+        for (int m = 1; m <= k; m++) {
+            dp[m][i] = Integer.MAX_VALUE;
+            for (int j = i; j < n; j++) {
+                // houses[i:] is split into two groups:
+                // houses[i:j] and houses[(j + 1):]
+                dp[m][i] = Math.min(dp[m][i], distance[i][j] + dp[m - 1][j + 1]);
+            }
+        }
+    }
+
+    return dp[k][0];
+}
+{% endhighlight %}
+
+Another way to calculate the distance matrix:
+
+{% highlight java %}
+for (int i = n - 1; i >= 0; i--) {
+    for (int j = i; j < n; j++) {
+        distance[i][j] = houses[j] - houses[i];
+        if (i + 1 < n - 1 && j > 0) {
+            // from houses[(i + 1):(j - 1)] to houses[i:j]
+            // the minimum distance added by the two new endpoints houses[i] and houses[j]
+            // equals houses[j] - houses[i]
+            // the mailbox can be at any point between the new endpoints
+            distance[i][j] += distance[i + 1][j - 1];
+        }
+    }
 }
 {% endhighlight %}
 
@@ -461,6 +526,7 @@ public int reachNumber(int target) {
 {% endhighlight %}
 
 [4-keys-keyboard]: https://leetcode.com/problems/4-keys-keyboard/
+[allocate-mailboxes]: https://leetcode.com/problems/allocate-mailboxes/
 [best-meeting-point]: https://leetcode.com/problems/best-meeting-point/
 [check-if-number-is-a-sum-of-powers-of-three]: https://leetcode.com/problems/check-if-number-is-a-sum-of-powers-of-three/
 [count-sorted-vowel-strings]: https://leetcode.com/problems/count-sorted-vowel-strings/

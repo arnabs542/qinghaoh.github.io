@@ -113,6 +113,32 @@ public int[][] merge(int[][] intervals) {
 }
 {% endhighlight %}
 
+[Interval List Intersections][interval-list-intersections]
+
+{% highlight java %}
+public int[][] intervalIntersection(int[][] firstList, int[][] secondList) {
+    List<int[]> list = new ArrayList<>();
+    int i = 0, j = 0;
+    while (i < firstList.length && j < secondList.length) {
+        int start = Math.max(firstList[i][0], secondList[j][0]);
+        int end = Math.min(firstList[i][1], secondList[j][1]);
+
+        // intersects
+        if (start <= end) {
+            list.add(new int[]{start, end});
+        }
+
+        // removes the interval with the smallest endpoint
+        if (firstList[i][1] < secondList[j][1]) {
+            i++;
+        } else {
+            j++;
+        }
+    }
+    return list.toArray(new int[list.size()][]);
+}
+{% endhighlight %}
+
 [Minimum Number of Arrows to Burst Balloons][minimum-number-of-arrows-to-burst-balloons]
 
 {% highlight java %}
@@ -585,6 +611,7 @@ class Interval implements Comparable<Interval> {
 [check-if-all-the-integers-in-a-range-are-covered]: https://leetcode.com/problems/check-if-all-the-integers-in-a-range-are-covered/
 [course-schedule-iii]: https://leetcode.com/problems/course-schedule-iii/
 [exam-room]: https://leetcode.com/problems/exam-room/
+[interval-list-intersections]: https://leetcode.com/problems/interval-list-intersections/
 [maximum-distance-in-arrays]: https://leetcode.com/problems/maximum-distance-in-arrays/
 [maximum-length-of-pair-chain]: https://leetcode.com/problems/maximum-length-of-pair-chain/
 [maximum-number-of-eaten-apples]: https://leetcode.com/problems/maximum-number-of-eaten-apples/
