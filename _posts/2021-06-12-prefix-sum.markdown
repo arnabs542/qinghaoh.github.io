@@ -160,6 +160,33 @@ public ListNode removeZeroSumSublists(ListNode head) {
 abs(subarray) = p[i] - p[j] <= max(p) - min(p)
 ```
 
+## Rolling Prefix Sum
+
+[Maximize the Beauty of the Garden][maximize-the-beauty-of-the-garden]
+
+{% highlight java %}
+public int maximumBeauty(int[] flowers) {
+    // flower : first prefix sum of this flower
+    Map<Integer, Integer> map = new HashMap<>();
+    int sum = 0, max = Integer.MIN_VALUE;
+    for (int f : flowers) {
+        if (map.containsKey(f)) {
+            max = Math.max(max, sum - map.get(f) + 2 * f);
+        }
+
+        // counts positive beauty only
+        if (f > 0) {
+            sum += f;
+        }
+
+        if (!map.containsKey(f)) {
+            map.put(f, sum);
+        }
+    }
+    return max;
+}
+{% endhighlight %}
+
 ## Bounded Sum
 
 [Max Sum of Rectangle No Larger Than K][max-sum-of-rectangle-no-larger-than-k]
@@ -208,6 +235,7 @@ public int maxSumSubmatrix(int[][] matrix, int k) {
 [contiguous-array]: https://leetcode.com/problems/contiguous-array/
 [count-triplets-that-can-form-two-arrays-of-equal-xor]: https://leetcode.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/
 [max-sum-of-rectangle-no-larger-than-k]: https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/
+[maximize-the-beauty-of-the-garden]: https://leetcode.com/problems/maximize-the-beauty-of-the-garden/
 [maximum-absolute-sum-of-any-subarray]: https://leetcode.com/problems/maximum-absolute-sum-of-any-subarray/
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
 [product-of-the-last-k-numbers]: https://leetcode.com/problems/product-of-the-last-k-numbers/

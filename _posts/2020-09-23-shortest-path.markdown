@@ -351,6 +351,22 @@ private int distance(int[] p1, int[] p2) {
 
 [Floyd-Warshall algorithm](https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm) is an algorithm for finding shortest paths in a directed weighted graph with positive or negative edge weights (but with no negative cycles). A single execution of the algorithm will find the lengths (summed weights) of shortest paths between ***all*** pairs of vertices.
 
+Pseudocode:
+
+```
+let dist be a |V| × |V| array of minimum distances initialized to ∞ (infinity)
+for each edge (u, v) do
+    dist[u][v] ← w(u, v)  // The weight of the edge (u, v)
+for each vertex v do
+    dist[v][v] ← 0
+for k from 1 to |V|
+    for i from 1 to |V|
+        for j from 1 to |V|
+            if dist[i][j] > dist[i][k] + dist[k][j]
+                dist[i][j] ← dist[i][k] + dist[k][j]
+            end if
+```
+
 [Count Subtrees With Max Distance Between Cities][count-subtrees-with-max-distance-between-cities]
 
 {% highlight java %}

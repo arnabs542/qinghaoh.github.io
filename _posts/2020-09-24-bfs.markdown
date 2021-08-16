@@ -3,9 +3,9 @@ layout: post
 title:  "BFS"
 tags: bfs
 ---
-## Template
+# Template
 
-### Queue
+## Queue
 
 [Cheapest Flights Within K Stops][cheapest-flights-within-k-stops]
 
@@ -58,6 +58,8 @@ public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
     return min == MAX ? -1 : min;
 }
 {% endhighlight %}
+
+# Variants
 
 [Minimum Knight Moves][minimum-knight-moves]
 
@@ -172,6 +174,69 @@ public int depthSumInverse(List<NestedInteger> nestedList) {
        sum += runningSum;
     }
     return sum;
+}
+{% endhighlight %}
+
+[Shortest Path with Alternating Colors][shortest-path-with-alternating-colors]
+
+public int[] shortestAlternatingPaths(int n, int[][] red_edges, int[][] blue_edges) {
+    // red: 0
+    // blue: 1
+    List<List<Integer>>[] graph = new ArrayList[2];
+
+    for (int i = 0; i < graph.length; i++) {
+        graph[i] = new ArrayList<>();
+    }
+    for (int i = 0; i < n; i++) {
+        graph[0].add(new ArrayList<>());
+        graph[1].add(new ArrayList<>());
+    }
+
+    for (int[] r : red_edges) {
+        graph[0].get(r[0]).add(r[1]);
+    }
+    for (int[] b : blue_edges) {
+        graph[1].get(b[0]).add(b[1]);
+    }
+
+    // dp
+    int max = 2 * n;
+    int[][] distance = new int[2][n];
+    // distance[][0] == 0
+    // maximum distance == 2 * n - 3
+    // it happens when in a path from 0 to target,
+    // all the intermediate nodes (excluding 0 and target) have an additional self-edge
+    for (int i = 1; i < n; i++) {
+        distance[0][i] = max;
+        distance[1][i] = max;
+    }
+
+    Queue<int[]> q = new LinkedList<>();
+    // either with red or blue
+    q.offer(new int[] {0, 0});
+    q.offer(new int[] {0, 1});
+
+    while (!q.isEmpty()) {
+        int[] node = q.poll();
+        int color = node[1];
+
+        // No need to keep track of level up to now
+        // distance[][] is the shortest path so far
+        // it gets rid of duplicate computation
+        for (int neighbor : graph[1 - color].get(node[0])) {
+            if (distance[1 - color][neighbor] == max) {
+                distance[1 - color][neighbor] = distance[color][node[0]] + 1;
+                q.offer(new int[]{neighbor, 1 - color});
+            }
+        }
+    }
+
+    int[] answer = new int[n];
+    for (int i = 0; i < n; i++) {
+        int p = Math.min(distance[0][i], distance[1][i]);
+        answer[i] = (p == max) ? -1 : p;
+    }
+    return answer;
 }
 {% endhighlight %}
 
@@ -527,6 +592,7 @@ private void dfs(int r, int c) {
 [minimum-knight-moves]: https://leetcode.com/problems/minimum-knight-moves/
 [nested-list-weight-sum-ii]: https://leetcode.com/problems/nested-list-weight-sum-ii/
 [rotting-oranges]: https://leetcode.com/problems/rotting-oranges/
+[shortest-path-with-alternating-colors]: https://leetcode.com/problems/shortest-path-with-alternating-colors/
 [sliding-puzzle]: https://leetcode.com/problems/sliding-puzzle/
 [the-maze]: https://leetcode.com/problems/the-maze/
 [the-maze-ii]: https://leetcode.com/problems/the-maze-ii/

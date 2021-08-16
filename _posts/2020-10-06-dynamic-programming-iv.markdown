@@ -54,6 +54,60 @@ for (int i = m - 2; i >= 0; i--) {
 return dp[0];
 {% endhighlight %}
 
+[Unique Paths II][unique-paths-ii]
+
+{% highlight java %}
+public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+    int m = obstacleGrid.length, n = obstacleGrid[0].length;
+    int[][] dp = new int[m][n];
+
+    dp[0][0] = 1 - obstacleGrid[0][0];
+
+    // if there's an obstacle in the row, the following path is blocked
+    for (int i = 1; i < m; i++) {
+        dp[i][0] = (obstacleGrid[i][0] == 0 && dp[i - 1][0] == 1) ? 1 : 0;
+    }
+
+    // same as above
+    for (int j = 1; j < n; j++) {
+        dp[0][j] = (obstacleGrid[0][j] == 0 && dp[0][j - 1] == 1) ? 1 : 0;
+    }
+
+    for (int i = 1; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            if (obstacleGrid[i][j] == 0) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            } else {
+                dp[i][j] = 0;
+            }
+        }
+    }
+
+    return dp[m - 1][n - 1];
+}
+{% endhighlight %}
+
+Reduced to 1D:
+
+{% highlight java %}
+public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+    int n = obstacleGrid[0].length;
+    int[] dp = new int[n];
+    dp[0] = 1;
+
+    for (int[] row : obstacleGrid) {
+        for (int j = 0; j < n; j++) {
+            if (row[j] == 1) {
+                dp[j] = 0;
+            } else if (j > 0) {
+                dp[j] += dp[j - 1];
+            }
+        }
+    }
+    return dp[n - 1];
+}
+{% endhighlight %}
+
 [Maximum Number of Points with Cost][maximum-number-of-points-with-cost]
 
 The most straight forward formula:
@@ -167,6 +221,44 @@ public int minimumTotal(List<List<Integer>> triangle) {
     }
 
     return dp[0];
+}
+{% endhighlight %}
+
+[Cherry Pickup II][cherry-pickup-ii]
+
+{% highlight java %}
+public int cherryPickup(int[][] grid) {
+    int m = grid.length, n = grid[0].length;
+    int dp[][][] = new int[m][n][n];
+
+    for (int r = m - 1; r >= 0; r--) {
+        for (int c1 = 0; c1 < n; c1++) {
+            for (int c2 = 0; c2 < n; c2++) {
+                // if c1 == c2, Robot #1 picks up the cherries
+                // do not double count
+                int cherries = grid[r][c1];
+                if (c1 != c2) {
+                    cherries += grid[r][c2];
+                }
+
+                // finds the max from the line below
+                if (r != m - 1) {
+                    int max = 0;
+                    for (int j1 = c1 - 1; j1 <= c1 + 1; j1++) {
+                        for (int j2 = c2 - 1; j2 <= c2 + 1; j2++) {
+                            if (j1 >= 0 && j1 < n && j2 >= 0 && j2 < n) {
+                                max = Math.max(max, dp[r + 1][j1][j2]);
+                            }
+                        }
+                    }
+                    cherries += max;
+                }
+
+                dp[r][c1][c2] = cherries;
+            }
+        }
+    }
+    return dp[0][0][n - 1];
 }
 {% endhighlight %}
 
@@ -413,6 +505,7 @@ public int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
 {% endhighlight %}
 
 [bomb-enemy]: https://leetcode.com/problems/bomb-enemy/
+[cherry-pickup-ii]: https://leetcode.com/problems/cherry-pickup-ii/
 [dungeon-game]: https://leetcode.com/problems/dungeon-game/
 [largest-plus-sign]: https://leetcode.com/problems/largest-plus-sign/
 [longest-line-of-consecutive-one-in-matrix]: https://leetcode.com/problems/longest-line-of-consecutive-one-in-matrix/
@@ -422,3 +515,4 @@ public int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
 [minimum-path-sum]: https://leetcode.com/problems/minimum-path-sum/
 [out-of-boundary-paths]: https://leetcode.com/problems/out-of-boundary-paths/
 [triangle]: https://leetcode.com/problems/triangle/
+[unique-paths-ii]: https://leetcode.com/problems/unique-paths-ii/

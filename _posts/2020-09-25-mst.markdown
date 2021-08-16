@@ -135,14 +135,98 @@ private int find(int u) {
 }
 
 private boolean union(int u, int v) {
-    int uset = find(u);
-    int vset = find(v);
+    int uset = find(u), vset = find(v);
 
     if (uset == vset) {
         return false;
     }
 
     forest[vset] += forest[uset];  // records the number of points in the forest
+    forest[uset] = vset;
+    return true;
+}
+{% endhighlight %}
+
+[Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree][find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree]
+
+{% highlight java %}
+private int[] forest;
+private int[][] edges;
+
+public List<List<Integer>> findCriticalAndPseudoCriticalEdges(int n, int[][] edges) {
+    this.edges = edges;
+
+    int m = edges.length;
+    Integer[] index = new Integer[m];
+    for (int i = 0; i < m; i++) {
+        index[i] = i;
+    }
+
+    Arrays.sort(index, Comparator.comparingInt(i -> edges[i][2]));
+
+    List<Integer> critical = new ArrayList<>(), pseudo = new ArrayList<>();
+    int weight = mst(n, index, -1, -1);
+    for (int i : index) {
+        // if the edge is critical
+        // deletes it and gets a new MST
+        // the weight will increase
+        if (weight < mst(n, index, i, -1)) {
+            critical.add(i);
+        // adds the edge to the MST by force:
+        // - adds it to the MST edge set
+        // - runs the MST algorithm for the rest of the edges in the tree
+        // if the edge is pseudo-critical
+        // the weight doesn't change
+        } else if (weight == mst(n, index, -1, i)) {
+            pseudo.add(i);
+        }
+    }
+    return Arrays.asList(critical, pseudo);
+}
+
+// if there's no edge to delete, edgeToDelete < 0
+// so is edgeToForceAdd
+private int mst(int n, Integer[] index, int edgeToDelete, int edgeToForceAdd) {
+    forest = new int[n];
+    Arrays.fill(forest, -1);
+
+    // count is the number of edges in the edge set of the MST
+    int weight = 0, count = 0;
+    if (edgeToForceAdd >= 0) {
+        weight += edges[edgeToForceAdd][2];
+        union(edges[edgeToForceAdd][0], edges[edgeToForceAdd][1]);
+        count++;
+    }
+
+    for (int i : index) {
+        if (i == edgeToDelete || i == edgeToForceAdd) {
+            continue;
+        }
+
+        if (union(edges[i][0], edges[i][1])) {
+            weight += edges[i][2];
+            count++;
+        }
+
+        if (count == n - 1) {
+            break;
+        }
+    }
+
+    return count == n - 1 ? weight : Integer.MAX_VALUE;
+}
+
+private int find(int u) {
+    return forest[u] < 0 ? u : find(forest[u]);
+}
+
+private boolean union(int u, int v) {
+    int uset = find(u), vset = find(v);
+
+    if (uset == vset) {
+        return false;
+    }
+
     forest[uset] = vset;
     return true;
 }
@@ -192,5 +276,6 @@ private int find(int u) {
 }
 {% endhighlight %}
 
+[find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree]: https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/
 [min-cost-to-connect-all-points]: https://leetcode.com/problems/min-cost-to-connect-all-points/
 [optimize-water-distribution-in-a-village]: https://leetcode.com/problems/optimize-water-distribution-in-a-village/

@@ -3,6 +3,34 @@ layout: post
 title:  "Array"
 tags: array
 ---
+
+[Patching Array][patching-array]
+
+{% highlight java %}
+public int minPatches(int[] nums, int n) {
+    int patches = 0, i = 0;
+    // miss is the smallest missing number
+    // [1, miss) is already covered
+    // initially the range is empty
+    long miss = 1;
+    while (miss <= n) {
+        if (i < nums.length && nums[i] <= miss) {  // miss is covered
+            // extends the range to [1, miss + nums[i])
+            miss += nums[i++];
+        } else {
+            // supposes the number to patch is x
+            // after patching, [1, miss) and [x, x + miss) are both covered
+            // apparently x <= miss
+            // so [1, x + miss) is covered
+            // to make the range as large as possible, picks x = miss
+            miss += miss;
+            patches++;
+        }
+    }
+    return patches;
+}
+{% endhighlight %}
+
 # Buckets
 Count each element in an array `int[] a`.
 
@@ -255,6 +283,7 @@ public int candy(int[] ratings) {
 [first-missing-positive]: https://leetcode.com/problems/first-missing-positive/
 [longest-consecutive-sequence]: https://leetcode.com/problems/longest-consecutive-sequence/
 [minimum-number-of-flips-to-make-the-binary-string-alternating]: https://leetcode.com/problems/minimum-number-of-flips-to-make-the-binary-string-alternating/
+[patching-array]: https://leetcode.com/problems/patching-array/
 [reverse-words-in-a-string-ii]: https://leetcode.com/problems/reverse-words-in-a-string-ii/
 [rotate-array]: https://leetcode.com/problems/rotate-array/
 [shift-2d-grid]: https://leetcode.com/problems/shift-2d-grid/

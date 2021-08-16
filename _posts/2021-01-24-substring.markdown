@@ -5,6 +5,58 @@ tags: string
 ---
 # Dynamic Programming
 
+[Word Break][word-break]
+
+{% highlight java %}
+public boolean wordBreak(String s, List<String> wordDict) {
+    Set<String> dict = new HashSet<>(wordDict);
+    int n = s.length();
+    // dp[i]: s.substring(0, i)
+    boolean[] dp = new boolean[n + 1];
+    dp[0] = true;
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 0; j < i; j++) {
+            if (dp[j] && dict.contains(s.substring(j, i))) {
+                dp[i] = true;
+                break;
+            }
+        }
+    }
+    return dp[n];
+}
+{% endhighlight %}
+
+[Word Break II][word-break-ii]
+
+Recursion + Memorization:
+
+{% highlight java %}
+private Map<String, List<String>> map = new HashMap<>();
+
+public List<String> wordBreak(String s, List<String> wordDict) {
+    if (map.containsKey(s)) {
+        return map.get(s);
+    }
+
+    List<String> list = new ArrayList<String>();
+    if (wordDict.contains(s)) {
+        list.add(s);
+    }
+
+    for (int i = 1 ; i < s.length(); i++) {
+        String sub = s.substring(i);
+        if (wordDict.contains(sub)) {
+            for (String w : wordBreak(s.substring(0, i) , wordDict)) {
+                list.add(w + " " + sub);
+            }
+        }
+    }
+    map.put(s, list);
+    return list;
+}
+{% endhighlight %}
+
 [Longest Repeating Substring][longest-repeating-substring]
 
 {% highlight java %}
@@ -242,3 +294,5 @@ private void doStamp(int pos) {
 [longest-repeating-substring]: https://leetcode.com/problems/longest-repeating-substring/
 [shortest-palindrome]: https://leetcode.com/problems/shortest-palindrome/
 [stamping-the-sequence]: https://leetcode.com/problems/stamping-the-sequence/
+[word-break]: https://leetcode.com/problems/word-break/
+[word-break-ii]: https://leetcode.com/problems/word-break-ii/

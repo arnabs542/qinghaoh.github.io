@@ -93,6 +93,49 @@ public void dfs(String s, int iStart, int jStart, char c1, char c2, List<String>
 }
 {% endhighlight %}
 
+[Self Crossing][self-crossing]
+
+{% highlight java %}
+public boolean isSelfCrossing(int[] x) {
+    for (int i = 3; i < x.length; i++) {
+        //    i-2
+        // i-1┌─┐
+        //    └─┼─>i
+        //     i-3
+        if (x[i] >= x[i - 2] && x[i - 1] <= x[i - 3]) {
+            return true;
+        }
+
+        //      i-2
+        // i-1 ┌────┐
+        //     └─══>┘i-3
+        //     i  i-4      (i overlapped i-4)
+        if (i >= 4) {
+            if (x[i - 1] == x[i - 3] && x[i] + x[i - 4] >= x[i - 2]) {
+                return true;
+            }
+        }
+
+        //    i-4
+        //    ┌──┐
+        //    │i<┼─┐
+        // i-3│ i-5│i-1
+        //    └────┘
+        //     i-2
+        if (i >= 5) {
+            if (x[i - 2] - x[i - 4] >= 0
+                && x[i] >= x[i - 2] - x[i - 4]
+                && x[i - 1] >= x[i - 3] - x[i - 5]
+                && x[i - 1] <= x[i - 3]) {
+                return true;  // Sixth line crosses first line and onward
+            }
+        }
+    }
+    return false;
+}
+{% endhighlight %}
+
 [largest-merge-of-two-strings]: https://leetcode.com/problems/largest-merge-of-two-strings/
 [remove-invalid-parentheses]: https://leetcode.com/problems/remove-invalid-parentheses/
+[self-crossing]: https://leetcode.com/problems/self-crossing/
 [strobogrammatic-number-ii]: https://leetcode.com/problems/strobogrammatic-number-ii/

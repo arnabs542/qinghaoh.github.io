@@ -211,7 +211,7 @@ public int minScoreTriangulation(int[] values) {
 public int maxCoins(int[] nums) {
     int n = nums.length;
 
-    // dp[i][j]: max coins after bursting ballons in the range [nums[i], nums[j]]
+    // dp[i][j]: max coins after bursting all ballons in the range nums[i...j]
     //   and the rest balloons are NOT bursted. (reverse thinking)
     int[][] dp = new int[n][n];
 
@@ -220,7 +220,7 @@ public int maxCoins(int[] nums) {
             int right = left + len - 1;
             // reverse thinking: finds the balloon that's last to burst
             // every element of the range [left, right] could be the last balloon to burst
-            for (int i = left; i <= right; i++){
+            for (int i = left; i <= right; i++) {
                 int leftNum = (left == 0) ? 1 : nums[left - 1];
                 int rightNum = (right == n - 1) ? 1 : nums[right + 1];
 
@@ -233,6 +233,11 @@ public int maxCoins(int[] nums) {
 
     return dp[0][n - 1];
 }
+{% endhighlight %}
+
+[Remove Boxes][remove-boxes]
+
+{% highlight java %}
 {% endhighlight %}
 
 ## State Transition
@@ -288,3 +293,4 @@ public boolean canPartitionKSubsets(int[] nums, int k) {
 [maximum-score-from-performing-multiplication-operations]: https://leetcode.com/problems/maximum-score-from-performing-multiplication-operations/
 [minimum-score-triangulation-of-polygon]: https://leetcode.com/problems/minimum-score-triangulation-of-polygon/
 [partition-to-k-equal-sum-subsets]: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
+[remove-boxes]: https://leetcode.com/problems/remove-boxes/

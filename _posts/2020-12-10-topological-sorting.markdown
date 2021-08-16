@@ -47,6 +47,215 @@ public int[] findOrder(int numCourses, int[][] prerequisites) {
 }
 {% endhighlight %}
 
+# DFS
+
+[Sort Items by Groups Respecting Dependencies][sort-items-by-groups-respecting-dependencies]
+
+{% highlight java %}
+private List<Integer>[] graph;
+private int[] indegree;
+private int n;
+
+public int[] sortItems(int n, int m, int[] group, List<List<Integer>> beforeItems) {
+    this.n = n;
+
+    // items belong to the same group are virtually wrapped together
+    // n <= group node index <= m
+    //
+    // if k < n
+    //   if k is in a group
+    //     - graph[k] is inner-group after items of item k
+    //     - indegree[k] is inner-group indegree of item k
+    //   else if k is not in any group
+    //     - graph[k] is after items of item k
+    //     - indegree[k] is indegree of item k
+    // otherwise
+    //   - graph[k] is members of group (k - n)
+    //   - indegree[k] is indegree of group (k - n)
+    this.graph = new ArrayList[n + m];
+    this.indegree = new int[n + m];
+
+    for (int i = 0; i < graph.length; i++) {
+        graph[i] = new ArrayList<>();
+    }
+
+    for (int i = 0; i < n; i++) {
+        // wraps nodes that belong to the same group
+        // the new index becomes: n + group[i]
+        if (group[i] >= 0) {
+            graph[n + group[i]].add(i);
+            // marks indegree as 1
+            // so when we scan to find the 0-indegree node
+            // if index < n, it guarantees to be a node that doesn't belong to a group
+            indegree[i]++;
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        int ig = map(group, i);
+        for (int b : beforeItems.get(i)) {
+            int bg = map(group, b);
+
+            // current item and its before item are in the same group
+            if (bg == ig) {
+                graph[b].add(i);
+                // remember, inner-group indegrees start from 1
+                indegree[i]++;
+            } else {
+                // either i is not in a group
+                // or i and b are in different groups
+                // this is for "external" links
+                graph[bg].add(ig);
+                indegree[ig]++;
+            }
+        }
+    }
+
+    List<Integer> list = new ArrayList<>();
+    for (int i = 0; i < indegree.length; i++) {
+        // when indegree[i] == 0
+        // if i < n, the node i doesn't belong to any group (see comments above)
+        // if i >= n, the dfs topologically sorts the members in the group
+        if (indegree[i] == 0) {
+            dfs(i, list);
+        }
+    }
+
+    return list.size() == n ? list.stream().mapToInt(i -> i).toArray() : new int[0];
+}
+
+// maps the item to its group node index it it belongs to a group
+// otherwise returns its item index
+private int map(int[] group, int item) {
+    return group[item] < 0 ? item : group.length + group[item];
+}
+
+private void dfs(int curr, List<Integer> list) {
+    if (curr < n) {
+        list.add(curr);
+    }
+
+    // marks it as visited (-1)
+    // so the start condition of the dfs indegree[node] == 0 won't be met again
+    indegree[curr]--;
+
+    // if curr < n, and
+    // - curr doesn't belong to any group, then graph[curr] is its after items
+    // - curr belongs to a group, then group[curr] is the after items of the same groups
+    // otherwise, graph[curr] are the members of the group, and only members with degree 1 will be picked
+    for (int child : graph[curr]) {
+        // remember, inner-group indegrees are based on 1
+        if (--indegree[child] == 0) {
+            dfs(child, list);
+        }
+    }
+}
+{% endhighlight %}
+
+# Two-level Topological Sort
+
+[Sort Items by Groups Respecting Dependencies][sort-items-by-groups-respecting-dependencies]
+
+{% highlight java %}
+private List<Integer>[] groupGraph, itemGraph;
+private int[] groupsIndegree, itemsIndegree;
+
+public int[] sortItems(int n, int m, int[] group, List<List<Integer>> beforeItems) {
+    // maps items with -1 group to new isolated groups
+    // and updates the group count
+    for (int i = 0; i < group.length; i++) {
+        if (group[i] < 0) {
+            group[i] = m++;
+        }
+    }
+
+    this.itemGraph = new ArrayList[n];
+    this.groupGraph = new ArrayList[m];
+
+    for (int i = 0; i < n; i++) {
+        itemGraph[i] = new ArrayList<>();
+    }
+    for (int i = 0; i < m; i++) {
+        groupGraph[i] = new ArrayList<>();
+    }
+
+    this.itemsIndegree = new int[n];
+    this.groupsIndegree = new int[m];
+
+    // builds items
+    for (int i = 0; i < n; i++) {
+        for (int item : beforeItems.get(i)) {
+            itemGraph[item].add(i);
+            itemsIndegree[i]++;
+        }
+    }
+
+    // builds group
+    for (int i = 0; i < group.length; i++) {
+        int toGroup = group[i];
+        for (int fromItem : beforeItems.get(i)) {
+            int fromGroup = group[fromItem];
+            if (fromGroup != toGroup) {
+                groupGraph[fromGroup].add(toGroup);
+                groupsIndegree[toGroup]++;
+            }
+        }
+    }
+
+    // topological sort
+    List<Integer> itemsList = sort(itemGraph, itemsIndegree, n);
+    List<Integer> groupsList = sort(groupGraph, groupsIndegree, m);
+
+    // detects if there are any cycles
+    if (groupsList.isEmpty() || itemsList.isEmpty()) {
+        return new int[0];
+    }
+
+    // maps items to their group
+    List<Integer>[] membersInGroup = new ArrayList[m];
+    for (int i = 0; i < m; i++) {
+        membersInGroup[i] = new ArrayList<>();
+    }
+
+    for (int item : itemsList) {
+        membersInGroup[group[item]].add(item);
+    }
+
+    int[] result = new int[n];
+    int index = 0;
+    for (int g : groupsList) {
+        List <Integer> items = membersInGroup[g];
+        for (int item : items) {
+            result[index++] = item;
+        }
+    }
+    return result;
+}
+
+private List<Integer> sort(List<Integer>[] graph, int[] indegree, int count) {
+    List <Integer> list = new ArrayList<>();
+    Queue <Integer> q = new LinkedList();
+    for (int i = 0; i < graph.length; i++) {
+        if (indegree[i] == 0) {
+            q.offer(i);
+        }
+    }
+
+    while (!q.isEmpty()) {
+        int node = q.poll();
+        count--;
+        list.add(node);
+        for (int neighbor : graph[node]) {
+            indegree[neighbor]--;
+            if (indegree[neighbor] == 0) {
+                q.offer(neighbor);
+            }
+        }
+    }
+    return count == 0 ? list : Collections.EMPTY_LIST;
+}
+{% endhighlight %}
+
 # Cycle Detection
 
 A topological ordering is possible iff the graph has no directed cycles, that is, iff it is a directed acyclic graph (DAG).
@@ -345,4 +554,5 @@ Another solution is DFS + memorization
 [longest-increasing-path-in-a-matrix]: https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
 [minimum-height-trees]: https://leetcode.com/problems/minimum-height-trees/
 [sequence-reconstruction]: https://leetcode.com/problems/sequence-reconstruction/
+[sort-items-by-groups-respecting-dependencies]: https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies/
 [tree-diameter]: https://leetcode.com/problems/tree-diameter/
