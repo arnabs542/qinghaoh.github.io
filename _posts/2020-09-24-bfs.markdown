@@ -179,6 +179,7 @@ public int depthSumInverse(List<NestedInteger> nestedList) {
 
 [Shortest Path with Alternating Colors][shortest-path-with-alternating-colors]
 
+{% highlight java %}
 public int[] shortestAlternatingPaths(int n, int[][] red_edges, int[][] blue_edges) {
     // red: 0
     // blue: 1
