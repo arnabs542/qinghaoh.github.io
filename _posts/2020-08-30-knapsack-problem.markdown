@@ -13,7 +13,7 @@ maximize $$ \sum _{i=1}^{n}v_{i}x_{i} $$
 subject to $$ \sum _{i=1}^{n}w_{i}x_{i}\leq W $$ and $$ x_{i}\in \{0,1\} $$
 
 ### Backtracking
-Backtracking takes `O(2^n)` time, so it's less preferred.
+Backtracking takes `O(2^n)` time, so it's less preferable.
 
 ### Dynamic Programming
 [Partition Equal Subset Sum][partition-equal-subset-sum]
@@ -242,11 +242,13 @@ subject to $$ \sum _{i=1}^{n}w_{i}x_{i}\leq W $$ and $$ x_{i}\geq 0,\ x_{i}\in \
 
 {% highlight java %}
 public int change(int amount, int[] coins) {
+    int n = coins.length;
+
     // dp[i][j]: combinations to make up amount j by using the first i kinds of coins
-    int[][] dp = new int[coins.length + 1][amount + 1];
+    int[][] dp = new int[n + 1][amount + 1];
     dp[0][0] = 1;
 
-    for (int i = 0; i < coins.length; i++) {  
+    for (int i = 0; i < n; i++) {
         for (int j = 0; j <= amount; j++) {
             if (j < coins[i]) {
                 dp[i + 1][j] = dp[i][j];
@@ -255,7 +257,7 @@ public int change(int amount, int[] coins) {
             }
         }
     }
-    return dp[coins.length][amount];
+    return dp[n][amount];
 }
 {% endhighlight %}
 
@@ -290,6 +292,10 @@ In 2D, `dp[i + 1][j] = dp[i][j] + dp[i + 1][j - nums[i]]`. The natural iteration
 
 ![1D](/assets/knapsack_coin_change_2_1d.png)
 
+[Form Largest Integer With Digits That Add up to Target][form-largest-integer-with-digits-that-add-up-to-target]
+
+### Permutation Sum
+
 The below permutation sum (yes it's permutation, ignore the wrong problem name) is not a knapsack problem, but the only difference is the loop order:
 
 [Combination Sum IV][combination-sum-iv]
@@ -323,8 +329,9 @@ subject to $$ \sum _{j=1}^{n}w_{j}x_{j}=W $$
 
 {% highlight java %}
 public int coinChange(int[] coins, int amount) {
-    int[][] dp = new int[coins.length + 1][amount + 1];
-    int max = amount + 1;
+    int n = coins.length, max = amount + 1;
+
+    int[][] dp = new int[n + 1][amount + 1];
     for (int i = 0; i < dp.length; i++) {
         Arrays.fill(dp[i], max);
     }
@@ -332,7 +339,7 @@ public int coinChange(int[] coins, int amount) {
         dp[i][0] = 0;
     }
 
-    for (int i = 0; i < coins.length; i++) {
+    for (int i = 0; i < n; i++) {
         for (int j = 0; j <= amount; j++) {
             if (j < coins[i]) {
                 dp[i + 1][j] = dp[i][j];
@@ -341,7 +348,7 @@ public int coinChange(int[] coins, int amount) {
             }
         }
     }
-    return dp[coins.length][amount] == max ? -1 : dp[coins.length][amount];
+    return dp[n][amount] == max ? -1 : dp[n][amount];
 }
 {% endhighlight %}
 
@@ -365,6 +372,7 @@ public int coinChange(int[] coins, int amount) {
 [coin-change]: https://leetcode.com/problems/coin-change/
 [coin-change-2]: https://leetcode.com/problems/coin-change-2/
 [combination-sum-iv]: https://leetcode.com/problems/combination-sum-iv/
+[form-largest-integer-with-digits-that-add-up-to-target]: https://leetcode.com/problems/form-largest-integer-with-digits-that-add-up-to-target/
 [last-stone-weight-ii]: https://leetcode.com/problems/last-stone-weight-ii/
 [ones-and-zeroes]: https://leetcode.com/problems/ones-and-zeroes/
 [partition-equal-subset-sum]: https://leetcode.com/problems/partition-equal-subset-sum/

@@ -404,6 +404,7 @@ private enum Triangle {
     BOTTOM,
     LEFT
 }
+
 public int regionsBySlashes(String[] grid) {
     this.n = grid.length;
     this.regions = n * n * 4;  // total number of triangles

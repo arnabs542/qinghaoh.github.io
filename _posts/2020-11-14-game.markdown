@@ -4,6 +4,8 @@ title:  "Game"
 ---
 # Dynamic Programming
 
+## Bottom-up
+
 [Stone Game][stone-game]
 
 {% highlight java %}
@@ -41,30 +43,7 @@ public boolean stoneGame(int[] piles) {
 
 Alex can always take either all odd piles or all even piles, and one of the colors must have a sum number of stones larger than the other color.
 
-# Greedy
-
-[Stone Game VI][stone-game-vi]
-
-{% highlight java %}
-public int stoneGameVI(int[] aliceValues, int[] bobValues) {
-    int n = aliceValues.length, diff = 0;
-    int[] sum = new int[n];
-    for (int i = 0; i < n; i++) {
-        sum[i] = aliceValues[i] + bobValues[i];
-        // Bob takes all stones first
-        diff -= bobValues[i];
-    }
-
-    Arrays.sort(sum);
-    for (int i =  n - 1; i >= 0; i -= 2) {
-        diff += sum[i];
-    }
-
-    return Integer.compare(diff, 0);
-}
-{% endhighlight %}
-
-# Top-down DP
+## Top-down
 
 [Can I Win][can-i-win]
 
@@ -94,7 +73,7 @@ private boolean dfs(int total, int state) {
     boolean canWin = false;
     for (int i = maxChoosableInteger; i > 0; i--) {
         if ((state & (1 << (i - 1))) == 0) {
-            // can't force a win == lose
+            // "can't force a win" == "lose"
             // because both players play optimally
             if (i >= total || !dfs(total - i, state | (1 << (i - 1)))) {
                 canWin = true;
@@ -141,6 +120,111 @@ private int helper(int[] piles, int start, int m) {
     }
 
     return memo[start][m] = max;
+}
+{% endhighlight %}
+
+# Bottom-up Percolation
+
+[Cat and Mouse][cat-and-mouse]
+
+{% highlight java %}
+private enum Color {
+    DRAW,
+    MOUSE,
+    CAT
+}
+
+// minimax
+// P-complete
+public int catMouseGame(int[][] graph) {
+    int n = graph.length;
+
+    // state: (cat location, mouse location, move)
+    // mouse move = 0, cat move = 1
+    // these states form a directed graph
+    Color[][][] color = new Color[n][n][2];
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            Arrays.fill(color[i][j], Color.DRAW);
+        }
+    }
+
+    int[][][] outdegree = new int[n][n][2];
+    for (int i = 0; i < n; i++) {   // cat
+        for (int j = 0; j < n; j++) {   // mouse
+            outdegree[i][j][0] = graph[j].length;
+            outdegree[i][j][1] = graph[i].length;
+
+            for (int next : graph[i]) {
+                // excludes the hole from outdegree[i][j][1] (cat move)
+                if (next == 0) {
+                    outdegree[i][j][1]--;
+                    break;
+                }
+            }
+        }
+    }
+
+    // bottom-up percolation
+    // enqueues ending nodes with definite results
+    // {cat location, mouse location, move, color}
+    Queue<int[]> q = new LinkedList<>();
+    for (int i = 1; i < n; i++) {
+        for (int k = 0; k < 2; k++) {
+            // Mouse reaches the hole
+            color[i][0][k] = Color.MOUSE;
+            q.offer(new int[]{i, 0, k, Color.MOUSE.ordinal()});
+
+            // Cat occupies the same node as Mouse
+            color[i][i][k] = Color.CAT;
+            q.offer(new int[]{i, i, k, Color.CAT.ordinal()});
+        }
+    }
+
+    while (!q.isEmpty()) {
+        int[] node = q.poll();
+        int cat = node[0], mouse = node[1], move = node[2], c = node[3];
+
+        // starting node
+        if (cat == 2 && mouse == 1 && move == 0) {
+            return c;
+        }
+
+        int prevMove = 1 - move;
+        for (int prev : graph[prevMove == 0 ? mouse : cat]) {
+            // if previous move is mouse, then cat remains
+            // otherwise cat is prev
+            int prevCat = prevMove == 0 ? cat : prev;
+            // if previous move is mouse, then mouse is prev
+            // otherwise mouse remains
+            int prevMouse = prevMove == 0 ? prev : mouse;
+
+            // Cat can't be in the hole
+            if (prevCat == 0) {
+                continue;
+            }
+
+            // if previous state is not DRAW, then it's already visited
+            if (color[prevCat][prevMouse][prevMove] != Color.DRAW) {
+                continue;
+            }
+
+            // for each DRAW node, there are two types of coloring
+            // (suppose the move is mouse move)
+            // - immediate coloring: if there's a child that's colored MOUSE,
+            //   then this node will also be colored MOUSE
+            // - eventual coloring: if all children are colored CAT,
+            //   then this node will also be colored CAT
+            if ((prevMove == 0 && c == Color.MOUSE.ordinal()) ||    // immediate coloring
+                (prevMove == 1 && c == Color.CAT.ordinal()) ||      // immediate coloring
+                --outdegree[prevCat][prevMouse][prevMove] == 0) {   // eventual coloring
+                color[prevCat][prevMouse][prevMove] = Color.values()[c];
+                q.offer(new int[]{prevCat, prevMouse, prevMove, c});
+            }
+        }
+    }
+
+    return color[2][1][0].ordinal();
 }
 {% endhighlight %}
 
@@ -246,6 +330,7 @@ public boolean canWin(String s) {
 {% endhighlight %}
 
 [can-i-win]: https://leetcode.com/problems/can-i-win/
+[cat-and-mouse]: https://leetcode.com/problems/cat-and-mouse/
 [flip-game-ii]: https://leetcode.com/problems/flip-game-ii/
 [stone-game]: https://leetcode.com/problems/stone-game/
 [stone-game-ii]: https://leetcode.com/problems/stone-game-ii/

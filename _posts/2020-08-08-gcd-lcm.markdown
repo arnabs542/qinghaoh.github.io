@@ -45,6 +45,45 @@ public String gcdOfStrings(String str1, String str2) {
 
 [X of a Kind in a Deck of Cards][x-of-a-kind-in-a-deck-of-cards]
 
+[Number of Different Subsequences GCDs][number-of-different-subsequences-gcds]
+
+{% highlight java %}
+private static final int MAX = (int)2e5;
+
+public int countDifferentSubsequenceGCDs(int[] nums) {
+    // factor[i]: gcd of all nums that has a factor i
+    int[] factor = new int[MAX + 1];
+
+    for (int i = 0; i < nums.length; i++) {
+        // finds all factors of nums[i]
+        for (int j = 1; j * j <= nums[i]; j++) {
+            if (nums[i] % j == 0) {
+                int f1 = j;
+                int f2 = nums[i] / j;
+
+                // finds gcd of all nums[i] with factor1
+                factor[f1] = gcd(factor[f1], nums[i]);
+
+                // finds gcd of all nums[i] with factor2
+                factor[f2] = gcd(factor[f2], nums[i]);
+            }
+        }
+    }
+
+    int count = 0;
+    for (int i = 1; i <= MAX; i++) {
+        // this check guarantees the GCD's found are unique
+        if (factor[i] == i) {
+            count++;
+        }
+    }
+    return count;
+}
+
+private int gcd(int a, int b) {
+}
+{% endhighlight %}
+
 # Least Common Multiple
 
 $$ {lcm} (a,b)={\frac {|a\cdot b|}{\gcd(a,b)}} $$
@@ -108,4 +147,5 @@ private int gcd(int a, int b) {
 
 [greatest-common-divisor-of-strings]: https://leetcode.com/problems/greatest-common-divisor-of-strings/
 [lexicographically-smallest-string-after-applying-operations]: https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/
+[number-of-different-subsequences-gcds]: https://leetcode.com/problems/number-of-different-subsequences-gcds/
 [x-of-a-kind-in-a-deck-of-cards]: https://leetcode.com/problems/x-of-a-kind-in-a-deck-of-cards/

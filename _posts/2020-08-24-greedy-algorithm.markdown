@@ -94,43 +94,6 @@ public int brokenCalc(int X, int Y) {
 }
 {% endhighlight %}
 
-[Maximum Number of Events That Can Be Attended][maximum-number-of-events-that-can-be-attended]
-
-{% highlight java %}
-public int maxEvents(int[][] events) {
-    // sorts events by start day
-    Arrays.sort(events, (a, b) -> Integer.compare(a[0], b[0]));
-
-    // keeps the current open events
-    Queue<Integer> pq = new PriorityQueue<>();
-    int i = 0, count = 0, day = 0;
-    while (!pq.isEmpty() || i < events.length) {
-        // if no events are open on this day,
-        // flies time to the start day of the next open event
-        if (pq.isEmpty()) {
-            day = events[i][0];
-        }
-
-        // adds new events that can be attended on this day
-        while (i < events.length && events[i][0] <= day) {
-            pq.offer(events[i++][1]);
-        }
-
-        // attends the event that will end the earliest
-        pq.poll();
-        count++;
-        day++;
-
-        // removes closed events
-        while (!pq.isEmpty() && pq.peek() < day) {
-            pq.poll();
-        }   
-    }
-
-    return count;
-}
-{% endhighlight %}
-
 [Split Array into Consecutive Subsequences][split-array-into-consecutive-subsequences]
 
 {% highlight java %}
@@ -282,7 +245,6 @@ public String maximumBinaryString(String binary) {
 [hand-of-straights]: https://leetcode.com/problems/hand-of-straights/
 [jump-game]: https://leetcode.com/problems/jump-game/
 [maximum-binary-string-after-change]: https://leetcode.com/problems/maximum-binary-string-after-change/
-[maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
 [minimum-factorization]: https://leetcode.com/problems/minimum-factorization/
 [put-boxes-into-the-warehouse-i]: https://leetcode.com/problems/put-boxes-into-the-warehouse-i/
 [split-array-into-consecutive-subsequences]: https://leetcode.com/problems/split-array-into-consecutive-subsequences/

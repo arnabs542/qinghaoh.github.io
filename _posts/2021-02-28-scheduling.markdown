@@ -174,7 +174,6 @@ public int minNumberOfSemesters(int n, int[][] dependencies, int k) {
 
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [longest-happy-string]: https://leetcode.com/problems/longest-happy-string/
-[maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
 [minimum-swaps-to-make-strings-equal]: https://leetcode.com/problems/minimum-swaps-to-make-strings-equal/
 [parallel-courses-ii]: https://leetcode.com/problems/parallel-courses-ii/
 [rearrange-string-k-distance-apart]: https://leetcode.com/problems/rearrange-string-k-distance-apart/

@@ -187,6 +187,41 @@ public int maximumBeauty(int[] flowers) {
 }
 {% endhighlight %}
 
+[Change Minimum Characters to Satisfy One of Three Conditions][change-minimum-characters-to-satisfy-one-of-three-conditions]
+
+{% highlight java %}
+public int minCharacters(String a, String b) {
+    int m = a.length(), n = b.length(), min = m + n;
+    int[] c1 = new int[26], c2 = new int[26];
+    for (char c : a.toCharArray()) {
+        c1[c - 'a']++;
+    }
+    for (char c : b.toCharArray()) {
+        c2[c - 'a']++;
+    }
+
+    for (int i = 0; i < 26; ++i) {
+        // Condition 3
+        min = Math.min(min, m + n - c1[i] - c2[i]);
+
+        // rolling prefix sum
+        if (i > 0) {
+            c1[i] += c1[i - 1];
+            c2[i] += c2[i - 1];
+        }
+
+        // exludes 'z'
+        if (i < 25) {
+            // Condition 1
+            min = Math.min(min, m - c1[i] + c2[i]);
+            // Condition 2
+            min = Math.min(min, n - c2[i] + c1[i]);
+        }
+    }
+    return min;
+}
+{% endhighlight %}
+
 ## Bounded Sum
 
 [Max Sum of Rectangle No Larger Than K][max-sum-of-rectangle-no-larger-than-k]
@@ -232,6 +267,7 @@ public int maxSumSubmatrix(int[][] matrix, int k) {
 }
 {% endhighlight %}
 
+[change-minimum-characters-to-satisfy-one-of-three-conditions]: https://leetcode.com/problems/change-minimum-characters-to-satisfy-one-of-three-conditions/
 [contiguous-array]: https://leetcode.com/problems/contiguous-array/
 [count-triplets-that-can-form-two-arrays-of-equal-xor]: https://leetcode.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/
 [max-sum-of-rectangle-no-larger-than-k]: https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/

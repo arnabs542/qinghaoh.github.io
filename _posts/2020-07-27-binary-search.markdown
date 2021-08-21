@@ -3,6 +3,7 @@ layout: post
 title:  "Binary Search"
 ---
 # Template
+
 [Binary Search][binary-search]
 
 {% highlight java %}
@@ -873,6 +874,37 @@ private boolean hasAvgAbove(int[] nums, int k, double target) {
 }
 {% endhighlight %}
 
+[Minimize Max Distance to Gas Station][minimize-max-distance-to-gas-station]
+
+{% highlight java %}
+private static final double MAX_ERROR = 1e-6;
+
+public double minmaxGasDist(int[] stations, int k) {
+    int n = stations.length;
+    double low = 0, high = stations[n - 1] - stations[0];
+    while (low + MAX_ERROR < high) {
+        double mid = (low + high) / 2;
+        if (condition(stations, k, mid)) {
+            high = mid;
+        } else {
+            low = mid;
+        }
+    }
+    return low;
+}
+
+private boolean condition(int[] stations, int k, double penalty) {
+    int count = 0;
+    for (int i = 0; i < stations.length - 1; i++) {
+        // keeps mid as max
+        count += Math.ceil((stations[i + 1] - stations[i]) / penalty) - 1;
+    }
+
+    // (k - count) is monitonically increasing wrt penalty
+    return count <= k;
+}
+{% endhighlight %}
+
 # Java
 ## Arrays
 [public static \<T\> int binarySearch(T\[\] a, int fromIndex, int toIndex, T key, Comparator\<? super T\> c)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#binarySearch(T%5B%5D,int,int,T,java.util.Comparator))
@@ -911,6 +943,7 @@ if (insertionPoint < 0) {
 [maximum-number-of-removable-characters]: https://leetcode.com/problems/maximum-number-of-removable-characters/
 [maximum-value-at-a-given-index-in-a-bounded-array]: https://leetcode.com/problems/maximum-value-at-a-given-index-in-a-bounded-array/
 [maximum-width-ramp]: https://leetcode.com/problems/maximum-width-ramp/
+[minimize-max-distance-to-gas-station]: https://leetcode.com/problems/minimize-max-distance-to-gas-station/
 [minimum-number-of-days-to-make-m-bouquets]: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/
 [missing-element-in-sorted-array]: https://leetcode.com/problems/missing-element-in-sorted-array/
 [missing-number-in-arithmetic-progression]: https://leetcode.com/problems/missing-number-in-arithmetic-progression/

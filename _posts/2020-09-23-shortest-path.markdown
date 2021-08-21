@@ -517,6 +517,82 @@ private boolean expand(int[][] grid, int i, int j, int color) {
 }
 {% endhighlight %}
 
+[Minimum Number of Days to Disconnect Island][minimum-number-of-days-to-disconnect-island]
+
+{% highlight java %}
+{% raw %}
+private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+{% endraw %}
+private int[][] grid;
+private int m, n;
+
+public int minDays(int[][] grid) {
+    this.grid = grid;
+    this.m = grid.length;
+    this.n = grid[0].length;
+
+    // checks if there's only one island
+    int color = 1;
+    int count = countIslands(color);
+    if (count != 1) {
+        return 0;
+    }
+    color++;
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            // backtracking
+            if (grid[i][j] == color) {
+                grid[i][j] = 0;
+                if (countIslands(color) != 1) {
+                    return 1;
+                }
+
+                // painting bumps the color
+                color++;
+                grid[i][j] = color;
+            }
+        }
+    }
+
+    // any island can be disconnected in at most 2 days
+    return 2;
+}
+
+// counts islands with color, and paints these islands to (color + 1)
+private int countIslands(int color) {
+    int count = 0;
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (grid[i][j] == color) {
+                paint(i, j, color);
+                count++;
+
+                // if there are more than one land, returns directly
+                if (count > 1) {
+                    return count;
+                }
+            }
+        }
+    }
+    return count;
+}
+
+// paints island of (i, j) to (color + 1)
+private void paint(int i, int j, int color) {
+    if (i < 0 || i == m || j < 0 || j == n || grid[i][j] == 0 || grid[i][j] == color + 1) {
+        return;
+    }
+
+    // marks the cell as visited by incrementing it by 1
+    grid[i][j] = color + 1;
+
+    for (int[] d : DIRECTIONS) {
+        paint(i + d[0], j + d[1], color);
+    }
+}
+{% endhighlight %}
+
 [Making A Large Island][making-a-large-island]
 
 {% highlight java %}
@@ -543,7 +619,7 @@ public int largestIsland(int[][] grid) {
 
     // initially, if all cells are 1, they will be painted to 2
     // and the size of island 2 will be the final result,
-    // since on operation can be performed.
+    // since at most one operation can be performed.
     // otherwise, we initialize max to 0
     int max = map.getOrDefault(2, 0);
     for (int i = 0; i < n; i++) {
@@ -593,6 +669,7 @@ private int paint(int[][] grid, int i, int j, int color) {
 [course-schedule-iv]: https://leetcode.com/problems/course-schedule-iv/
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [making-a-large-island]: https://leetcode.com/problems/making-a-large-island/
+[minimum-number-of-days-to-disconnect-island]: https://leetcode.com/problems/minimum-number-of-days-to-disconnect-island/
 [number-of-restricted-paths-from-first-to-last-node]: https://leetcode.com/problems/number-of-restricted-paths-from-first-to-last-node/
 [path-with-maximum-minimum-value]: https://leetcode.com/problems/path-with-maximum-minimum-value/
 [path-with-maximum-probability]: https://leetcode.com/problems/path-with-maximum-probability/

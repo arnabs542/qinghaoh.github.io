@@ -75,6 +75,10 @@ public void reset() {
 
 ## Remapping
 
+[Insert Delete GetRandom O(1)][insert-delete-getrandom-o1]
+
+Map + List
+
 [Random Pick with Blacklist][random-pick-with-blacklist]
 
 {% highlight java %}
@@ -320,6 +324,7 @@ public int pick(int target) {
 [Linked List Random Node][linked-list-random-node]
 
 [implement-rand10-using-rand7]: https://leetcode.com/problems/implement-rand10-using-rand7/
+[insert-delete-getrandom-o1]: https://leetcode.com/problems/insert-delete-getrandom-o1/
 [generate-random-point-in-a-circle]: https://leetcode.com/problems/generate-random-point-in-a-circle/
 [linked-list-random-node]: https://leetcode.com/problems/linked-list-random-node/
 [random-flip-matrix]: https://leetcode.com/problems/random-flip-matrix/

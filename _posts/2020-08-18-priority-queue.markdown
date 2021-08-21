@@ -92,6 +92,38 @@ public int furthestBuilding(int[] heights, int bricks, int ladders) {
 }
 {% endhighlight %}
 
+[Range Sum of Sorted Subarray Sums][range-sum-of-sorted-subarray-sums]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int rangeSum(int[] nums, int n, int left, int right) {
+    // {subarray, next index}
+    Queue<int[]> pq  = new PriorityQueue<>(n, Comparator.comparingInt(p -> p[0]));
+    // enqueues all numbers in nums
+    for (int i = 0; i < n; i++) {
+        pq.offer(new int[]{nums[i], i + 1});
+    }
+
+    int sum = 0;
+    // 1-indexed
+    for (int i = 1; i <= right; i++) {
+        // minimum subarray sum so far
+        int[] p = pq.poll();
+        if (i >= left) {
+            sum = (sum + p[0]) % MOD;
+        }
+
+        // adds next number to the subarray sum
+        if (p[1] < n) {
+            p[0] += nums[p[1]++];
+            pq.offer(p);
+        }
+    }
+    return sum;
+}
+{% endhighlight %}
+
 [Smallest Range Covering Elements from K Lists][smallest-range-covering-elements-from-k-lists]
 
 {% highlight java %}
@@ -328,5 +360,6 @@ public int minRefuelStops(int target, int startFuel, int[][] stations) {
 [minimum-cost-to-hire-k-workers]: https://leetcode.com/problems/minimum-cost-to-hire-k-workers/
 [minimize-deviation-in-array]: https://leetcode.com/problems/minimize-deviation-in-array/
 [minimum-number-of-refueling-stops]: https://leetcode.com/problems/minimum-number-of-refueling-stops/
+[range-sum-of-sorted-subarray-sums]: https://leetcode.com/problems/range-sum-of-sorted-subarray-sums/
 [smallest-range-covering-elements-from-k-lists]: https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/
 [the-skyline-problem]: https://leetcode.com/problems/the-skyline-problem/

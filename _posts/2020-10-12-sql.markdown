@@ -332,6 +332,24 @@ ORDER BY
 ;
 {% endhighlight %}
 
+[Exchange Seats][exchange-seats]
+
+{% highlight sql %}
+SELECT
+    CASE
+        WHEN seat.id % 2 <> 0 AND seat.id = (SELECT COUNT(*) FROM seat) THEN seat.id
+        WHEN seat.id % 2 = 0 THEN seat.id - 1
+    ELSE
+        seat.id + 1
+    END AS id,
+    student 
+FROM
+    seat
+ORDER BY
+    id
+;
+{% endhighlight %}
+
 [Game Play Analysis I][game-play-analysis-i]
 
 {% highlight sql %}
@@ -1839,6 +1857,7 @@ WHERE
 [customers-who-bought-products-a-and-b-but-not-c]: https://leetcode.com/problems/customers-who-bought-products-a-and-b-but-not-c/
 [employees-earning-more-than-their-managers]: https://leetcode.com/problems/employees-earning-more-than-their-managers/
 [evaluate-boolean-expression]: https://leetcode.com/problems/evaluate-boolean-expression/
+[exchange-seats]: https://leetcode.com/problems/exchange-seats/
 [find-interview-candidates]: https://leetcode.com/problems/find-interview-candidates/
 [find-median-given-frequency-of-numbers]: https://leetcode.com/problems/find-median-given-frequency-of-numbers/
 [find-the-start-and-end-number-of-continuous-ranges]: https://leetcode.com/problems/find-the-start-and-end-number-of-continuous-ranges/

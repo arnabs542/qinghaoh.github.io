@@ -73,6 +73,8 @@ Another solution is LIS DIP.
 
 [ISMP](https://en.wikipedia.org/wiki/Interval_scheduling#Interval_Scheduling_Maximization): to find a largest compatible set - a set of non-overlapping intervals of maximum size. The goal here is to execute as many tasks as possible.
 
+#### Unweighted
+
 [Non-overlapping Intervals][non-overlapping-intervals]
 
 {% highlight java %}
@@ -91,6 +93,77 @@ public int eraseOverlapIntervals(int[][] intervals) {
         }
     }
     return intervals.length - count;
+}
+{% endhighlight %}
+
+#### Weighted
+
+[Maximum Profit in Job Scheduling][maximum-profit-in-job-scheduling]
+
+{% highlight java %}
+public int jobScheduling(int[] startTime, int[] endTime, int[] profit) {
+    int n = startTime.length;
+    Integer[] index = new Integer[n];
+    for (int i = 0; i < n; i++) {
+        index[i] = i;
+    }
+
+    // sorts index by end time
+    Arrays.sort(index, Comparator.comparingInt(i -> endTime[i]));
+
+    // end time : max profit
+    TreeMap<Integer, Integer> dp = new TreeMap<>();
+    dp.put(0, 0);
+
+    for (int i : index) {
+        // curr is the max profit if we pick the current job
+        // binary searches in dp for the max profit we can make before startTime[i]
+        int curr = dp.floorEntry(startTime[i]).getValue() + profit[i];
+
+        // if curr max profit is more than last time
+        // it's worth doing this job
+        if (curr > dp.lastEntry().getValue()) {
+            // puts the job and its profit into the map
+            // only if curr max profit is more than last time
+            // it guarantees the map value increases as endTime (keys) increases
+            dp.put(endTime[i], curr);
+        }
+
+        // otherwise don't do this job
+    }
+    return dp.lastEntry().getValue();
+}
+{% endhighlight %}
+
+[Maximum Number of Events That Can Be Attended II][maximum-number-of-events-that-can-be-attended-ii]
+
+{% highlight java %}
+public int maxValue(int[][] events, int k) {
+    // sorts events by end day
+    Arrays.sort(events, Comparator.comparingInt(e -> e[1]));
+
+    int n = events.length;
+    // end day : max sum
+    // rolling dp
+    // dp1: i - 1
+    // dp2: i
+    TreeMap<Integer, Integer> dp1 = new TreeMap<>(), dp2 = new TreeMap<>();
+    dp1.put(0, 0);
+    dp2.put(0, 0);
+
+    for (int i = 0; i < k; i++) {
+        for (int[] e : events) {
+            int sum = dp1.lowerEntry(e[0]).getValue();
+            if (sum + e[2] > dp2.lastEntry().getValue()) {
+                dp2.put(e[1], sum + e[2]);
+            }
+        }
+        dp1 = dp2;
+        dp2 = new TreeMap<>();
+        dp2.put(0, 0);
+    }
+
+    return dp1.lastEntry().getValue();
 }
 {% endhighlight %}
 
@@ -194,8 +267,8 @@ public int maxEvents(int[][] events) {
 
     // stores the end day of the current open events
     Queue<Integer> pq = new PriorityQueue<>();
-    int i = 0, count = 0, day = 0;
-    while (!pq.isEmpty() || i < events.length) {
+    int n = events.length, i = 0, count = 0, day = 0;
+    while (!pq.isEmpty() || i < n) {
         // if no events are open on this day,
         // flies time to the start day of the next open event
         if (pq.isEmpty()) {
@@ -203,7 +276,7 @@ public int maxEvents(int[][] events) {
         }
 
         // adds new events that can be attended on this day
-        while (i < events.length && events[i][0] <= day) {
+        while (i < n && events[i][0] <= day) {
             pq.offer(events[i++][1]);
         }
 
@@ -616,6 +689,8 @@ class Interval implements Comparable<Interval> {
 [maximum-length-of-pair-chain]: https://leetcode.com/problems/maximum-length-of-pair-chain/
 [maximum-number-of-eaten-apples]: https://leetcode.com/problems/maximum-number-of-eaten-apples/
 [maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
+[maximum-number-of-events-that-can-be-attended-ii]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended-ii/
+[maximum-profit-in-job-scheduling]: https://leetcode.com/problems/maximum-profit-in-job-scheduling/
 [meeting-rooms-ii]: https://leetcode.com/problems/meeting-rooms-ii/
 [meeting-scheduler]: https://leetcode.com/problems/meeting-scheduler/
 [merge-intervals]: https://leetcode.com/problems/merge-intervals/
