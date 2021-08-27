@@ -15,6 +15,7 @@ tag: array
 public int maxProfit(int[] prices) {
     int profit = 0;
     for (int i = 1; i < prices.length; i++) {
+        // keeps on adding positive profit obtained from every consecutive transaction
         profit += Math.max(0, prices[i] - prices[i - 1]);
     }
     return profit;
@@ -97,7 +98,42 @@ i = 5, up = 0, down = 3, peak = 2, count = 13
 
 ```
 
+# Two Pointers
+
+[Shortest Subarray to be Removed to Make Array Sorted][shortest-subarray-to-be-removed-to-make-array-sorted]
+
+{% highlight java %}
+public int findLengthOfShortestSubarray(int[] arr) {
+    int n = arr.length;
+    // first peak and last valley
+    int left = 0, right = n - 1;
+    while (left + 1 < n && arr[left] <= arr[left + 1]) {
+        left++;
+    }
+    if (left == n - 1) {
+        return 0;
+    }
+
+    while (right > left && arr[right - 1] <= arr[right]) {
+        right--;
+    }
+
+    int min = Math.min(n - left - 1, right);
+    int i = 0, j = right;
+    while (i <= left && j < n) {
+        if (arr[j] >= arr[i]) {
+            min = Math.min(min, j - i - 1);
+            i++;
+        } else {
+            j++;
+        }
+    }
+    return min;
+}
+{% endhighlight %}
+
 [best-time-to-buy-and-sell-stock-ii]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
 [candy]: https://leetcode.com/problems/candy/
 [decrease-elements-to-make-array-zigzag]: https://leetcode.com/problems/decrease-elements-to-make-array-zigzag/
 [find-permutation]: https://leetcode.com/problems/find-permutation/
+[shortest-subarray-to-be-removed-to-make-array-sorted]: https://leetcode.com/problems/find-permutation/shortest-subarray-to-be-removed-to-make-array-sorted/

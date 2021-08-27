@@ -100,36 +100,146 @@ public int findUnsortedSubarray(int[] nums) {
 [Find Two Non-overlapping Sub-arrays Each With Target Sum][find-two-non-overlapping-sub-arrays-each-with-target-sum]
 
 {% highlight java %}
-private final int MAX = 100_001;
+private static final int MAX = (int)1e5 + 1;
 
 public int minSumOfLengths(int[] arr, int target) {
-    // minimum length sum of subarrays with target sum
-    int dp[] = new int[arr.length];
+    int n = arr.length;
 
-    // sliding window
-    int i = 0, j = 0, sum = 0, result = MAX, min = MAX;
-    while (j < arr.length) {
+    // dp[k]: minimum length of subarray arr[i...j]
+    // - sum(arr[i...j]) == target
+    // - 0 <= i <= j <= k
+    int[] dp = new int[n];
+
+    int i = 0, j = 0, sum = 0, result = MAX;
+    int minLen = MAX;     // min length of required subarrays so far
+    while (j < n) {
+        // sliding window
+        // based on the fact that all integers are positive
+        // and target > 0
         sum += arr[j];
         while (sum > target) {
             sum -= arr[i++];
         }
 
         if (sum == target) {
-            if (i > 0 && dp[i - 1] != 0) {
-                result = Math.min(result, dp[i - 1] + j - i + 1);
+            int currLen = j - i + 1;    // length of the current required subarray
+            minLen = Math.min(minLen, currLen);
+
+            if (i > 0 && dp[i - 1] > 0) {
+                result = Math.min(result, dp[i - 1] + currLen);
             }
-            min = Math.min(min, j - i + 1);
         }
-        dp[j++] = min;
+        dp[j++] = minLen;
     }
 
     return result == MAX ? -1 : result;
 }
 {% endhighlight %}
 
-Generalization: `N` non-overlapping subarrays
+Generalization: `k` non-overlapping subarrays
 
 {% highlight java %}
+private static final int MAX = (int)1e5 + 1;
+private Map<Integer, Integer> map = new HashMap<>();
+
+public int minSumOfLengths(int[] arr, int target) {
+    return minSumOfLengths(arr, target, 2);
+}
+
+// k non-overlapping sub-arrays
+private int minSumOfLengths(int[] arr, int target, int k) {
+    int n = arr.length;
+
+    // dp[t][m]: minimum sum of the lengths of m non-overlapping sub-arrays arr[i...j]
+    // - sum(arr[i...j]) == target
+    // - 0 <= i <= j < t
+    int[][] dp = new int[n + 1][k + 1];  //if asking for n subarrays, change 3 to n+1
+
+    map.put(0, 0);
+
+    // initialization
+    Arrays.fill(dp[0], MAX);
+
+    // length of 0 subarrays is 0
+    for (int i = 0; i <= n; i++) {
+        dp[i][0] = 0;
+    }
+
+    int sum = 0;
+    for (int i = 1; i <= n; i++) {
+        sum += arr[i - 1];
+        map.put(sum, i);
+
+        // arr[d + 1 ... i] == target
+        int d = map.getOrDefault(sum - target, -1);
+
+        for (int j = 1; j <= k; j++) {
+            dp[i][j] = dp[i - 1][j];
+            if (d >= 0) {
+                // len(arr[d + 1 ... i]) == i - d
+                dp[i][j] = Math.min(dp[i][j], dp[d][j - 1] + i - d);
+            }
+        }
+    }
+
+    return dp[n][k] == MAX ? -1 : dp[n][k];
+}
+{% endhighlight %}
+
+[Maximum Sum of 3 Non-Overlapping Subarrays][maximum-sum-of-3-non-overlapping-subarrays]
+
+{% highlight java %}
+public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
+    int n = nums.length;
+    int[] p = new int[n + 1];
+    for (int i = 0; i < n; i++) {
+        p[i + 1] = p[i] + nums[i];
+    }
+
+    int[] left = new int[n], right = new int[n];
+    // starting position in left
+    // left[k] = 0
+    for (int i = k, max = p[k] - p[0]; i < n; i++) {
+        int start = i + 1 - k, sum = p[i + 1] - p[start];
+        // strict >
+        // because the result is the lexicographically smallest one
+        if (sum > max) {
+            left[i] = start;
+            max = sum;
+        } else {
+            left[i] = left[i - 1];
+        }
+    }
+
+    // starting position in right
+    right[n - k] = n - k;
+    for (int i = n - k - 1, max = p[n] - p[n - k]; i >= 0; i--) {
+        int start = i, sum = p[i + k] - p[start];
+        // non-strict >=
+        // because the result is the lexicographically smallest one
+        if (sum >= max) {
+            right[i] = start;
+            max = sum;
+        } else {
+            right[i] = right[i + 1];
+        }
+    }
+
+    int[] result = new int[3];
+    int max = 0;
+    // iterates all middle intervals
+    for (int i = k; i <= n - 2 * k; i++) {
+        int l = left[i - 1], r = right[i + k];
+        int sum = (p[i + k] - p[i]) + (p[l + k] - p[l]) + (p[r + k] - p[r]);
+        if (sum > max) {
+            max = sum;
+            result[0] = l;
+            result[1] = i;
+            result[2] = r;
+        }
+    }
+    return result;
+}
 {% endhighlight %}
 
 [Arithmetic Slices][arithmetic-slices]
@@ -168,6 +278,7 @@ public int numberOfArithmeticSlices(int[] A) {
 [arithmetic-slices]: https://leetcode.com/problems/arithmetic-slices/
 [find-two-non-overlapping-sub-arrays-each-with-target-sum]: https://leetcode.com/problems/find-two-non-overlapping-sub-arrays-each-with-target-sum/
 [maximum-number-of-occurrences-of-a-substring]: https://leetcode.com/problems/maximum-number-of-occurrences-of-a-substring/
+[maximum-sum-of-3-non-overlapping-subarrays]: https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays/
 [minimum-moves-to-make-array-complementary]: https://leetcode.com/problems/minimum-moves-to-make-array-complementary/
 [range-addition]: https://leetcode.com/problems/range-addition/
 [subarrays-with-k-different-integers]: https://leetcode.com/problems/subarrays-with-k-different-integers/

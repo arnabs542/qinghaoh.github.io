@@ -31,4 +31,19 @@ public boolean isIdealPermutation(int[] A) {
 }
 {% endhighlight %}
 
+[Maximum Height by Stacking Cuboids][maximum-height-by-stacking-cuboids]
+
+Credit to @quantuminfo
+
+If the one with longest edge not as height is on the top of the cuboid stack, we can simply rotate it so the it contriubutes more height.
+
+If the one with longest edge is in the middle, let's say it is `A` and the 3 edges are `[A1, A3, A2] (A3 > A2 && A3 > A1, A2 is not longest but it is the height)`, the one on top of `A` is `B [B1, B2, B3] (B3 >= B2 >= B1)`:
+
+we have `A1 >= B1 && A3 >= B2 && A2 >= B3`
+
+then: `A3 > A2 >= B3, A2 >= B3 >= B2, A1 >= B1`
+
+so we can rotate `A` from `[A1, A3, A2]` to `[A1, A2, A3]` without afffecting `B` but make the total height larger (increase by `A3 - A2`)
+
 [global-and-local-inversions]: https://leetcode.com/problems/global-and-local-inversions/
+[maximum-height-by-stacking-cuboids]: https://leetcode.com/problems/maximum-height-by-stacking-cuboids/

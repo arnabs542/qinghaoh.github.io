@@ -249,43 +249,6 @@ for (int i = n - 1; i >= 0; i--) {
 }
 {% endhighlight %}
 
-# Permutation
-
-[Permutations of multisets](https://en.wikipedia.org/wiki/Permutation#Permutations_of_multisets)
-
-\\[{n \choose m_{1},m_{2},\ldots ,m_{l}}={\frac {n!}{m_{1}!\,m_{2}!\,\cdots \,m_{l}!}}=\frac {\left(\sum_{i=1}^{l}{m_{i}}\right)!}{\prod_{i=1}^{l}{m_{i}!}}\\]
-
-# Combination
-
-[Count Sorted Vowel Strings][count-sorted-vowel-strings]
-
-{% highlight java %}
-public int countVowelStrings(int n) {
-    // comb(n + 4, 4)
-    return (n + 4) * (n + 3) * (n + 2) * (n + 1) / 24;
-}
-{% endhighlight %}
-
-[Number of Sets of K Non-Overlapping Line Segments][number-of-sets-of-k-non-overlapping-line-segments]
-
-{% highlight java %}
-private static final int MOD = (int)1e9 + 7;
-
-public int numberOfSets(int n, int k) {
-    // equivalent to:
-    // n + k - 1 points, k segments, not allowed to share endpoints.
-    // C(n + k - 1, 2 * k)
-    // (n + k - 1)! / ((n - k - 1)! * (2 * k)!)
-    BigInteger count = BigInteger.valueOf(1);
-    for (int i = 1; i < k * 2 + 1; i++) {
-        count = count.multiply(BigInteger.valueOf(n + k - i));
-        count = count.divide(BigInteger.valueOf(i));
-    }
-    count = count.mod(BigInteger.valueOf(MOD));
-    return count.intValue();
-}
-{% endhighlight %}
-
 ## Catalan Number
 
 The nth Catalan number is given directly in terms of binomial coefficients by
@@ -326,18 +289,21 @@ public int numberOfWays(int num_people) {
 
 [Exponentiation by squaring](https://en.wikipedia.org/wiki/Exponentiation_by_squaring): square-and-multiply/binary exponentiation/double-and-add
 
-\\[
-\begin{cases}
-x^{n}={\begin{cases}x\,(x^{2})^{\frac {n-1}{2}},&{\mbox{if }}n{\mbox{ is odd}}
-(x^{2})^{\frac {n}{2}},&{\mbox{if }}n{\mbox{ is even}}.\end{cases}}
-\end{cases}
-\\]
+$$
+x^{n}=
+  \begin{cases}
+    x\,(x^{2})^{\frac {n-1}{2}},&{\mbox{if }}n{\mbox{ is odd}} \\
+    (x^{2})^{\frac {n}{2}},&{\mbox{if }}n{\mbox{ is even}}
+  \end{cases}
+$$
 
 If we write \\(n\\) in binary as \\(b_{k}\cdots b_{0}\\), then this is equivalent to defining a sequence \\(r_{k+1}, \ldots, r_{0}\\) by letting \\(r_{k+1} = 1\\) and then defining \\(r_{i}=r_{i+1}^{2}x^{b_{i}} \\) for \\(i = k, \ldots, 0\\), where \\(r_{0}\\) will equal \\(x^{n}\\).
 
 [Pow(x, n)][powx-n]
 
 ![Exponentiation by squaring](/assets/powx_n.png)
+
+Iterative:
 
 {% highlight java %}
 public double myPow(double x, int n) {
@@ -360,6 +326,38 @@ public double myPow(double x, int n) {
     }
     return r;
 }
+{% endhighlight %}
+
+Recursive:
+
+{% highlight java %}
+public double myPow(double x, int n) {
+    return fastPow(x, (long)n);
+}
+
+// fast power algorithm
+private double fastPow(double x, long n) {
+    if (n < 0) {
+        return fastPow(1 / x, -n);
+    }
+
+    if (n == 0) {
+        return 1;
+    }
+
+    if (n == 1) {
+        return x;
+    }
+
+    return n % 2 == 0 ? fastPow(x * x, n / 2) : x * fastPow(x * x, (n - 1) / 2);
+}
+{% endhighlight %}
+
+Another way of the last return is:
+
+{% highlight java %}
+double half = fastPow(x, n / 2);
+return half * half * (n % 2 == 0 ? 1 : x);
 {% endhighlight %}
 
 # Radix
@@ -529,12 +527,10 @@ public int reachNumber(int target) {
 [allocate-mailboxes]: https://leetcode.com/problems/allocate-mailboxes/
 [best-meeting-point]: https://leetcode.com/problems/best-meeting-point/
 [check-if-number-is-a-sum-of-powers-of-three]: https://leetcode.com/problems/check-if-number-is-a-sum-of-powers-of-three/
-[count-sorted-vowel-strings]: https://leetcode.com/problems/count-sorted-vowel-strings/
 [egg-drop-with-2-eggs-and-n-floors]: https://leetcode.com/problems/egg-drop-with-2-eggs-and-n-floors/
 [handshakes-that-dont-cross]: https://leetcode.com/problems/handshakes-that-dont-cross/
 [maximum-of-absolute-value-expression]: https://leetcode.com/problems/maximum-of-absolute-value-expression/
 [non-negative-integers-without-consecutive-ones]: https://leetcode.com/problems/non-negative-integers-without-consecutive-ones/
-[number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
 [power-of-three]: https://leetcode.com/problems/power-of-three/
 [powx-n]: https://leetcode.com/problems/powx-n/
 [reach-a-number]: https://leetcode.com/problems/reach-a-number/

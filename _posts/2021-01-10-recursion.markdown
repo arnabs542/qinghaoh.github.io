@@ -34,6 +34,53 @@ private List<String> findStrobogrammatic(int n, int initialN) {
 }
 {% endhighlight %}
 
+[Strobogrammatic Number III][strobogrammatic-number-iii]
+
+{% highlight java %}
+{% raw %}
+private static final char[][] PAIRS = {{'0', '0'}, {'1', '1'}, {'6', '9'}, {'8', '8'}, {'9', '6'}};
+{% endraw %}
+private String low, high;
+
+public int strobogrammaticInRange(String low, String high) {
+    this.low = low;
+    this.high = high;
+
+    int count = 0;
+    for (int len = low.length(); len <= high.length(); len++) {
+        count += helper(new char[len], 0, len - 1);
+    }
+    return count;
+}
+
+private int helper(char[] ch, int left, int right) {
+    if (left > right) {
+        String s = new String(ch);
+        return (ch.length == low.length() && s.compareTo(low) < 0) ||
+            (ch.length == high.length() && s.compareTo(high) > 0) ? 0 : 1;
+    }
+
+    int count = 0;
+    for (char[] p : PAIRS) {
+        ch[left] = p[0];
+        ch[right] = p[1];
+
+        // don't start with 0
+        if (ch.length != 1 && ch[0] == '0') {
+            continue;
+        }
+
+        // don't put 6/9 at the middle of string
+        if (left == right && (p[0] == '6' || p[0] == '9')) {
+            continue;
+        }
+
+        count += helper(ch, left + 1, right - 1);
+    }
+    return count;
+}
+{% endhighlight %}
+
 [Largest Merge Of Two Strings][largest-merge-of-two-strings]
 
 {% highlight java %}
@@ -135,7 +182,100 @@ public boolean isSelfCrossing(int[] x) {
 }
 {% endhighlight %}
 
+[Race Car][race-car]
+
+{% highlight java %}
+private int[] dp = new int[10001];
+
+public int racecar(int target) {
+    if (dp[target] > 0) {
+        return dp[target];
+    }
+
+    // at first, keeps accelerating
+    // n is the number of consecutive 'A's
+    // the position after n 'A's is 2 ^ n - 1
+    //
+    // now finds the n so that: 2 ^ (n - 1) - 1 < target <= 2 ^ n - 1
+    int n = (int)(Math.log(target) / Math.log(2)) + 1;
+
+    if (1 << n == target + 1) {
+        dp[target] = n;
+    } else {
+        // 2 ^ (n - 1) - 1 < target < 2 ^ n - 1
+        // Strategy 1:
+        // n 'A's -> 'R' -> backwards dp[2 ^ n - 1 - target]
+        dp[target] = racecar((1 << n) - 1 - target) + n + 1;
+        // Strategy 2:
+        // (n - 1) 'A's -> 'R' -> backwards m 'A's -> 'R' -> dp[target - (2 ^ (n - 1) - 1) + (2 ^ m - 1)]
+        for (int m = 0; m < n - 1; m++) {
+            dp[target] = Math.min(dp[target], (n - 1) + 1 + m + 1 + racecar(target - (1 << (n - 1)) + (1 << m)));
+        }
+    }
+    return dp[target];
+}
+{% endhighlight %}
+
+[Least Operators to Express Number][least-operators-to-express-number]
+
+{% highlight java %}
+private Map<Integer, Integer> memo = new HashMap<>();
+
+public int leastOpsExpressTarget(int x, int target) {
+    if (x == target) {
+        return 0;
+    }
+
+    if (x > target) {
+        // adds `target` times `x / x`
+        // or substracts `x - target` times `x / x` from x
+        return Math.min(target * 2 - 1, (x - target) * 2);
+    }
+
+    if (memo.containsKey(target)) {
+        return memo.get(target);
+    }
+
+    // greedy
+    // multiplies `x` as many as possible
+    long expression = x;
+    int multiplications = 0;
+    while (expression < target) {
+        multiplications++;
+        expression *= x;
+    }
+
+    if (expression == target) {
+        return multiplications;
+    }
+
+    // expression > target
+    int min = Integer.MAX_VALUE;
+
+    // the if condition bounds the recursion to be finite
+    // otherwise the new target `expression - target` will become bigger and bigger
+    if (expression - target < target) {
+        // subtraction:
+        // target = x ^ n - (x ^ n - target)
+        // operations = multiplications - f(expression - target)
+        min = Math.min(min, multiplications + 1 + leastOpsExpressTarget(x, (int)(expression - target)));
+    }
+
+    // addition:
+    // the multiplications went too far; we need to go one step back
+    // target = x ^ (n - 1) + 1 + (target - x ^ n / x)
+    // operators = (multiplications - 1) + 1 + f(target - expression / x)
+    //   = multiplications + f(target - expression / x);
+    min = Math.min(min, multiplications + leastOpsExpressTarget(x, (int)(target - expression / x)));
+    memo.put(target, min);
+    return min;
+}
+{% endhighlight %}
+
 [largest-merge-of-two-strings]: https://leetcode.com/problems/largest-merge-of-two-strings/
+[least-operators-to-express-number]: https://leetcode.com/problems/least-operators-to-express-number/
+[race-car]: https://leetcode.com/problems/race-car/
 [remove-invalid-parentheses]: https://leetcode.com/problems/remove-invalid-parentheses/
 [self-crossing]: https://leetcode.com/problems/self-crossing/
 [strobogrammatic-number-ii]: https://leetcode.com/problems/strobogrammatic-number-ii/
+[strobogrammatic-number-iii]: https://leetcode.com/problems/strobogrammatic-number-iii/

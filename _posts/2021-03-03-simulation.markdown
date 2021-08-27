@@ -90,6 +90,35 @@ public String predictPartyVictory(String senate) {
 }
 {% endhighlight %}
 
+[Where Will the Ball Fall][where-will-the-ball-fall]
+
+{% highlight java %}
+public int[] findBall(int[][] grid) {
+    int m = grid.length, n = grid[0].length;
+    int[] answer = new int[n];
+    for (int j = 0; j < n; j++) {
+        int j1 = j, j2 = 0;
+        for (int i = 0; i < m; i++) {
+            // next possible column
+            j2 = j1 + grid[i][j1];
+
+            // if a ball can move from j1 to j2
+            // grid[i][j1] == grid[i][j2]
+            if (j2 < 0 || j2 >= n || grid[i][j2] != grid[i][j1]) {
+                j1 = -1;
+                break;
+            }
+
+            // prepares for next row
+            j1 = j2;
+        }
+        answer[j] = j1;
+    }
+    return answer;
+}
+{% endhighlight %}
+
 [champagne-tower]: https://leetcode.com/problems/champagne-tower/
 [dota2-senate]: https://leetcode.com/problems/dota2-senate/
 [pour-water]: https://leetcode.com/problems/pour-water/
+[where-will-the-ball-fall]: https://leetcode.com/problems/where-will-the-ball-fall/

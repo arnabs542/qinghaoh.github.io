@@ -11,19 +11,22 @@ dp[k][i] = max(dp[k][i - 1], prices[i] - prices[j] + dp[k - 1][j - 1]), j = [0, 
 
 {% highlight java %}
 public int maxProfit(int k, int[] prices) {
-    if (k >= prices.length / 2) {
-        // Best Time to Buy and Sell Stock II
+    int n = prices.length;
+
+    // we can make maximum number of transactions
+    if (k >= n / 2) {
+        // 122. Best Time to Buy and Sell Stock II
         int profit = 0;
-        for (int i = 1; i < prices.length; i++) {
+        for (int i = 1; i < n; i++) {
             profit += Math.max(0, prices[i] - prices[i - 1]);
         }
         return profit;
     }
 
     // dp[i][j]: max profit on j-th day with i transactions
-    int[][] dp = new int[k + 1][prices.length];
+    int[][] dp = new int[k + 1][n];
     for (int m = 1; m <= k; m++) {
-        for (int i = 1; i < prices.length; i++) {
+        for (int i = 1; i < n; i++) {
             int min = prices[0];
             for (int j = 1; j <= i; j++) {
                 min = Math.min(min, prices[j] - dp[m - 1][j - 1]);
@@ -31,7 +34,7 @@ public int maxProfit(int k, int[] prices) {
             dp[m][i] = Math.max(dp[m][i - 1], prices[i] - min);
         }
     }
-    return dp[k][prices.length - 1];
+    return dp[k][n - 1];
 }
 {% endhighlight %}
 
@@ -40,7 +43,7 @@ Reduces the repetitive calculation of min:
 {% highlight java %}
 for (int m = 1; m <= k; m++) {
     int min = prices[0];
-    for (int i = 1; i < prices.length; i++) {
+    for (int i = 1; i < n; i++) {
 	min = Math.min(min, prices[i] - dp[m - 1][i - 1]);
 	dp[m][i] = Math.max(dp[m][i - 1], prices[i] - min);
     }
@@ -52,7 +55,7 @@ Swaps the two for-loops. `min` becomes an array to store min of each transaction
 {% highlight java %}
 int[] min = new int[k + 1];
 Arrays.fill(min, prices[0]);      
-for (int i = 1; i < prices.length; i++) {
+for (int i = 1; i < n; i++) {
     for (int j = 1; j <= k; j++) {
 	min[j] = Math.min(min[j], prices[i] - dp[j - 1][i - 1]);
 	dp[j][i] = Math.max(dp[j][i - 1], prices[i] - min[j]);
@@ -63,9 +66,9 @@ for (int i = 1; i < prices.length; i++) {
 Reduces to 1D:
 
 {% highlight java %}
-int[] dp = new int[k + 1];
-int[] min = new int[k + 1];
+int[] dp = new int[k + 1], min = new int[k + 1];
 Arrays.fill(min, prices[0]);      
+
 for (int i = 1; i < prices.length; i++) {
     for (int j = 1; j <= k; j++) {
 	min[j] = Math.min(min[j], prices[i] - dp[j - 1]);

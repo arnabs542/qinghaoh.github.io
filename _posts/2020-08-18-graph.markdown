@@ -224,6 +224,7 @@ private int getDistance(String a, String b) {
 [Directed graph](https://en.wikipedia.org/wiki/Directed_graph)
 
 ## Degree
+
 [Find the Town Judge][find-the-town-judge]
 
 {% highlight java %}
@@ -397,15 +398,14 @@ private long[][] multiply(long[][] m1, long[][] m2) {
 [Graph Valid Tree][graph-valid-tree]
 
 {% highlight java %}
-private List<Set<Integer>> graph;
-private Set<Integer> visited;
+private List<Set<Integer>> graph = new ArrayList<>();
+private Set<Integer> visited = new HashSet<>();
 
 public boolean validTree(int n, int[][] edges) {
     if (n != edges.length + 1) {
         return false;
     }
 
-    this.graph = new ArrayList<>();
     for (int i = 0; i < n; i++) {
         graph.add(new HashSet<>());
     }
@@ -415,7 +415,6 @@ public boolean validTree(int n, int[][] edges) {
     }
 
     // checks if the graph is fully connected
-    this.visited = new HashSet<>();
     dfs(0);
 
     return visited.size() == n;

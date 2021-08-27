@@ -222,6 +222,30 @@ public int minCharacters(String a, String b) {
 }
 {% endhighlight %}
 
+## Dynamic Programming
+
+[Maximum Number of Non-Overlapping Subarrays With Sum Equals Target][maximum-number-of-non-overlapping-subarrays-with-sum-equals-target]
+
+{% highlight java %}
+public int maxNonOverlapping(int[] nums, int target) {
+    // prefix sum : max number of non-empty non-overlapping subarrays
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(0, 0);
+
+    int sum = 0, count = 0;
+    for (int i = 0; i < nums.length; i++) {
+        sum += nums[i];
+        if (map.containsKey(sum - target)) {
+            count = Math.max(count, map.get(sum - target) + 1);
+        }
+
+        // later sum can always overwrite, because `count` is guaranteed >=
+        map.put(sum, count);
+    }
+    return count;
+}
+{% endhighlight %}
+
 ## Bounded Sum
 
 [Max Sum of Rectangle No Larger Than K][max-sum-of-rectangle-no-larger-than-k]
@@ -273,6 +297,7 @@ public int maxSumSubmatrix(int[][] matrix, int k) {
 [max-sum-of-rectangle-no-larger-than-k]: https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/
 [maximize-the-beauty-of-the-garden]: https://leetcode.com/problems/maximize-the-beauty-of-the-garden/
 [maximum-absolute-sum-of-any-subarray]: https://leetcode.com/problems/maximum-absolute-sum-of-any-subarray/
+[maximum-number-of-non-overlapping-subarrays-with-sum-equals-target]: https://leetcode.com/problems/maximum-number-of-non-overlapping-subarrays-with-sum-equals-target/
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
 [product-of-the-last-k-numbers]: https://leetcode.com/problems/product-of-the-last-k-numbers/
 [remove-zero-sum-consecutive-nodes-from-linked-list]: https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/

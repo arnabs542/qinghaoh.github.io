@@ -47,6 +47,22 @@ for (int i = 0; i < n; i++) {
 Arrays.sort(candidate, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
 {% endhighlight %}
 
+[Maximum Height by Stacking Cuboids][maximum-height-by-stacking-cuboids]
+
+{% highlight java %}
+nt n = cuboids.length, max = 0;
+int[] dp = new int[n];
+for (int j = 0; j < n; j++) {
+    dp[j] = cuboids[j][2];
+    for (int i = 0; i < j; i++) {
+        if (cuboids[i][0] >= cuboids[j][0] && cuboids[i][1] >= cuboids[j][1] && cuboids[i][2] >= cuboids[j][2]) {
+            dp[j] = Math.max(dp[j], dp[i] + cuboids[j][2]);
+        }
+    }
+    max = Math.max(max, dp[j]);
+}
+{% endhighlight %}
+
 [Build Array Where You Can Find The Maximum Exactly K Comparisons][build-array-where-you-can-find-the-maximum-exactly-k-comparisons]
 
 {% highlight java %}
@@ -126,3 +142,4 @@ for (int a = 1; a <= n; a++) {
 
 [best-team-with-no-conflicts]: https://leetcode.com/problems/best-team-with-no-conflicts/
 [build-array-where-you-can-find-the-maximum-exactly-k-comparisons]: https://leetcode.com/problems/build-array-where-you-can-find-the-maximum-exactly-k-comparisons/
+[maximum-height-by-stacking-cuboids]: https://leetcode.com/problems/maximum-height-by-stacking-cuboids/

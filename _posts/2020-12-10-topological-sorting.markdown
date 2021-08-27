@@ -320,6 +320,10 @@ private boolean dfs(int node) {
 }
 {% endhighlight %}
 
+[Detect Cycles in 2D Grid][detect-cycles-in-2d-grid]
+
+Don't visit the last cell.
+
 [Critical Connections in a Network][critical-connections-in-a-network]
 
 {% highlight java %}
@@ -551,6 +555,7 @@ Another solution is DFS + memorization
 [count-subtrees-with-max-distance-between-cities]: https://leetcode.com/problems/count-subtrees-with-max-distance-between-cities/
 [course-schedule-ii]: https://leetcode.com/problems/course-schedule-ii/
 [critical-connections-in-a-network]: https://leetcode.com/problems/critical-connections-in-a-network/
+[detect-cycles-in-2d-grid]: https://leetcode.com/problems/detect-cycles-in-2d-grid/
 [longest-increasing-path-in-a-matrix]: https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
 [minimum-height-trees]: https://leetcode.com/problems/minimum-height-trees/
 [sequence-reconstruction]: https://leetcode.com/problems/sequence-reconstruction/
