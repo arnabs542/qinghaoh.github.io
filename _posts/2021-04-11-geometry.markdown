@@ -35,7 +35,7 @@ public boolean escapeGhosts(int[][] ghosts, int[] target) {
 
 [Graham scan](https://en.wikipedia.org/wiki/Graham_scan)
 
-For three points \\(P_{1}=(x_{1},y_{1})\\), \\(P_{2}=(x_{2},y_{2}\\) and \\(P_{3}=(x_{3},y_{3})\\), compute the z-coordinate of the cross product of the two vectors \\(\overrightarrow {P_{1}P_{2}}\\) and \\(\overrightarrow {P_{1}P_{3}}\\), which is given by the expression \\((x_{2}-x_{1})(y_{3}-y_{1})-(y_{2}-y_{1})(x_{3}-x_{1})\\).
+For three points \\(P_{1}=(x_{1},y_{1})\\), \\(P_{2}=(x_{2},y_{2})\\) and \\(P_{3}=(x_{3},y_{3})\\), compute the z-coordinate of the cross product of the two vectors \\(\overrightarrow {P_{1}P_{2}}\\) and \\(\overrightarrow {P_{1}P_{3}}\\), which is given by the expression \\((x_{2}-x_{1})(y_{3}-y_{1})-(y_{2}-y_{1})(x_{3}-x_{1})\\).
 
 [Convex Polygon][convex-polygon]
 
@@ -250,11 +250,20 @@ public int maxAbsValExpr(int[] arr1, int[] arr2) {
 
 [Circum Circle Cartesian equation](https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates):
 
+$${\begin{aligned}
+S_{x}&={\frac {1}{2}}\det {\begin{bmatrix}|\mathbf {A} |^{2}&A_{y}&1\\|\mathbf {B} |^{2}&B_{y}&1\\|\mathbf {C} |^{2}&C_{y}&1\end{bmatrix}},\\[5pt]
+S_{y}&={\frac {1}{2}}\det {\begin{bmatrix}A_{x}&|\mathbf {A} |^{2}&1\\B_{x}&|\mathbf {B} |^{2}&1\\C_{x}&|\mathbf {C} |^{2}&1\end{bmatrix}},\\[5pt]
+a&=\det {\begin{bmatrix}A_{x}&A_{y}&1\\B_{x}&B_{y}&1\\C_{x}&C_{y}&1\end{bmatrix}},\\[5pt]
+b&=\det {\begin{bmatrix}A_{x}&A_{y}&|\mathbf {A} |^{2}\\B_{x}&B_{y}&|\mathbf {B} |^{2}\\C_{x}&C_{y}&|\mathbf {C} |^{2}\end{bmatrix}}
+\end{aligned}}$$
+
 Circumcenter:
 \\[\frac{\mathbf{S}}{a}\\]
 
 Circumradius:
 \\[\sqrt{\frac{b}{a} + \frac{\|\mathbf{S}\|^2}{a ^ 2}}\\]
+
+[Erect the Fence II][erect-the-fence-ii]
 
 {% highlight java %}
 public double[] outerTrees(int[][] trees) {
@@ -383,6 +392,69 @@ for (int i = 0; i < m; i++) {
 }
 {% endhighlight %}
 
+# Convex Hull
+
+[Monotone Chain](https://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain): Andrew's monotone chain convex hull algorithm constructs the convex hull of a set of 2-dimensional points in \\(O(n\log n)\\) time. It does so by first sorting the points lexicographically (first by x-coordinate, and in case of a tie, by y-coordinate), and then constructing upper and lower hulls of the points in \\(O(n)\\) time.
+
+[Orientation of a Simple Polygon](https://en.wikipedia.org/wiki/Curve_orientation#Orientation_of_a_simple_polygon)
+
+$$\mathbf {O} ={\begin{bmatrix}1&x_{A}&y_{A}\\1&x_{B}&y_{B}\\1&x_{C}&y_{C}\end{bmatrix}}$$
+
+$$\det(O)=(x_{B}-x_{A})(y_{C}-y_{A})-(x_{C}-x_{A})(y_{B}-y_{A})$$
+
+[Erect the Fence][erect-the-fence]
+
+{% highlight java %}
+// Convex Hull
+// Monotone Chain
+public int[][] outerTrees(int[][] points) {
+    // sort the point of P by x-coordinate
+    // in case of a tie, by y-coordinate
+    Arrays.sort(points, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
+
+    // holds the vertices of upper and lower hulls
+    List<int[]> lower = new ArrayList<>(), upper = new ArrayList<>();
+
+    // builds Lower layer of hulls
+    for (int[] p : points) {
+        // while the 3 points are clockwise turn
+        while (lower.size() >= 2 &&
+               clockwise(lower.get(lower.size() - 2), lower.get(lower.size() - 1), p)) {
+            lower.remove(lower.size() - 1);             // remove q on (p,q,r)
+        }
+        lower.add(p);
+    }
+
+    // builds upper layer of hulls
+    for (int i = points.length - 1; i >= 0; i--) {
+        // while the 3 points are clockwise turn
+        while (upper.size() >= 2 &&
+               clockwise(upper.get(upper.size() - 2), upper.get(upper.size() - 1), points[i])) {
+            upper.remove(upper.size() - 1);             // remove q on (p,q,r)
+        }
+        upper.add(points[i]);
+    }
+
+    // concatenates L and U to obtain the convex hull of P.
+    // points in the result will be listed in counter-clockwise order.
+    // removes duplicates.
+    Set<int[]> set = Stream.concat(lower.stream(), upper.stream())
+        .collect(Collectors.toSet());
+
+    int[][] perimeter = new int[set.size()][2];
+    int i = 0;
+    for (int[] p : set) {
+        perimeter[i++] = p;
+    }
+    return perimeter;
+}
+
+// orientation
+private boolean clockwise(int[] a, int[] b, int[] c) {
+    return (b[1] - a[1]) * (c[0] - b[0])  - (b[0] - a[0]) * (c[1] - b[1]) > 0;
+}
+{% endhighlight %}
+
 # 3-D
 
 [Building Boxes][building-boxes]
@@ -421,6 +493,8 @@ public int minimumBoxes(int n) {
 [building-boxes]: https://leetcode.com/problems/building-boxes/
 [circle-and-rectangle-overlapping]: https://leetcode.com/problems/circle-and-rectangle-overlapping/
 [convex-polygon]: https://leetcode.com/problems/convex-polygon/
+[erect-the-fence]: https://leetcode.com/problems/erect-the-fence/
+[erect-the-fence-ii]: https://leetcode.com/problems/erect-the-fence-ii/
 [escape-the-ghosts]: https://leetcode.com/problems/escape-the-ghosts/
 [maximum-of-absolute-value-expression]: https://leetcode.com/problems/maximum-of-absolute-value-expression/
 [minimum-area-rectangle]: https://leetcode.com/problems/minimum-area-rectangle/

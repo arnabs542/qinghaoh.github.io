@@ -240,11 +240,41 @@ public String maximumBinaryString(String binary) {
 }
 {% endhighlight %}
 
+[Maximum Number of Ones][maximum-number-of-ones]
+
+![2D](/assets/maximum_number_of_ones.png)
+
+{% highlight java %}
+public int maximumNumberOfOnes(int width, int height, int sideLength, int maxOnes) {
+    // greedy - translation of a single sub-matrix
+    // considers all positions in the sub-matrix
+    // counts their occurrences in M
+    int[] count = new int[sideLength * sideLength];
+    for (int i = 0; i < sideLength; i++) {
+        for (int j = 0; j < sideLength; j++) {
+            // Math.ceil((width - i) / (double)sideLength)
+            count[i * sideLength + j] += ((width - i - 1) / sideLength + 1) * ((height - j - 1) / sideLength + 1);
+        }
+    }
+
+    // sorts the positions by occurrences
+    Arrays.sort(count);
+
+    // assigns ones to positions with more occurrences
+    int sum = 0;
+    for (int i = count.length - 1; i > count.length - 1 - maxOnes; i--) {
+        sum += count[i];
+    }
+    return sum;
+}
+{% endhighlight %}
+
 [broken-calculator]: https://leetcode.com/problems/broken-calculator/
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [hand-of-straights]: https://leetcode.com/problems/hand-of-straights/
 [jump-game]: https://leetcode.com/problems/jump-game/
 [maximum-binary-string-after-change]: https://leetcode.com/problems/maximum-binary-string-after-change/
+[maximum-number-of-ones]: https://leetcode.com/problems/maximum-number-of-ones/
 [minimum-factorization]: https://leetcode.com/problems/minimum-factorization/
 [put-boxes-into-the-warehouse-i]: https://leetcode.com/problems/put-boxes-into-the-warehouse-i/
 [split-array-into-consecutive-subsequences]: https://leetcode.com/problems/split-array-into-consecutive-subsequences/

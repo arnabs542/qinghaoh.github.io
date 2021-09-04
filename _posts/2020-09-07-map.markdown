@@ -218,6 +218,35 @@ public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
 
 [Depth of BST Given Insertion Order][depth-of-bst-given-insertion-order]
 
+[Array of Doubled Pairs][array-of-doubled-pairs]
+
+{% highlight java %}
+public boolean canReorderDoubled(int[] arr) {
+    Map<Integer, Integer> count = new TreeMap();
+    for (int a : arr) {
+        count.put(a, count.getOrDefault(a, 0) + 1);
+    }
+
+    for (int a : count.keySet()) {
+        if (count.get(a) == 0) {
+            continue;
+        }
+
+        int pair = a < 0 ? a / 2 : a * 2;
+        // if a is an odd negative, we can't find a pair that pair * 2 == a
+        // if count(a) > count(pair), there's not enough pair to cancel a out
+        // since we are scanning in ascending order
+        if ((a < 0 && a % 2 != 0) || count.get(a) > count.getOrDefault(pair, 0)) {
+            return false;
+        }
+
+        count.put(pair, count.get(pair) - count.get(a));
+    }
+    return true;
+}
+{% endhighlight %}
+
+[array-of-doubled-pairs]: https://leetcode.com/problems/array-of-doubled-pairs/
 [contains-duplicate-iii]: https://leetcode.com/problems/contains-duplicate-iii/
 [depth-of-bst-given-insertion-order]: https://leetcode.com/problems/depth-of-bst-given-insertion-order/
 [making-file-names-unique]: https://leetcode.com/problems/making-file-names-unique/

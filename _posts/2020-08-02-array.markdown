@@ -85,6 +85,27 @@ public void rotate(int[] nums, int k) {
 
 [Shift 2D Grid][shift-2d-grid]
 
+[Array Nesting][array-nesting]
+
+{% highlight java %}
+public int arrayNesting(int[] nums) {
+    int max = 0;
+    for (int i = 0; i < nums.length; i++) {
+        int length = 0, j = i;
+        // finds cycles
+        while (nums[j] >= 0) {
+            int next = nums[j];
+            // marks nums[j] as visited
+            nums[j] = -1;
+            j = next;
+            length++;
+        }
+        max = Math.max(max, length);
+    }
+    return max;
+}
+{% endhighlight %}
+
 [Reverse Words in a String II][reverse-words-in-a-string-ii]
 
 {% highlight java %}
@@ -279,6 +300,7 @@ public int candy(int[] ratings) {
 }
 {% endhighlight %}
 
+[array-nesting]: https://leetcode.com/problems/array-nesting/
 [candy]: https://leetcode.com/problems/candy/
 [first-missing-positive]: https://leetcode.com/problems/first-missing-positive/
 [longest-consecutive-sequence]: https://leetcode.com/problems/longest-consecutive-sequence/

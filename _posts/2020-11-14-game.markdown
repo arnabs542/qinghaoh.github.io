@@ -2,6 +2,33 @@
 layout: post
 title:  "Game"
 ---
+
+[Sum Game][sum-game]
+
+{% highlight java %}
+public boolean sumGame(String num) {
+    // left - right
+    int diff = 0, qDiff = 0;
+    for (int i = 0; i < num.length(); i++) {
+        int c = i < num.length() / 2 ? 1 : -1;
+        if (num.charAt(i) == '?') {
+            qDiff += c;
+        } else {
+            diff += c * (num.charAt(i) - '0');
+        }
+    }
+
+    // if qDiff is odd, Alice can always win
+    // checks parity by qDiff & 1 to cover negative cases
+
+    // 1. '?' on the opposite sides cancel each out
+    // 2. For two '?' on the same side, Bob can always make ? + ? == 9, regardless of how Alice plays.
+    // so if we have n '?'s, Bob can only win if:
+    // smaller + n * 9 / 2 == larger
+    return (qDiff & 1) == 1 || diff + qDiff * 9 / 2 != 0;
+}
+{% endhighlight %}
+
 # Dynamic Programming
 
 ## Bottom-up
@@ -335,3 +362,4 @@ public boolean canWin(String s) {
 [stone-game]: https://leetcode.com/problems/stone-game/
 [stone-game-ii]: https://leetcode.com/problems/stone-game-ii/
 [stone-game-vi]: https://leetcode.com/problems/stone-game-vi/
+[sum-game]: https://leetcode.com/problems/sum-game/

@@ -216,7 +216,7 @@ public List<List<Integer>> getSkyline(int[][] buildings) {
 
     Collections.sort(heights, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
 
-    TreeMap<Integer, Integer> map = new TreeMap<>(Collections.reverseOrder());
+    TreeMap<Integer, Integer> map = new TreeMap<>();
     // a trick to deal with last building in a block
     map.put(0, 1);
 
@@ -228,12 +228,8 @@ public List<List<Integer>> getSkyline(int[][] buildings) {
             map.put(-h[1], map.getOrDefault(-h[1], 0) + 1);
         } else {
             // if it's end, removes/decrements the height from map
-            int count = map.get(h[1]);
-            if (count == 1) {
-                map.remove(h[1]);
-            } else {
-                map.put(h[1], count - 1);
-            }
+            map.put(h[1], map.get(h[1]) - 1);
+            map.remove(h[1], 0);
         }
 
         // gets the max height

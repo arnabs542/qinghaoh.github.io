@@ -272,6 +272,59 @@ public int leastOpsExpressTarget(int x, int target) {
 }
 {% endhighlight %}
 
+# Mutual Recursion
+
+[Elimination Game][elimination-game]
+
+{% highlight java %}
+public int lastRemaining(int n) {
+    boolean fromLeftToRight = true;
+    int remaining = n, step = 1, head = 1;
+    while (remaining > 1) {
+        // updates head if it's from left to right,
+        // or remaining is odd
+        if (fromLeftToRight || remaining % 2 == 1) {
+            head += step;
+        }
+
+        remaining /= 2;
+        step *= 2;
+        fromLeftToRight = !fromLeftToRight;
+    }
+    return head;
+}
+{% endhighlight %}
+
+{% highlight java %}
+public int lastRemaining(int n) {
+    return leftToRight(n);
+}
+
+private static int leftToRight(int n) {
+    if (n <= 2) {
+        return n;
+    }
+    return 2 * rightToLeft(n / 2);
+}
+
+private static int rightToLeft(int n) {
+    if (n <= 2) {
+        return 1;
+    }
+
+    return n % 2 == 1 ? 2 * leftToRight(n / 2) : 2 * leftToRight(n / 2) - 1;
+}
+{% endhighlight %}
+
+{% highlight java %}
+public int lastRemaining(int n) {
+    // mirroring:
+    // l(n) + r(n) == 1 + n
+    return n == 1 ? 1 : 2 * (1 + n / 2 - lastRemaining(n / 2));
+}
+{% endhighlight %}
+
+[elimination-game]: https://leetcode.com/problems/elimination-game/
 [largest-merge-of-two-strings]: https://leetcode.com/problems/largest-merge-of-two-strings/
 [least-operators-to-express-number]: https://leetcode.com/problems/least-operators-to-express-number/
 [race-car]: https://leetcode.com/problems/race-car/

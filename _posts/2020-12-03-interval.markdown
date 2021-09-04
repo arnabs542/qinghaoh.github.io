@@ -3,6 +3,43 @@ layout: post
 title:  "Interval"
 ---
 
+# TreeMap
+
+[Falling Squares][falling-squares]
+
+{% highlight java %}
+public List<Integer> fallingSquares(int[][] positions) {
+    // start : height
+    TreeMap<Integer, Integer> map = new TreeMap<>();
+    // avoids null floor keys
+    map.put(0, 0);
+
+    List<Integer> list = new ArrayList<>();
+    int max = 0;
+    for (int[] p : positions) {
+        int start = p[0], end = start + p[1];
+        Integer from = map.floorKey(start);
+        int height = map.subMap(from, end)
+            .values()
+            .stream()
+            .max(Integer::compare)
+            .get() + p[1];
+        max = Math.max(max, height);
+        list.add(max);
+
+        // sets [start, end) to height
+        // sets [end, ) to prev
+        int prev = map.floorEntry(end).getValue();
+        map.put(start, height);
+        map.put(end, prev);
+
+        // removes interval within (start, end)
+        map.subMap(start, false, end, false).clear();
+    }
+    return list;
+}
+{% endhighlight %}
+
 [Check if All the Integers in a Range Are Covered][check-if-all-the-integers-in-a-range-are-covered]
 
 {% highlight java %}
@@ -684,6 +721,7 @@ class Interval implements Comparable<Interval> {
 [check-if-all-the-integers-in-a-range-are-covered]: https://leetcode.com/problems/check-if-all-the-integers-in-a-range-are-covered/
 [course-schedule-iii]: https://leetcode.com/problems/course-schedule-iii/
 [exam-room]: https://leetcode.com/problems/exam-room/
+[falling-squares]: https://leetcode.com/problems/falling-squares/
 [interval-list-intersections]: https://leetcode.com/problems/interval-list-intersections/
 [maximum-distance-in-arrays]: https://leetcode.com/problems/maximum-distance-in-arrays/
 [maximum-length-of-pair-chain]: https://leetcode.com/problems/maximum-length-of-pair-chain/

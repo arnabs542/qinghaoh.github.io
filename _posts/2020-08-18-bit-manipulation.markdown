@@ -9,8 +9,8 @@ n ^ 0 = n
 n ^ n = 0
 2k ^ (2k + 1) = 1
 
-n &= -n 		// clears all but lsb
-n &= n - 1		// zeros out lsb, Brian Kernighan's Algorithm
+n & -n 		// clears all but rightmost set bit
+n & (n - 1)		// zeros out rightmost set bit, Brian Kernighan's Algorithm
 n & (n - 1) == 0  	// power of 2
 
 // enumerate all subsets
@@ -310,15 +310,40 @@ Another solution is by Trie.
 
 [Gray code](https://en.wikipedia.org/wiki/Gray_code): an ordering of the binary numeral system such that two successive values differ in only one bit (binary digit).
 
+Formula:
+
+{% highlight java %}
+int g(int n) {
+    return n ^ (n >> 1);
+}
+{% endhighlight %}
+
 [Circular Permutation in Binary Representation][circular-permutation-in-binary-representation]
 
 {% highlight java %}
 public List<Integer> circularPermutation(int n, int start) {
-    List<Integer> result = new ArrayList<>();
-    for (int i = 0; i < (1 << n); ++i) {
-        result.add(start ^ i ^ (i >> 1));
+    List<Integer> list = new ArrayList<>();
+    for (int i = 0; i < (1 << n); i++) {
+        list.add(start ^ i ^ (i >> 1));
     }
-    return result;
+    return list;
+}
+{% endhighlight %}
+
+## Inverse Gray Code
+
+[Minimum One Bit Operations to Make Integers Zero][minimum-one-bit-operations-to-make-integers-zero]
+
+{% highlight java %}
+public int minimumOneBitOperations(int n) {
+    // oeis A006068
+    // inverse Gray code
+    int count = 0;
+    while (n > 0) {
+        count ^= n;
+        n >>= 1;
+    }
+    return count;
 }
 {% endhighlight %}
 
@@ -459,6 +484,7 @@ public boolean validUtf8(int[] data) {
 [integer-replacement]: https://leetcode.com/problems/integer-replacement/
 [k-th-symbol-in-grammar]: https://leetcode.com/problems/k-th-symbol-in-grammar/
 [maximum-xor-of-two-numbers-in-an-array]: https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/
+[minimum-one-bit-operations-to-make-integers-zero]: https://leetcode.com/problems/minimum-one-bit-operations-to-make-integers-zero/
 [missing-number]: https://leetcode.com/problems/missing-number/
 [single-number]: https://leetcode.com/problems/single-number/
 [single-number-ii]: https://leetcode.com/problems/single-number-ii/

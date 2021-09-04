@@ -3,10 +3,10 @@ layout: post
 title:  "DFS"
 tags: dfs
 ---
-## Template
+# Template
 [Keys and Rooms][keys-and-rooms]
 
-### Recursion
+## Recursion
 
 {% highlight java %}
 private Set<Integer> set = new HashSet<>();
@@ -28,7 +28,7 @@ private void dfs(List<List<Integer>> rooms, int room) {
 }
 {% endhighlight %}
 
-### Stack
+## Stack
 
 {% highlight java %}
 public boolean canVisitAllRooms(List<List<Integer>> rooms) {
@@ -88,7 +88,7 @@ private boolean dfs(String row, String nextRow, int index) {
 }
 {% endhighlight %}
 
-### Bottom-up
+# Bottom-up
 
 [Time Needed to Inform All Employees][time-needed-to-inform-all-employees]
 
@@ -208,10 +208,96 @@ This solution includes all possibilities, and uses a set as termination conditio
 
 [Lexicographical Numbers][lexicographical-numbers]
 
+# DFS + BFS
+
+[Shortest Path in a Hidden Grid][shortest-path-in-a-hidden-grid]
+
+{% highlight java %}
+{% raw %}
+private static final int[][] DIRECTIONS = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+{% endraw %}
+private static final char[] CHARS = {'U', 'L', 'D', 'R'};
+private static final int N = 500;
+
+private enum Cell {
+    UNVISITED(-1),
+    BLOCKED(0),
+    EMPTY(1),
+    TARGET(2);
+
+    private int value;
+
+    Cell(int value) {
+        this.value = value;
+    }
+}
+
+public int findShortestPath(GridMaster master) {
+    // 4 x grid, and places starting cell at the centor
+    Cell[][] grid = new Cell[2 * N][2 * N];
+    for (int i = 0; i < grid.length; i++) {
+        Arrays.fill(grid[i], Cell.UNVISITED);
+    }
+
+    // (N, N) is the start
+    dfs(N, N, master, grid);
+
+    Queue<int[]> q = new LinkedList<>();
+    q.offer(new int[]{N, N});
+
+    // marks visited as BLOCKED
+    grid[N][N] = Cell.BLOCKED;
+
+    // bfs
+    int distance = 0;
+    while (!q.isEmpty()) {
+        for (int i = q.size(); i > 0; i--) {
+            int[] node = q.poll();
+            for (int[] d : DIRECTIONS) {
+                int r = node[0] + d[0], c = node[1] + d[1];
+                if (grid[r][c] == Cell.TARGET) {
+                    return distance + 1;
+                }
+
+                if (grid[r][c] != Cell.BLOCKED) {
+                    q.offer(new int[]{r, c});
+                    grid[r][c] = Cell.BLOCKED;
+                }
+            }
+        }
+        distance++;
+    }
+
+    return -1;
+}
+
+// explores the map
+private void dfs(int i, int j, GridMaster master, Cell[][] grid) {
+    if (grid[i][j] != Cell.UNVISITED) {
+        return;
+    }
+
+    grid[i][j] = master.isTarget() ? Cell.TARGET : Cell.EMPTY;
+
+    for (int k = 0; k < 4; k++) {
+        int r = i + DIRECTIONS[k][0], c = j + DIRECTIONS[k][1];
+        if (master.canMove(CHARS[k])) {
+            master.move(CHARS[k]);
+            dfs(r, c, master, grid);
+            // moves back
+            master.move(CHARS[(k + 2) % 4]);
+        } else {
+            grid[r][c] = Cell.BLOCKED;
+        }
+    }
+}
+{% endhighlight %}
+
 [clone-graph]: https://leetcode.com/problems/clone-graph/
 [keys-and-rooms]: https://leetcode.com/problems/keys-and-rooms/
 [lexicographical-numbers]: https://leetcode.com/problems/lexicographical-numbers/
 [lexicographically-smallest-string-after-applying-operations]: https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/
 [number-of-distinct-islands]: https://leetcode.com/problems/number-of-distinct-islands/
 [pyramid-transition-matrix]: https://leetcode.com/problems/pyramid-transition-matrix/
+[shortest-path-in-a-hidden-grid]: https://leetcode.com/problems/shortest-path-in-a-hidden-grid/
 [time-needed-to-inform-all-employees]: https://leetcode.com/problems/time-needed-to-inform-all-employees/

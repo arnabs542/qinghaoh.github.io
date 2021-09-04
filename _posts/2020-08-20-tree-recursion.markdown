@@ -94,6 +94,30 @@ private int height(TreeNode node) {
 
 [Diameter of N-Ary Tree][diameter-of-n-ary-tree]
 
+[Equal Tree Partition][equal-tree-partition]
+
+{% highlight java %}
+private Set<Integer> set = new HashSet<>();
+
+public boolean checkEqualTree(TreeNode root) {
+    int sum = root.val + dfs(root.left) + dfs(root.right);
+    // the root sum is not added to the set
+    return sum % 2 == 0 && set.contains(sum / 2);
+}
+
+private int dfs(TreeNode node) {
+    // 0 from null node is not added to the set
+    // so trees like [0], [0, 1, -1] will return correct answer
+    if (node == null) {
+        return 0;
+    }
+
+    int sum = node.val + dfs(node.left) + dfs(node.right);
+    set.add(sum);
+    return sum;
+}
+{% endhighlight %}
+
 [Find Leaves of Binary Tree][find-leaves-of-binary-tree]
 
 {% highlight java %}
@@ -887,6 +911,7 @@ public Camera dfs(TreeNode root) {
 [delete-nodes-and-return-forest]: https://leetcode.com/problems/delete-nodes-and-return-forest/
 [diameter-of-binary-tree]: https://leetcode.com/problems/diameter-of-binary-tree/
 [diameter-of-n-ary-tree]: https://leetcode.com/problems/diameter-of-n-ary-tree/
+[equal-tree-partition]: https://leetcode.com/problems/equal-tree-partition/
 [find-bottom-left-tree-value]: https://leetcode.com/problems/find-bottom-left-tree-value/
 [find-distance-in-a-binary-tree]: https://leetcode.com/problems/find-distance-in-a-binary-tree/
 [find-leaves-of-binary-tree]: https://leetcode.com/problems/find-leaves-of-binary-tree/

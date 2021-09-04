@@ -380,7 +380,10 @@ public String minWindow(String s, String t) {
     int i = 0, j = 0, k = t.length(), min = s.length();
     String window = "";
     while (j < s.length()) {
+        // count of t-chars > 0
+        // count of non-t-chars == 0
         if (count[s.charAt(j++)]-- > 0) {
+            // only t-chars will decrement k
             k--;
         }
 
@@ -389,8 +392,46 @@ public String minWindow(String s, String t) {
                 window = s.substring(i, j);
                 min = j - i;
             }
+
+            // count of non-t-chars < 0
             if (count[s.charAt(i++)]++ == 0) {
+                // only t-chars will increment k
                 k++;
+            }
+        }
+    }
+    return window;
+}
+{% endhighlight %}
+
+[Minimum Window Subsequence][minimum-window-subsequence]
+
+{% highlight java %}
+public String minWindow(String s1, String s2) {
+    String window = "";
+    int i1 = 0, i2 = 0, min = Integer.MAX_VALUE;
+    while (i1 < s1.length()) {
+        if (s1.charAt(i1++) == s2.charAt(i2)) {
+            // pauses when s2 is fully scanned
+            if (++i2 == s2.length()) {
+                int j = i1;
+
+                // finds the right most i1 in the window that satisfies
+                // s1.charAt(i1) == s2.charAt(0);
+                while (--i2 >= 0) {
+                    while (s1.charAt(--i1) != s2.charAt(i2)) {
+                    }
+                }
+                i2 = 0;
+
+                if (j - i1 < min) {
+                    window = s1.substring(i1, j);
+                    min = j - i1;
+                }
+
+                // moves i1 forward, so we don't get inifite loop
+                // e.g. "abcde" "bde" (i1 == 1)
+                i1++;
             }
         }
     }
@@ -603,6 +644,7 @@ Similar to: [Maximum Size Subarray Sum Equals k][maximum-size-subarray-sum-equal
 [minimum-operations-to-reduce-x-to-zero]: https://leetcode.com/problems/minimum-operations-to-reduce-x-to-zero/
 [minimum-size-subarray-sum]: https://leetcode.com/problems/minimum-size-subarray-sum/
 [minimum-swaps-to-group-all-1s-together]: https://leetcode.com/problems/minimum-swaps-to-group-all-1s-together/
+[minimum-window-subsequence]: https://leetcode.com/problems/minimum-window-subsequence/
 [minimum-window-substring]: https://leetcode.com/problems/minimum-window-substring/
 [number-of-substrings-containing-all-three-characters]: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
 [replace-the-substring-for-balanced-string]: https://leetcode.com/problems/replace-the-substring-for-balanced-string/

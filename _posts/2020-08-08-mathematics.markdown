@@ -362,6 +362,14 @@ return half * half * (n % 2 == 0 ? 1 : x);
 
 # Radix
 
+[Remove 9][remove-9]
+
+{% highlight java %}
+public int newInteger(int n) {
+    return Integer.parseInt(Integer.toString(n, 9));
+}
+{% endhighlight %}
+
 [Check if Number is a Sum of Powers of Three][check-if-number-is-a-sum-of-powers-of-three]
 
 {% highlight java %}
@@ -445,6 +453,41 @@ public int maxAbsValExpr(int[] arr1, int[] arr2) {
 private int maxDiff(int[] c) {
     Arrays.sort(c);
     return c[c.length - 1] - c[0];
+}
+{% endhighlight %}
+
+[Reverse Subarray To Maximize Array Value][reverse-subarray-to-maximize-array-value]
+
+![(abs(a-c)+abs(b-d)) - (abs(a-b)+abs(c-d))](/assets/reverse_subarray_to_maximize_array_value.png)
+
+{% highlight java %}
+public int maxValueAfterReverse(int[] nums) {
+    int n = nums.length;
+    int value = 0;
+    for (int i = 0; i < n - 1; i++) {
+        value += Math.abs(nums[i] - nums[i + 1]);
+    }
+
+    // ..., a, [b, ..., c], d, ...
+    // only if [min(a, b), max(a, b)] doesn't intersect with [min(c, d), max(c, d)]
+    // will the gain be positive
+    int low = Integer.MAX_VALUE, high = Integer.MIN_VALUE;
+    for (int i = 0; i < n - 1; i++) {
+        low = Math.min(low, Math.max(nums[i], nums[i + 1]));
+        high = Math.max(high, Math.min(nums[i], nums[i + 1]));
+    }
+
+    int gain = Math.max(0, (high - low) * 2);
+
+    // edge cases
+    for (int i = 1; i < n - 1; i++) {
+        // subarray starts at index 0
+        gain = Math.max(gain, Math.abs(nums[0] - nums[i + 1]) - Math.abs(nums[i] - nums[i + 1]));
+        // subarray ends at index n - 1
+        gain = Math.max(gain, Math.abs(nums[n - 1] - nums[i]) - Math.abs(nums[i + 1] - nums[i]));
+    }
+
+    return value + gain;
 }
 {% endhighlight %}
 
@@ -534,5 +577,7 @@ public int reachNumber(int target) {
 [power-of-three]: https://leetcode.com/problems/power-of-three/
 [powx-n]: https://leetcode.com/problems/powx-n/
 [reach-a-number]: https://leetcode.com/problems/reach-a-number/
+[remove-9]: https://leetcode.com/problems/remove-9/
+[reverse-subarray-to-maximize-array-value]: https://leetcode.com/problems/reverse-subarray-to-maximize-array-value/
 [robot-bounded-in-circle]: https://leetcode.com/problems/robot-bounded-in-circle/
 [sparse-matrix-multiplication]: https://leetcode.com/problems/sparse-matrix-multiplication/
