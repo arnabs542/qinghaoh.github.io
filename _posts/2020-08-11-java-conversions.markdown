@@ -13,12 +13,13 @@ Integer[] b = Arrays.stream(a).boxed().toArray(Integer[]::new);
 {% highlight java %}
 Integer[] a = {0, 1, 2};
 int[] b = Arrays.stream(a).mapToInt(Integer::intValue).toArray();
+b = Arrays.stream(a).mapToInt(i -> i).toArray();
 {% endhighlight %}
 
 # List\<Integer\> -> int[]
 {% highlight java %}
-list.stream().mapToInt(Integer::valueOf).toArray();
-list.stream().mapToInt(i -> i).toArray();
+int[] b = list.stream().mapToInt(Integer::valueOf).toArray();
+b = list.stream().mapToInt(i -> i).toArray();
 {% endhighlight %}
 
 # int[] -> List\<Integer\>
@@ -37,6 +38,12 @@ Set<Integer> b = Arrays.stream(a).collect(Collectors.toSet());
 {% highlight java %}
 int[] a = {0, 1, 2};
 Iterable<Integer> b = IntStream.of(a).boxed().iterator();
+{% endhighlight %}
+
+# int[] -> double[]
+{% highlight java %}
+int[] a = {0, 1, 2};
+double[] b = IntStream.of(a).mapToDouble(i -> i).toArray();
 {% endhighlight %}
 
 # Array -> Stream

@@ -749,7 +749,44 @@ public String parseTernary(String expression) {
 }
 {% endhighlight %}
 
+# Parsing
+
+[Basic Calculator][basic-calculator]
+
+{% highlight java %}
+public int calculate(String s) {
+    // stores operands and signs alternatively
+    Deque<Integer> stack = new ArrayDeque<>();
+    int result = 0;
+    int operand = 0, sign = 1;
+
+    for (char c : s.toCharArray()) {
+        if (Character.isDigit(c)) {
+            operand = 10 * operand + c - '0';
+        } else if (c == '+' || c == '-') {
+            result += sign * operand;
+            sign = c == '+' ? 1 : -1;
+            operand = 0;
+        } else if (c == '(') {
+            stack.push(result);
+            stack.push(sign);
+            sign = 1;
+            result = 0;
+        } else if (c == ')') {
+            result += sign * operand;
+            result *= stack.pop();  // sign
+            result += stack.pop();  // operand
+            operand = 0;
+        }
+    }
+
+    // + sign * operand at '+', '-', ')' or end of s
+    return result + sign * operand;
+}
+{% endhighlight %}
+
 [132-pattern]: https://leetcode.com/problems/132-pattern/
+[basic-calculator]: https://leetcode.com/problems/basic-calculator/
 [count-submatrices-with-all-ones]: https://leetcode.com/problems/count-submatrices-with-all-ones/
 [create-maximum-number]: https://leetcode.com/problems/create-maximum-number/
 [final-prices-with-a-special-discount-in-a-shop]: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/

@@ -204,9 +204,60 @@ public void increment(int k, int val) {
 }
 {% endhighlight %}
 
+[Design Movie Rental System][design-movie-rental-system]
+
+Map/Set of array, with self-define comparator:
+
+{% highlight java %}
+class MovieRentingSystem {
+    // {price, shop, movie}
+    private static final Comparator<int[]> CMP = (a, b) -> a[0] == b[0] ? (a[1] == b[1] ? a[2] - b[2] : a[1] - b[1]) : a[0] - b[0];
+    // movie : {price, shop, movie}
+    private Map<Integer, Set<int[]>> unrented = new HashMap<>();
+    // {price, shop, movie}
+    private Set<int[]> rented = new TreeSet<>(CMP);
+    // movie : {shop : price}
+    private Map<Integer, Map<Integer, Integer>> prices = new HashMap<>();
+
+    public MovieRentingSystem(int n, int[][] entries) {
+        for (int[] e : entries) {
+            prices.computeIfAbsent(e[0], k -> new HashMap<>()).put(e[1], e[2]);
+            unrented.computeIfAbsent(e[1], k -> new TreeSet<>(CMP)).add(new int[]{e[2], e[0], e[1]});
+        }
+    }
+
+    public List<Integer> search(int movie) {
+        return unrented.getOrDefault(movie, Collections.emptySet()).stream()
+            .limit(5)
+            .map(e -> e[1])
+            .collect(Collectors.toList());
+    }
+
+    public void rent(int shop, int movie) {
+        int[] e = {prices.get(shop).get(movie), shop, movie};
+        unrented.get(movie).remove(e);
+        rented.add(e);
+    }
+
+    public void drop(int shop, int movie) {
+        int[] e = {prices.get(shop).get(movie), shop, movie};
+        unrented.get(movie).add(e);
+        rented.remove(e);
+    }
+
+    public List<List<Integer>> report() {
+        return rented.stream()
+            .limit(5)
+            .map(e -> List.of(e[1], e[2]))
+            .collect(Collectors.toList());
+    }
+}
+{% endhighlight %}
+
 [design-a-leaderboard]: https://leetcode.com/problems/design-a-leaderboard/
 [design-a-stack-with-increment-operation]: https://leetcode.com/problems/design-a-stack-with-increment-operation/
 [design-hashmap]: https://leetcode.com/problems/design-phone-hashmap/
+[design-movie-rental-system]: https://leetcode.com/problems/design-movie-rental-system/
 [design-phone-directory]: https://leetcode.com/problems/design-phone-directory/
 [find-median-from-data-stream]: https://leetcode.com/problems/find-median-from-data-stream/
 [lru-cache]: https://leetcode.com/problems/lru-cache/

@@ -140,6 +140,53 @@ for (int a = 1; a <= n; a++) {
 }
 {% endhighlight %}
 
+[Number of Ways to Rearrange Sticks With K Sticks Visible][number-of-ways-to-rearrange-sticks-with-k-sticks-visible]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int rearrangeSticks(int n, int k) {
+    long[][] dp = new long[n + 1][k + 1];
+    dp[0][0] = 1;
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= k; j++) {
+            // f(n - 1, k - 1): rightmost is the longest
+            // f(n - 1, k): rightmost is not the longest, and there are (n - 1) possibilities
+            dp[i][j] = (dp[i - 1][j - 1] + (i - 1) * dp[i - 1][j] % MOD) % MOD;
+        }
+    }
+    return (int)dp[n][k];
+}
+{% endhighlight %}
+
+[Frog Jump][frog-jump]
+
+{% highlight java %}
+public boolean canCross(int[] stones) {
+    // stone : set of jump sizes which lead to the stone
+    HashMap<Integer, Set<Integer>> map = new HashMap<>();
+    for (int s : stones) {
+        map.put(s, new HashSet<>());
+    }
+
+    map.get(0).add(0);
+    for (int s : stones) {
+        for (int k : map.get(s)) {
+            // finds all stones that can be reached from the current stone
+            for (int step = k - 1; step <= k + 1; step++) {
+                if (step > 0 && map.containsKey(s + step)) {
+                    map.get(s + step).add(step);
+                }
+            }
+        }
+    }
+    return !map.get(stones[stones.length - 1]).isEmpty();
+}
+{% endhighlight %}
+
 [best-team-with-no-conflicts]: https://leetcode.com/problems/best-team-with-no-conflicts/
 [build-array-where-you-can-find-the-maximum-exactly-k-comparisons]: https://leetcode.com/problems/build-array-where-you-can-find-the-maximum-exactly-k-comparisons/
+[frog-jump]: https://leetcode.com/problems/frog-jump/
 [maximum-height-by-stacking-cuboids]: https://leetcode.com/problems/maximum-height-by-stacking-cuboids/
+[number-of-ways-to-rearrange-sticks-with-k-sticks-visible]: https://leetcode.com/problems/number-of-ways-to-rearrange-sticks-with-k-sticks-visible/

@@ -32,6 +32,7 @@ public int minPatches(int[] nums, int n) {
 {% endhighlight %}
 
 # Buckets
+
 Count each element in an array `int[] a`.
 
 If `0 <= a[i] <= max`, where max is not too big, then we can use `int[] count = new int[max + 1]` as buckets, instead of `Map<Integer, Integer>` 
@@ -270,6 +271,27 @@ public int longestConsecutive(int[] nums) {
 }
 {% endhighlight %}
 
+# Division
+
+[Divide Array Into Increasing Sequences][divide-array-into-increasing-sequences]
+
+{% highlight java %}
+public boolean canDivideIntoSubsequences(int[] nums, int k) {
+    // m = the maximum frequency of any element in the array
+    // then number of sequences >= m
+
+    // a valid solution is possible iff m * k <= n
+    // e.g. groups[i % m] = nums[i]
+    int freq = 1, groups = 1, n = nums.length;
+    for (int i = 1; i < nums.length; i++) {
+        freq = nums[i - 1] < nums[i] ? 1 : freq + 1;
+        // groups = m
+        groups = Math.max(groups, freq);
+    }
+    return nums.length >= k * groups;
+}
+{% endhighlight %}
+
 # Two Passes
 
 [Candy][candy]
@@ -302,6 +324,7 @@ public int candy(int[] ratings) {
 
 [array-nesting]: https://leetcode.com/problems/array-nesting/
 [candy]: https://leetcode.com/problems/candy/
+[divide-array-into-increasing-sequences]: https://leetcode.com/problems/divide-array-into-increasing-sequences/
 [first-missing-positive]: https://leetcode.com/problems/first-missing-positive/
 [longest-consecutive-sequence]: https://leetcode.com/problems/longest-consecutive-sequence/
 [minimum-number-of-flips-to-make-the-binary-string-alternating]: https://leetcode.com/problems/minimum-number-of-flips-to-make-the-binary-string-alternating/

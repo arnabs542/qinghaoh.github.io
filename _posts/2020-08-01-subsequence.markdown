@@ -231,19 +231,61 @@ public String shortestCommonSupersequence(String str1, String str2) {
 [Longest Arithmetic Subsequence][longest-arithmetic-subsequence]
 
 {% highlight java %}
-public int longestArithSeqLength(int[] A) {
-    // diff : max length
-    List<Map<Integer, Integer>> dp = new ArrayList<>();
+public int longestArithSeqLength(int[] nums) {
+    int n = nums.length;
+    // dp[i]: all subsequences in nums[0...i]
+    // map -> diff : max length
+    Map<Integer, Integer>[] dp = new Map[n];
+
     int max = 2;
-    for (int j = 0; j < A.length; j++) {
-        dp.add(new HashMap<>());
-        for (int i = 0; i < j; i++) {
-            int d = A[j] - A[i];
-            dp.get(j).put(d, dp.get(i).getOrDefault(d, 1) + 1);
-            max = Math.max(max, dp.get(j).get(d));
+    for (int i = 0; i < n; i++) {
+        dp[i] = new HashMap<>();
+        for (int j = 0; j < i; j++) {
+            int d = nums[i] - nums[j];
+            dp[i].put(d, dp[j].getOrDefault(d, 1) + 1);
+            max = Math.max(max, dp[i].get(d));
         }
     }
+
     return max;
+}
+{% endhighlight %}
+
+[Arithmetic Slices II - Subsequence][arithmetic-slices-ii-subsequence]
+
+{% highlight java %}
+public int numberOfArithmeticSlices(int[] nums) {
+    int n = nums.length;
+    // dp[i]: all subsequences in nums[0...i]
+    // map -> diff : count
+    Map<Integer, Integer>[] dp = new Map[n];
+
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+        dp[i] = new HashMap<>(i);
+        for (int j = 0; j < i; j++) {
+            // not (long)(nums[i] - nums[j])
+            // e.g. [0,2000000000,-294967296]
+            long diff = (long)nums[i] - nums[j];
+
+            // out of 32 bits
+            if (diff <= Integer.MIN_VALUE || diff > Integer.MAX_VALUE) {
+                continue;
+            }
+
+            int d = (int)diff;
+            // sub: number of subsequences in nums[0...j] with difference d
+            int sub = dp[j].getOrDefault(d, 0);
+
+            // 1: 2-element slice -> [nums[j], nums[i]]
+            dp[i].put(d, dp[i].getOrDefault(d, 0) + sub + 1);
+
+            // accumulates sub would yield all indexes with all differences
+            count += sub;
+        }
+    }
+
+    return count;
 }
 {% endhighlight %}
 
@@ -353,12 +395,13 @@ count: 2
 count: 3
 ```
 
+[arithmetic-slices-ii-subsequence]: https://leetcode.com/problems/arithmetic-slices-ii-subsequence/
+[is-subsequence]: https://leetcode.com/problems/is-subsequence/
 [largest-divisible-subset]: https://leetcode.com/problems/largest-divisible-subset/
 [length-of-longest-fibonacci-subsequence]: https://leetcode.com/problems/length-of-longest-fibonacci-subsequence/
 [longest-arithmetic-subsequence]: https://leetcode.com/problems/longest-arithmetic-subsequence/
 [longest-arithmetic-subsequence-of-given-difference]: https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
 [longest-increasing-subsequence]: https://leetcode.com/problems/longest-increasing-subsequence/
-[is-subsequence]: https://leetcode.com/problems/is-subsequence/
 [number-of-matching-subsequences]: https://leetcode.com/problems/number-of-matching-subsequences/
 [russian-doll-envelopes]: https://leetcode.com/problems/russian-doll-envelopes/
 [shortest-common-subsequence]: https://leetcode.com/problems/shortest-common-subsequence/

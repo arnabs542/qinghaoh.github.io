@@ -39,6 +39,9 @@ Proof: [Divergence of the Sum of the Reciprocals of the Primes](https://en.wikip
 
 # Prime Factorization
 
+[Shor's algorithm](https://en.wikipedia.org/wiki/Shor's_algorithm): a polynomial-time quantum computer algorithm for integer factorization.
+[General number field sieve (GNFS)](https://en.wikipedia.org/wiki/General_number_field_sieve): the most efficient classical algorithm known for factoring integers larger than \\(10^100\\)
+
 [2 Keys Keyboard][2-keys-keyboard]
 
 {% highlight java %}
@@ -79,6 +82,50 @@ public int integerBreak(int n) {
 }
 {% endhighlight %}
 
+[Consecutive Numbers Sum][consecutive-numbers-sum]
+
+{% highlight java %}
+public int consecutiveNumbersSum(int n) {
+    // (a + a + (k - 1)) * k / 2 = n
+    // a = n / k - (k - 1) / 2
+    //
+    // a is an integer, so
+    // n % k == 0 && k % 2 == 1
+
+    // count of odd factors of n
+
+    // discards all factor 2's
+    while (n % 2 == 0) {
+        n /= 2;
+    }
+
+    // 1 is always valid
+    int count = 1;
+    for (int k = 3; k * k <= n; k += 2) {
+        // count of this factor
+        int f = 0;
+        while (n % k == 0) {
+            n /= k;
+            f++;
+        }
+        count *= f + 1;
+    }
+
+    // say k', n' are right before the last iteration starts
+    // and k, n are after the loop ends
+    // - if n == 1,
+    //     - k' * k' <= n'
+    //     - k * k > n
+    //     - k' is the last prime factor and it's counted
+    // - else,
+    //     - k' * k' > n'
+    //     - k == k', n == n'
+    //     - n (n') is the last prime factor and it's not counted yet
+    return n == 1 ? count : count * 2;
+}
+{% endhighlight %}
+
 [2-keys-keyboard]: https://leetcode.com/problems/2-keys-keyboard/
+[consecutive-numbers-sum]: https://leetcode.com/problems/consecutive-numbers-sum/
 [count-primes]: https://leetcode.com/problems/count-primes/
 [integer-break]: https://leetcode.com/problems/integer-break/

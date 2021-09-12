@@ -175,7 +175,7 @@ public int minTotalDistance(int[][] grid) {
     return minDistance1D(x) + minDistance1D(y);
 }
 
-public int minDistance1D(List<Integer> points) {
+private int minDistance1D(List<Integer> points) {
     int d = 0, median = points.get(points.size() / 2);
     for (int p : points) {
         d += Math.abs(p - median);

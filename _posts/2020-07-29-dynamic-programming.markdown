@@ -330,8 +330,39 @@ public int minimumTotal(List<List<Integer>> triangle) {
 }
 {% endhighlight %}
 
+# Reverse
+
+[Freedom Trail][freedom-trail]
+
+{% highlight java %}
+// O(mn^2)
+public int findRotateSteps(String ring, String key) {
+    // dp[i][j]: key.substring(i) and ring.substring(j)
+    int n = ring.length(), m = key.length();
+    int[][] dp = new int[m + 1][n];
+
+    // reversely scans key
+    for (int i = m - 1; i >= 0; i--) {
+        // ring points to j
+        for (int j = 0; j < n; j++) {
+            dp[i][j] = Integer.MAX_VALUE;
+            for (int k = 0; k < n; k++) {
+                if (key.charAt(i) == ring.charAt(k)) {
+                    int diff = Math.abs(j - k);
+                    int step = Math.min(diff, n - diff);
+                    dp[i][j] = Math.min(dp[i][j], step + dp[i + 1][k]);
+                }
+            }
+        }
+    }
+
+    return dp[0][0] + m;
+}
+{% endhighlight %}
+
 [delete-operation-for-two-strings]: https://leetcode.com/problems/delete-operation-for-two-strings/
 [edit-distance]: https://leetcode.com/problems/edit-distance/
+[freedom-trail]: https://leetcode.com/problems/freedom-trail/
 [greatest-sum-divisible-by-three]: https://leetcode.com/problems/greatest-sum-divisible-by-three/
 [interleaving-string]: https://leetcode.com/problems/interleaving-string/
 [longest-common-subsequence]: https://leetcode.com/problems/longest-common-subsequence/

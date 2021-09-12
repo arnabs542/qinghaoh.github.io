@@ -312,6 +312,10 @@ public int minimumEffortPath(int[][] heights) {
 
 [Swim in Rising Water][swim-in-rising-water]
 
+* Dijkstra's Algorithm
+* BinarySearch + BFS/DFS
+* Union-Find
+
 [Campus Bikes II][campus-bikes-ii]
 
 {% highlight java %}

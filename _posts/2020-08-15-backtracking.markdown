@@ -673,6 +673,50 @@ private void goBack() {
 }
 {% endhighlight %}
 
+[24 Game][24-game]
+
+{% highlight java %}
+private static final double TARGET = 24d;
+private static final double EPS = 0.001;
+
+public boolean judgePoint24(int[] cards) {
+    return backtrack(IntStream.of(cards).mapToDouble(i -> i).toArray(), cards.length);
+}
+
+private boolean backtrack(double[] nums, int length) {
+    if (length == 1) {
+        if (Math.abs(nums[0] - TARGET) < EPS) {
+            return true;
+        }
+    }
+
+    // picks two cards
+    for (int i = 0; i < length - 1; i++) {
+        for (int j = i + 1; j < length; j++) {
+            double c1 = nums[i], c2 = nums[j];
+
+            // puts the new card to the min of i, j
+            // and moves the last card to the max of i,j to shrink the array size bby 1
+            int index = Math.min(i, j);
+            nums[Math.max(i, j)] = nums[length - 1];
+
+            // iterates through all possible combinations as a new card
+            for (double c : new double[]{c1 + c2, c1 - c2, c2 - c1, c1 * c2, c1 / c2, c2 / c1}) {
+                nums[index] = c;
+                if (backtrack(nums, length - 1)) {
+                    return true;
+                }
+            }
+
+            nums[i] = c1;
+            nums[j] = c2;
+        }
+    }
+
+    return false;
+}
+{% endhighlight %}
+
 # NP Complete
 
 [Optimal Account Balancing][optimal-account-balancing]
@@ -711,6 +755,7 @@ private int backtrack(int index, int[] debt) {
 }
 {% endhighlight %}
 
+[24-game]: https://leetcode.com/problems/24-game/
 [android-unlock-patterns]: https://leetcode.com/problems/android-unlock-patterns/
 [beautiful-arrangement]: https://leetcode.com/problems/beautiful-arrangement/
 [closest-dessert-cost]: https://leetcode.com/problems/closest-dessert-cost/

@@ -812,6 +812,65 @@ private void dfs(TreeNode node, int d) {
 }
 {% endhighlight %}
 
+# Multiple DFS
+
+[Sum of Distances in Tree][sum-of-distances-in-tree]
+
+{% highlight java %}
+private List<List<Integer>> tree = new ArrayList<>();
+// count[i]: count of all nodes in the subtree i
+private int[] answer, count;
+
+public int[] sumOfDistancesInTree(int n, int[][] edges) {
+    this.answer = new int[n];
+    this.count = new int[n];
+
+    for (int i = 0; i < n; i++) {
+        tree.add(new ArrayList<>());
+    }
+
+    for (int[] e : edges) {
+        tree.get(e[0]).add(e[1]);
+        tree.get(e[1]).add(e[0]);
+    }
+
+    dfs(0, -1);
+    dfs2(0, -1);
+
+    return answer;
+}
+
+// postorder, computes count[] and answer[]
+private void dfs(int node, int parent) {
+    for (int child : tree.get(node)) {
+        if (child == parent) {
+            continue;
+        }
+
+        dfs(child, node);
+        count[node] += count[child];
+        // sum of distances between this node and all the other nodes in the subtree
+        answer[node] += answer[child] + count[child];
+    }
+    count[node]++;
+}
+
+// preorder, updates answer[]
+private void dfs2(int node, int parent) {
+    for (int child : tree.get(node)) {
+        if (child == parent) {
+            continue;
+        }
+
+        // when we move node to child:
+        // * count[child] nodes get 1 closer to node
+        // * n - count[i] nodes get 1 further to node
+        answer[child] = answer[node] - count[child] + count.length - count[child];
+        dfs2(child, node);
+    }
+}
+{% endhighlight %}
+
 # Postorder
 
 In postorder, we don't have to pass parent node as a parameter of dfs().
@@ -930,3 +989,4 @@ public Camera dfs(TreeNode root) {
 [pseudo-palindromic-paths-in-a-binary-tree]: https://leetcode.com/problems/pseudo-palindromic-paths-in-a-binary-tree/
 [second-minimum-node-in-a-binary-tree]: https://leetcode.com/problems/second-minimum-node-in-a-binary-tree/
 [split-bst]: https://leetcode.com/problems/split-bst/
+[sum-of-distances-in-tree]: https://leetcode.com/problems/sum-of-distances-in-tree/

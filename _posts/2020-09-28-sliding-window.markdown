@@ -596,7 +596,7 @@ public int minFlips(String s) {
 }
 {% endhighlight %}
 
-## Exact
+## Exact Size
 
 [Minimum Operations to Reduce X to Zero][minimum-operations-to-reduce-x-to-zero]
 
@@ -626,6 +626,53 @@ public int minOperations(int[] nums, int x) {
 
 Similar to: [Maximum Size Subarray Sum Equals k][maximum-size-subarray-sum-equals-k]
 
+## Elastic Size
+
+[Moving Stones Until Consecutive II][moving-stones-until-consecutive-ii]
+
+{% highlight java %}
+public int[] numMovesStonesII(int[] stones) {
+    Arrays.sort(stones);
+
+    // sliding window
+    int n = stones.length;
+    int i = 0, j = 0, min = n;
+    while (j < n) {
+        // moves i so that the window size is <= n and as close to n as possible
+        while (stones[j] - stones[i] >= n) {
+            i++;
+        }
+
+        // corner case
+        // - number of stones in the window is (n - 1)
+        // - window size is (n - 1)
+        // e.g. [1,2,3,4,10] -> [2,3,4,6,10] -> [2,3,4,5,6]
+        if (j - i + 1 == n - 1 && stones[j] - stones[i] == n - 2) {
+            min = Math.min(min, 2);
+        } else {
+            // e.g. [1,2,4,5,10] -> [1,2,3,4,5]
+            // e.g. [1,2,3,4,6] -> [2,3,4,5,6]
+            // the 2nd example has two windows:
+            // - the first window matches the corner case, min = 2;
+            // - the second window falls into this else block, min = 1
+            min = Math.min(min, n - (j - i + 1));
+        }
+        j++;
+    }
+
+    // moves leftmost or rightmost stone
+    // e.g. moves leftmost to the next available slot
+    // [1,3,5,10] -> [3,4,5,10] -> [4,5,6,10]
+    //
+    // max of avaible slots:
+    // - left -> right: (stones[n - 1] - stones[1] + 1) - (n - 1)
+    // - right -> left: (stones[n - 2] - stones[0] + 1) - (n - 1)
+    int max = Math.max(stones[n - 1] - stones[1] - n + 2, stones[n - 2] - stones[0] - n + 2);
+
+    return new int[]{min, max};
+}
+{% endhighlight %}
+
 [count-number-of-nice-subarrays]: https://leetcode.com/problems/count-number-of-nice-subarrays/
 [find-all-anagrams-in-a-string]: https://leetcode.com/problems/find-all-anagrams-in-a-string/
 [find-k-th-smallest-pair-distance]: https://leetcode.com/problems/find-k-th-smallest-pair-distance/
@@ -646,6 +693,7 @@ Similar to: [Maximum Size Subarray Sum Equals k][maximum-size-subarray-sum-equal
 [minimum-swaps-to-group-all-1s-together]: https://leetcode.com/problems/minimum-swaps-to-group-all-1s-together/
 [minimum-window-subsequence]: https://leetcode.com/problems/minimum-window-subsequence/
 [minimum-window-substring]: https://leetcode.com/problems/minimum-window-substring/
+[moving-stones-until-consecutive-ii]: https://leetcode.com/problems/moving-stones-until-consecutive-ii/
 [number-of-substrings-containing-all-three-characters]: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
 [replace-the-substring-for-balanced-string]: https://leetcode.com/problems/replace-the-substring-for-balanced-string/
 [subarray-product-less-than-k]: https://leetcode.com/problems/subarray-product-less-than-k/submissions/

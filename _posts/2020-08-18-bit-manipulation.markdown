@@ -3,7 +3,7 @@ layout: post
 title:  "Bit Manipulation"
 tags: bit
 ---
-## Properties
+# Properties
 ```
 n ^ 0 = n
 n ^ n = 0
@@ -17,7 +17,7 @@ n & (n - 1) == 0  	// power of 2
 for (int s = superset; s > 0; s = (s - 1) & superset)
 ```
 
-# Brian Kernighan's Algorithm
+## Brian Kernighan's Algorithm
 
 [Counting Bits][counting-bits]
 
@@ -273,6 +273,15 @@ public int[] singleNumber(int[] nums) {
     return result;
 }
 {% endhighlight %}
+
+# Exclusive Or
+
+Distributive Property:
+
+```
+(a + b) * (c + d) = (a * c) + (a * d) + (b * c) + (b * d)
+(a ^ b) & (c ^ d) = (a & c) ^ (a & d) ^ (b & c) ^ (b & d)
+```
 
 [Maximum XOR of Two Numbers in an Array][maximum-xor-of-two-numbers-in-an-array]
 

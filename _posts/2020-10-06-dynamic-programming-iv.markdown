@@ -504,7 +504,54 @@ public int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
 }
 {% endhighlight %}
 
+[Cherry Pickup][cherry-pickup]
+
+{% highlight java %}
+public int cherryPickup(int[][] grid) {
+    // greedy (maximizing each pass) doesn't work
+    // because the second pass depends on the path choice of the first pass
+    int n = grid.length, m = (n << 1) - 1;
+
+    // dp[r1][r2]: two people pick cherry from (0, 0) to (r1, c1) and (r2, c2), respectively
+    // and they don't walk on the same cell except when (r1, c1) == (r2, c2)
+    int[][] dp = new int[n][n];
+    dp[0][0] = grid[0][0];
+
+    // k == r1 + c1 == r2 + c2
+    for (int k = 1; k < m; k++) {
+        for (int r1 = n - 1; r1 >= 0; r1--) {
+            for (int r2 = n - 1; r2 >= 0; r2--) {
+                int c1 = k - r1, c2 = k - r2;
+
+                // out of boundary or thorn
+                if (c1 < 0 || c1 >= n || c2 < 0 || c2 >= n || grid[r1][c1] < 0 || grid[r2][c2] < 0) {
+                    dp[r1][r2] = -1;
+                    continue;
+                 }
+
+                 if (r1 > 0) {
+                     dp[r1][r2] = Math.max(dp[r1][r2], dp[r1 - 1][r2]);
+                 }
+                 if (r2 > 0) {
+                     dp[r1][r2] = Math.max(dp[r1][r2], dp[r1][r2 - 1]);
+                 }
+                 if (r1 > 0 && r2 > 0) {
+                     dp[r1][r2] = Math.max(dp[r1][r2], dp[r1 - 1][r2 - 1]);
+                 }
+
+                 if (dp[r1][r2] >= 0) {
+                     // don't double count if (r1, c1) == (r2, c2)
+                     dp[r1][r2] += grid[r1][c1] + (r1 == r2 ? 0 : grid[r2][c2]);
+                 }
+             }
+         }
+    }
+    return Math.max(0, dp[n - 1][n - 1]);
+}
+{% endhighlight %}
+
 [bomb-enemy]: https://leetcode.com/problems/bomb-enemy/
+[cherry-pickup]: https://leetcode.com/problems/cherry-pickup/
 [cherry-pickup-ii]: https://leetcode.com/problems/cherry-pickup-ii/
 [dungeon-game]: https://leetcode.com/problems/dungeon-game/
 [largest-plus-sign]: https://leetcode.com/problems/largest-plus-sign/

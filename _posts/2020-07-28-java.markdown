@@ -15,7 +15,7 @@ private static int MOD = 1_000_000_007
 
 The for statement also has another form designed for iteration through *Collections* and *arrays* This form is sometimes referred to as the enhanced for statement, and can be used to make your loops more compact and easy to read.
 
-### Multidimensional Array
+## Multidimensional Array
 {% highlight java %}
 int[][] matrix = new int[r][c];
 // r == matrix.length
@@ -26,7 +26,7 @@ int[][] matrix = new int[r][c];
 
 In C and C++, the remainder operator accepts only integral operands, but in the Java programming language, it also accepts floating-point operands.
 
-### Integer
+## Integer
 
 1. The remainder operation can be negative only if the dividend is negative, and can be positive only if the dividend is positive.
 2. The magnitude of the result is always less than the magnitude of the divisor.
@@ -95,7 +95,14 @@ floorMod(+4, -3) == -2;   and (+4 % -3) == +1
 floorMod(-4, +3) == +2;   and (-4 % +3) == -1
 {% endhighlight %}
 
-### Floating-point
+# Division
+
+## By Zero
+
+* Double/Float division: the output is Infinity, the basic reason behind that it implements the floating point arithmetic algorithm which specifies a special values like “Not a number” OR “infinity” for “divided by zero cases” as per IEEE 754 standards.
+* Integer division: throws ArithmeticException.
+
+# Floating-point
 
 The Java programming language defines % on floating-point operations to behave in a manner analogous to that of the integer remainder operator.
 
@@ -109,16 +116,16 @@ double c = (-5.0) % 3.0;  // -2.0
 double d = (-5.0) % (-3.0);  // -2.0
 {% endhighlight %}
 
-## Queue
+# Queue
 [Queue][queue]
 
 Queue implementations generally do not allow insertion of ***null*** elements, although some implementations, such as **LinkedList**, do not prohibit insertion of null. Even in the implementations that permit it, null should not be inserted into a Queue, as null is also used as a special return value by the poll method to indicate that the queue contains no elements.
 
-## Local Variable Type Interface
+# Local Variable Type Interface
 
 [Local variable type interface](https://docs.oracle.com/en/java/javase/13/language/local-variable-type-inference.html)
 
-## Boolean Logical Operators
+# Boolean Logical Operators
 
 [Boolean Logical Operators &, ^, and \|](https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.22.2): no short-circuit
 

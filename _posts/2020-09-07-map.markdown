@@ -246,9 +246,91 @@ public boolean canReorderDoubled(int[] arr) {
 }
 {% endhighlight %}
 
+[Find Array Given Subset Sums][find-array-given-subset-sums]
+
+{% highlight java %}
+public int[] recoverArray(int n, int[] sums) {
+    Arrays.sort(sums);
+
+    return recover(sums).stream().mapToInt(i -> i).toArray();
+}
+
+private List<Integer> recover(int[] sums) {
+    if (sums.length == 1) {
+        return new ArrayList<>();
+    }
+
+    Map<Integer, Long> count = Arrays.stream(sums).boxed()
+        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+    // considers the subset sums of arr [x, y, z]
+    // sums can be split into two groups:
+    //     A             B
+    // [0, y, z] + [x, x + y, x + z]
+
+    // sorts sums
+    // d = sums[1] - sums[0]
+    // then x == -d or x == d
+
+    // proof:
+    // s0, s1, ..., s_k, where k = 2 ^ n
+    // since one of the subsets is empty, there always exists s_i == 0
+
+    // - if there's at least one negative subset sum s_0
+    //   - if there's only one negative subset sum
+    //     - d = arr[m], where arr[m] is the least non-negative
+    //       x = d
+    //       e.g. arr = [-3, 1]
+    //     - d = -arr[0], x = -d
+    //       e.g. arr = [-3, 4]
+    //   - if there're more than one negative subset sum
+    //     - d = -arr[m], where arr[m] < 0 and |arr[m]| is the least
+    //       x = -d
+    // - else
+    //   - if there're more than one subset sum == 0
+    //     d = 0, x = d = 0
+    //   - else
+    //     d = arr[m], where arr[m] is the least
+    //     x = d
+    int d = sums[1] - sums[0];
+
+    // splits the subset sums into two groups A and B
+    int[] groupA = new int[sums.length / 2], groupB = new int[sums.length / 2];
+    // by default, Group A + x == Group B
+    boolean toSwap = false;
+    // iterates the sums ascendingly, finds the matching b == a + d
+    int i = 0;
+    for (int a : sums) {
+        int b = a + d;
+        if (count.getOrDefault(a, 0l) > 0) {
+            count.put(b, count.get(b) - 1);
+            count.put(a, count.get(a) - 1);
+
+            // when b == 0, we can swap Group B and Group A
+            // and take -d as the new x
+            if (b == 0) {
+                toSwap = true;
+            }
+
+            groupA[i] = a;
+            groupB[i] = b;
+            i++;
+        }
+    }
+
+    // arr is sorted
+    List<Integer> arr = recover(toSwap ? groupB : groupA);
+    // arr.add(x)
+    arr.add(toSwap ? -d : d);
+
+    return arr;
+}
+{% endhighlight %}
+
 [array-of-doubled-pairs]: https://leetcode.com/problems/array-of-doubled-pairs/
 [contains-duplicate-iii]: https://leetcode.com/problems/contains-duplicate-iii/
 [depth-of-bst-given-insertion-order]: https://leetcode.com/problems/depth-of-bst-given-insertion-order/
+[find-array-given-subset-sums]: https://leetcode.com/problems/find-array-given-subset-sums/
 [making-file-names-unique]: https://leetcode.com/problems/making-file-names-unique/
 [tuple-with-same-product]: https://leetcode.com/problems/tuple-with-same-product/
 [vowel-spellchecker]: https://leetcode.com/problems/vowel-spellchecker/

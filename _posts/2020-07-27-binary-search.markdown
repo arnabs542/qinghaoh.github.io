@@ -238,7 +238,7 @@ private int findMaxRow(int[][] mat, int col) {
 
 @zhijun_liao
 
-Minimize `k`, s.t. `condition(k) == true`
+Minimize `x`, s.t. `condition(x) == true`
 
 {% highlight java %}
 public int binarySearch(int[] arr) {
@@ -619,7 +619,7 @@ public List<Integer> findClosestElements(int[] arr, int k, int x) {
 
 Similarly,
 
-Maximize `k`, s.t. `condition(k) == true`
+Maximize `x`, s.t. `condition(x) == true`
 
 {% highlight java %}
 public int binarySearch(int[] arr) {
@@ -806,6 +806,10 @@ public int maxWidthRamp(int[] A) {
 }
 {% endhighlight %}
 
+[Last Day Where You Can Still Cross][last-day-where-you-can-still-cross]
+
+Binary Search + BFS/DFS
+
 # Fraction
 
 [Maximum Average Subarray II][maximum-average-subarray-ii]
@@ -937,6 +941,7 @@ if (insertionPoint < 0) {
 [kth-missing-positive-number]: https://leetcode.com/problems/kth-missing-positive-number/
 [kth-smallest-element-in-a-sorted-matrix]: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
 [k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
+[last-day-where-you-can-still-cross]: https://leetcode.com/problems/last-day-where-you-can-still-cross/
 [magnetic-force-between-two-balls]: https://leetcode.com/problems/magnetic-force-between-two-balls/
 [maximum-average-subarray-ii]: https://leetcode.com/problems/maximum-average-subarray-ii/
 [maximum-font-to-fit-a-sentence-in-a-screen]: https://leetcode.com/problems/maximum-font-to-fit-a-sentence-in-a-screen/
