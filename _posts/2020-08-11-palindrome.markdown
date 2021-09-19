@@ -164,6 +164,57 @@ private boolean isPalindrome(String s) {
 }
 {% endhighlight %}
 
+[Find the Closest Palindrome][find-the-closest-palindrome]
+
+{% highlight java %}
+public String nearestPalindromic(String n) {
+    int len = n.length();
+    if (len == 1) {
+        return String.valueOf(Integer.valueOf(n) - 1);
+    }
+
+    if (n.equals("1" + "0".repeat(len - 2) + "1")) {
+        return "9".repeat(len - 1);
+    }
+
+    if (n.equals("9".repeat(len))) {
+        return "1" + "0".repeat(len - 1) + "1";
+    }
+
+    if (n.equals("1" + "0".repeat(len - 1))) {
+        return "9".repeat(len - 1);
+    }
+
+    String root = n.substring(0, (len + 1) / 2);
+    String root1 = String.valueOf(Integer.valueOf(root) - 1);
+    String root2 = String.valueOf(Integer.valueOf(root) + 1);
+
+    long nl = Long.valueOf(n);
+    long p2 = palindrome(root2, len / 2);
+    long pl = p2;
+    long diff = Math.abs(p2 - nl);
+
+    if (!isPalindrome(n)) {
+        long p = palindrome(root, len / 2);
+        if (Math.abs(p - nl) <= diff) {
+            diff = Math.abs(p - nl);
+            pl = p;
+        }
+    }
+
+    long p1 = palindrome(root1, len / 2);
+    if (Math.abs(p1 - nl) <= diff) {
+        diff = Math.abs(p1 - nl);
+        pl = p1;
+    }
+    return String.valueOf(pl);
+}
+
+private long palindrome(String root, int len) {
+    return Long.valueOf(root + new StringBuilder(root.substring(0, len)).reverse().toString());
+}
+{% endhighlight %}
+
 ## Greedy
 
 [Construct K Palindrome Strings][construct-k-palindrome-strings]
@@ -303,6 +354,7 @@ public int countPalindromicSubsequences(String S) {
 
 [construct-k-palindrome-strings]: https://leetcode.com/problems/construct-k-palindrome-strings/
 [count-different-palindromic-subsequences]: https://leetcode.com/problems/count-different-palindromic-subsequences/
+[find-the-closest-palindrome]: https://leetcode.com/problems/find-the-closest-palindrome/
 [longest-palindromic-subsequence]: https://leetcode.com/problems/longest-palindromic-subsequence/
 [longest-palindromic-substring]: https://leetcode.com/problems/longest-palindromic-substring/
 [palindrome-number]: https://leetcode.com/problems/palindrome-number/

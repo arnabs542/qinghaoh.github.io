@@ -2,6 +2,7 @@
 layout: post
 title:  "Topological Sorting"
 tags: graph
+usemathjax: true
 ---
 
 [Topological sorting](https://en.wikipedia.org/wiki/Topological_sorting): In computer science, a topological sort or topological ordering of a directed graph is a linear ordering of its vertices such that for every directed edge `uv` from vertex `u` to vertex `v`, `u` comes before `v` in the ordering.
@@ -44,6 +45,58 @@ public int[] findOrder(int numCourses, int[][] prerequisites) {
     }
 
     return count == numCourses ? order : new int[0];
+}
+{% endhighlight %}
+
+[Largest Color Value in a Directed Graph][largest-color-value-in-a-directed-graph]
+
+{% highlight java %}
+public int largestPathValue(String colors, int[][] edges) {
+    int n = colors.length();
+    List<Integer>[] graph = new List[n];
+    for (int i = 0; i < n; i++) {
+        graph[i] = new ArrayList<>();
+    }
+
+    int[] indegree = new int[n];
+    for (int[] e : edges) {
+        graph[e[0]].add(e[1]);
+        indegree[e[1]]++;
+    }
+
+    // dp[i][j]: max count of i-th node, j-th color
+    int[][] dp = new int[n][26];
+
+    // zero indegree
+    Queue<Integer> q = new LinkedList<>();
+    for (int i = 0; i < n; i++) {
+        if (indegree[i] == 0) {
+            q.offer(i);
+            dp[i][colors.charAt(i) - 'a'] = 1;
+        }
+    }
+
+    int count = 0, max = 0;
+    while (!q.isEmpty()) {
+        int node = q.poll();
+        count++;
+
+        // if max is updated at this node
+        // then the color of this node must be the most frequent
+        max = Math.max(max, dp[node][colors.charAt(node) - 'a']);
+
+        for (int child : graph[node]) {
+            // updates dp of child node
+            for (int i = 0; i < 26; i++) {
+                dp[child][i] = Math.max(dp[child][i], dp[node][i] + (colors.charAt(child) - 'a' == i ? 1 : 0));
+            }
+
+            if (--indegree[child] == 0) {
+                q.offer(child);
+            }
+        }
+    }
+    return count == n ? max : -1;
 }
 {% endhighlight %}
 
@@ -552,10 +605,20 @@ Longest path in a DAG can be solved by topological sorting.
 
 Another solution is DFS + memorization
 
+# Count
+
+[Count Ways to Build Rooms in an Ant Colony][count-ways-to-build-rooms-in-an-ant-colony]
+
+$$ \frac{n!}{\prod{s_i}} $$
+
+where \\(s_i\\) is the size of the subtree at the i-th node.
+
 [count-subtrees-with-max-distance-between-cities]: https://leetcode.com/problems/count-subtrees-with-max-distance-between-cities/
+[count-ways-to-build-rooms-in-an-ant-colony]: https://leetcode.com/problems/count-ways-to-build-rooms-in-an-ant-colony/
 [course-schedule-ii]: https://leetcode.com/problems/course-schedule-ii/
 [critical-connections-in-a-network]: https://leetcode.com/problems/critical-connections-in-a-network/
 [detect-cycles-in-2d-grid]: https://leetcode.com/problems/detect-cycles-in-2d-grid/
+[largest-color-value-in-a-directed-graph]: https://leetcode.com/problems/largest-color-value-in-a-directed-graph/
 [longest-increasing-path-in-a-matrix]: https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
 [minimum-height-trees]: https://leetcode.com/problems/minimum-height-trees/
 [sequence-reconstruction]: https://leetcode.com/problems/sequence-reconstruction/

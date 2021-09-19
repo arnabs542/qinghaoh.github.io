@@ -16,7 +16,9 @@ where \\(\varphi (n)\\) is Euler's totient function.
 
 **Euler's totient function** counts the positive integers up to a given integer \\(n\\) that are relatively prime to \\(n\\).
 
-If \\(n\\) is a prime, then \\(\varphi (n) = n - 1\\)
+If \\(n\\) is a prime
+* \\(\varphi (n) = n - 1\\)
+* \\(a^{-1} \equiv a^{m-2} \pmod{m}\\)
 
 Multiplicative: if \\(\gcd(m, n) = 1\\), then \\(\varphi (m) \varphi (n) = \varphi (mn)\\).
 

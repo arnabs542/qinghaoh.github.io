@@ -566,11 +566,28 @@ public int reachNumber(int target) {
 }
 {% endhighlight %}
 
+# Set Theory
+
+[Cantor's diagonal argument](https://en.wikipedia.org/wiki/Cantor%27s_diagonal_argument): If `s1, s2, … , sn, …` is any enumeration of elements from `T`, then we can always construct an element `s` of `T` which doesn't correspond to any `sn` in the enumeration.
+
+[Find Unique Binary String][find-unique-binary-string]
+
+{% highlight java %}
+public String findDifferentBinaryString(String[] nums) {
+    StringBuilder sb= new StringBuilder();
+    for (int i = 0; i < nums.length; i++) {
+        sb.append('1' - nums[i].charAt(i));
+    }
+    return sb.toString();
+}
+{% endhighlight %}
+
 [4-keys-keyboard]: https://leetcode.com/problems/4-keys-keyboard/
 [allocate-mailboxes]: https://leetcode.com/problems/allocate-mailboxes/
 [best-meeting-point]: https://leetcode.com/problems/best-meeting-point/
 [check-if-number-is-a-sum-of-powers-of-three]: https://leetcode.com/problems/check-if-number-is-a-sum-of-powers-of-three/
 [egg-drop-with-2-eggs-and-n-floors]: https://leetcode.com/problems/egg-drop-with-2-eggs-and-n-floors/
+[find-unique-binary-string]: https://leetcode.com/problems/find-unique-binary-string/
 [handshakes-that-dont-cross]: https://leetcode.com/problems/handshakes-that-dont-cross/
 [maximum-of-absolute-value-expression]: https://leetcode.com/problems/maximum-of-absolute-value-expression/
 [non-negative-integers-without-consecutive-ones]: https://leetcode.com/problems/non-negative-integers-without-consecutive-ones/

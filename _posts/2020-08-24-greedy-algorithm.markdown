@@ -269,6 +269,85 @@ public int maximumNumberOfOnes(int width, int height, int sideLength, int maxOne
 }
 {% endhighlight %}
 
+[Strong Password Checker][strong-password-checker]
+
+{% highlight java %}
+public int strongPasswordChecker(String s) {
+    int missingTypes = 3;
+    for (char c : s.toCharArray()) {
+        if (Character.isUpperCase(c)) {
+            missingTypes--;
+            break;
+        }
+    }
+    for (char c : s.toCharArray()) {
+        if (Character.isLowerCase(c)) {
+            missingTypes--;
+            break;
+        }
+    }
+    for (char c : s.toCharArray()) {
+        if (Character.isDigit(c)) {
+            missingTypes--;
+            break;
+        }
+    }
+
+    int n = s.length();
+    if (n < 6) {
+        // (6 - n): number of chars to be inserted
+        // if 6 - n < missingTypes, we will need to replace some chars, too
+        // the length of a repeating char seq <= 5
+        // so one insertion can break it
+        return Math.max(6 - n, missingTypes);
+    }
+
+    // mod0: count of repeating char seq those length % 3 == 0
+    // mod1: count of repeating char seq those length % 3 == 1
+    int i = 2, mod0 = 0, mod1 = 0, replacements = 0;
+    while (i < n) {
+        // three repeating chars in a row
+        if (s.charAt(i) == s.charAt(i - 1) && s.charAt(i) == s.charAt(i - 2)) {
+            // finds the length of the sequence
+            int len = 2;
+            while (i < n && s.charAt(i) == s.charAt(i - 1)) {
+                len++;
+                i++;
+            }
+
+            // always replace the third char
+            replacements += len / 3;
+
+            if (len % 3 == 0) {
+                mod0++;
+            } else if (len % 3 == 1) {
+                mod1++;
+            }
+        } else {
+            i++;
+        }
+    }
+
+    if (n <= 20) {
+        // minimum replacement
+        return Math.max(replacements, missingTypes);
+    }
+
+    // when n > 20, the idea is to prefer deletions over replacements
+    // (length / 3) replacements = (length / 3 - 1) replacements + (length % 3 + 1) deletions
+    int deletes = n - 20;
+    // length % 3 == 0, one replacement => one deletion
+    replacements -= Math.min(mod0, deletes);
+    // length % 3 == 1, one replacement => two deletions
+    // Math.max(deletes - mod0, 0) is the remaining deletes after the above action
+    replacements -= Math.min(Math.max(deletes - mod0, 0), mod1 * 2) / 2;
+    // length % 3 == 2, one replacement => three deletions
+    // Math.max(deletes - mod0 - mod1 * 2, 0) is the remaining deletes after the above actions
+    replacements -= Math.max(deletes - mod0 - mod1 * 2, 0) / 3;
+    return deletes + Math.max(replacements, missingTypes);
+}
+{% endhighlight %}
+
 [broken-calculator]: https://leetcode.com/problems/broken-calculator/
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [hand-of-straights]: https://leetcode.com/problems/hand-of-straights/
@@ -278,5 +357,6 @@ public int maximumNumberOfOnes(int width, int height, int sideLength, int maxOne
 [minimum-factorization]: https://leetcode.com/problems/minimum-factorization/
 [put-boxes-into-the-warehouse-i]: https://leetcode.com/problems/put-boxes-into-the-warehouse-i/
 [split-array-into-consecutive-subsequences]: https://leetcode.com/problems/split-array-into-consecutive-subsequences/
+[strong-password-checker]: https://leetcode.com/problems/strong-password-checker/
 [video-stitching]: https://leetcode.com/problems/video-stitching/
 [wiggle-sort]: https://leetcode.com/problems/wiggle-sort/

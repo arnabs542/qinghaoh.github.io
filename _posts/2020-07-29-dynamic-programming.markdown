@@ -149,6 +149,24 @@ if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
 
 Look how it's transformed to [Longest Common Subsequence][longest-common-subsequence]!
 
+[Distinct Subsequences][distinct-subsequences]
+
+{% highlight java %}
+// t == ""
+for (int i = 0; i <= m; i++) {
+    dp[i][0] = 1;
+}
+
+for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+        if (s.charAt(i) == t.charAt(j)) {
+            dp[i + 1][j + 1] = dp[i][j];
+        }
+        dp[i + 1][j + 1] += dp[i][j + 1];
+    }
+}
+{% endhighlight %}
+
 [Maximum Length of Repeated Subarray][maximum-length-of-repeated-subarray]
 
 {% highlight java %}
@@ -361,6 +379,7 @@ public int findRotateSteps(String ring, String key) {
 {% endhighlight %}
 
 [delete-operation-for-two-strings]: https://leetcode.com/problems/delete-operation-for-two-strings/
+[distinct-subsequences]: https://leetcode.com/problems/distinct-subsequences/
 [edit-distance]: https://leetcode.com/problems/edit-distance/
 [freedom-trail]: https://leetcode.com/problems/freedom-trail/
 [greatest-sum-divisible-by-three]: https://leetcode.com/problems/greatest-sum-divisible-by-three/

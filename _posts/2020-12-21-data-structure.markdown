@@ -19,6 +19,12 @@ tag: data structure
 * Map
 * TreeMap
 
+[All O`one Data Structure][all-oone-data-structure]
+
+* Doubly linked list (buckets)
+* Map (key -> count)
+* Map (count -> bucket)
+
 [Find Median from Data Stream][find-median-from-data-stream]
 
 {% highlight java %}
@@ -254,6 +260,7 @@ class MovieRentingSystem {
 }
 {% endhighlight %}
 
+[all-oone-data-structure]: https://leetcode.com/problems/all-oone-data-structure/
 [design-a-leaderboard]: https://leetcode.com/problems/design-a-leaderboard/
 [design-a-stack-with-increment-operation]: https://leetcode.com/problems/design-a-stack-with-increment-operation/
 [design-hashmap]: https://leetcode.com/problems/design-phone-hashmap/

@@ -717,6 +717,58 @@ private boolean backtrack(double[] nums, int length) {
 }
 {% endhighlight %}
 
+# Parsing
+
+[Expression Add Operators][expression-add-operators]
+
+{% highlight java %}
+private int target;
+
+public List<String> addOperators(String num, int target) {
+    this.target = target;
+
+    List<String> list = new ArrayList<>();
+    backtrack(list, new StringBuilder(), num, 0, 0, 0);
+    return list;
+}
+
+// 1 + 2 * 3 * 4
+// curr = 4
+// eval = 7
+// product = 6
+public void backtrack(List<String> list, StringBuilder sb, String num, int index, long eval, long product) {
+    if (index == num.length()) {
+        if (target == eval) {
+            list.add(sb.toString());
+        }
+        return;
+    }
+
+    for (int i = index; i < num.length(); i++) {
+        // skips consecutive 0's
+        if (num.charAt(index) == '0' && i != index) {
+            break;
+        }
+
+        long curr = Long.parseLong(num.substring(index, i + 1));
+        int len = sb.length();
+        if (index == 0) {
+            backtrack(list, sb.append(curr), num, i + 1, curr, curr);
+            sb.setLength(len);
+        } else {
+            backtrack(list, sb.append("+").append(curr), num, i + 1, eval + curr, curr);
+            sb.setLength(len);
+
+            backtrack(list, sb.append("-").append(curr), num, i + 1, eval - curr, -curr);
+            sb.setLength(len);
+
+            backtrack(list, sb.append("*").append(curr), num, i + 1, eval - product + product * curr, product * curr);
+            sb.setLength(len);
+        }
+    }
+}
+{% endhighlight %}
+
 # NP Complete
 
 [Optimal Account Balancing][optimal-account-balancing]
@@ -763,6 +815,7 @@ private int backtrack(int index, int[] debt) {
 [combination-sum-ii]: https://leetcode.com/problems/combination-sum-ii/
 [combination-sum-iii]: https://leetcode.com/problems/combination-sum-iii/
 [construct-the-lexicographically-largest-valid-sequence]: https://leetcode.com/problems/construct-the-lexicographically-largest-valid-sequence/
+[expression-add-operators]: https://leetcode.com/problems/expression-add-operators/
 [factor-combinations]: https://leetcode.com/problems/factor-combinations/
 [generalized-abbreviation]: https://leetcode.com/problems/generalized-abbreviation/
 [letter-tile-possibilities]: https://leetcode.com/problems/letter-tile-possibilities/

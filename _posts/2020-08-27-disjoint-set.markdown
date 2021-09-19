@@ -44,6 +44,79 @@ private boolean union(int u, int v) {
 }
 {% endhighlight %}
 
+[Redundante Connection II][redundant-connection-ii]
+
+{% highlight java %}
+public int[] findRedundantDirectedConnection(int[][] edges) {
+    // there are two cases where the graph is invalid
+    // - a node has two parents
+    // - a cycle exists
+
+    // parent of each node
+    int[] parents = new int[edges.length + 1];
+
+    // there's at most one node which has more than one parent
+    // and this node has at most two parents
+    // the two edges from the parents to this node are the two candidates
+
+    // note the order of these two candidates matters
+    int[] candidate1 = null, candidate2 = null;
+    for (int[] e : edges) {
+        if (parents[e[1]] == 0) {
+            parents[e[1]] = e[0];
+        } else {
+            // there are two parents of e[1]
+            candidate2 = new int[] {e[0], e[1]};
+            candidate1 = new int[] {parents[e[1]], e[1]};
+
+            // sets the edge of candidate2 to 0
+            // so that later when we construct the graph
+            // candidate2 is skipped
+            e[1] = 0;
+        }
+    }
+
+    // now uses the parents array as the roots for union-find
+    Arrays.fill(parents, 0);
+
+    // adds edges to the graph in order
+    for (int[] e : edges) {
+        if (e[1] == 0) {
+            continue;
+        }
+
+        // found cycle
+        if (!union(parents, e[0], e[1])) {
+            // if there's no candidate edge, this edge is redundant
+            // else candiate1 is redundant
+            // because candidate2 is not in the graph yet
+
+            // in other words, if there's a cycle, candidate1 has precedence over other edges
+            return candidate1 == null ? e : candidate1;
+        }
+    }
+
+    // there's no cycle
+    // removes the candiate2
+    return candidate2;
+}
+
+private int find(int[] parents, int u) {
+    return parents[u] == 0 ? u : find(parents, parents[u]);
+}
+
+private boolean union(int[] parents, int u, int v) {
+    int pu = find(parents, u), pv = find(parents, v);
+
+    if (pu == pv) {
+        return false;
+    }
+
+    parents[pu] = pv;
+    return true;
+}
+{% endhighlight %}
+
 [Evaluate Division][evaluate-division]
 
 {% highlight java %}
@@ -468,4 +541,5 @@ private int indexOf(int i, int j, Triangle t) {
 [number-of-connected-components-in-an-undirected-graph]: https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
 [rank-transform-of-a-matrix]: https://leetcode.com/problems/rank-transform-of-a-matrix/
 [redundant-connection]: https://leetcode.com/problems/redundant-connection/
+[redundant-connection-ii]: https://leetcode.com/problems/redundant-connection-ii/
 [regions-cut-by-slashes]: https://leetcode.com/problems/regions-cut-by-slashes/

@@ -298,7 +298,7 @@ public int findMaximumXOR(int[] nums) {
         }
 
         // so far, max contains the most significant i bits
-        // tpm stands for the potential max we can get if we consider the current bit 
+        // tmp stands for the potential max we can get if we consider the current bit
         int tmp = max | (1 << (31 - i));
         // finds a and b in the set so that a ^ b == tmp
         // a ^ b == tmp => a ^ b ^ b == tmp ^ b => a == tmp ^ b
@@ -314,6 +314,114 @@ public int findMaximumXOR(int[] nums) {
 {% endhighlight %}
 
 Another solution is by Trie.
+
+## Trie
+
+[Count Pairs With XOR in a Range][count-pairs-with-xor-in-a-range]
+
+{% highlight java %}
+private static final int NUM_BITS = 15;
+
+public int countPairs(int[] nums, int low, int high) {
+    TrieNode root = new TrieNode();
+    int lowCount = 0, highCount = 0;
+    for (int num : nums) {
+        lowCount += countSmallerPairs(root, num, low);
+        highCount += countSmallerPairs(root, num, high + 1);
+        insert(root, num);
+    }
+    return highCount - lowCount;
+}
+
+// counts elements in the trie that xor num < x
+private int countSmallerPairs(TrieNode root, int num, int x) {
+    TrieNode node = root;
+    int count = 0;
+    for (int i = NUM_BITS - 1; i >= 0 && node != null; i--) {
+        int a = (num >> i) & 1, b = (x >> i) & 1;
+
+        // compares the i-th bits of num and x
+        if (b == 0) {
+            // finds the bit == a, so they xor to 0
+            node = node.children[a];
+        } else {
+            if (node.children[a] != null) {
+                // finds the bit == a, so they xor to 0
+                // so the xor < x
+                count += node.children[a].count;
+            }
+            // keeps searching
+            node = node.children[1 - a];
+        }
+    }
+    return count;
+}
+
+class TrieNode {
+    TrieNode[] children;
+    int count;
+
+    TrieNode() {
+        children = new TrieNode[2];
+        count = 0;
+    }
+}
+
+private void insert(TrieNode root, int num) {
+    TrieNode node = root;
+    for (int i = NUM_BITS - 1; i >= 0; i--) {
+        int b = (num >> i) & 1;
+        if (node.children[b] == null) {
+            node.children[b] = new TrieNode();
+        }
+        node = node.children[b];
+        node.count++;
+    }
+}
+{% endhighlight %}
+
+Simplied version: no Trie, but similarly, level-traverse all the numbers
+
+{% highlight java %}
+public int countPairs(int[] nums, int low, int high) {
+    return countSmallerPairs(nums, high + 1) - countSmallerPairs(nums, low);
+}
+
+// it's a variant of the trie solution
+// the search starts from leaves
+// counts pairs in nums that xor < x
+private int countSmallerPairs(int[] nums, int x) {
+    Map<Integer, Long> count = Arrays.stream(nums).boxed()
+        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    Map<Integer, Long> count2 = new HashMap<>();
+
+    int pairs = 0;
+    // iterates through each bit of x, from lsb to msb
+    while (x > 0) {
+        for (int k : count.keySet()) {
+            // counts next level of nums to check
+            // by right shifting all nums
+            long v = count.get(k);
+            count2.put(k >> 1, count2.getOrDefault(k >> 1, 0l) + v);
+
+            // looks for pairs that, after XORing, have the same bits to the left
+            // but have a 0 instead of a 1 at lsb.
+            // if x & 1 == 0, then there can be no such pairs
+            // if lsb == 1
+            if ((x & 1) > 0) {
+                // k ^ (x - 1) ^ k == x - 1 < x
+                pairs += v * count.getOrDefault((x - 1) ^ k, 0l);
+            }
+        }
+        count = count2;
+        count2 = new HashMap<>();
+        x >>= 1;
+    }
+
+    // i < j
+    return pairs / 2;
+}
+{% endhighlight %}
 
 # Gray Code
 
@@ -486,6 +594,7 @@ public boolean validUtf8(int[] data) {
 [bitwise-and-of-numbers-range]: https://leetcode.com/problems/bitwise-and-of-numbers-range/
 [concatenation-of-consecutive-binary-numbers]: https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/
 [circular-permutation-in-binary-representation]: https://leetcode.com/problems/circular-permutation-in-binary-representation/
+[count-pairs-with-xor-in-a-range]: https://leetcode.com/problems/count-pairs-with-xor-in-a-range/
 [counting-bits]: https://leetcode.com/problems/counting-bits/
 [divide-two-integers]: https://leetcode.com/problems/divide-two-integers/
 [find-root-of-n-ary-tree]: https://leetcode.com/problems/find-root-of-n-ary-tree/

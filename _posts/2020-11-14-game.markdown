@@ -150,6 +150,94 @@ private int helper(int[] piles, int start, int m) {
 }
 {% endhighlight %}
 
+[Cat and Mouse II][cat-and-mouse-ii]
+
+{% highlight java %}
+{% raw %}
+public static final int[][] DIRECTIONS = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+{% endraw %}
+private int n, m, available, catJump, mouseJump;
+private String[] grid;
+// {cell position, cat r, cat c, mouse r, mouse c}
+private Boolean[][][][][] memo;
+
+public boolean canMouseWin(String[] grid, int catJump, int mouseJump) {
+    this.grid = grid;
+    this.n = grid.length;
+    this.m = grid[0].length();
+    this.catJump = catJump;
+    this.mouseJump = mouseJump;
+
+    // positions of Cat and Mouse
+    int[] cat = {-1, -1}, mouse = {-1, -1};
+    // count of cells that Cat or Mouse can move to, i.e. non-wall cells
+    available = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (grid[i].charAt(j) != '#') {
+                available++;
+            }
+
+            if (grid[i].charAt(j) == 'C') {
+                cat = new int[]{i, j};
+            } else if (grid[i].charAt(j) == 'M') {
+                mouse = new int[]{i, j};
+            }
+        }
+    }
+    memo = new Boolean[available * 2 + 1][n][m][n][m];
+    return dfs(0, cat, mouse);
+}
+
+private boolean dfs(int turn, int[] cat, int[] mouse) {
+    if (memo[turn][cat[0]][cat[1]][mouse[0]][mouse[1]] != null) {
+        return memo[turn][cat[0]][cat[1]][mouse[0]][mouse[1]];
+    }
+
+    // 2 * available is the max turns
+    // it's a rough estimate
+    if (turn == available * 2) {
+        return false;
+    }
+
+    // Mouse's turn
+    if (turn % 2 == 0) {
+        for (int[] d : DIRECTIONS) {
+            for (int i = 0; i <= mouseJump; i++) {
+                int r = mouse[0] + i * d[0], c = mouse[1] + i * d[1];
+
+                if (r < 0 || r == n || c < 0 || c == m || grid[r].charAt(c) == '#') {
+                    break;
+                }
+
+                if (grid[r].charAt(c) == 'F' || dfs(turn + 1, cat, new int[]{r, c})) {
+                    return memo[turn][cat[0]][cat[1]][mouse[0]][mouse[1]] = true;
+                }
+            }
+        }
+
+        return memo[turn][cat[0]][cat[1]][mouse[0]][mouse[1]] = false;
+    }
+
+    // Cat's turn
+    for (int[] d : DIRECTIONS) {
+        for (int i = 0; i <= catJump; i++) {
+            int r = cat[0] + i * d[0], c = cat[1] + i * d[1];
+
+            if (r < 0 || r == n || c < 0 || c == m || grid[r].charAt(c) == '#') {
+                break;
+            }
+
+            if ((r == mouse[0] && c == mouse[1]) || grid[r].charAt(c) == 'F' || !dfs(turn + 1, new int[]{r, c}, mouse)) {
+                return memo[turn][cat[0]][cat[1]][mouse[0]][mouse[1]] = false;
+            }
+        }
+    }
+
+    return memo[turn][cat[0]][cat[1]][mouse[0]][mouse[1]] = true;
+}
+{% endhighlight %}
+
 # Bottom-up Percolation
 
 [Cat and Mouse][cat-and-mouse]
@@ -358,6 +446,7 @@ public boolean canWin(String s) {
 
 [can-i-win]: https://leetcode.com/problems/can-i-win/
 [cat-and-mouse]: https://leetcode.com/problems/cat-and-mouse/
+[cat-and-mouse-ii]: https://leetcode.com/problems/cat-and-mouse-ii/
 [flip-game-ii]: https://leetcode.com/problems/flip-game-ii/
 [stone-game]: https://leetcode.com/problems/stone-game/
 [stone-game-ii]: https://leetcode.com/problems/stone-game-ii/

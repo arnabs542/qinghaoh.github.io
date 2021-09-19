@@ -245,6 +245,31 @@ public boolean canTransform(String start, String end) {
 }
 {% endhighlight %}
 
+[Array With Elements Not Equal to Average of Neighbors][array-with-elements-not-equal-to-average-of-neighbors]
+
+{% highlight java %}
+public int[] rearrangeArray(int[] nums) {
+    int n = nums.length;
+    int[] result = Arrays.copyOf(nums, n);
+    for (int i = 1; i < n - 1; i++) {
+        // increasing or decreasing
+        // if we swap if the middle num is an average of its neighbors
+        // we will need two passes: left -> right and right -> left
+        // e.g. [0, 1, 2, 3, 4, 5]
+        if ((result[i - 1] < result[i] && result[i] < result[i + 1]) || (result[i - 1] > result[i] && result[i] > result[i + 1])) {
+            swap(result, i, i + 1);
+        }
+    }
+    return result;
+}
+
+private void swap(int[] nums, int i, int j) {
+    int tmp = nums[i];
+    nums[i] = nums[j];
+    nums[j] = tmp;
+}
+{% endhighlight %}
+
 # Set
 
 [Longest Consecutive Sequence][longest-consecutive-sequence]
@@ -323,6 +348,7 @@ public int candy(int[] ratings) {
 {% endhighlight %}
 
 [array-nesting]: https://leetcode.com/problems/array-nesting/
+[array-with-elements-not-equal-to-average-of-neighbors]: https://leetcode.com/problems/array-with-elements-not-equal-to-average-of-neighbors/
 [candy]: https://leetcode.com/problems/candy/
 [divide-array-into-increasing-sequences]: https://leetcode.com/problems/divide-array-into-increasing-sequences/
 [first-missing-positive]: https://leetcode.com/problems/first-missing-positive/

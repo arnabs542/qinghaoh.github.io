@@ -351,6 +351,56 @@ private int distance(int[] p1, int[] p2) {
 }
 {% endhighlight %}
 
+[Reachable Nodes In Subdivided Graph][reachable-nodes-in-subdivided-graph]
+
+{% highlight java %}
+public int reachableNodes(int[][] edges, int maxMoves, int n) {
+    // graph[i][j]: count between the edge [i, j]
+    int[][] graph = new int[n][n];
+    for (int[] g : graph) {
+        Arrays.fill(g, -1);
+    }
+    for (int[] e : edges) {
+        graph[e[0]][e[1]] = e[2];
+        graph[e[1]][e[0]] = e[2];
+    }
+
+    // {node, max moves}
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> -a[1]));
+    pq.offer(new int[]{0, maxMoves});
+
+    boolean[] visited = new boolean[n];
+    int count = 0;
+    while (!pq.isEmpty()) {
+        int[] curr = pq.poll();
+        int node = curr[0], move = curr[1];
+
+        if (visited[node]) {
+            continue;
+        }
+
+        visited[node] = true;
+        count++;
+
+        for (int neighbor = 0; neighbor < n; neighbor++) {
+            if (graph[node][neighbor] >= 0) {
+                if (move > graph[node][neighbor] && !visited[neighbor]) {
+                    pq.offer(new int[]{neighbor, move - graph[node][neighbor] - 1});
+                }
+
+                // number of nodes that are reachable on the edge [node, neighbor]
+                int reach = Math.min(move, graph[node][neighbor]);
+                count += reach;
+
+                // the remaining new nodes could be visited from the other direction
+                graph[neighbor][node] -= reach;
+            }
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
 # Floyd-Warshall Algorithm
 
 [Floyd-Warshall algorithm](https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm) is an algorithm for finding shortest paths in a directed weighted graph with positive or negative edge weights (but with no negative cycles). A single execution of the algorithm will find the lengths (summed weights) of shortest paths between ***all*** pairs of vertices.
@@ -678,6 +728,7 @@ private int paint(int[][] grid, int i, int j, int color) {
 [path-with-maximum-minimum-value]: https://leetcode.com/problems/path-with-maximum-minimum-value/
 [path-with-maximum-probability]: https://leetcode.com/problems/path-with-maximum-probability/
 [path-with-minimum-effort]: https://leetcode.com/problems/path-with-minimum-effort/
+[reachable-nodes-in-subdivided-graph]: https://leetcode.com/problems/reachable-nodes-in-subdivided-graph/
 [shortest-bridge]: https://leetcode.com/problems/shortest-bridge/
 [swim-in-rising-water]: https://leetcode.com/problems/swim-in-rising-water/
 [the-maze-iii]: https://leetcode.com/problems/the-maze-iii/

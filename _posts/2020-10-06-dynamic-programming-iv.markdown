@@ -201,7 +201,7 @@ public int calculateMinimumHP(int[][] dungeon) {
         }
     }
 
-    return health[0][0];
+    return dp[0][0];
 }
 {% endhighlight %}
 

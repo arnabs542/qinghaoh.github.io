@@ -1777,7 +1777,8 @@ FROM
 [Group Employees of the Same Salary][group-employees-of-the-same-salary]
 
 {% highlight sql %}
-SELECT *,
+SELECT
+    *,
     DENSE_RANK() OVER(ORDER BY salary) team_id
 FROM
     Employees
@@ -1793,6 +1794,47 @@ WHERE
 ORDER BY
     team_id,
     employee_id
+;
+{% endhighlight %}
+
+[First and Last Call On the Same Day][first-and-last-call-on-the-same-day]
+
+{% highlight sql %}
+WITH cte AS (
+    SELECT
+        caller_id AS user_id,
+        recipient_id,
+        call_time
+    FROM
+        Calls
+    UNION
+    SELECT
+        recipient_id AS user_id,
+        caller_id AS recipient_id,
+        call_time
+    FROM
+        Calls),
+
+cte1 AS (
+    SELECT
+        user_id,
+        recipient_id,
+        DATE(call_time) as day,
+        DENSE_RANK() OVER(PARTITION BY user_id, DATE(call_time) ORDER BY call_time ASC) AS asc_rank,
+        DENSE_RANK() OVER(PARTITION BY user_id, DATE(call_time) ORDER BY call_time DESC) AS desc_rank
+    FROM
+        cte)
+
+SELECT
+    DISTINCT user_id
+FROM
+    cte1
+WHERE
+    asc_rank = 1 OR desc_rank = 1
+GROUP BY
+    user_id,
+    day
+    HAVING COUNT(DISTINCT recipient_id) = 1
 ;
 {% endhighlight %}
 
@@ -1966,6 +2008,7 @@ WHERE
 [find-the-quiet-students-in-all-exams]: https://leetcode.com/problems/find-the-quiet-students-in-all-exams/
 [find-the-subtasks-that-did-not-execute]: https://leetcode.com/problems/find-the-subtasks-that-did-not-execute/
 [find-users-with-valid-e-mails]: https://leetcode.com/problems/find-users-with-valid-e-mails/
+[first-and-last-call-on-the-same-day]: https://leetcode.com/problems/first-and-last-call-on-the-same-day/
 [friend-requests-i-overall-acceptance-rate]: https://leetcode.com/problems/friend-requests-i-overall-acceptance-rate/
 [game-play-analysis-i]: https://leetcode.com/problems/game-play-analysis-i/
 [game-play-analysis-ii]: https://leetcode.com/problems/game-play-analysis-ii/
