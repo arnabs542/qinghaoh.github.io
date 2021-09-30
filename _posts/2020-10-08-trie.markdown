@@ -173,7 +173,53 @@ class TrieNode {
 }
 {% endhighlight %}
 
+# Virtual Trie
+
+[K-th Smallest in Lexicographical Order][k-th-smallest-in-lexicographical-order]
+
+![Trie](/assets/k_th_smallest_in_lexicographical_order.png)
+
+{% highlight java %}
+public int findKthNumber(int n, int k) {
+    int curr = 1;
+    while (k > 1) {
+        // counts the nodes between the current node and its next node on the same level
+        int count = countNodes(n, curr, curr + 1);
+        if (count < k) {
+            // moves to curr + 1
+            curr++;
+            k -= count;
+        } else {
+            // the k-th integer is in the subtree of current node
+            // goes to the leftmost child node
+            curr *= 10;
+            k--;
+        }
+    }
+    return curr;
+}
+
+// counts the nodes in [node1, node2)
+// node1 and node2 are in the same subtree and on the same level
+public int countNodes(int n, long node1, long node2) {
+    int count = 0;
+    while (node1 <= n) {
+        // if node2 > n, n is in the range [node1, node2).
+        //   adds (n - node1 + 1) to the count
+        // else the subtree of node1 is complete.
+        //   adds (node2 - node1) to the count
+        count += Math.min(n + 1, node2) - node1;
+
+        // next level
+        node1 *= 10;
+        node2 *= 10;
+    }
+    return count;
+}
+{% endhighlight %}
+
 [implement-trie-ii-prefix-tree]: https://leetcode.com/problems/implement-trie-ii-prefix-tree/
 [index-pairs-of-a-string]: https://leetcode.com/problems/index-pairs-of-a-string/
+[k-th-smallest-in-lexicographical-order]: https://leetcode.com/problems/k-th-smallest-in-lexicographical-order/
 [map-sum-pairs]: https://leetcode.com/problems/map-sum-pairs/
 [prefix-and-suffix-search]: https://leetcode.com/problems/prefix-and-suffix-search/

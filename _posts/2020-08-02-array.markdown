@@ -31,6 +31,32 @@ public int minPatches(int[] nums, int n) {
 }
 {% endhighlight %}
 
+# Brute Force
+
+[Count The Repetitions][count-the-repetitions]
+
+{% highlight java %}
+public int getMaxRepetitions(String s1, int n1, String s2, int n2) {
+    char[] array1 = s1.toCharArray(), array2 = s2.toCharArray();
+    int count1 = 0, count2 = 0, i = 0, j = 0;
+
+    while (count1 < n1) {
+        if (array1[i] == array2[j]) {
+            if (++j == array2.length) {
+                j = 0;
+                count2++;
+            }
+        }
+        if (++i == array1.length) {
+            i = 0;
+            count1++;
+        }
+    }
+
+    return count2 / n2;
+}
+{% endhighlight %}
+
 # Buckets
 
 Count each element in an array `int[] a`.
@@ -204,6 +230,30 @@ public int[] shortestToChar(String s, char c) {
 
 [Shortest Distance to Target Color][shortest-distance-to-target-color]
 
+[Max Chunks To Make Sorted II][max-chunks-to-make-sorted-ii]
+
+{% highlight java %}
+public int maxChunksToSorted(int[] arr) {
+    int n = arr.length;
+
+    int[] minOfRight = new int[n];
+    minOfRight[n - 1] = arr[n - 1];
+    for (int i = n - 2; i >= 0; i--) {
+        minOfRight[i] = Math.min(minOfRight[i + 1], arr[i]);
+    }
+
+    int chunks = 0, max = 0;
+    for (int i = 0; i < n - 1; i++) {
+        max = Math.max(max, arr[i]);
+        // splits if all elements to the left <= to all elements to the right
+        if (max <= minOfRight[i + 1]) {
+            chunks++;
+        }
+    }
+    return chunks + 1;
+}
+{% endhighlight %}
+
 # Swapping
 
 [Swap Adjacent in LR String][swap-adjacent-in-lr-string]
@@ -350,9 +400,11 @@ public int candy(int[] ratings) {
 [array-nesting]: https://leetcode.com/problems/array-nesting/
 [array-with-elements-not-equal-to-average-of-neighbors]: https://leetcode.com/problems/array-with-elements-not-equal-to-average-of-neighbors/
 [candy]: https://leetcode.com/problems/candy/
+[count-the-repetitions]: https://leetcode.com/problems/count-the-repetitions/
 [divide-array-into-increasing-sequences]: https://leetcode.com/problems/divide-array-into-increasing-sequences/
 [first-missing-positive]: https://leetcode.com/problems/first-missing-positive/
 [longest-consecutive-sequence]: https://leetcode.com/problems/longest-consecutive-sequence/
+[max-chunks-to-make-sorted-ii]: https://leetcode.com/problems/max-chunks-to-make-sorted-ii/
 [minimum-number-of-flips-to-make-the-binary-string-alternating]: https://leetcode.com/problems/minimum-number-of-flips-to-make-the-binary-string-alternating/
 [patching-array]: https://leetcode.com/problems/patching-array/
 [reverse-words-in-a-string-ii]: https://leetcode.com/problems/reverse-words-in-a-string-ii/

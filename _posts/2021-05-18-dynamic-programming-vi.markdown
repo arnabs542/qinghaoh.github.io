@@ -160,6 +160,31 @@ public int rearrangeSticks(int n, int k) {
 }
 {% endhighlight %}
 
+[Number of Music Playlists][number-of-music-playlists]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int numMusicPlaylists(int n, int goal, int k) {
+    long[][] dp = new long[goal + 1][n + 1];
+    dp[0][0] = 1;
+
+    for (int i = 1; i <= goal; i++) {
+        for (int j = 1; j <= n; j++) {
+            // the last song is new
+            dp[i][j] = (dp[i - 1][j - 1] * (n - (j - 1))) % MOD;
+
+            // the last song is old
+            // the songs from (j - k) to (j - 1) cannot be chosen
+            if (j > k) {
+                dp[i][j] = (dp[i][j] + (dp[i - 1][j] * (j - k)) % MOD) % MOD;
+            }
+        }
+    }
+    return (int)dp[goal][n];
+}
+{% endhighlight %}
+
 [Frog Jump][frog-jump]
 
 {% highlight java %}
@@ -189,4 +214,5 @@ public boolean canCross(int[] stones) {
 [build-array-where-you-can-find-the-maximum-exactly-k-comparisons]: https://leetcode.com/problems/build-array-where-you-can-find-the-maximum-exactly-k-comparisons/
 [frog-jump]: https://leetcode.com/problems/frog-jump/
 [maximum-height-by-stacking-cuboids]: https://leetcode.com/problems/maximum-height-by-stacking-cuboids/
+[number-of-music-playlists]: https://leetcode.com/problems/number-of-music-playlists/
 [number-of-ways-to-rearrange-sticks-with-k-sticks-visible]: https://leetcode.com/problems/number-of-ways-to-rearrange-sticks-with-k-sticks-visible/

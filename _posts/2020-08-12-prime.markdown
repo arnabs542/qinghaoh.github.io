@@ -78,7 +78,7 @@ public int integerBreak(int n) {
         prod *= 3;
         n -= 3;
     }
-    return prod *= n;
+    return prod * n;
 }
 {% endhighlight %}
 

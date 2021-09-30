@@ -603,7 +603,7 @@ Longest path in a DAG can be solved by topological sorting.
 
 [Longest Increasing Path in a Matrix][longest-increasing-path-in-a-matrix]
 
-Another solution is DFS + memorization
+Another solution is DFS + memoization
 
 # Count
 

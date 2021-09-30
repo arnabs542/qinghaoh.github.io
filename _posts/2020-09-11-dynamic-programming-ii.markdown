@@ -5,7 +5,7 @@ tag: dynamic programming
 ---
 [Largest Sum of Averages][largest-sum-of-averages]
 
-### Top-down DP: divide and conquer + memorization
+### Top-down DP: divide and conquer + memoization
 
 {% highlight java %}
 private double[][] memo;

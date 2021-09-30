@@ -961,6 +961,71 @@ public Camera dfs(TreeNode root) {
 }
 {% endhighlight %}
 
+[Smallest Missing Genetic Value in Each Subtree][smallest-missing-genetic-value-in-each-subtree]
+
+{% highlight java %}
+private Map<Integer, List<Integer>> tree = new HashMap<>();
+private Set<Integer> set = new HashSet<>();
+
+public int[] smallestMissingValueSubtree(int[] parents, int[] nums) {
+    int n = parents.length;
+    for (int i = 0; i < n; i++) {
+        tree.computeIfAbsent(parents[i], k -> new ArrayList<>()).add(i);
+    }
+
+    // only the node with genetic value 1 and its ancestors have missing values > 1
+    int miss = 1;
+    int[] ans = new int[n];
+    Arrays.fill(ans, miss);
+
+    // finds the node with genetic value 1
+    int node = -1;
+    for (int i = 0; i < n; i++) {
+        if (nums[i] == 1) {
+            node = i;
+            break;
+        }
+    }
+    if (node < 0) {
+        return ans;
+    }
+
+    int prev = -1;
+    while (node >= 0) {
+        if (tree.containsKey(node)) {
+            for (int child : tree.get(node)) {
+                // skips previously visited child
+                if (child != prev) {
+                    dfs(nums, child);
+                }
+            }
+        }
+
+        set.add(nums[node]);
+        // finds next missing genetic value
+        while (set.contains(miss)) {
+            miss++;
+        }
+        ans[node] = miss;
+
+        prev = node;
+        // goes up by one node
+        node = parents[node];
+    }
+    return ans;
+}
+
+// adds all descendants to the set
+private void dfs(int[] nums, int node) {
+    set.add(nums[node]);
+    if (tree.containsKey(node)) {
+        for (int child : tree.get(node)) {
+            dfs(nums, child);
+        }
+    }
+}
+{% endhighlight %}
+
 [all-nodes-distance-k-in-binary-tree]: https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/
 [binary-tree-cameras]: https://leetcode.com/problems/binary-tree-cameras/
 [binary-tree-maximum-path-sum]: https://leetcode.com/problems/binary-tree-maximum-path-sum/
@@ -988,5 +1053,6 @@ public Camera dfs(TreeNode root) {
 [path-sum-iii]: https://leetcode.com/problems/path-sum-iii/
 [pseudo-palindromic-paths-in-a-binary-tree]: https://leetcode.com/problems/pseudo-palindromic-paths-in-a-binary-tree/
 [second-minimum-node-in-a-binary-tree]: https://leetcode.com/problems/second-minimum-node-in-a-binary-tree/
+[smallest-missing-genetic-value-in-each-subtree]: https://leetcode.com/problems/smallest-missing-genetic-value-in-each-subtree/
 [split-bst]: https://leetcode.com/problems/split-bst/
 [sum-of-distances-in-tree]: https://leetcode.com/problems/sum-of-distances-in-tree/

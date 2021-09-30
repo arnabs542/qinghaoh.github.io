@@ -279,6 +279,30 @@ public void wallsAndGates(int[][] rooms) {
 }
 {% endhighlight %}
 
+[Minimum Moves to Reach Target with Rotations][minimum-moves-to-reach-target-with-rotations]
+
+{% highlight java %}
+// {i, j, orientation (horizontal: 0, vertical: 1)}
+Queue<int[]> q = new LinkedList<>();
+int[] node = {0, 0, 0};
+q.offer(node);
+
+boolean[][][] visited = new boolean[n][n][2];
+visited[0][0][0] = true;
+{% endhighlight %}
+
+[Shortest Path in a Grid with Obstacles Elimination][shortest-path-in-a-grid-with-obstacles-elimination]
+
+{% highlight java %}
+// {i, j, number of eliminated obstacles}
+Queue<int[]> q = new LinkedList<>();
+int[] node = new int[]{0, 0, 0};
+q.offer(node);
+
+boolean[][][] visited = new boolean[m][n][k + 1];
+visited[0][0][0] = true;
+{% endhighlight %}
+
 [The Maze][the-maze]
 
 {% highlight java %}
@@ -585,14 +609,88 @@ private void dfs(int r, int c) {
 
 [Sliding Puzzle][sliding-puzzle]
 
+# Total Distance
+
+[Shortest Distance from All Buildings][shortest-distance-from-all-buildings]
+
+{% highlight java %}
+{% raw %}
+private static final int[][] DIRECTIONS = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+{% endraw %}
+public int shortestDistance(int[][] grid) {
+    int min = Integer.MAX_VALUE;
+    int m = grid.length, n = grid[0].length;
+    int total = 0;
+
+    // distances[i][j]: {total distances, total houses} to this empty land
+    int[][][] distances = new int[m][n][2];
+
+    // from each house to empty lands
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (grid[i][j] == 1) {
+                total++;
+                bfs(grid, distances, i, j);
+            }
+        }
+    }
+
+    // checks all empty lands with houses count == total
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (distances[i][j][1] == total) {
+                min = Math.min(min, distances[i][j][0]);
+            }
+        }
+    }
+
+    return min == Integer.MAX_VALUE ? -1 : min;
+}
+
+private void bfs(int[][] grid, int[][][] distances, int i, int j) {
+    int m = grid.length, n = grid[0].length;
+
+    Queue<int[]> q = new LinkedList<>();
+    q.offer(new int[]{ i, j });
+
+    boolean[][] visited = new boolean[m][n];
+    visited[i][j] = true;
+
+    int steps = 0;
+    while (!q.isEmpty()) {
+        for (int k = q.size(); k > 0; k--) {
+            int[] node = q.poll();
+
+            if (grid[node[0]][node[1]] == 0) {
+                distances[node[0]][node[1]][0] += steps;
+                distances[node[0]][node[1]][1]++;
+            }
+
+            // Traverse the next cells which is not a blockage.
+            for (int[] d : DIRECTIONS) {
+                int r = node[0] + d[0], c = node[1] + d[1];
+                if (r >= 0 && c >= 0 && r < m && c < n && !visited[r][c] && grid[r][c] == 0) {
+                    visited[r][c] = true;
+                    q.offer(new int[]{ r, c });
+                }
+            }
+        }
+        steps++;
+    }
+}
+{% endhighlight %}
+
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
 [map-of-highest-peak]: https://leetcode.com/problems/map-of-highest-peak/
 [minimum-cost-to-make-at-least-one-valid-path-in-a-grid]: https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/
 [minimum-jumps-to-reach-home]: https://leetcode.com/problems/minimum-jumps-to-reach-home/
 [minimum-knight-moves]: https://leetcode.com/problems/minimum-knight-moves/
+[minimum-moves-to-reach-target-with-rotations]: https://leetcode.com/problems/minimum-moves-to-reach-target-with-rotations/
 [nested-list-weight-sum-ii]: https://leetcode.com/problems/nested-list-weight-sum-ii/
 [rotting-oranges]: https://leetcode.com/problems/rotting-oranges/
+[shortest-distance-from-all-buildings]: https://leetcode.com/problems/shortest-distance-from-all-buildings/
+[shortest-path-in-a-grid-with-obstacles-elimination]: https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/
 [shortest-path-with-alternating-colors]: https://leetcode.com/problems/shortest-path-with-alternating-colors/
 [sliding-puzzle]: https://leetcode.com/problems/sliding-puzzle/
 [the-maze]: https://leetcode.com/problems/the-maze/

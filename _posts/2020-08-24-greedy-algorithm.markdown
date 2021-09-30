@@ -348,13 +348,60 @@ public int strongPasswordChecker(String s) {
 }
 {% endhighlight %}
 
+[Minimum Adjacent Swaps to Reach the Kth Smallest Number][minimum-adjacent-swaps-to-reach-the-kth-smallest-number]
+
+{% highlight java %}
+public int getMinSwaps(String num, int k) {
+    char[] chars = num.toCharArray();
+    for (int i = 0; i < k; i++) {
+        nextPermutation(chars);
+    }
+
+    int n = num.length(), count = 0;
+    for (int i = 0; i < n; i++) {
+        if (num.charAt(i) != chars[i]) {
+            for (int j = i + 1; j < n; j++) {
+                swap(chars, i, j);
+                count++;
+                if (num.charAt(i) == chars[i]) {
+                    break;
+                }
+            }
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
+[Minimum Initial Energy to Finish Tasks][minimum-initial-energy-to-finish-tasks]
+
+{% highlight java %}
+public int minimumEffort(int[][] tasks) {
+    // sorts to maximize running energy
+    Arrays.sort(tasks, Comparator.comparingInt(a -> a[0] - a[1]));
+
+    int initial = 0, energy = 0;
+    for (int[] t : tasks) {
+        if (energy < t[1]) {
+            initial += t[1] - energy;
+            energy = t[1] - t[0];
+        } else {
+            energy -= t[0];
+        }
+    }
+    return initial;
+}
+{% endhighlight %}
+
 [broken-calculator]: https://leetcode.com/problems/broken-calculator/
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [hand-of-straights]: https://leetcode.com/problems/hand-of-straights/
 [jump-game]: https://leetcode.com/problems/jump-game/
 [maximum-binary-string-after-change]: https://leetcode.com/problems/maximum-binary-string-after-change/
 [maximum-number-of-ones]: https://leetcode.com/problems/maximum-number-of-ones/
+[minimum-adjacent-swaps-to-reach-the-kth-smallest-number]: https://leetcode.com/problems/minimum-adjacent-swaps-to-reach-the-kth-smallest-number/
 [minimum-factorization]: https://leetcode.com/problems/minimum-factorization/
+[minimum-initial-energy-to-finish-tasks]: https://leetcode.com/problems/minimum-initial-energy-to-finish-tasks/
 [put-boxes-into-the-warehouse-i]: https://leetcode.com/problems/put-boxes-into-the-warehouse-i/
 [split-array-into-consecutive-subsequences]: https://leetcode.com/problems/split-array-into-consecutive-subsequences/
 [strong-password-checker]: https://leetcode.com/problems/strong-password-checker/

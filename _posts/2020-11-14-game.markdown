@@ -70,6 +70,23 @@ public boolean stoneGame(int[] piles) {
 
 Alex can always take either all odd piles or all even piles, and one of the colors must have a sum number of stones larger than the other color.
 
+[Stone Game IV][stone-game-iv]
+
+{% highlight java %}
+public boolean winnerSquareGame(int n) {
+    boolean[] dp = new boolean[n + 1];
+    for (int i = 1; i <= n; i++) {
+        for (int k = 1; k * k <= i; k++) {
+            if (!dp[i - k * k]) {
+                dp[i] = true;
+                break;
+            }
+        }
+    }
+    return dp[n];
+}
+{% endhighlight %}
+
 ## Top-down
 
 [Can I Win][can-i-win]
@@ -450,5 +467,6 @@ public boolean canWin(String s) {
 [flip-game-ii]: https://leetcode.com/problems/flip-game-ii/
 [stone-game]: https://leetcode.com/problems/stone-game/
 [stone-game-ii]: https://leetcode.com/problems/stone-game-ii/
+[stone-game-iv]: https://leetcode.com/problems/stone-game-iv/
 [stone-game-vi]: https://leetcode.com/problems/stone-game-vi/
 [sum-game]: https://leetcode.com/problems/sum-game/

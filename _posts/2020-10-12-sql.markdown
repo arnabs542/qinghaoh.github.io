@@ -1658,6 +1658,47 @@ Specifies that `COUNT` returns the number of unique ***nonnull*** values.
 
 # Window Functions
 
+## SUM
+
+Cumulative sum.
+
+[The Number of Seniors and Juniors to Join the Company][the-number-of-seniors-and-juniors-to-join-the-company]
+
+{% highlight sql %}
+WITH cte AS (
+    SELECT
+        employee_id,
+        experience,
+        SUM(salary) OVER(PARTITION BY experience ORDER BY salary) AS total_salary
+    FROM
+        Candidates)
+
+SELECT
+    'Senior' AS experience,
+    COUNT(employee_id) AS accepted_candidates
+FROM
+    cte
+WHERE
+    experience = 'Senior'
+    AND total_salary < 70000
+UNION
+SELECT
+    'Junior' AS experience,
+    COUNT(employee_id) AS accepted_candidates
+FROM
+    cte
+WHERE
+    experience = 'Junior'
+    AND total_salary < (
+        SELECT
+            70000 - IFNULL(MAX(total_salary), 0)
+        FROM
+            cte
+        WHERE
+            experience = 'Senior'
+            AND total_salary < 70000)
+{% endhighlight %}
+
 ## RANK
 
 [The Most Frequently Ordered Products for Each Customer][the-most-frequently-ordered-products-for-each-customer]
@@ -2052,5 +2093,6 @@ WHERE
 [the-most-frequently-ordered-products-for-each-customer]: https://leetcode.com/problems/the-most-frequently-ordered-products-for-each-customer/
 [the-most-recent-orders-for-each-product]: https://leetcode.com/problems/the-most-recent-orders-for-each-product/
 [the-most-recent-three-orders]: https://leetcode.com/problems/the-most-recent-three-orders/
+[the-number-of-seniors-and-juniors-to-join-the-company]: https://leetcode.com/problems/the-number-of-seniors-and-juniors-to-join-the-company/
 [total-sales-amount-by-year]: https://leetcode.com/problems/total-sales-amount-by-year/
 [tree-node]: https://leetcode.com/problems/tree-node/

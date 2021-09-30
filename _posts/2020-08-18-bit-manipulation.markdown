@@ -13,8 +13,8 @@ n & -n 		// clears all but rightmost set bit
 n & (n - 1)		// zeros out rightmost set bit, Brian Kernighan's Algorithm
 n & (n - 1) == 0  	// power of 2
 
-// enumerate all subsets
-for (int s = superset; s > 0; s = (s - 1) & superset)
+// enumerate all submasks
+for (int s = mask; s > 0; s = (s - 1) & mask)
 ```
 
 ## Brian Kernighan's Algorithm

@@ -174,6 +174,29 @@ public int lastStoneWeightII(int[] stones) {
 }
 {% endhighlight %}
 
+[Toss Strange Coins][toss-strange-coins]
+
+{% highlight java %}
+public double probabilityOfHeads(double[] prob, int target) {
+    int n = prob.length;
+
+    // dp[i][j]: whether the first i elements can sum up to j
+    double[][] dp = new double[n + 1][target + 1];
+    dp[0][0] = 1d;
+
+    for (int i = 0; i < n; i++) {
+        dp[i + 1][0] = dp[i][0] * (1 - prob[i]);
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 1; j <= target; j++) {
+            dp[i + 1][j] = dp[i][j] * (1 - prob[i]) + dp[i][j - 1] * prob[i];
+        }
+    }
+    return dp[n][target];
+}
+{% endhighlight %}
+
 [Ones and Zeroes][ones-and-zeroes]
 
 {% highlight java %}
@@ -377,3 +400,4 @@ public int coinChange(int[] coins, int amount) {
 [ones-and-zeroes]: https://leetcode.com/problems/ones-and-zeroes/
 [partition-equal-subset-sum]: https://leetcode.com/problems/partition-equal-subset-sum/
 [target-sum]: https://leetcode.com/problems/target-sum/
+[toss-strange-coins]: https://leetcode.com/problems/toss-strange-coins/

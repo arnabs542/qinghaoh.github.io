@@ -2,6 +2,7 @@
 layout: post
 title:  "Data Structure"
 tag: data structure
+usemathjax: true
 ---
 
 [Max Stack][max-stack]
@@ -260,13 +261,237 @@ class MovieRentingSystem {
 }
 {% endhighlight %}
 
+[LFU Cache][lfu-cache]
+
+{% highlight java %}
+private HashMap<Integer, Node> keyMap = new HashMap<>();
+private HashMap<Integer, DoubleLinkedList> freqMap = new HashMap<>();
+private int capacity;
+private int size = 0;
+// gets least frequency in O(1)
+private int minFreq = 0;
+
+public LFUCache(int capacity) {
+    this.capacity = capacity;
+
+    freqMap.put(0, new DoubleLinkedList(0));
+}
+
+public int get(int key) {
+    return keyMap.containsKey(key) ? updateFreq(keyMap.get(key)) : -1;
+}
+
+public void put(int key, int value) {
+    if (capacity == 0) {
+        return;
+    }
+
+    if (keyMap.containsKey(key)) {
+        Node node = keyMap.get(key);
+        node.value = value;
+        updateFreq(node);
+        return;
+    }
+
+    if (size >= capacity) {
+        keyMap.remove(freqMap.get(minFreq).removeLast().key);
+        size--;
+    }
+
+    Node node = new Node(key, value);
+    freqMap.get(0).add(node);
+    keyMap.put(key, node);
+    minFreq = 0;
+    size++;
+}
+
+private int updateFreq(Node node) {
+    int freq = node.freq;
+    freqMap.get(node.freq++).remove(node);
+    freqMap.computeIfAbsent(node.freq, k -> new DoubleLinkedList(node.freq)).add(node);
+
+    if (minFreq == freq && freqMap.get(minFreq).isEmpty()) {
+        minFreq++;
+    }
+    return node.value;
+}
+
+class Node {
+    private int key = 0;
+    private int value = 0;
+    private int freq = 0;
+    private Node prev = null;
+    private Node next = null;
+
+    Node() {
+    }
+
+    Node(int key,int value) {
+        this.key = key;
+        this.value = value;
+    }
+}
+
+class DoubleLinkedList {
+    private int freq;
+    private Node head = null;
+    private Node tail = null;
+
+    DoubleLinkedList(int freq) {
+        this.freq = freq;
+        head = new Node();
+        tail = new Node();
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    // inserts to the head of the list
+    void add(Node node) {
+        Node tmp = head.next;
+        head.next = node;
+        node.prev = head;
+        node.next = tmp;
+        tmp.prev = node;
+    }
+
+    void remove(Node node) {
+        node.next.prev = node.prev;
+        node.prev.next = node.next;
+    }
+
+    boolean isEmpty() {
+        return head.next == tail;
+    }
+
+    // gets the least recently used node
+    Node removeLast() {
+        if (isEmpty()) {
+            return null;
+        }
+
+        Node node = tail.prev;
+        remove(node);
+        return node;
+    }
+}
+{% endhighlight %}
+
+# Skip List
+
+[Skip List](https://en.wikipedia.org/wiki/Skip_list): a probabilistic data structure that allows \\({\mathcal {O}}(\log n)\\) search complexity as well as \\({\mathcal {O}}(\log n)\\) insertion complexity within an ordered sequence of \\(n\\) elements.
+
+[Design Skiplist][design-skiplist]
+
+{% highlight java %}
+class Skiplist {
+    class Node {
+        private int val;
+        private Node next = null, down = null;
+
+        public Node(int val) {
+            this.val = val;
+        }
+
+        public Node(int val, Node next, Node down) {
+            this.val = val;
+            this.next = next;
+            this.down = down;
+        }
+    }
+
+    private Node head = new Node(-1);
+
+    public Skiplist() {
+
+    }
+
+    public boolean search(int target) {
+        Node curr = head;
+        while (curr != null) {
+            // searches to right on the same level
+            while (curr.next != null && curr.next.val < target) {
+                curr = curr.next;
+            }
+
+            // found the target
+            if (curr.next != null && curr.next.val == target) {
+                return true;
+            }
+
+            // goes down one level
+            curr = curr.down;
+        }
+        return false;
+    }
+
+    public void add(int num) {
+        Deque<Node> stack = new ArrayDeque<>();
+        Node curr = head;
+        while (curr != null) {
+            // searches to right on the same level
+            while (curr.next != null && curr.next.val < num) {
+                curr = curr.next;
+            }
+
+            // pushes the right most node (< num) on the level to stack
+            stack.push(curr);
+
+            // goes down one level
+            curr = curr.down;
+        }
+
+        // now we are at the bottom
+        Node down = null;
+        do {
+            curr = stack.pop();
+            curr.next = new Node(num, curr.next, down);
+            down = curr.next;
+        // if coin tails up, stops appending new node to the level
+        } while(flipCoin() && !stack.isEmpty());
+
+        // if coin heads up, creates a new list head
+        if (flipCoin()) {
+            head = new Node(-1, null, head);
+        }
+    }
+
+    public boolean erase(int num) {
+        Node curr = head;
+        boolean found = false;
+        while (curr != null) {
+            // searches to right on the same level
+            while (curr.next != null && curr.next.val < num) {
+                curr = curr.next;
+            }
+
+            // the node could be on multiple levels
+            if (curr.next != null && curr.next.val == num) {
+                found = true;
+                // removes the node
+                curr.next = curr.next.next;
+            }
+
+            // goes one level down
+            curr = curr.down;
+        }
+        return found;
+    }
+
+    private boolean flipCoin() {
+        return Math.random() < 0.5;
+    }
+}
+{% endhighlight %}
+
 [all-oone-data-structure]: https://leetcode.com/problems/all-oone-data-structure/
 [design-a-leaderboard]: https://leetcode.com/problems/design-a-leaderboard/
 [design-a-stack-with-increment-operation]: https://leetcode.com/problems/design-a-stack-with-increment-operation/
 [design-hashmap]: https://leetcode.com/problems/design-phone-hashmap/
 [design-movie-rental-system]: https://leetcode.com/problems/design-movie-rental-system/
 [design-phone-directory]: https://leetcode.com/problems/design-phone-directory/
+[design-skiplist]: https://leetcode.com/problems/design-skiplist/
 [find-median-from-data-stream]: https://leetcode.com/problems/find-median-from-data-stream/
+[lfu-cache]: https://leetcode.com/problems/lfu-cache/
 [lru-cache]: https://leetcode.com/problems/lru-cache/
 [max-stack]: https://leetcode.com/problems/max-stack/
 [maximum-frequency-stack]: https://leetcode.com/problems/maximum-frequency-stack/

@@ -29,7 +29,7 @@ public boolean wordBreak(String s, List<String> wordDict) {
 
 [Word Break II][word-break-ii]
 
-Recursion + Memorization:
+Recursion + Memoization:
 
 {% highlight java %}
 private Map<String, List<String>> map = new HashMap<>();
