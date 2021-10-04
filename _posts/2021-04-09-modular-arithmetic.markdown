@@ -18,7 +18,7 @@ where \\(\varphi (n)\\) is Euler's totient function.
 
 If \\(n\\) is a prime
 * \\(\varphi (n) = n - 1\\)
-* \\(a^{-1} \equiv a^{m-2} \pmod{m}\\)
+* \\(a^{-1} \equiv a^{n-2} \pmod{n}\\)
 
 Multiplicative: if \\(\gcd(m, n) = 1\\), then \\(\varphi (m) \varphi (n) = \varphi (mn)\\).
 
@@ -150,5 +150,57 @@ public int smallestRepunitDivByK(int K) {
 }
 {% endhighlight %}
 
+# Modular Inverse
+
+[Fancy Sequence][fancy-sequence]
+
+{% highlight java %}
+class Fancy {
+    private static final int MOD = (int)1e9 + 7;
+    private long[] arr = new long[100001];
+    // a[i] * m + inc
+    private long inc = 0, m = 1;
+    private int size = 0;
+
+    public Fancy() {
+
+    }
+
+    public void append(int val) {
+        // a[i] * m + inc = val
+        // a[i] = (val - inc) / m
+        arr[size++] = (((val - inc + MOD) % MOD) * modPow(m, MOD - 2)) % MOD;
+    }
+
+    public void addAll(int inc) {
+        this.inc = (this.inc + inc) % MOD;
+    }
+
+    public void multAll(int m) {
+        // (a[i] * m + inc) * m'
+        // = a[i] * m * m' + inc * m'
+        this.inc = (this.inc * m) % MOD;
+        this.m = (this.m * m) % MOD;
+    }
+
+    public int getIndex(int idx) {
+        return idx < size ? (int)((arr[idx] * m) % MOD + inc) % MOD : -1;
+    }
+
+    private long modPow(long x, long y) {
+        long res = 1;
+        while (y > 0) {
+            if ((y & 1) == 1) {
+                res = res * x % MOD;
+            }
+            x = x * x % MOD;
+            y >>= 1;
+        }
+        return res;
+    }
+}
+{% endhighlight %}
+
+[fancy-sequence]: https://leetcode.com/problems/fancy-sequence/
 [smallest-integer-divisible-by-k]: https://leetcode.com/problems/smallest-integer-divisible-by-k/
 [super-pow]: https://leetcode.com/problems/super-pow/

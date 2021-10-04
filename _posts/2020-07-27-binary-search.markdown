@@ -617,6 +617,33 @@ public List<Integer> findClosestElements(int[] arr, int k, int x) {
 }
 {% endhighlight %}
 
+[Minimum Limit of Balls in a Bag][minimum-limit-of-balls-in-a-bag]
+
+{% highlight java %}
+public int minimumSize(int[] nums, int maxOperations) {
+    int low = 1, high = Integer.MAX_VALUE;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (condition(nums, mid, maxOperations)) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return low;
+}
+
+private boolean condition(int[] nums, int penalty, int maxOperations) {
+    int operations = 0;
+    for (int num : nums) {
+        operations += (num  - 1) / penalty;
+    }
+
+    // (maxOperations - operations) is monotonically increasing with respect to penalty
+    return operations <= maxOperations;
+}
+{% endhighlight %}
+
 Similarly,
 
 Maximize `x`, s.t. `condition(x) == true`
@@ -949,6 +976,7 @@ if (insertionPoint < 0) {
 [maximum-value-at-a-given-index-in-a-bounded-array]: https://leetcode.com/problems/maximum-value-at-a-given-index-in-a-bounded-array/
 [maximum-width-ramp]: https://leetcode.com/problems/maximum-width-ramp/
 [minimize-max-distance-to-gas-station]: https://leetcode.com/problems/minimize-max-distance-to-gas-station/
+[minimum-limit-of-balls-in-a-bag]: https://leetcode.com/problems/minimum-limit-of-balls-in-a-bag/
 [minimum-number-of-days-to-make-m-bouquets]: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/
 [missing-element-in-sorted-array]: https://leetcode.com/problems/missing-element-in-sorted-array/
 [missing-number-in-arithmetic-progression]: https://leetcode.com/problems/missing-number-in-arithmetic-progression/

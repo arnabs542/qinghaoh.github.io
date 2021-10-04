@@ -1585,6 +1585,26 @@ WHERE
 ;
 {% endhighlight %}
 
+[Leetcodify Similar Friends][leetcodify-similar-friends]
+
+{% highlight sql %}
+SELECT DISTINCT
+    l1.user_id AS user1_id,
+    l2.user_id AS user2_id
+FROM
+    Listens l1,
+    Listens l2
+WHERE
+    l1.song_id = l2.song_id
+    AND l1.day = l2.day
+    AND l1.user_id != l2.user_id
+    AND (l1.user_id, l2.user_id) IN (SELECT * FROM Friendship)
+GROUP BY
+    1, 2, l1.day
+    HAVING COUNT(DISTINCT l1.song_id) >= 3
+;
+{% endhighlight %}
+
 # String Functions
 
 {% highlight sql %}
@@ -2066,6 +2086,7 @@ WHERE
 [investments-in-2016]: https://leetcode.com/problems/investments-in-2016/
 [last-person-to-fit-in-the-elevator]: https://leetcode.com/problems/last-person-to-fit-in-the-elevator/
 [leetcodify-friends-recommendations]: https://leetcode.com/problems/leetcodify-friends-recommendations/
+[leetcodify-similar-friends]: https://leetcode.com/problems/leetcodify-similar-friends/
 [leetflex-banned-accounts]: https://leetcode.com/problems/leetflex-banned-accounts/
 [league-statistics]: https://leetcode.com/problems/league-statistics/
 [median-employee-salary]: https://leetcode.com/problems/median-employee-salary/

@@ -3,6 +3,15 @@ layout: post
 title:  "Java Cheatsheet"
 tags: java
 ---
+# Array
+
+Empty array:
+
+{% highlight java %}
+int[] arr1 = new int[0];
+int[][] arr2 = new int[0][0];
+{% endhighlight %}
+
 # ArrayDeque
 
 Null elements are prohibited.

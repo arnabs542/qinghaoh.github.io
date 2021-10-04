@@ -386,6 +386,84 @@ public boolean checkPowersOfThree(int n) {
 }
 {% endhighlight %}
 
+[Smallest Good Base][smallest-good-base]
+
+\\[
+\begin{equation} \label{eq:1}
+n = \sum_{i=0}^m{k}^i = k\sum_{i=0}^{m-1}{k}^i
+\end{equation}
+\\]
+
+\\[
+\begin{equation} \label{eq:2}
+n - k^m = \sum_{i=0}^{m-1}{k}^i
+\end{equation}
+\\]
+
+From \eqref{eq:1} and \eqref{eq:2},
+
+\\[
+n - 1 = k(n - k^m)
+\\]
+
+\\[
+\begin{equation} \label{eq:3}
+n = \frac{k^{m+1}-1}{k-1}
+\end{equation}
+\\]
+
+From \eqref{eq:3}
+
+\\[
+n > k^m
+\\]
+\\[
+\sqrt[m]{n} > k
+\\]
+
+From Binomial Thorem,
+
+\\[
+n = \sum_{i=0}^m{k}^i < (k+1)^m
+\\]
+
+Therefore,
+
+\\[
+\begin{equation} \label{eq:4}
+k < \sqrt[m]{n} < k + 1
+\end{equation}
+\\]
+
+\\[
+k = \left \lfloor{\sqrt[m]{n}}\right \rfloor 
+\\]
+
+{% highlight java %}
+
+public String smallestGoodBase(String n) {
+    long num = Long.valueOf(n);
+    BigInteger bn = BigInteger.valueOf(num);
+
+    // the smallest base is 2, so
+    // 2 <= m <= log_2^n
+    // if m == 1, then k == n - 1
+    int max = (int)(Math.log(num) / Math.log(2));
+    for (int m = max; m > 0; m--) {
+        // \sqrt[m]{n}
+        BigInteger k = BigInteger.valueOf((long) Math.floor(Math.pow(num, 1.0 / m)));
+        // k^(m + 1) - 1
+        BigInteger left = k.pow(m + 1).subtract(BigInteger.ONE);
+        // n(k - 1)
+        BigInteger right = bn.multiply(k.subtract(BigInteger.ONE));
+        if (left.equals(right)) {
+            return String.valueOf(k);
+        }
+    }
+    return String.valueOf(num - 1);
+}
+{% endhighlight %}
+
 # Dyanmical Systems
 
 [Attractor](https://en.wikipedia.org/wiki/Attractor): a set of numerical values toward which a system tends to evolve, for a wide variety of starting conditions of the system.
@@ -597,4 +675,5 @@ public String findDifferentBinaryString(String[] nums) {
 [remove-9]: https://leetcode.com/problems/remove-9/
 [reverse-subarray-to-maximize-array-value]: https://leetcode.com/problems/reverse-subarray-to-maximize-array-value/
 [robot-bounded-in-circle]: https://leetcode.com/problems/robot-bounded-in-circle/
+[smallest-good-base]: https://leetcode.com/problems/smallest-good-base/
 [sparse-matrix-multiplication]: https://leetcode.com/problems/sparse-matrix-multiplication/

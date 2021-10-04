@@ -174,6 +174,8 @@ public long maxPoints(int[][] points) {
 }
 {% endhighlight %}
 
+Similar: [Count Square Submatrices with All Ones][count-square-submatrices-with-all-ones]
+
 [Dungeon Game][dungeon-game]
 
 {% highlight java %}
@@ -262,14 +264,41 @@ public int cherryPickup(int[][] grid) {
 }
 {% endhighlight %}
 
+[Count Submatrices With All Ones][count-submatrices-with-all-ones]
+
+{% highlight java %}
+// O(n ^ 3)
+public int numSubmat(int[][] mat) {
+    int m = mat.length, n = mat[0].length;
+    // dp[j]: count of consecutive ones in the j-th column in the current row
+    int[] dp = new int[n];
+    int count = 0;
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (mat[i][j] == 1) {
+                dp[j]++;
+            } else {
+                dp[j] = 0;
+            }
+        }
+
+        // count the number of submatrices with base mat[i][j...k]
+        for (int j = 0; j < n; j++) {
+            int min = m;
+            for (int k = j; k < n; k++) {
+                min = Math.min(min, dp[k]);
+                count += min;
+            }
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
 [Maximal Square][maximal-square]
 
 {% highlight java %}
 public int maximalSquare(char[][] matrix) {
-    if (matrix.length == 0) {
-        return 0;
-    }
-
     int m = matrix.length, n = matrix[0].length;
     // dp[i][j]: side length of the max square whose bottom-right is at (i - 1, j - 1)
     int[][] dp = new int[m + 1][n + 1];
@@ -305,6 +334,29 @@ dp[][]:
 0 1 2 3 2
 0 0 1 2 3
 ```
+
+Reduced to 1D:
+
+{% highlight java %}
+public int maximalSquare(char[][] matrix) {
+    int m = matrix.length, n = matrix[0].length;
+    int[] dp = new int[n + 1];
+    int maxLen = 0, prev = 0;
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            int tmp = dp[j];
+            if (matrix[i - 1][j - 1] == '1') {
+                dp[j] = Math.min(Math.min(dp[j - 1], dp[j]), prev) + 1;
+                maxLen = Math.max(maxLen, dp[j]);
+            } else {
+                dp[j] = 0;
+            }
+            prev = tmp;
+        }
+    }
+    return maxLen * maxLen;
+}
+{% endhighlight %}
 
 [Maximal Rectangle][maximal-rectangle]
 
@@ -553,6 +605,8 @@ public int cherryPickup(int[][] grid) {
 [bomb-enemy]: https://leetcode.com/problems/bomb-enemy/
 [cherry-pickup]: https://leetcode.com/problems/cherry-pickup/
 [cherry-pickup-ii]: https://leetcode.com/problems/cherry-pickup-ii/
+[count-square-submatrices-with-all-ones]: https://leetcode.com/problems/count-square-submatrices-with-all-ones/
+[count-submatrices-with-all-ones]: https://leetcode.com/problems/count-submatrices-with-all-ones/
 [dungeon-game]: https://leetcode.com/problems/dungeon-game/
 [largest-plus-sign]: https://leetcode.com/problems/largest-plus-sign/
 [longest-line-of-consecutive-one-in-matrix]: https://leetcode.com/problems/longest-line-of-consecutive-one-in-matrix/

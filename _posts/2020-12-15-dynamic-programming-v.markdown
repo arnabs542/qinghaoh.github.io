@@ -332,6 +332,45 @@ private int setColor(int mask, int pos, int color) {
 }
 {% endhighlight %}
 
+[Paint House II][paint-house-ii]
+
+{% highlight java %}
+public int minCostII(int[][] costs) {
+    int n = costs.length, k = costs[0].length;
+    // min1: 1st smallest cost so far
+    // min2: 2nd smallest cost so far
+    // it's possible that min1 == min2
+    int min1 = 0, min2 = 0;
+    // index of min1
+    int minIndex = -1;
+
+    // O(nk)
+    for (int i = 0; i < n; i++) {
+        int currMin1 = Integer.MAX_VALUE, currMin2 = Integer.MAX_VALUE, currMinIndex = 0;
+        for (int j = 0; j < k; j++) {
+            // if current color j is different from previous min1, picks min1
+            // otherwise, picks min2
+            int cost = costs[i][j] + (j == minIndex ? min2 : min1);
+
+            // curr becomes min1
+            if (cost < currMin1) {
+                currMin2 = currMin1;
+                currMin1 = cost;
+                currMinIndex = j;
+            } else if (cost < currMin2) {
+                // curr becomes min2
+                currMin2 = cost;
+            }
+        }
+        min1 = currMin1;
+        min2 = currMin2;
+        minIndex = currMinIndex;
+    }
+
+    return min1;
+}
+{% endhighlight %}
+
 [decode-ways]: https://leetcode.com/problems/decode-ways/
 [delete-and-earn]: https://leetcode.com/problems/delete-and-earn/
 [flip-string-to-monotone-increasing]: https://leetcode.com/problems/flip-string-to-monotone-increasing/
@@ -341,5 +380,6 @@ private int setColor(int mask, int pos, int color) {
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
 [number-of-ways-to-paint-n-3-grid]: https://leetcode.com/problems/number-of-ways-to-paint-n-3-grid/
 [paint-fence]: https://leetcode.com/problems/paint-fence/
+[paint-house-ii]: https://leetcode.com/problems/paint-house-ii/
 [painting-a-grid-with-three-different-colors]: https://leetcode.com/problems/painting-a-grid-with-three-different-colors/
 [wiggle-subsequence]: https://leetcode.com/problems/wiggle-subsequence/

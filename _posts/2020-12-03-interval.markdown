@@ -407,6 +407,41 @@ public int maxDistance(List<List<Integer>> arrays) {
 }
 {% endhighlight %}
 
+[Set Intersection Size At Least Two][set-intersection-size-at-least-two]
+
+{% highlight java %}
+public int intersectionSizeTwo(int[][] intervals) {
+    Arrays.sort(intervals, (a, b) -> a[1] == b[1] ? b[0] - a[0] : a[1] - b[1]);
+
+    // the largest two elements in the the minimal set so far
+    int second = -2, largest = -1;
+
+    // compares the two elements with intervals[i]
+    // with this approach, size of S is minimized,
+    // and the largest two elements in S are maximized
+    int size = 0;
+    for (int[] i : intervals) {
+        // both elements intersect with i
+        if (i[0] <= second) {
+            continue;
+        }
+
+        // largest element intersects with i
+        if (i[0] <= largest) {
+            size++;
+            second = largest;
+            largest = i[1];
+        } else {
+            // neither intersects with i
+            size += 2;
+            second = i[1] - 1;
+            largest = i[1];
+        }
+    }
+    return size;
+}
+{% endhighlight %}
+
 # Dynamic Programming
 
 [Video Stitching][video-stitching]
@@ -736,4 +771,5 @@ class Interval implements Comparable<Interval> {
 [non-overlapping-intervals]: https://leetcode.com/problems/non-overlapping-intervals/
 [range-module]: https://leetcode.com/problems/range-module/
 [seat-reservation-manager]: https://leetcode.com/problems/seat-reservation-manager/
+[set-intersection-size-at-least-two]: https://leetcode.com/problems/set-intersection-size-at-least-two/
 [video-stitching]: https://leetcode.com/problems/video-stitching/

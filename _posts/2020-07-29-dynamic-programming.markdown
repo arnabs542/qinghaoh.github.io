@@ -284,51 +284,6 @@ public int maxSumDivThree(int[] nums) {
 }
 {% endhighlight %}
 
-[Paint House II][paint-house-ii]
-
-{% highlight java %}
-public int minCostII(int[][] costs) {
-    if (costs == null || costs.length == 0) {
-        return 0;
-    }
-
-    int n = costs.length, k = costs[0].length;
-    // min1: 1st smallest cost
-    // min2: 2nd smallest cost
-    int min1 = Integer.MAX_VALUE, min2 = Integer.MAX_VALUE;
-    // index of min1
-    int minIndex = -1;
-
-    // O(nk)
-    for (int i = 0; i < n; i++) {
-        int tmp1 = min1, tmp2 = min2, tmpIndex = minIndex;
-        min1 = Integer.MAX_VALUE;
-        min2 = Integer.MAX_VALUE;
-        for (int j = 0; j < k; j++) {
-            int curr = 0;
-            if (j != tmpIndex) {
-                // current color j is different from previous min1
-                // tmpIndex < 0 means i == 0
-                curr = (tmpIndex < 0 ? 0 : tmp1) + costs[i][j];
-            } else {
-                curr = tmp2 + costs[i][j];
-            }
-
-            // updates the 1st and 2nd smallest cost of painting current house i
-            if (curr < min1) {
-                minIndex = j;
-                min2 = min1;
-                min1 = curr;
-            } else if (curr < min2) {
-                min2 = curr;
-            }
-        }
-    }
-
-    return min1;
-}
-{% endhighlight %}
-
 [Longest String Chain][longest-string-chain]
 
 {% highlight java %}
@@ -374,7 +329,61 @@ public int findRotateSteps(String ring, String key) {
         }
     }
 
+    // if we process from 0 to (m - 1)
+    // there could be multiple indefinite final states dp[i][j]
     return dp[0][0] + m;
+}
+{% endhighlight %}
+
+Precomputation:
+
+{% highlight java %}
+// O(mn)
+public int findRotateSteps(String ring, String key) {
+    int n = ring.length(), m = key.length();
+    // dp[i][j]: key.substring(i) and ring.substring(j)
+    int[][] dp = new int[m + 1][n];
+
+    int[][] clock = preProcess(ring, 1), anti = preProcess(ring, -1);
+    for (int i = m - 1; i >= 0; i--) {
+        int index = key.charAt(i) - 'a';
+        for (int j = 0; j < n; j++) {
+            int p = clock[j][index], q = anti[j][index];
+            dp[i][j] = Math.min(dp[i + 1][p] + (j + n - p) % n, dp[i + 1][q] + (q + n - j) % n);
+        }
+    }
+    return dp[0][0] + m;
+}
+
+/**
+ * Precomputes the last index memo array.
+ * @param r ring
+ * @param orientation: clockwise (1) or anticlockwise (-1)
+ * @return last index memo array
+ */
+private int[][] preProcess(String r, int orientation) {
+    int n = r.length();
+    // lastIndex[i][j]: last index of character (j + 'a') appears before (or at) the i-th position of r (wrapped)
+    int[][] lastIndex = new int[n][26];
+
+    // map[i]: last index of character (i + 'a')
+    int[] map = new int[26];
+
+    // "abc" -> "abcab"
+    for (int i = 0, j = 0; j < n * 2 - 1; j++) {
+        map[r.charAt(i) - 'a'] = i;
+
+        // all the indexes before (n - 1) will be written twice
+        // i.e. i and i + n
+        // so the map copied at i will be overwritten at (i + n)
+        // therefore, we can skip the first copy and start from (n - 1) directly
+        if (j >= n - 1) {
+            System.arraycopy(map, 0, lastIndex[i], 0, 26);
+        }
+
+        i = (i + orientation + n) % n;
+    }
+    return lastIndex;
 }
 {% endhighlight %}
 
@@ -389,5 +398,4 @@ public int findRotateSteps(String ring, String key) {
 [maximum-length-of-repeated-subarray]: https://leetcode.com/problems/maximum-length-of-repeated-subarray/
 [min-cost-climbing-stairs]: https://leetcode.com/problems/min-cost-climbing-stairs/
 [minimum-ascii-delete-sum-for-two-strings]: https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/
-[paint-house-ii]: https://leetcode.com/problems/paint-house-ii/
 [uncrossed-lines]: https://leetcode.com/problems/uncrossed-lines/

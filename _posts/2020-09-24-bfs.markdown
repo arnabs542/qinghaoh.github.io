@@ -398,6 +398,37 @@ public int trapRainWater(int[][] heightMap) {
 }
 {% endhighlight %}
 
+# Prune
+
+[K-Similar Strings][k-similar-strings]
+
+{% highlight java %}
+private List<String> getNeighbors(String source, String target) {
+    List<String> list = new ArrayList<>();
+    char[] arr = source.toCharArray();
+
+    // finds an index i where source[i] != target[i]
+    int i = 0;
+    while (i < arr.length) {
+        if (arr[i] != target.charAt(i)) {
+            break;
+        }
+        i++;
+    }
+
+    // finds all index j where souce[j] == target[i]
+    // in this case, swapping i and j makes source and target closer
+    for (int j = i + 1; j < arr.length; j++) {
+        if (arr[j] == target.charAt(i)) {
+            swap(arr, i, j);
+            list.add(new String(arr));
+            swap(arr, i, j);
+        }
+    }
+    return list;
+}
+{% endhighlight %}
+
 # In-place BFS
 
 [Rotting Oranges][rotting-oranges]
@@ -682,6 +713,7 @@ private void bfs(int[][] grid, int[][][] distances, int i, int j) {
 
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
+[k-similar-strings]: https://leetcode.com/problems/k-similar-strings/
 [map-of-highest-peak]: https://leetcode.com/problems/map-of-highest-peak/
 [minimum-cost-to-make-at-least-one-valid-path-in-a-grid]: https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/
 [minimum-jumps-to-reach-home]: https://leetcode.com/problems/minimum-jumps-to-reach-home/

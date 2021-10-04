@@ -39,6 +39,15 @@ if (left.size() == right.size()) {
 }
 {% endhighlight %}
 
+[Sliding Window Median][sliding-window-median]
+
+{% highlight java %}
+// two TreeSets
+// stores index
+Comparator<Integer> comparator = (a, b) -> nums[a] == nums[b] ? a - b : Integer.compare(nums[a], nums[b]);
+TreeSet<Integer> left = new TreeSet<>(comparator), right = new TreeSet<>(comparator);
+{% endhighlight %}
+
 [Design Phone Directory][design-phone-directory]
 
 {% highlight java %}
@@ -495,3 +504,4 @@ class Skiplist {
 [lru-cache]: https://leetcode.com/problems/lru-cache/
 [max-stack]: https://leetcode.com/problems/max-stack/
 [maximum-frequency-stack]: https://leetcode.com/problems/maximum-frequency-stack/
+[sliding-window-median]: https://leetcode.com/problems/sliding-window-median/
