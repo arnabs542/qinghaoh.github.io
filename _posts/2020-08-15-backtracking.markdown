@@ -807,6 +807,35 @@ private int backtrack(int index, int[] debt) {
 }
 {% endhighlight %}
 
+[Find Minimum Time to Finish All Jobs][find-minimum-time-to-finish-all-jobs]
+
+{% highlight java %}
+private int min = Integer.MAX_VALUE;
+
+public int minimumTimeRequired(int[] jobs, int k) {
+    backtrack(jobs, 0, new int[k], 0);
+    return min;
+}
+
+private void backtrack(int[] jobs, int index, int[] workers, int max) {
+    if (index == jobs.length) {
+        min = Math.min(min, max);
+        return;
+    }
+
+    // e.g. [10, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+    // with the set, 5 is searched only once
+    Set<Integer> used = new HashSet<>();
+    for (int i = 0; i < workers.length; i++) {
+        if (used.add(workers[i]) && workers[i] + jobs[index] < min) {
+            workers[i] += jobs[index];
+            backtrack(jobs, index + 1, workers, Math.max(workers[i], max));
+            workers[i] -= jobs[index];
+        }
+    }
+}
+{% endhighlight %}
+
 [24-game]: https://leetcode.com/problems/24-game/
 [android-unlock-patterns]: https://leetcode.com/problems/android-unlock-patterns/
 [beautiful-arrangement]: https://leetcode.com/problems/beautiful-arrangement/
@@ -817,6 +846,7 @@ private int backtrack(int index, int[] debt) {
 [construct-the-lexicographically-largest-valid-sequence]: https://leetcode.com/problems/construct-the-lexicographically-largest-valid-sequence/
 [expression-add-operators]: https://leetcode.com/problems/expression-add-operators/
 [factor-combinations]: https://leetcode.com/problems/factor-combinations/
+[find-minimum-time-to-finish-all-jobs]: https://leetcode.com/problems/find-minimum-time-to-finish-all-jobs/
 [generalized-abbreviation]: https://leetcode.com/problems/generalized-abbreviation/
 [letter-tile-possibilities]: https://leetcode.com/problems/letter-tile-possibilities/
 [matchsticks-to-square]: https://leetcode.com/problems/matchsticks-to-square/

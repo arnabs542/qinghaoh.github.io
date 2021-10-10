@@ -397,11 +397,33 @@ public int candy(int[] ratings) {
 }
 {% endhighlight %}
 
+# Marking
+
+[Find All Duplicates in an Array][find-all-duplicates-in-an-array]
+
+{% highlight java %}
+public List<Integer> findDuplicates(int[] nums) {
+    List<Integer> list = new ArrayList<>();
+    for (int num : nums) {
+        // 1 <= nums[i] <= n
+        int index = Math.abs(num) - 1;
+        if (nums[index] < 0) {
+            list.add(Math.abs(num));
+        } else {
+            // appears twice
+            nums[index] = -nums[index];
+        }
+    }
+    return list;
+}
+{% endhighlight %}
+
 [array-nesting]: https://leetcode.com/problems/array-nesting/
 [array-with-elements-not-equal-to-average-of-neighbors]: https://leetcode.com/problems/array-with-elements-not-equal-to-average-of-neighbors/
 [candy]: https://leetcode.com/problems/candy/
 [count-the-repetitions]: https://leetcode.com/problems/count-the-repetitions/
 [divide-array-into-increasing-sequences]: https://leetcode.com/problems/divide-array-into-increasing-sequences/
+[find-all-duplicates-in-an-array]: https://leetcode.com/problems/find-all-duplicates-in-an-array/
 [first-missing-positive]: https://leetcode.com/problems/first-missing-positive/
 [longest-consecutive-sequence]: https://leetcode.com/problems/longest-consecutive-sequence/
 [max-chunks-to-make-sorted-ii]: https://leetcode.com/problems/max-chunks-to-make-sorted-ii/

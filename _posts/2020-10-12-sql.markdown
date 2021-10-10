@@ -989,7 +989,7 @@ IN
     FROM
         Products
     WHERE
-        change_date <= "2019-08-16"
+        change_date <= '2019-08-16'
     GROUP BY
         product_id)
 ;
@@ -1566,7 +1566,7 @@ ORDER BY
 ;
 {% endhighlight %}
 
-## Implicit Join
+## Implicit Join (= Cross Join)
 
 [Consecutive Numbers][consecutive-numbers]
 
@@ -1721,6 +1721,53 @@ WHERE
 
 ## RANK
 
+[Tournament Winners][tournament-winners]
+
+{% highlight sql %}
+WITH c1 AS (
+    SELECT
+        player_id,
+        group_id,
+        SUM(score) AS scores
+    FROM (
+        SELECT
+            first_player AS player_id,
+            first_score AS score
+        FROM matches
+        UNION ALL
+        SELECT
+            second_player AS player_id,
+            second_score AS score
+        FROM
+            matches
+    ) t
+    LEFT JOIN
+        players
+        USING (player_id)
+    GROUP BY
+        player_id,
+        group_id
+),
+
+c2 AS (
+    SELECT
+        group_id,
+        player_id,
+        RANK() OVER (PARTITION BY group_id ORDER BY scores DESC, player_id) AS rk
+    FROM
+        c1
+)
+
+SELECT
+    group_id,
+    player_id
+FROM
+    c2
+WHERE
+    rk = 1
+;
+{% endhighlight %}
+
 [The Most Frequently Ordered Products for Each Customer][the-most-frequently-ordered-products-for-each-customer]
 
 {% highlight sql %}
@@ -1745,25 +1792,6 @@ WHERE
     r = 1
 ORDER BY
     customer_id, product_id
-;
-{% endhighlight %}
-
-[Median Employee Salary][median-employee-salary]
-
-{% highlight sql %}
-SELECT
-    Id,
-    Company,
-    Salary
-FROM
-    (SELECT
-        *,
-        ROW_NUMBER() OVER(PARTITION BY COMPANY ORDER BY Salary, Id) AS rank_asc,
-        ROW_NUMBER() OVER(PARTITION BY COMPANY ORDER BY Salary DESC, Id DESC) AS rank_desc
-    FROM
-        Employee) t
-WHERE
-    rank_asc BETWEEN rank_desc - 1 AND rank_desc + 1
 ;
 {% endhighlight %}
 
@@ -2008,6 +2036,24 @@ log_id, num, difference
 8, 5, 3
 10, 6, 4
 ```
+[Median Employee Salary][median-employee-salary]
+
+{% highlight sql %}
+SELECT
+    Id,
+    Company,
+    Salary
+FROM
+    (SELECT
+        *,
+        ROW_NUMBER() OVER(PARTITION BY COMPANY ORDER BY Salary, Id) AS rank_asc,
+        ROW_NUMBER() OVER(PARTITION BY COMPANY ORDER BY Salary DESC, Id DESC) AS rank_desc
+    FROM
+        Employee) t
+WHERE
+    rank_asc BETWEEN rank_desc - 1 AND rank_desc + 1
+;
+{% endhighlight %}
 
 [Students Report By Geography][students-report-by-geography]
 
@@ -2115,5 +2161,6 @@ WHERE
 [the-most-recent-orders-for-each-product]: https://leetcode.com/problems/the-most-recent-orders-for-each-product/
 [the-most-recent-three-orders]: https://leetcode.com/problems/the-most-recent-three-orders/
 [the-number-of-seniors-and-juniors-to-join-the-company]: https://leetcode.com/problems/the-number-of-seniors-and-juniors-to-join-the-company/
+[tournament-winners]: https://leetcode.com/problems/tournament-winners/
 [total-sales-amount-by-year]: https://leetcode.com/problems/total-sales-amount-by-year/
 [tree-node]: https://leetcode.com/problems/tree-node/

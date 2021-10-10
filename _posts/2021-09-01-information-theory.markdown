@@ -24,7 +24,7 @@ public int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
 }
 {% endhighlight %}
 
-Another way of explanation (credits to @StefanPochmann):
+Another way of explanation (credit to @StefanPochmann):
 
 With 2 pigs, poison killing in 15 minutes, and having 60 minutes, we can find the poison in up to 25 buckets in the following way. Arrange the buckets in a 5×5 square:
 

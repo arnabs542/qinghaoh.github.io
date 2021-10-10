@@ -112,6 +112,30 @@ for (int i = 1; i < n; i++) {
 }
 {% endhighlight %}
 
+[Kth Smallest Instructions][kth-smallest-instructions]
+
+{% highlight java %}
+public String kthSmallestPath(int[] destination, int k) {
+    int row = destination[0], col = destination[1];
+    StringBuilder sb = new StringBuilder();
+    int down = row;
+    for (int i = 0; i < row + col; i++) {
+        int count = choose[row + col - (i + 1)][down];
+
+        // goes right
+        if (count >= k) {
+            sb.append("H");
+        } else {
+            // goes down
+            down--;
+            k -= count;
+            sb.append("V");
+        }
+    }
+    return sb.toString();
+}
+{% endhighlight %}
+
 ## Indistinguishable Objects, Distinguishable Bins
 
 ### Stars and Bars
@@ -159,5 +183,6 @@ public int waysToDistribute(int n, int k) {
 
 [count-sorted-vowel-strings]: https://leetcode.com/problems/count-sorted-vowel-strings/
 [count-ways-to-distribute-candies]: https://leetcode.com/problems/count-ways-to-distribute-candies/
+[kth-smallest-instructions]: https://leetcode.com/problems/kth-smallest-instructions/
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
 [probability-of-a-two-boxes-having-the-same-number-of-distinct-balls]: https://leetcode.com/problems/probability-of-a-two-boxes-having-the-same-number-of-distinct-balls/

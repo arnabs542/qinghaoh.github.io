@@ -3,7 +3,7 @@ layout: post
 title:  "Palindrome"
 tags: string
 ---
-## Palindrome String
+# Palindrome String
 
 {% highlight java %}
 public boolean isPalindrome(String s) {
@@ -17,7 +17,7 @@ public boolean isPalindrome(String s) {
 }
 {% endhighlight %}
 
-## Palindrome Number
+# Palindrome Number
 
 [Palindrome Number][palindrome-number]
 
@@ -37,7 +37,7 @@ public boolean isPalindrome(int x) {
 }
 {% endhighlight %}
 
-## Construction
+# Construction
 
 [Prime Palindrome][prime-palindrome]
 
@@ -215,7 +215,7 @@ private long palindrome(String root, int len) {
 }
 {% endhighlight %}
 
-## Greedy
+# Greedy
 
 [Construct K Palindrome Strings][construct-k-palindrome-strings]
 
@@ -232,9 +232,7 @@ public boolean canConstruct(String s, int k) {
 }
 {% endhighlight %}
 
-## Dynamic Programming
-
-### Expand Around Center
+# Expand Around Center
 
 [Palindromic Substring][palindromic-substring]
 
@@ -256,6 +254,7 @@ public int countSubstrings(String s) {
 [Longest Palindromic Substring][longest-palindromic-substring]
 
 {% highlight java %}
+// O(n ^ 2)
 public String longestPalindrome(String s) {
     String result = "";
     int n = s.length(), max = 0;
@@ -275,7 +274,45 @@ public String longestPalindrome(String s) {
 }
 {% endhighlight %}
 
-[Manacher's algorithm](https://en.wikipedia.org/wiki/Longest_palindromic_substring#Manacher's_algorithm)
+[Palindrome Partitioning II][palindrome-partitioning-ii]
+
+{% highlight java %}
+public int minCut(String s) {
+    int n = s.length();
+    // dp[i]: min cut of s.substring(0, i + 1)
+    int[] dp = new int[n];
+    // initialization
+    // partitions into one-char groups
+    for (int i = 0; i < n; i++) {
+        dp[i] = i;
+    }
+
+    for (int center = 0; center <= 2 * n - 1; center++) {
+        int left = center / 2, right = left + center % 2;
+        while (left >= 0 && right < n && s.charAt(left) == s.charAt(right)) {
+            // s.substring(0, left) + current palindrome == s.substring(0, right + 1);
+            dp[right] = Math.min(dp[right], left == 0 ? 0 : dp[left - 1] + 1);
+            left--;
+            right++;
+        }
+    }
+    return dp[n - 1];
+}
+{% endhighlight %}
+
+# Manacher's Algorithm
+
+[Manacher's algorithm](https://en.wikipedia.org/wiki/Longest_palindromic_substring#Manacher's_algorithm): find all palindromic substrings in `O(n)`.
+
+[Longest Palindromic Substring][longest-palindromic-substring]
+
+{% highlight java %}
+// O(n)
+public String longestPalindrome(String s) {
+}
+{% endhighlight %}
+
+# Dynamic Programming
 
 [Longest Palindromic Subsequence][longest-palindromic-subsequence]
 
@@ -359,6 +396,7 @@ public int countPalindromicSubsequences(String S) {
 [longest-palindromic-substring]: https://leetcode.com/problems/longest-palindromic-substring/
 [palindrome-number]: https://leetcode.com/problems/palindrome-number/
 [palindrome-pairs]: https://leetcode.com/problems/palindrome-pairs/
+[palindrome-partitioning-ii]: https://leetcode.com/problems/palindrome-partitioning-ii/
 [palindromic-substring]: https://leetcode.com/problems/palindromic-substring/
 [prime-palindrome]: https://leetcode.com/problems/prime-palindrome/
 [super-palindromes]: https://leetcode.com/problems/super-palindromes/

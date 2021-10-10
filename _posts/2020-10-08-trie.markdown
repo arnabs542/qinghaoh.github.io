@@ -218,6 +218,81 @@ public int countNodes(int n, long node1, long node2) {
 }
 {% endhighlight %}
 
+# Traversal
+
+[Delete Duplicate Folders in System][delete-duplicate-folders-in-system]
+
+{% highlight java %}
+private List<List<String>> ans = new ArrayList();
+
+public List<List<String>> deleteDuplicateFolder(List<List<String>> paths) {
+    TrieNode root = new TrieNode();
+    paths.forEach(p -> buildTree(root, p));
+
+    deDupe(root);
+    root.children.values().forEach(this::dfs);
+    return ans;
+}
+
+class TrieNode {
+    String name = null;
+    // sorted map guarantees the serialization of identical subfolders is unique
+    Map<String, TrieNode> children = new TreeMap();
+    boolean toDelete = false;
+
+    public TrieNode() {
+    }
+
+    public TrieNode(String name) {
+        this.name = name;
+    }
+}
+
+private void buildTree(TrieNode root, List<String> path) {
+    for (String p : path) {
+        root.children.putIfAbsent(p, new TrieNode(p));
+        root = root.children.get(p);
+    }
+}
+
+// backtracking
+List<String> path = new ArrayList<>();
+private void dfs(TrieNode root) {
+    // skip deleted nodes
+    if (root.toDelete) {
+        return;
+    }
+
+    path.add(root.name);
+    ans.add(new ArrayList<>(path));
+    root.children.values().forEach(this::dfs);
+    path.remove(path.size() - 1);
+}
+
+// postorder
+Map<String, TrieNode> seen = new HashMap();
+private String deDupe(TrieNode root) {
+    String subfolders = "";
+
+    for (TrieNode child : root.children.values()) {
+        subfolders += deDupe(child);
+    }
+
+    if (!subfolders.isEmpty()) {
+        if (seen.containsKey(subfolders)) {
+            // if the subfolder has been seen before, marks the existing node as to-delete
+            seen.get(subfolders).toDelete = root.toDelete = true;
+        } else {
+            seen.put(subfolders, root);
+        }
+    }
+
+    // "()" ensures unique serialization
+    return "("  + root.name + subfolders + ")";
+}
+{% endhighlight %}
+
+[delete-duplicate-folders-in-system]: https://leetcode.com/problems/delete-duplicate-folders-in-system/
 [implement-trie-ii-prefix-tree]: https://leetcode.com/problems/implement-trie-ii-prefix-tree/
 [index-pairs-of-a-string]: https://leetcode.com/problems/index-pairs-of-a-string/
 [k-th-smallest-in-lexicographical-order]: https://leetcode.com/problems/k-th-smallest-in-lexicographical-order/

@@ -6,16 +6,18 @@ usemathjax: true
 ---
 [Knapsack problem](https://en.wikipedia.org/wiki/Knapsack_problem)
 
-## 0-1 Knapsack Problem
+# 0-1 Knapsack Problem
 
 maximize $$ \sum _{i=1}^{n}v_{i}x_{i} $$
 
 subject to $$ \sum _{i=1}^{n}w_{i}x_{i}\leq W $$ and $$ x_{i}\in \{0,1\} $$
 
-### Backtracking
+## Backtracking
+
 Backtracking takes `O(2^n)` time, so it's less preferable.
 
-### Dynamic Programming
+## Dynamic Programming
+
 [Partition Equal Subset Sum][partition-equal-subset-sum]
 
 With full dimensionality (no reduction), we can backtrace.
@@ -197,6 +199,8 @@ public double probabilityOfHeads(double[] prob, int target) {
 }
 {% endhighlight %}
 
+### 3D
+
 [Ones and Zeroes][ones-and-zeroes]
 
 {% highlight java %}
@@ -255,7 +259,34 @@ public int findMaxForm(String[] strs, int m, int n) {
 }
 {% endhighlight %}
 
-## Unbounded Knapsack Problem (UKP)
+[Profitable Schemes][profitable-schemes]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+// Knapsack
+public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {
+    // dp[i][j]: count of schemes with profit >= j done by exactly i members
+    int[][] dp = new int[n + 1][minProfit + 1];
+    dp[0][0] = 1;
+
+    for (int k = 0; k < group.length; k++) {
+        for (int i = n; i >= group[k]; i--) {
+            for (int j = minProfit; j >= 0; j--) {
+                dp[i][j] = (dp[i][j] + dp[i - group[k]][Math.max(0, j - profit[k])]) % MOD;
+            }
+        }
+    }
+
+    int count = 0;
+    for (int i = 0; i < dp.length; i++){
+        count = (count + dp[i][minProfit]) % MOD;
+    }
+    return count;
+}
+{% endhighlight %}
+
+# Unbounded Knapsack Problem (UKP)
 
 maximize $$ \sum _{i=1}^{n}v_{i}x_{i} $$
 
@@ -317,7 +348,7 @@ In 2D, `dp[i + 1][j] = dp[i][j] + dp[i + 1][j - nums[i]]`. The natural iteration
 
 [Form Largest Integer With Digits That Add up to Target][form-largest-integer-with-digits-that-add-up-to-target]
 
-### Permutation Sum
+## Permutation Sum
 
 The below permutation sum (yes it's permutation, ignore the wrong problem name) is not a knapsack problem, but the only difference is the loop order:
 
@@ -341,7 +372,7 @@ public int combinationSum4(int[] nums, int target) {
 
 In essence, it's recursion.
 
-### Change-making Problem
+## Change-making Problem
 [Change-making problem](https://en.wikipedia.org/wiki/Change-making_problem)
 
 minimize $$ f(W)=\sum _{j=1}^{n}x_{j} $$
@@ -399,5 +430,6 @@ public int coinChange(int[] coins, int amount) {
 [last-stone-weight-ii]: https://leetcode.com/problems/last-stone-weight-ii/
 [ones-and-zeroes]: https://leetcode.com/problems/ones-and-zeroes/
 [partition-equal-subset-sum]: https://leetcode.com/problems/partition-equal-subset-sum/
+[profitable-schemes]: https://leetcode.com/problems/profitable-schemes/
 [target-sum]: https://leetcode.com/problems/target-sum/
 [toss-strange-coins]: https://leetcode.com/problems/toss-strange-coins/

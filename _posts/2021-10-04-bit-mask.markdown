@@ -1,0 +1,227 @@
+---
+layout: post
+title:  "Bit Mask"
+tags: math
+usemathjax: true
+---
+# Set Cover Problem
+
+[Set cover problem](https://en.wikipedia.org/wiki/Set_cover_problem): NP-complete
+
+[Smallest Sufficient Team][smallest-sufficient-team]
+
+{% highlight java %}
+public int[] smallestSufficientTeam(String[] req_skills, List<List<String>> people) {
+    Map<String, Integer> map = new HashMap();
+    int index = 0;
+    for (String s : req_skills) {
+        map.put(s, index++);
+    }
+
+    int n = req_skills.length, m = 1 << n;
+
+    // dp[i]: the sufficient team of skill set i
+    List<Integer>[] dp = new List[m];
+    dp[0] = new ArrayList();
+
+    for (int i = 0; i < people.size(); i++) {
+        // current skill set for the i-th person
+        int skills = 0;
+        for (String p : people.get(i)) {
+            if (map.containsKey(p)) {
+                skills |= 1 << map.get(p);
+            }
+        }
+
+        // updates states with this new person
+        // j-th bit in mask == 1 means the j-th skill is required
+        for (int state = 0; state < m; state++) {
+            // skips if the state is not processed yet
+            if (dp[state] == null) {
+                continue;
+            }
+
+            int newSkillSet = skills | state;
+            // skips if the state is a subset of current skills
+            // meaning adding this person doesn't make a difference
+            if (newSkillSet == state) {
+                continue;
+            }
+
+            // if newSkillSet is not covered, or the newSkillSet has more teams than the current teams + 1
+            if (dp[newSkillSet] == null || dp[newSkillSet].size() > dp[state].size() + 1) {
+                dp[newSkillSet] = new ArrayList<>(dp[state]);
+                dp[newSkillSet].add(i);
+            }
+        }
+    }
+    return dp[m - 1].stream().mapToInt(i -> i).toArray();
+}
+{% endhighlight %}
+
+# Subsets of Mask
+
+[Distribute Repeating Integers][distribute-repeating-integers]
+
+{% highlight java %}
+public boolean canDistribute(int[] nums, int[] quantity) {
+    // frequency map
+    List<Long> freq = new ArrayList(Arrays.stream(nums).boxed()
+        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+        .values());
+
+    // preprocessing
+    Collections.sort(freq);
+    Arrays.sort(quantity);
+    List<Integer> q = Arrays.stream(quantity).boxed().collect(Collectors.toList());
+
+    List<Long> freqList = new ArrayList<>();
+    List<Integer> quantityList = new ArrayList<>();
+    int i = 0;
+    for (long f : freq) {
+        // quantity is all iterated
+        if (i == q.size()) {
+            freqList.add(f);
+            continue;
+        }
+
+        if (f < q.get(i)) {
+            continue;
+        }
+
+        // puts the ball into the box and discards them
+        if (i == q.size() - 1 || f == q.get(i)) {
+            i++;
+            continue;
+        }
+
+        // if the box can contain at most one ball,
+        // finds the largest ball that fits into the box
+        if (f < q.get(i) + q.get(i + 1)) {
+            int index = Collections.binarySearch(q, (int)f);
+            if (index < 0) {
+                index = ~index;
+                q.remove(index - 1);
+            } else {
+                q.remove(index);
+            }
+            continue;
+        }
+
+        // to be determined
+        freqList.add(f);
+        quantityList.add(q.get(i++));
+    }
+
+    while (i < q.size()) {
+        quantityList.add(q.get(i++));
+    }
+
+    // all customers are satisfied
+    if (quantityList.isEmpty()) {
+        return true;
+    }
+
+    // no integers available for the remaining customers
+    if (freqList.isEmpty()) {
+        return false;
+    }
+
+    int m = quantityList.size();
+    return dfs(0, (1 << m) - 1, freqList, quantityList, new Boolean[freqList.size()][1 << m]);
+}
+
+// mask is the customers who is not assigned with integers
+private boolean dfs(int index, int mask, List<Long> freq, List<Integer> quantity, Boolean[][] memo) {
+    // all customers are satisfied
+    if (mask == 0) {
+        return true;
+    }
+
+    if (index == freq.size()) {
+        return false;
+    }
+
+    if (memo[index][mask] != null) {
+        return memo[index][mask];
+    }
+
+    // all subsets of mask
+    for (int state = mask; ; state = (state - 1) & mask) {
+        int sum = 0;
+        for (int i = 0; i < quantity.size(); i++) {
+            // i-th customer is not assigned
+            if (((1 << i) & state) > 0) {
+                sum += quantity.get(i);
+            }
+        }
+
+        // assigns the freq to the customers in this subset
+        // mask ^ state is the new mask
+        // if state == 0, we are skipping the integer at this index
+        if (sum <= freq.get(index) && dfs(index + 1, mask ^ state, freq, quantity, memo)) {
+            return memo[index][mask] = true;
+        }
+
+        // stops early
+        if (state == 0) {
+            break;
+        }
+    }
+    return memo[index][mask] = false;
+}
+{% endhighlight %}
+
+# Bottom-up
+
+[Partition to K Equal Sum Subsets][partition-to-k-equal-sum-subsets]
+
+{% highlight java %}
+public boolean canPartitionKSubsets(int[] nums, int k) {
+    int sum = 0, max = 0;
+    for (int num : nums) {
+        sum += num;
+        max = Math.max(max, num);
+    }
+
+    int target = sum / k;
+    if (sum % k != 0 || max > target) {
+        return false;
+    }
+
+    // searches in reverse order, so that subset sizes decrease faster
+    Arrays.sort(nums);
+
+    int n = nums.length;
+
+    // dp[state] indicates whether state is a possible candidate
+    boolean[] dp = new boolean[1 << n];
+    dp[0] = true;
+    int[] total = new int[1 << n];
+
+    // bit mask
+    // the i-th bit in state represents the presence of nums[i]
+    for (int state = 0; state < (1 << n); state++) {
+        if (!dp[state]) {
+            continue;
+        }
+
+        for (int i = 0; i < n; i++) {
+            int next = state | (1 << i);  // next state
+            // state doesn't set the i-th position
+            // next state is not a possible candidate yet
+            // nums[i] fits into the current partial subset
+            if (state != next && !dp[next] && nums[i] + total[state] % target <= target) {
+                dp[next] = true;
+                total[next] = total[state] + nums[i];
+            }
+        }
+    }
+
+    return dp[(1 << n) - 1];
+}
+{% endhighlight %}
+
+[distribute-repeating-integers]: https://leetcode.com/problems/distribute-repeating-integers/
+[partition-to-k-equal-sum-subsets]: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
+[smallest-sufficient-team]: https://leetcode.com/problems/smallest-sufficient-team/

@@ -240,57 +240,9 @@ public int maxCoins(int[] nums) {
 {% highlight java %}
 {% endhighlight %}
 
-## State Transition
-
-[Partition to K Equal Sum Subsets][partition-to-k-equal-sum-subsets]
-
-{% highlight java %}
-public boolean canPartitionKSubsets(int[] nums, int k) {
-    int sum = 0, max = 0;
-    for (int num : nums) {
-        sum += num;
-        max = Math.max(max, num);
-    }
-
-    int target = sum / k;
-    if (sum % k != 0 || max > target) {
-        return false;
-    }
-
-    // searches in reverse order, so that subset sizes decrease faster
-    Arrays.sort(nums);
-
-    // dp[state] indicates whether state is a possible candidate
-    boolean[] dp = new boolean[1 << nums.length];
-    dp[0] = true;
-    int[] total = new int[1 << nums.length];
-
-    // bit mask
-    // the i-th bit in state represents the presence of nums[i]
-    for (int state = 0; state < (1 << nums.length); state++) {
-        if (!dp[state]) {
-            continue;
-        }
-
-        for (int i = 0; i < nums.length; i++) {
-            int next = state | (1 << i);  // next state
-            // state doesn't set the i-th position
-            // next state is not a possible candidate yet
-            // nums[i] fits into the current partial subset
-            if (state != next && !dp[next] && nums[i] + total[state] % target <= target) {
-                dp[next] = true;
-                total[next] = total[state] + nums[i];
-            }
-        }
-    }
-
-    return dp[(1 << nums.length) - 1];
-}
-{% endhighlight %}
 
 [burst-balloons]: https://leetcode.com/problems/burst-balloons/
 [largest-sum-of-averages]: https://leetcode.com/problems/largest-sum-of-averages/
 [maximum-score-from-performing-multiplication-operations]: https://leetcode.com/problems/maximum-score-from-performing-multiplication-operations/
 [minimum-score-triangulation-of-polygon]: https://leetcode.com/problems/minimum-score-triangulation-of-polygon/
-[partition-to-k-equal-sum-subsets]: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
 [remove-boxes]: https://leetcode.com/problems/remove-boxes/

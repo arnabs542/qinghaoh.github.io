@@ -274,7 +274,44 @@ public int[] singleNumber(int[] nums) {
 }
 {% endhighlight %}
 
+# And
+
+[Find a Value of a Mysterious Function Closest to Target][find-a-value-of-a-mysterious-function-closest-to-target]
+
+{% highlight java %}
+public int closestToTarget(int[] arr, int target) {
+    int n = arr.length, min = Integer.MAX_VALUE;
+
+    // ands[i]: unique AND values of arr[i...]
+    // the size of ands[i] is at most ceil(log(arr[i])), i.e. arr[i].bitCount()
+    Set<Integer>[] ands = new Set[n];
+    for (int i = 0; i < n; i++) {
+        ands[i] = new HashSet<>();
+    }
+
+    ands[n - 1].add(arr[n - 1]);
+
+    // computes ands[i] from ands[i + 1]
+    for (int i = n - 2; i >= 0; i--) {
+        ands[i].add(arr[i]);
+        for (int v: ands[i + 1]) {
+            ands[i].add(arr[i] & v);
+        }
+    }
+
+    for (var a : ands) {
+        for (int v : a) {
+            min = Math.min(min, Math.abs(v - target));
+        }
+    }
+
+    return min;
+}
+{% endhighlight %}
+
 # Exclusive Or
+
+## Properties
 
 Distributive Property:
 
@@ -283,14 +320,18 @@ Distributive Property:
 (a ^ b) & (c ^ d) = (a & c) ^ (a & d) ^ (b & c) ^ (b & d)
 ```
 
+## MSB -> LSB
+
+Process the numbres bit by bit from msb to lsb.
+
 [Maximum XOR of Two Numbers in an Array][maximum-xor-of-two-numbers-in-an-array]
 
 {% highlight java %}
 public int findMaximumXOR(int[] nums) {
     int max = 0, mask = 0;
-    for (int i = 0; i < 32; i++) {
-        // most significant (i + 1) bits
-        mask = mask | (1 << (31 - i));
+    for (int i = 31; i >= 0; i--) {
+        // most significant (32 - i) bits
+        mask = mask | (1 << i);
 
         Set<Integer> set = new HashSet<>();
         for (int num : nums) {
@@ -298,13 +339,18 @@ public int findMaximumXOR(int[] nums) {
         }
 
         // so far, max contains the most significant i bits
-        // tmp stands for the potential max we can get if we consider the current bit
-        int tmp = max | (1 << (31 - i));
-        // finds a and b in the set so that a ^ b == tmp
-        // a ^ b == tmp => a ^ b ^ b == tmp ^ b => a == tmp ^ b
+        // candidate stands for the potential max we can get if we set the current bit to 1
+        int candidate = max | (1 << i);
+
+        // finds a and b in the set so that a ^ b == candidate
+        // a ^ b == candidate
+        // => a ^ b ^ b == candidate ^ b
+        // => a == candidate ^ b
+        // if there's no such a and b
+        // we pick 0 at this bit so max continues to be the max so far
         for (int prefix : set) {
-            if (set.contains(tmp ^ prefix)) {
-                max = tmp;
+            if (set.contains(candidate ^ prefix)) {
+                max = candidate;
                 break;
             }
         }
@@ -313,9 +359,87 @@ public int findMaximumXOR(int[] nums) {
 }
 {% endhighlight %}
 
-Another solution is by Trie.
-
 ## Trie
+
+It's a more intuitive way to process the numbers bit by bit.
+
+[Maximum XOR of Two Numbers in an Array][maximum-xor-of-two-numbers-in-an-array]
+
+{% highlight java %}
+public int findMaximumXOR(int[] nums) {
+TrieNode root = new TrieNode();
+    for (int num : nums) {
+        TrieNode node = root;
+        for (int i = 31; i >= 0; i--) {
+            int bit = (num >> i) & 1;
+            if (node.children[bit] == null) {
+                node.children[bit] = new TrieNode();
+            }
+            node = node.children[bit];
+        }
+    }
+
+    int max = 0;
+    for (int num: nums) {
+        TrieNode node = root;
+        int value = 0;
+        for (int i = 31; i >= 0; i--) {
+            int bit = (num >> i) & 1;
+            if (node.children[bit ^ 1] != null) {
+                // complement at the bit of this num exists
+                // so the xor at the bit is 1, and the max at this bit will be 1
+                node = node.children[bit ^ 1];
+                value += 1 << i;
+            } else {
+                node = node.children[bit];
+            }
+        }
+        max = Math.max(max, value);
+    }
+    return max;
+}
+}
+
+class TrieNode {
+    TrieNode[] children = new TrieNode[2];
+}
+{% endhighlight %}
+
+{% highlight java %}
+public int findMaximumXOR(int[] nums) {
+    TrieNode root = new TrieNode();
+    int max = 0;
+    for (int num : nums) {
+        TrieNode node = root, complement = root;
+        int value = 0;
+
+        for (int i = 31; i >= 0; i--) {
+            // the i-th bit of num
+            int bit = (num >> i) & 1;
+
+            if (node.children[bit] == null) {
+                node.children[bit] = new TrieNode();
+            }
+            node = node.children[bit];
+
+            if (complement.children[bit ^ 1] != null) {
+                // complement at the bit of this num exists
+                // so the xor at the bit is 1, and the max at this bit will be 1
+                complement = complement.children[bit ^ 1];
+                value += 1 << i;
+            } else {
+                complement = complement.children[bit];
+            }
+        }
+        max = Math.max(max, value);
+    }
+    return max;
+}
+
+class TrieNode {
+    TrieNode[] children = new TrieNode[2];
+}
+{% endhighlight %}
 
 [Count Pairs With XOR in a Range][count-pairs-with-xor-in-a-range]
 
@@ -597,6 +721,7 @@ public boolean validUtf8(int[] data) {
 [count-pairs-with-xor-in-a-range]: https://leetcode.com/problems/count-pairs-with-xor-in-a-range/
 [counting-bits]: https://leetcode.com/problems/counting-bits/
 [divide-two-integers]: https://leetcode.com/problems/divide-two-integers/
+[find-a-value-of-a-mysterious-function-closest-to-target]: https://leetcode.com/problems/find-a-value-of-a-mysterious-function-closest-to-target/
 [find-root-of-n-ary-tree]: https://leetcode.com/problems/find-root-of-n-ary-tree/
 [flip-columns-for-maximum-number-of-equal-rows]: https://leetcode.com/problems/flip-columns-for-maximum-number-of-equal-rows/
 [integer-replacement]: https://leetcode.com/problems/integer-replacement/
