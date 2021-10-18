@@ -85,8 +85,7 @@ private int height(TreeNode node) {
         return 0;
     }
 
-    int left = height(node.left);  // DFS
-    int right = height(node.right);
+    int left = height(node.left), right = height(node.right);
     diameter = Math.max(diameter, left + right);
     return Math.max(left, right) + 1;
 }

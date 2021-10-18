@@ -2,6 +2,24 @@
 layout: post
 title:  "Game"
 ---
+# Math
+
+[Chalkboard XOR Game][chalkboard-xor-game]
+
+{% highlight java %}
+public boolean xorGame(int[] nums) {
+    int xor = 0;
+    for (int num : nums) {
+        xor ^= num;
+    }
+
+    // when the number of elements are even
+    // not all elements are same, otherwise xor == 0
+    // if nums[i] and nums[j] are distinct
+    // Alice can erase either and not close at current turn
+    return xor == 0 || nums.length % 2 == 0;
+}
+{% endhighlight %}
 
 [Sum Game][sum-game]
 
@@ -464,6 +482,7 @@ public boolean canWin(String s) {
 [can-i-win]: https://leetcode.com/problems/can-i-win/
 [cat-and-mouse]: https://leetcode.com/problems/cat-and-mouse/
 [cat-and-mouse-ii]: https://leetcode.com/problems/cat-and-mouse-ii/
+[chalkboard-xor-game]: https://leetcode.com/problems/chalkboard-xor-game/
 [flip-game-ii]: https://leetcode.com/problems/flip-game-ii/
 [stone-game]: https://leetcode.com/problems/stone-game/
 [stone-game-ii]: https://leetcode.com/problems/stone-game-ii/

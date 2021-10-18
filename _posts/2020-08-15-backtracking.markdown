@@ -836,6 +836,80 @@ private void backtrack(int[] jobs, int index, int[] workers, int max) {
 }
 {% endhighlight %}
 
+# Memoization
+
+[Zuma Game][zuma-game]
+
+{% highlight java %}
+public int findMinStep(String board, String hand) {
+    int[] freq = new int[26];
+    for (char c : hand.toCharArray()) {
+        freq[c - 'A']++;
+    }
+
+    return backtrack(board, freq, new HashMap<String, Integer>());
+}
+
+private int backtrack(String board, int[] freq, Map<String, Integer> memo) {
+    if (board.isEmpty()) {
+        return 0;
+    }
+
+    String key = board + "#" + serialize(freq);
+    if (memo.containsKey(key)) {
+        return memo.get(key);
+    }
+
+    // inserts a ball from hand to every possible position of the board
+    int min = Integer.MAX_VALUE;
+    for (int i = 0; i <= board.length(); i++) {
+        for (int j = 0; j < freq.length; j++) {
+            if (freq[j] > 0) {
+                freq[j]--;
+
+                String b = updateBoard(board.substring(0, i) + (char)('A' + j) + board.substring(i));
+                int steps = backtrack(b, freq, memo);
+                if (steps >= 0) {
+                    min = Math.min(min, steps + 1);
+                }
+
+                freq[j]++;
+            }
+        }
+    }
+
+    if (min == Integer.MAX_VALUE) {
+        min = -1;
+    }
+
+    memo.put(board + "#" + serialize(freq), min);
+    return min;
+}
+
+private String updateBoard(String board) {
+    for (int i = 0, j = 0; i < board.length(); j++) {
+        while (i < board.length() && board.charAt(i) == board.charAt(j)) {
+            i++;
+        }
+        if (i - j >= 3) {
+            return updateBoard(board.substring(0, j) + board.substring(i));
+        } 
+    }
+    return board;
+}
+
+private String serialize(int[] freq) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < freq.length; i++) {
+        if (freq[i] > 0) {
+            sb.append((char)('A' + i));
+            sb.append(freq[i]);
+        }
+    }
+    return sb.toString();
+}
+{% endhighlight %}
+
 [24-game]: https://leetcode.com/problems/24-game/
 [android-unlock-patterns]: https://leetcode.com/problems/android-unlock-patterns/
 [beautiful-arrangement]: https://leetcode.com/problems/beautiful-arrangement/
@@ -860,3 +934,4 @@ private void backtrack(int[] jobs, int index, int[] workers, int max) {
 [robot-room-cleaner]: https://leetcode.com/problems/robot-room-cleaner/
 [subsets]: https://leetcode.com/problems/subsets/
 [subsets-ii]: https://leetcode.com/problems/subsets-ii/
+[zuma-game]: https://leetcode.com/problems/zuma-game/

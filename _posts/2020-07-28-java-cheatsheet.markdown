@@ -171,7 +171,7 @@ private int gcd(int a, int b) {
 
 # Set
 * [boolean containsAll(Collection\<?\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Set.html#containsAll-java.util.Collection-)
-* [boolean retainAll(Collection\<?\> c)](https://docs.oracle.com/javase/8/docs/api/java/util/Set.html#retainAll-java.util.Collection-)
+* [boolean retainAll(Collection\<?\> c)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html#retainAll(java.util.Collection))
 
 # Stream
 * [\<A\> A\[\] toArray(IntFunction\<A\[\]\> generator)](https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#toArray-java.util.function.IntFunction-)

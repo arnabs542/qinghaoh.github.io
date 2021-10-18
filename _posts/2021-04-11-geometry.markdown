@@ -242,6 +242,14 @@ public int maxAbsValExpr(int[] arr1, int[] arr2) {
 }
 {% endhighlight %}
 
+# Geometric Median
+
+$${\underset {y\in \mathbb {R} ^{n}}{\operatorname {arg\,min} }}\sum _{i=1}^{m}\left\|x_{i}-y\right\|_{2}$$
+
+Weiszfeld's algorithm
+
+$$y_{i+1}=(\sum_{j=1}^{m}{\frac{x_{j}}{\|x_{j}-y_{i}\|}})/(\sum_{j=1}^{m}{\frac{1}{\|x_{j}-y_{i}\|}})$$
+
 # Circle
 
 ## Smallest Circle Problem

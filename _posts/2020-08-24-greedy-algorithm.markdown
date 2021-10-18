@@ -393,6 +393,27 @@ public int minimumEffort(int[][] tasks) {
 }
 {% endhighlight %}
 
+[Minimum Number of Days to Eat N Oranges][minimum-number-of-days-to-eat-n-oranges]
+
+{% highlight java %}
+private Map<Integer, Integer> memo = new HashMap<>();
+
+public int minDays(int n) {
+    if (n < 2) {
+        return n;
+    }
+
+    if (memo.containsKey(n)) {
+        return memo.get(n);
+    }
+
+    int days = 1 + Math.min(n % 2 + minDays(n / 2), n % 3 + minDays(n / 3));
+    memo.put(n, days);
+
+    return days;
+}
+{% endhighlight %}
+
 [broken-calculator]: https://leetcode.com/problems/broken-calculator/
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [hand-of-straights]: https://leetcode.com/problems/hand-of-straights/
@@ -402,6 +423,7 @@ public int minimumEffort(int[][] tasks) {
 [minimum-adjacent-swaps-to-reach-the-kth-smallest-number]: https://leetcode.com/problems/minimum-adjacent-swaps-to-reach-the-kth-smallest-number/
 [minimum-factorization]: https://leetcode.com/problems/minimum-factorization/
 [minimum-initial-energy-to-finish-tasks]: https://leetcode.com/problems/minimum-initial-energy-to-finish-tasks/
+[minimum-number-of-days-to-eat-n-oranges]: https://leetcode.com/problems/minimum-number-of-days-to-eat-n-oranges/
 [put-boxes-into-the-warehouse-i]: https://leetcode.com/problems/put-boxes-into-the-warehouse-i/
 [split-array-into-consecutive-subsequences]: https://leetcode.com/problems/split-array-into-consecutive-subsequences/
 [strong-password-checker]: https://leetcode.com/problems/strong-password-checker/

@@ -222,6 +222,69 @@ public boolean canPartitionKSubsets(int[] nums, int k) {
 }
 {% endhighlight %}
 
+# DFS
+
+[Number of Ways to Wear Different Hats to Each Other][number-of-ways-to-wear-different-hats-to-each-other]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+private static final int NUM_HATS = 40;
+
+public int numberWays(List<List<Integer>> hats) {
+    int n = hats.size();
+    // h2p[i]: list of people who prefers wearing i-th hat
+    List<Integer>[] h2p = new List[NUM_HATS + 1];
+    for (int i = 1; i < h2p.length; i++) {
+        h2p[i] = new ArrayList<>();
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int h : hats.get(i)) {
+            h2p[h].add(i);
+        }
+    }
+
+    return dfs(h2p, n, 1, 0, new Integer[NUM_HATS + 1][1 << n]);
+}
+
+/**
+ * Finds number of ways that the people mask assigned with hats[hat...].
+ * @param hat current hat label
+ * @param mask people that wear hats
+ * @param memo memo[i][j] number of ways that the people mask j assigned with hats[i...]
+ */
+int dfs(List<Integer>[] h2p, int n, int hat, int mask, Integer[][] memo) {
+    // all people wear hats
+    if (mask == (1 << n) - 1) {
+        return 1;
+    }
+
+    // no more hats to process
+    if (hat > NUM_HATS) {
+        return 0;
+    }
+
+    if (memo[hat][mask] != null) {
+        return memo[hat][mask];
+    }
+
+    // no one wears this hat
+    int count = dfs(h2p, n, hat + 1, mask, memo);
+
+    for (int p : h2p[hat]) {
+        // skips if this person already wears a hat
+        if ((mask & (1 << p)) > 0) {
+            continue;
+        }
+
+        // this person wears this hat
+        count = (count + dfs(h2p, n, hat + 1, mask | (1 << p), memo)) % MOD;
+    }
+    return memo[hat][mask] = count;
+}
+{% endhighlight %}
+
 [distribute-repeating-integers]: https://leetcode.com/problems/distribute-repeating-integers/
 [partition-to-k-equal-sum-subsets]: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
+[number-of-ways-to-wear-different-hats-to-each-other]: https://leetcode.com/problems/number-of-ways-to-wear-different-hats-to-each-other/
 [smallest-sufficient-team]: https://leetcode.com/problems/smallest-sufficient-team/

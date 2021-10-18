@@ -660,6 +660,33 @@ public String findDifferentBinaryString(String[] nums) {
 }
 {% endhighlight %}
 
+# Dynamic Programming
+
+[Perfect Squares][perfect-squares]
+
+{% highlight java %}
+public int numSquares(int n) {
+    int dp[] = new int[n + 1];
+    Arrays.fill(dp, Integer.MAX_VALUE);
+    dp[0] = 0;
+
+    // pre-calculates the square numbers
+    int[] squares = new int[(int)Math.sqrt(n) + 1];
+    for (int i = 1; i < squares.length; ++i) {
+        squares[i] = i * i;
+    }
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j < squares.length; j++) {
+            if (i >= squares[j]) {
+                dp[i] = Math.min(dp[i], dp[i - squares[j]] + 1);
+            }
+        }
+    }
+    return dp[n];
+}
+{% endhighlight %}
+
 [4-keys-keyboard]: https://leetcode.com/problems/4-keys-keyboard/
 [allocate-mailboxes]: https://leetcode.com/problems/allocate-mailboxes/
 [best-meeting-point]: https://leetcode.com/problems/best-meeting-point/
@@ -669,6 +696,7 @@ public String findDifferentBinaryString(String[] nums) {
 [handshakes-that-dont-cross]: https://leetcode.com/problems/handshakes-that-dont-cross/
 [maximum-of-absolute-value-expression]: https://leetcode.com/problems/maximum-of-absolute-value-expression/
 [non-negative-integers-without-consecutive-ones]: https://leetcode.com/problems/non-negative-integers-without-consecutive-ones/
+[perfect-squares]: https://leetcode.com/problems/perfect-squares/
 [power-of-three]: https://leetcode.com/problems/power-of-three/
 [powx-n]: https://leetcode.com/problems/powx-n/
 [reach-a-number]: https://leetcode.com/problems/reach-a-number/

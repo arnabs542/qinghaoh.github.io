@@ -101,12 +101,12 @@ public int numberOfSets(int n, int k) {
 
 {% highlight java %}
 long[][] choose = new long[n][k];
-for (int i = 0; i < n; i++) {
+for (int i = 0; i < choose.length; i++) {
     choose[i][0] = 1;
 }
 
-for (int i = 1; i < n; i++) {
-    for (int j = 1; j < k; j++) {
+for (int i = 1; i < choose.length; i++) {
+    for (int j = 1; j < choose[0].length; j++) {
         choose[i][j] = (choose[i - 1][j - 1] + choose[i - 1][j]) % mod;
     }
 }

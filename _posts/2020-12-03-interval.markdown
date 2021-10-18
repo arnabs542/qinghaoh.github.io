@@ -104,13 +104,13 @@ public int findLongestChain(int[][] pairs) {
 
 Another solution is LIS DIP.
 
-## Interval Scheduling
+# Interval Scheduling
 
-### Interval Scheduling Maximization Problem (ISMP)
+## Interval Scheduling Maximization Problem (ISMP)
 
 [ISMP](https://en.wikipedia.org/wiki/Interval_scheduling#Interval_Scheduling_Maximization): to find a largest compatible set - a set of non-overlapping intervals of maximum size. The goal here is to execute as many tasks as possible.
 
-#### Unweighted
+### Unweighted
 
 [Non-overlapping Intervals][non-overlapping-intervals]
 
@@ -133,7 +133,7 @@ public int eraseOverlapIntervals(int[][] intervals) {
 }
 {% endhighlight %}
 
-#### Weighted
+### Weighted
 
 [Maximum Profit in Job Scheduling][maximum-profit-in-job-scheduling]
 
@@ -537,6 +537,25 @@ public List<Integer> minAvailableDuration(int[][] slots1, int[][] slots2, int du
 }
 {% endhighlight %}
 
+# Cover
+
+[Remove Covered Intervals][remove-covered-intervals]
+
+{% highlight java %}
+public int removeCoveredIntervals(int[][] intervals) {
+    Arrays.sort(intervals, (a, b) -> a[0] == b[0] ? b[1] - a[1] : a[0] - b[0]);
+
+    int remaining = 1, end = intervals[0][1];
+    for (int i = 1; i < intervals.length; i++) {
+        if (intervals[i][1] > end) {
+            remaining++;
+            end = intervals[i][1];
+        }
+    }
+    return remaining;
+}
+{% endhighlight %}
+
 # Data Structure
 
 [Seat Reservation Manager][seat-reservation-manager]
@@ -770,6 +789,7 @@ class Interval implements Comparable<Interval> {
 [minimum-number-of-arrows-to-burst-balloons]: https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/
 [non-overlapping-intervals]: https://leetcode.com/problems/non-overlapping-intervals/
 [range-module]: https://leetcode.com/problems/range-module/
+[remove-covered-intervals]: https://leetcode.com/problems/remove-covered-intervals/
 [seat-reservation-manager]: https://leetcode.com/problems/seat-reservation-manager/
 [set-intersection-size-at-least-two]: https://leetcode.com/problems/set-intersection-size-at-least-two/
 [video-stitching]: https://leetcode.com/problems/video-stitching/

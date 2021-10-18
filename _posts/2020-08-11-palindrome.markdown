@@ -337,6 +337,33 @@ public int longestPalindromeSubseq(String s) {
 }
 {% endhighlight %}
 
+[Maximize Palindrome Length From Subsequences][maximize-palindrome-length-from-subsequences]
+
+{% highlight java %}
+public int longestPalindrome(String word1, String word2) {
+    String s = word1 + word2;
+    int n = s.length(), n1 = word1.length();
+    // dp[i][j]: s.substring(i, j + 1)
+    int[][] dp = new int[n][n];
+
+    int max = 0;
+    for (int i = n - 1; i >= 0; i--) {
+        dp[i][i] = 1;
+        for (int j = i + 1; j < n; j++) {
+            if (s.charAt(i) == s.charAt(j)) {
+                dp[i][j] = dp[i + 1][j - 1] + 2;
+                if (i < n1 && j >= n1) {
+                    max = Math.max(max, dp[i][j]);
+                }
+            } else {
+                dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    return max;
+}
+{% endhighlight %}
+
 [Count Different Palindromic Subsequences][count-different-palindromic-subsequences]
 
 {% highlight java %}
@@ -394,6 +421,7 @@ public int countPalindromicSubsequences(String S) {
 [find-the-closest-palindrome]: https://leetcode.com/problems/find-the-closest-palindrome/
 [longest-palindromic-subsequence]: https://leetcode.com/problems/longest-palindromic-subsequence/
 [longest-palindromic-substring]: https://leetcode.com/problems/longest-palindromic-substring/
+[maximize-palindrome-length-from-subsequences]: https://leetcode.com/problems/maximize-palindrome-length-from-subsequences/
 [palindrome-number]: https://leetcode.com/problems/palindrome-number/
 [palindrome-pairs]: https://leetcode.com/problems/palindrome-pairs/
 [palindrome-partitioning-ii]: https://leetcode.com/problems/palindrome-partitioning-ii/

@@ -88,7 +88,7 @@ private int gcd(int a, int b) {
 
 $$ {lcm} (a,b)={\frac {|a\cdot b|}{\gcd(a,b)}} $$
 
-[Lexicographically Smallest String After Applying Operations][]
+[Lexicographically Smallest String After Applying Operations][lexicographically-smallest-string-after-applying-operations]
 
 {% highlight java %}
 public String findLexSmallestString(String s, int a, int b) {
@@ -134,18 +134,30 @@ private String rotate(String s, int b) {
     int n = s.length();
     return s.substring(n - b) + s.substring(0, n - b);
 }
+{% endhighlight %}
 
-private int gcd(int a, int b) {
-    while (b != 0) {
-        int tmp = b;
-        b = a % b;
-        a = tmp;
+[Nth Magical Number][nth-magical-number]
+
+{% highlight java %}
+public int nthMagicalNumber(int n, int a, int b) {
+    int lcm = a * b / gcd(a, b);
+
+    long low = 0, high = (long)n * Math.min(a, b);
+    while (low < high) {
+        long mid = (low + high) >>> 1;
+        if (mid / a + mid / b - mid / lcm >= n) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
     }
-    return a;
+
+    return (int)(low % MOD);
 }
 {% endhighlight %}
 
 [greatest-common-divisor-of-strings]: https://leetcode.com/problems/greatest-common-divisor-of-strings/
 [lexicographically-smallest-string-after-applying-operations]: https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/
+[nth-magical-number]: https://leetcode.com/problems/nth-magical-number/
 [number-of-different-subsequences-gcds]: https://leetcode.com/problems/number-of-different-subsequences-gcds/
 [x-of-a-kind-in-a-deck-of-cards]: https://leetcode.com/problems/x-of-a-kind-in-a-deck-of-cards/

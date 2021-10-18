@@ -3,7 +3,7 @@ layout: post
 title:  "Stack"
 tags: stack
 ---
-## Monotonic Stack
+# Monotonic Stack
 
 [Remove K Digits][remove-k-digits]
 
@@ -144,6 +144,25 @@ private int[] maxArray(int[] nums, int k) {
 }
 {% endhighlight %}
 
+[Number of Valid Subarrays][number-of-valid-subarrays]
+
+{% highlight java %}
+public int validSubarrays(int[] nums) {
+    int count = 0;
+    Deque<Integer> st = new ArrayDeque<>();
+    for (int num : nums) {
+        while (!st.isEmpty() && num < st.peek()) {
+            st.pop();
+        }
+        st.push(num);
+        count += st.size();
+    }
+    return count;
+}
+{% endhighlight %}
+
+## Previous/Next Less/Greater Element
+
 ### Templates
 
 #### Previous Less Element
@@ -154,7 +173,7 @@ int[] prev = new int[n];
 
 for (int i = 0; i < n; i++) {
     // monotonically increasing stack
-    // non-strict
+    // non-strictly less
     while (!st.isEmpty() && nums[i] < nums[st.peek()]) {
         st.pop();
     }
@@ -170,9 +189,9 @@ Deque<Integer> st = new ArrayDeque<>();
 int[] next = new int[n];
 Arrays.fill(next, -1);
 
-for (int i = 0; i < nums.length; i++) {
+for (int i = 0; i < n; i++) {
     // monotonically increasing stack
-    // strict
+    // strictly less
     while (!st.isEmpty() && nums[i] < nums[st.peek()]) {
         next[st.pop()] = i;
     }
@@ -196,7 +215,7 @@ public int[] finalPrices(int[] prices) {
     // next less element
     Deque<Integer> st = new ArrayDeque<>();
     for (int i = 0; i < n; i++) {
-        while (!st.isEmpty() && result[st.peek()] >= result[i]) {
+        while (!st.isEmpty() && result[i] <= result[st.peek()]) {
             result[st.pop()] -= result[i];
         }
         st.push(i);
@@ -205,64 +224,42 @@ public int[] finalPrices(int[] prices) {
 }
 {% endhighlight %}
 
-[Next Greater Element II][next-greater-element-ii]
-
-[Next Greater Node in Linked List][next-greater-node-in-linked-list]
-
-[Online Stock Span][online-stock-span]
-
-{% highlight java %}
-private Deque<int[]> st;
-
-public StockSpanner() {
-    st = new ArrayDeque<>();
-}
-
-public int next(int price) {
-    int count = 1;
-    while (!st.isEmpty() && st.peek()[0] <= price) {
-        count += st.pop()[1];
-    }    
-    st.push(new int[]{price, count});
-    return count;
-}
-{% endhighlight %}
-
 [Sum of Subarray Minimums][sum-of-subarray-minimums]
 
 {% highlight java %}
 private int MOD = (int)1e9 + 7;
 
-public int sumSubarrayMins(int[] A) {
-    // left[i]:  distance between A[i] and its previous less element (prev, A[i]]
-    // right[i]: distance between A[i] and its next less element [A[i], next)
-    int[] left = new int[A.length], right = new int[A.length];
-    for (int i = 0; i < A.length; i++) {
-        right[i] = A.length - i;
+public int sumSubarrayMins(int[] arr) {
+    int n = arr.length;
+    // left[i]:  distance between arr[i] and its previous less element (prev, arr[i]]
+    // right[i]: distance between arr[i] and its next less element [arr[i], next)
+    int[] left = new int[n], right = new int[n];
+    for (int i = 0; i < n; i++) {
+        right[i] = n - i;
     }
 
     // element : index
     Deque<Integer> st1 = new ArrayDeque<>(), st2 = new ArrayDeque<>();
     int result = 0;
 
-    for (int i = 0; i < A.length; i++) {
+    for (int i = 0; i < n; i++) {
         // previous less element (non-strict)
-        while (!st1.isEmpty() && A[st1.peek()] > A[i]) {
+        while (!st1.isEmpty() && arr[i] < arr[st1.peek()]) {
             st1.pop();
         }
         left[i] = i - (st1.isEmpty() ? -1 : st1.peek());
         st1.push(i);
 
         // next less element (strict)
-        while (!st2.isEmpty() && A[st2.peek()] > A[i]) {
+        while (!st2.isEmpty() && arr[i] < arr[st2.peek()]) {
             int index = st2.pop();
             right[index] = i - index;
         }
         st2.push(i);
     }
 
-    for (int i = 0; i < A.length; i++) {
-        result = (result + A[i] * left[i] * right[i]) % MOD;
+    for (int i = 0; i < n; i++) {
+        result = (result + arr[i] * left[i] * right[i]) % MOD;
     }
     return result;
 }
@@ -295,6 +292,29 @@ Similarly, with Monotonically Increasing Stack, we can get Previous Greater Elem
 |Stack Strictness|   Strict   | Non-strict  |Non-strict|  Strict   |
 |   Condition    |a[i] >= top | a[i] > top  |a[i] > top|a[i] >= top|
 
+[Next Greater Element II][next-greater-element-ii]
+
+[Next Greater Node in Linked List][next-greater-node-in-linked-list]
+
+[Online Stock Span][online-stock-span]
+
+{% highlight java %}
+private Deque<int[]> st;
+
+public StockSpanner() {
+    st = new ArrayDeque<>();
+}
+
+public int next(int price) {
+    int count = 1;
+    while (!st.isEmpty() && price >= st.peek()[0]) {
+        count += st.pop()[1];
+    }
+    st.push(new int[]{price, count});
+    return count;
+}
+{% endhighlight %}
+
 [Minimum Cost Tree From Leaf Values][minimum-cost-tree-from-leaf-values]
 
 {% highlight java %}
@@ -317,6 +337,36 @@ public int mctFromLeafValues(int[] arr) {
     }
 
     return sum;
+}
+{% endhighlight %}
+
+[Number of Visible People in a Queue][number-of-visible-people-in-a-queue]
+
+{% highlight java %}
+public int[] canSeePersonsCount(int[] heights) {
+    int n = heights.length;
+    int[] answer = new int[n];
+    Deque<Integer> st = new ArrayDeque<>();
+    for (int i = 0; i < n; i++) {
+        // monotonically decreasing stack
+        // next greater (>=) element
+        while (!st.isEmpty() && heights[i] >= heights[st.peek()]) {
+            // st.peek() can see i
+            // st.peek() can't see after i, so we've done for st.peek().
+            // pops it
+            answer[st.pop()]++;
+        }
+
+        if (!st.isEmpty()) {
+            // previous less (<) element
+            // st.peek() can see i
+            answer[st.peek()]++;
+        }
+
+        st.push(i);
+    }
+
+    return answer;
 }
 {% endhighlight %}
 
@@ -344,7 +394,7 @@ public int maxWidthRamp(int[] A) {
 }
 {% endhighlight %}
 
-## Histogram
+# Histogram
 
 [Largest Rectangle in Histogram][largest-rectangle-in-histogram]
 
@@ -546,7 +596,8 @@ public String reverseParentheses(String s) {
 }
 {% endhighlight %}
 
-## Reduced to Counter
+# Regress to Counter
+
 [Remove Outermost Parentheses][remove-outermost-parentheses]
 
 {% highlight java %}
@@ -802,6 +853,8 @@ public int calculate(String s) {
 [minimum-insertions-to-balance-a-parentheses-string]: https://leetcode.com/problems/minimum-insertions-to-balance-a-parentheses-string/
 [next-greater-element-ii]: https://leetcode.com/problems/next-greater-element-ii/
 [next-greater-node-in-linked-list]: https://leetcode.com/problems/next-greater-node-in-linked-list/
+[number-of-valid-subarrays]: https://leetcode.com/problems/number-of-valid-subarrays/
+[number-of-visible-people-in-a-queue]: https://leetcode.com/problems/number-of-visible-people-in-a-queue/
 [online-stock-span]: https://leetcode.com/problems/online-stock-span/
 [remove-duplicate-letters]: https://leetcode.com/problems/remove-duplicate-letters/
 [remove-outermost-parentheses]: https://leetcode.com/problems/remove-outermost-parentheses/

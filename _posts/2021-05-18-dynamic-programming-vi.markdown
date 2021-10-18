@@ -361,9 +361,65 @@ public int minCost(int[] houses, int[][] cost, int m, int n, int target) {
 }
 {% endhighlight %}
 
+[Make the XOR of All Segments Equal to Zero][make-the-xor-of-all-segments-equal-to-zero]
+
+{% highlight java %}
+private static final int MAX = (int)1e6 + 1;
+
+public int minCost(int[] houses, int[][] cost, int m, int n, int target) {
+    // dp[i][j][k]: min cost where we have j neighborhood in the first i houses
+    //   and the i-th house is painted with the color k
+    int[][][] dp = new int[m + 1][target + 1][n];
+
+    for (int i = 0; i <= m; i++) {
+        for (int j = 0; j <= target; j++) {
+            Arrays.fill(dp[i][j], MAX);
+        }
+    }
+
+    for (int k = 0; k < n; k++) {
+        dp[0][0][k] = 0;
+    }
+
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= Math.min(target, i); j++) {
+            for (int k = 0; k < n; k++) {
+                // the current house is houses[i - 1]
+                // skips if it's painted and the painted color is not (k + 1)
+                if (houses[i - 1] != 0 && k != houses[i - 1] - 1) {
+                    continue;
+                }
+
+                // compares the current house with previous house
+                int sameNeighborhood = dp[i - 1][j][k];
+
+                int diffNeighborhood = MAX;
+                for (int prevK = 0; prevK < n; prevK++) {
+                    if (prevK != k) {
+                        diffNeighborhood = Math.min(diffNeighborhood, dp[i - 1][j - 1][prevK]);
+                    }
+                }
+
+                // paints the current house only if it's not pained yet
+                int paintCost = cost[i - 1][k] * (houses[i - 1] == 0 ? 1 : 0);
+                dp[i][j][k] = Math.min(sameNeighborhood, diffNeighborhood) + paintCost;
+            }
+        }
+    }
+
+    int min = MAX;
+    for (int k = 0; k < n; k++) {
+        min = Math.min(min, dp[m][target][k]);
+    }
+
+    return min == MAX ? -1 : min;
+}
+{% endhighlight %}
+
 [best-team-with-no-conflicts]: https://leetcode.com/problems/best-team-with-no-conflicts/
 [build-array-where-you-can-find-the-maximum-exactly-k-comparisons]: https://leetcode.com/problems/build-array-where-you-can-find-the-maximum-exactly-k-comparisons/
 [frog-jump]: https://leetcode.com/problems/frog-jump/
+[make-the-xor-of-all-segments-equal-to-zero]: https://leetcode.com/problems/make-the-xor-of-all-segments-equal-to-zero/
 [maximum-height-by-stacking-cuboids]: https://leetcode.com/problems/maximum-height-by-stacking-cuboids/
 [number-of-music-playlists]: https://leetcode.com/problems/number-of-music-playlists/
 [number-of-ways-to-rearrange-sticks-with-k-sticks-visible]: https://leetcode.com/problems/number-of-ways-to-rearrange-sticks-with-k-sticks-visible/

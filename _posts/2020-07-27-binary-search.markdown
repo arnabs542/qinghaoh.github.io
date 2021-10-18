@@ -936,6 +936,10 @@ private boolean condition(int[] stations, int k, double penalty) {
 }
 {% endhighlight %}
 
+## Combination
+
+[Ways to Split Array Into Three Subarrays][ways-to-split-array-into-three-subarrays]
+
 # Java
 ## Arrays
 [public static \<T\> int binarySearch(T\[\] a, int fromIndex, int toIndex, T key, Comparator\<? super T\> c)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#binarySearch(T%5B%5D,int,int,T,java.util.Comparator))
@@ -987,3 +991,4 @@ if (insertionPoint < 0) {
 [search-in-rotated-sorted-array-ii]: https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
 [search-suggestions-system]: https://leetcode.com/problems/search-suggestions-system/
 [the-k-weakest-rows-in-a-matrix]: https://leetcode.com/problems/the-k-weakest-rows-in-a-matrix/
+[ways-to-split-array-into-three-subarrays]: https://leetcode.com/problems/ways-to-split-array-into-three-subarrays/
