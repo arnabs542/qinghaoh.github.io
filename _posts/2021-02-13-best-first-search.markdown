@@ -69,4 +69,83 @@ public int shortestPathBinaryMatrix(int[][] grid) {
 }
 {% endhighlight %}
 
+[Minimum Moves to Move a Box to Their Target Location][minimum-moves-to-move-a-box-to-their-target-location]
+
+{% highlight java %}
+{% raw %}
+private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}, {1, 1}, {-1, 1}, {-1, -1}, {1, -1}};
+{% endraw %}
+public int minPushBox(char[][] grid) {
+    int m = grid.length, n = grid[0].length;
+    int[] start = null, box = null, target = null;
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (grid[i][j] == 'S') {
+                start = new int[]{i, j};
+            } else if (grid[i][j] == 'B') {
+                box = new int[]{i, j};
+            } else if (grid[i][j] == 'T') {
+                target = new int[]{i, j};
+            }
+        }
+    }
+
+    // {h, pushes, player[0], player[1], box[0], box[1]}
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+    int[] node = new int[]{h(box[0], box[1], target), 0, start[0], start[1], box[0], box[1]};
+    pq.offer(node);
+
+    Set<String> set = new HashSet();
+    while (!pq.isEmpty()) {
+        node = pq.poll();
+        // box is at the target
+        if (node[4] == target[0] && node[5] == target[1]) {
+            return node[1];
+        }
+
+        // set key
+        String key = Arrays.stream(node, 2, node.length)
+            .mapToObj(String::valueOf)
+            .collect(Collectors.joining(" - "));
+
+        if (!set.add(key)) {
+            continue;
+        }
+
+        for (int[] d : DIRECTIONS) {
+            // player
+            int pr = node[2] + d[0], pc = node[3] + d[1];
+            if (isBlocked(grid, pr, pc, m, n)) {
+                continue;
+            }
+
+            int[] next = null;
+            if (pr == node[4] && pc == node[5]) {
+                // player is at box
+                int br = node[4] + d[0], bc = node[5] + d[1];
+                if (isBlocked(grid, br, bc, m, n)) {
+                    continue;
+                }
+                next = new int[]{h(br, bc, target) + node[1] + 1, node[1] + 1, pr, pc, br, bc};
+            } else {
+                // box doesn't move
+                next = new int[]{node[0], node[1], pr, pc, node[4], node[5]};
+            }
+            pq.offer(next);
+        }
+    }
+    return -1;
+}
+
+private boolean isBlocked(char[][] grid, int i, int j, int m, int n) {
+    return i < 0 || i == m || j < 0 || j == n || grid[i][j] == '#';
+}
+
+// Manhattan's distance
+private int h(int box0, int box1, int[] target) {
+    return Math.abs(box0 - target[0]) + Math.abs(box1 - target[1]);
+}
+{% endhighlight %}
+
+[minimum-moves-to-move-a-box-to-their-target-location]: https://leetcode.com/problems/minimum-moves-to-move-a-box-to-their-target-location/
 [shortest-path-in-binary-matrix]: https://leetcode.com/problems/shortest-path-in-binary-matrix/

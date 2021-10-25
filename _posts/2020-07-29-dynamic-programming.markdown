@@ -303,6 +303,47 @@ public int minimumTotal(List<List<Integer>> triangle) {
 }
 {% endhighlight %}
 
+[Make Array Strictly Increasing][make-array-strictly-increasing]
+
+{% highlight java %}
+public int makeArrayIncreasing(int[] arr1, int[] arr2) {
+    Arrays.sort(arr2);
+
+    // rolling dp
+    // dp[i]: i is the element we choose for the current position.
+    // this element can be from either arr1 or arr2.
+    Map<Integer, Integer> dp = new HashMap<>();
+    dp.put(-1, 0);
+
+    for (int a1: arr1) {
+        // builds temporary dp map for i-th element of arr1
+        Map<Integer, Integer> tmp = new HashMap<>();
+        for (int key : dp.keySet()) {
+            int val = dp.get(key);
+            // path one
+            // no assignment for key -> a1
+            if (a1 > key) {
+                tmp.put(a1, Math.min(tmp.getOrDefault(a1, Integer.MAX_VALUE), val));
+            }
+
+            int index = Arrays.binarySearch(arr2, key + 1);
+            if (index < 0) {
+                index = ~index;
+            }
+
+            // path two
+            // one assignment for key -> arr2[index]
+            if (index < arr2.length) {
+                tmp.put(arr2[index], Math.min(tmp.getOrDefault(arr2[index], Integer.MAX_VALUE), val + 1));
+            }
+        }
+        dp = tmp;
+    }
+
+    return dp.isEmpty() ? - 1: Collections.min(dp.values());
+}
+{% endhighlight %}
+
 # Reverse
 
 [Freedom Trail][freedom-trail]
@@ -395,6 +436,7 @@ private int[][] preProcess(String r, int orientation) {
 [interleaving-string]: https://leetcode.com/problems/interleaving-string/
 [longest-common-subsequence]: https://leetcode.com/problems/longest-common-subsequence/
 [longest-string-chain]: https://leetcode.com/problems/longest-string-chain/
+[make-array-strictly-increasing]: https://leetcode.com/problems/make-array-strictly-increasing/
 [maximum-length-of-repeated-subarray]: https://leetcode.com/problems/maximum-length-of-repeated-subarray/
 [min-cost-climbing-stairs]: https://leetcode.com/problems/min-cost-climbing-stairs/
 [minimum-ascii-delete-sum-for-two-strings]: https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/

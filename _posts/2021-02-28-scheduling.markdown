@@ -80,6 +80,45 @@ public int leastInterval(char[] tasks, int n) {
 }
 {% endhighlight %}
 
+[Maximum Number of Weeks for Which You Can Work][maximum-number-of-weeks-for-which-you-can-work]
+
+{% highlight java %}
+public long numberOfWeeks(int[] milestones) {
+    long sum = 0;
+    int max = 0;
+    for (int m : milestones) {
+        sum += m;
+        max = Math.max(max, m);
+    }
+
+    // Case 1: there are more than one max.
+    // takes turns working on projects that have max milestones
+    // e.g. [4, 4, 2, 1]
+    // -> [3, 3, 2, 1] +2
+    // -> [2, 2, 2, 1] +2
+    // -> [1, 1, 1, 1] +3
+    // -> [0, 0, 0, 0] +4
+
+    // Case 2: there is only one max
+    // strategy:
+    // - max: a0, second: a1, remaining projects: r
+    // 1. works on a0 and any one from r, until a0 is reduced to a1
+    // 2. then we have two max projects (a1) - back to Case 1
+    //
+    // for Step 1, it's required sum(r) >= a0 - a1
+    // -> sum(r) + a1 - a0 >= 0
+    // -> sum - 2 * max >= 0
+
+    // Case 3: the requirement in Step 1, Case 2 is not met
+    // stragy:
+    // max -> any one from others -> max -> ...
+    // e.g. [3, 1]
+    // -> [2, 0] +2
+    // -> [1, 0] +1
+    return (sum - max) < max ? 2 * (sum - max) + 1 : sum;
+}
+{% endhighlight %}
+
 # EDF
 
 [Earliest deadline first scheduling](https://en.wikipedia.org/wiki/Earliest_deadline_first_scheduling)
@@ -174,6 +213,7 @@ public int minNumberOfSemesters(int n, int[][] dependencies, int k) {
 
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [longest-happy-string]: https://leetcode.com/problems/longest-happy-string/
+[maximum-number-of-weeks-for-which-you-can-work]: https://leetcode.com/problems/maximum-number-of-weeks-for-which-you-can-work/
 [minimum-swaps-to-make-strings-equal]: https://leetcode.com/problems/minimum-swaps-to-make-strings-equal/
 [parallel-courses-ii]: https://leetcode.com/problems/parallel-courses-ii/
 [rearrange-string-k-distance-apart]: https://leetcode.com/problems/rearrange-string-k-distance-apart/

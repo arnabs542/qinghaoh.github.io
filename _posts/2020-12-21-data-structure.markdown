@@ -4,6 +4,9 @@ title:  "Data Structure"
 tag: data structure
 usemathjax: true
 ---
+[Min Stack][min-stack]
+
+stack and minStack
 
 [Max Stack][max-stack]
 
@@ -504,4 +507,5 @@ class Skiplist {
 [lru-cache]: https://leetcode.com/problems/lru-cache/
 [max-stack]: https://leetcode.com/problems/max-stack/
 [maximum-frequency-stack]: https://leetcode.com/problems/maximum-frequency-stack/
+[min-stack]: https://leetcode.com/problems/min-stack/
 [sliding-window-median]: https://leetcode.com/problems/sliding-window-median/

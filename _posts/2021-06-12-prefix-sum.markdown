@@ -98,6 +98,26 @@ for (int i = 0; i < n; i++) {
 
 [Count Triplets That Can Form Two Arrays of Equal XOR][count-triplets-that-can-form-two-arrays-of-equal-xor]
 
+[Can Make Palindrome from Substring][can-make-palindrome-from-substring]
+
+{% highlight java %}
+public List<Boolean> canMakePaliQueries(String s, int[][] queries) {
+    int n = s.length();
+    // 26 bits to represent prefix xor
+    int[] p = new int[n + 1];
+    for (int i = 0; i < n; i++) {
+        p[i + 1] = p[i] ^ (1 << (s.charAt(i) - 'a'));
+    }
+
+    List<Boolean> answer = new ArrayList<>();
+    for (int[] q : queries) {
+        int odd = Integer.bitCount(p[q[1] + 1] ^ p[q[0]]);
+        answer.add((odd - 1) <= 2 * q[2]);
+    }
+    return answer;
+}
+{% endhighlight %}
+
 ### Product
 
 [Product of the Last K Numbers][product-of-the-last-k-numbers]
@@ -291,6 +311,7 @@ public int maxSumSubmatrix(int[][] matrix, int k) {
 }
 {% endhighlight %}
 
+[can-make-palindrome-from-substring]: https://leetcode.com/problems/can-make-palindrome-from-substring/
 [change-minimum-characters-to-satisfy-one-of-three-conditions]: https://leetcode.com/problems/change-minimum-characters-to-satisfy-one-of-three-conditions/
 [contiguous-array]: https://leetcode.com/problems/contiguous-array/
 [count-triplets-that-can-form-two-arrays-of-equal-xor]: https://leetcode.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/

@@ -320,6 +320,39 @@ private void swap(int[] nums, int i, int j) {
 }
 {% endhighlight %}
 
+## Cyclic Swapping
+
+[Couples Holding Hands][couples-holding-hands]
+
+{% highlight java %}
+public int minSwapsCouples(int[] row) {
+    int n = row.length, min = 0;
+    int[] seat = new int[n];
+    for (int i = 0; i < n; i++) {
+        seat[row[i]] = i;
+    }
+
+    // fixes a person and swaps his partner in the seat by his side
+    for (int i = 0; i < n; i += 2) {
+        // the seat by side
+        int j = i + 1;
+        if (row[j] != partner(row[i])) {
+            // finds the seat of this person's partner
+            j = seat[partner(row[i])];
+            // swaps the partner to the seat
+            swap(row, i + 1, j);
+            swap(seat, row[i + 1], row[j]);
+            min++;
+        }
+    }
+    return min;
+}
+
+private int partner(int p) {
+    return p ^ 1;
+}
+{% endhighlight %}
+
 # Set
 
 [Longest Consecutive Sequence][longest-consecutive-sequence]
@@ -422,6 +455,7 @@ public List<Integer> findDuplicates(int[] nums) {
 [array-with-elements-not-equal-to-average-of-neighbors]: https://leetcode.com/problems/array-with-elements-not-equal-to-average-of-neighbors/
 [candy]: https://leetcode.com/problems/candy/
 [count-the-repetitions]: https://leetcode.com/problems/count-the-repetitions/
+[couples-holding-hands]: https://leetcode.com/problems/couples-holding-hands/
 [divide-array-into-increasing-sequences]: https://leetcode.com/problems/divide-array-into-increasing-sequences/
 [find-all-duplicates-in-an-array]: https://leetcode.com/problems/find-all-duplicates-in-an-array/
 [first-missing-positive]: https://leetcode.com/problems/first-missing-positive/

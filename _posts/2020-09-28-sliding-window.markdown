@@ -317,6 +317,22 @@ private boolean condition(int[] nums, int distance, int k) {
 }
 {% endhighlight %}
 
+[Kth Smallest Subarray Sum][kth-smallest-subarray-sum]
+
+{% highlight java %}
+private boolean condition(int[] nums, int upper, int k) {
+    int i = 0, j = 0, sum = 0, count = 0;
+    while (j < nums.length) {
+        sum += nums[j++];
+        while (sum > upper) {
+            sum -= nums[i++];
+        }
+        count += j - i;
+    }
+    return count >= k;
+}
+{% endhighlight %}
+
 ## Min Length
 
 [Minimum Size Subarray Sum][minimum-size-subarray-sum]
@@ -679,6 +695,7 @@ public int[] numMovesStonesII(int[] stones) {
 [fruit-into-baskets]: https://leetcode.com/problems/fruit-into-baskets/
 [get-equal-substrings-within-budget]: https://leetcode.com/problems/get-equal-substrings-within-budget/
 [k-empty-slots]: https://leetcode.com/problems/k-empty-slots/
+[kth-smallest-subarray-sum]: https://leetcode.com/problems/kth-smallest-subarray-sum/
 [longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit]: https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/
 [longest-repeating-character-replacement]: https://leetcode.com/problems/longest-repeating-character-replacement/
 [longest-substring-with-at-most-k-distinct-characters]: https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/

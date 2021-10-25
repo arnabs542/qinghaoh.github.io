@@ -1568,6 +1568,42 @@ ORDER BY
 
 ## Implicit Join (= Cross Join)
 
+[Strong Friendship][strong-friendship]
+
+{% highlight sql %}
+WITH Friends AS (
+    SELECT
+        user1_id,
+        user2_id
+    FROM
+        Friendship
+    UNION
+    SELECT user2_id AS user1_id,
+        user1_id AS user2_id
+    FROM
+        Friendship
+)
+
+SELECT
+    f.user1_id,
+    f.user2_id,
+    COUNT(f2.user2_id) AS common_friend
+FROM
+    Friendship f
+JOIN
+    Friends f1
+    -- u1
+    ON f.user1_id = f1.user1_id
+JOIN friends f2
+    -- u2
+    ON f.user2_id = f2.user1_id
+    -- common friends
+    AND f1.user2_id = f2.user2_id
+GROUP BY
+    1, 2
+    HAVING COUNT(3) >= 3
+{% endhighlight %}
+
 [Consecutive Numbers][consecutive-numbers]
 
 {% highlight sql %}
@@ -2153,6 +2189,7 @@ WHERE
 [sales-analysis-ii]: https://leetcode.com/problems/sales-analysis-ii/
 [sales-person]: https://leetcode.com/problems/sales-person/
 [second-highest-salary]: https://leetcode.com/problems/second-highest-salary/
+[strong-friendship]: https://leetcode.com/problems/strong-friendship/
 [students-report-by-geography]: https://leetcode.com/problems/students-report-by-geography/
 [suspicious-bank-accounts]: https://leetcode.com/problems/suspicious-bank-accounts/
 [swap-salary]: https://leetcode.com/problems/swap-salary/
