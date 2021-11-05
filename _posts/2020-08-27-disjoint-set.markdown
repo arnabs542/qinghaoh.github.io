@@ -392,6 +392,79 @@ private void union(int u, int v) {
 }
 {% endhighlight %}
 
+[Remove Max Number of Edges to Keep Graph Fully Traversable][remove-max-number-of-edges-to-keep-graph-fully-traversable]
+
+{% highlight java %}
+public int maxNumEdgesToRemove(int n, int[][] edges) {
+    // prioritizes Type 3
+    Arrays.sort(edges, Comparator.comparingInt(e -> -e[0]));
+
+    UnionFind alice = new UnionFind(n), bob = new UnionFind(n);
+
+    // count of added edges
+    int count = 0;
+    for (int[] e : edges) {
+        switch (e[0]) {
+            case 1:
+                if (alice.union(e[1], e[2])) {
+                    count++;
+                }
+                break;
+            case 2:
+                if (bob.union(e[1], e[2])) {
+                    count++;
+                }
+                break;
+            case 3:
+                // no short-circuit
+                if (alice.union(e[1], e[2]) | bob.union(e[1], e[2])) {
+                    count++;
+                }
+                break;
+        }
+    }
+
+    return alice.isFullyConnected() && bob.isFullyConnected() ? edges.length - count : -1;
+}
+
+class UnionFind {
+    int[] parents;
+    int components;
+
+    public UnionFind(int n) {
+        this.parents = new int[n + 1];
+        Arrays.fill(parents, -1);
+        this.components = n;
+    }
+
+    private boolean union(int u, int v) {
+        int pu = find(u), pv = find(v);
+
+        if (pu == pv) {
+            return false;
+        }
+
+        parents[pu] = pv;
+        components--;
+
+        return true;
+    }
+
+    private int find(int u) {
+        // path compression
+        int p = parents[u];
+        if (p < 0) {
+            return u;
+        }
+        return parents[u] = find(p);
+    }
+
+    private boolean isFullyConnected() {
+        return components == 1;
+    }
+}
+{% endhighlight %}
+
 [Rank Transform of a Matrix][rank-transform-of-a-matrix]
 
 {% highlight java %}
@@ -543,3 +616,4 @@ private int indexOf(int i, int j, Triangle t) {
 [redundant-connection]: https://leetcode.com/problems/redundant-connection/
 [redundant-connection-ii]: https://leetcode.com/problems/redundant-connection-ii/
 [regions-cut-by-slashes]: https://leetcode.com/problems/regions-cut-by-slashes/
+[remove-max-number-of-edges-to-keep-graph-fully-traversable]: https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/

@@ -414,6 +414,42 @@ public int minDays(int n) {
 }
 {% endhighlight %}
 
+[Minimum Number of People to Teach][minimum-number-of-people-to-teach]
+
+{% highlight java %}
+public int minimumTeachings(int n, int[][] languages, int[][] friendships) {
+    int m = languages.length;
+    // language set for each user
+    Set<Integer>[] ls = new Set[m + 1];
+    for (int i = 1; i <= m; i++) {
+        ls[i] = new HashSet<>();
+    }
+    for (int i = 0; i < m; i++) {
+        ls[i + 1] = Arrays.stream(languages[i]).boxed().collect(Collectors.toSet());
+    }
+
+    // finds the set of people who can't communicate with at least one friend
+    Set<Integer> set = new HashSet<>();
+    for (int[] f : friendships) {
+        if (Collections.disjoint(ls[f[0]], ls[f[1]])) {
+            set.add(f[0]);
+            set.add(f[1]);
+        }
+    }
+
+    // finds the count of users in the set that speak each language
+    int[] userCount = new int[n + 1];
+    for (int u : set) {
+        for (int l : languages[u - 1]) {
+            userCount[l]++;
+        }
+    }
+
+    // finds the language that most people know
+    return set.size() - Arrays.stream(userCount).max().getAsInt();
+}
+{% endhighlight %}
+
 [broken-calculator]: https://leetcode.com/problems/broken-calculator/
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [hand-of-straights]: https://leetcode.com/problems/hand-of-straights/
@@ -424,6 +460,7 @@ public int minDays(int n) {
 [minimum-factorization]: https://leetcode.com/problems/minimum-factorization/
 [minimum-initial-energy-to-finish-tasks]: https://leetcode.com/problems/minimum-initial-energy-to-finish-tasks/
 [minimum-number-of-days-to-eat-n-oranges]: https://leetcode.com/problems/minimum-number-of-days-to-eat-n-oranges/
+[minimum-number-of-people-to-teach]: https://leetcode.com/problems/minimum-number-of-people-to-teach/
 [put-boxes-into-the-warehouse-i]: https://leetcode.com/problems/put-boxes-into-the-warehouse-i/
 [split-array-into-consecutive-subsequences]: https://leetcode.com/problems/split-array-into-consecutive-subsequences/
 [strong-password-checker]: https://leetcode.com/problems/strong-password-checker/

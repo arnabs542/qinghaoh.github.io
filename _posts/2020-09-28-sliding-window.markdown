@@ -145,6 +145,31 @@ public int longestSubarray(int[] nums, int limit) {
 }
 {% endhighlight %}
 
+[Frequency of the Most Frequent Element][frequency-of-the-most-frequent-element]
+
+{% highlight java %}
+public int maxFrequency(int[] nums, int k) {
+    Arrays.sort(nums);
+
+    // sliding window, never shrinks
+    // k + sum >= size * max
+    int i = 0, j = 0;
+    long kl = k;
+    while (j < nums.length) {
+        kl += nums[j];
+
+        if (kl < (long)nums[j] * (j - i + 1)) {
+            kl -= nums[i++];
+        }
+        j++;
+    }
+
+    // [i, j) is a sliding window.
+    // its span memorizes the max range so far
+    return j - i;
+}
+{% endhighlight %}
+
 ## At Most K Different Elements
 
 ### Count
@@ -692,6 +717,7 @@ public int[] numMovesStonesII(int[] stones) {
 [count-number-of-nice-subarrays]: https://leetcode.com/problems/count-number-of-nice-subarrays/
 [find-all-anagrams-in-a-string]: https://leetcode.com/problems/find-all-anagrams-in-a-string/
 [find-k-th-smallest-pair-distance]: https://leetcode.com/problems/find-k-th-smallest-pair-distance/
+[frequency-of-the-most-frequent-element]: https://leetcode.com/problems/frequency-of-the-most-frequent-element/
 [fruit-into-baskets]: https://leetcode.com/problems/fruit-into-baskets/
 [get-equal-substrings-within-budget]: https://leetcode.com/problems/get-equal-substrings-within-budget/
 [k-empty-slots]: https://leetcode.com/problems/k-empty-slots/

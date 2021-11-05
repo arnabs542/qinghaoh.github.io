@@ -24,6 +24,46 @@ Two pointers: `O(n)`
 
 Sort + O(n) * Two pointers: `O(n ^ 2)`
 
+{% highlight java %}
+public List<List<Integer>> threeSum(int[] nums) {
+    Arrays.sort(nums);
+
+    int n = nums.length;
+    List<List<Integer>> list = new ArrayList<>(); 
+    for (int i = 0; i < n - 2; i++) {
+        // the array is sosrted
+        if (nums[i] > 0) {
+            break;
+        }
+
+        // skips duplicates
+        if (i == 0 || (i > 0 && nums[i - 1] != nums[i])) {
+            int left = i + 1, right = n - 1, sum = -nums[i];
+            while (left < right) {
+                if (nums[left] + nums[right] == sum) {
+                    list.add(Arrays.asList(nums[i], nums[left], nums[right]));
+
+                    // skips duplicates
+                    while (left < right && nums[left] == nums[left + 1]) {
+                        left++;
+                    }
+                    while (left < right && nums[right - 1] == nums[right]) {
+                        right--;
+                    }
+                    left++;
+                    right--;
+                } else if (nums[left] + nums[right] < sum) {
+                    left++;
+                } else {
+                    right--;
+                }
+           }
+        }
+    }
+    return list;
+}
+{% endhighlight %}
+
 [3Sum Smaller][3sum-smaller]
 
 [3Sum Closest][3sum-closest]

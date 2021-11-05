@@ -359,10 +359,38 @@ public String pushDominoes(String dominoes) {
 
 LL.RR.LLRRLL..
 ```
+
+[Get the Maximum Score][get-the-maximum-score]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int maxSum(int[] nums1, int[] nums2) {
+    int i = 0, j = 0, n = nums1.length, m = nums2.length;
+    // sum of elements between the knots (comment elements) on each path
+    long dp1 = 0, dp2 = 0;
+    while (i < n || j < m) {
+        if (i < n && (j == m || nums1[i] < nums2[j])) {
+            dp1 += nums1[i++];
+        } else if (j < m && (i == n || nums1[i] > nums2[j])) {
+            dp2 += nums2[j++];
+        } else {
+            // common elements
+            // resets both sums to the same value
+            dp1 = dp2 = Math.max(dp1, dp2) + nums1[i];
+            i++;
+            j++;
+        }
+    }
+    return (int)(Math.max(dp1, dp2) % MOD);
+}
+{% endhighlight %}
+
 [backspace-string-compare]: https://leetcode.com/problems/backspace-string-compare/
 [container-with-most-water]: https://leetcode.com/problems/container-with-most-water/
 [count-substrings-that-differ-by-one-character]: https://leetcode.com/problems/count-substrings-that-differ-by-one-character/
 [count-unique-characters-of-all-substrings-of-a-given-string]: https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/
+[get-the-maximum-score]: https://leetcode.com/problems/get-the-maximum-score/
 [intersection-of-three-sorted-arrays]: https://leetcode.com/problems/intersection-of-three-sorted-arrays/
 [maximum-score-of-a-good-subarray]: https://leetcode.com/problems/maximum-score-of-a-good-subarray/
 [number-of-subsequences-that-satisfy-the-given-sum-condition]: https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/

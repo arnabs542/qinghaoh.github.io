@@ -30,7 +30,7 @@ Null elements are prohibited.
 * [boolean contains(Object o)](https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html#contains-java.lang.Object-)
 
 # Collections
-* [public static boolean disjoint(Collection\<?\> c1, Collection\<?\> c2)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#disjoint-java.util.Collection-java.util.Collection-)
+* [public static boolean disjoint(Collection\<?\> c1, Collection\<?\> c2)](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/util/Collections.html#disjoint(java.util.Collection,java.util.Collection))
 * [public static final \<T\> List\<T\> emptyList()](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#emptyList--): immutable
 * [public static \<T\> void fill(List\<? super T\> list, T obj)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#fill-java.util.List-T-)
 * [public static int frequency(Collection\<?\> c, Object o)](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#frequency-java.util.Collection-java.lang.Object-)

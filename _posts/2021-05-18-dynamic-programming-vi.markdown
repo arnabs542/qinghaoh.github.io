@@ -416,11 +416,42 @@ public int minCost(int[] houses, int[][] cost, int m, int n, int target) {
 }
 {% endhighlight %}
 
+# Fractional DP
+
+[Minimum Skips to Arrive at Meeting On Time][minimum-skips-to-arrive-at-meeting-on-time]
+
+{% highlight java %}
+public int minSkips(int[] dist, int speed, int hoursBefore) {
+    int n = dist.length;
+    // dp[i][j]: minimum arriving time * speed when we have travelled i roads and skipped j rests
+    long[][] dp = new long[n + 1][n + 1];
+
+    for (int j = 0; j <= n; j++) {
+        for (int i = 0; i < n; i++) {
+            // no skip, ceil
+            dp[i + 1][j] = (dp[i][j] + dist[i] + speed - 1) / speed * speed;
+
+            // skips current rest at i-th road
+            if (j > 0) {
+                dp[i + 1][j] = Math.min(dp[i + 1][j], dist[i] + dp[i][j - 1]);
+            }
+        }
+
+        // min skips to arrive with time <= hoursBefore
+        if (dp[n][j] <= speed * hoursBefore) {
+            return j;
+        }
+    }
+    return -1;
+}
+{% endhighlight %}
+
 [best-team-with-no-conflicts]: https://leetcode.com/problems/best-team-with-no-conflicts/
 [build-array-where-you-can-find-the-maximum-exactly-k-comparisons]: https://leetcode.com/problems/build-array-where-you-can-find-the-maximum-exactly-k-comparisons/
 [frog-jump]: https://leetcode.com/problems/frog-jump/
 [make-the-xor-of-all-segments-equal-to-zero]: https://leetcode.com/problems/make-the-xor-of-all-segments-equal-to-zero/
 [maximum-height-by-stacking-cuboids]: https://leetcode.com/problems/maximum-height-by-stacking-cuboids/
+[minimum-skips-to-arrive-at-meeting-on-time]: https://leetcode.com/problems/minimum-skips-to-arrive-at-meeting-on-time/
 [number-of-music-playlists]: https://leetcode.com/problems/number-of-music-playlists/
 [number-of-ways-to-rearrange-sticks-with-k-sticks-visible]: https://leetcode.com/problems/number-of-ways-to-rearrange-sticks-with-k-sticks-visible/
 [paint-house-iii]: https://leetcode.com/problems/paint-house-iii/

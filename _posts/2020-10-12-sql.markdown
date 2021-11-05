@@ -1479,6 +1479,45 @@ GROUP BY
 ;
 {% endhighlight %}
 
+## LEFT JOIN
+
+{% highlight sql %}
+WITH Friends AS (
+    SELECT
+        user1_id,
+        user2_id
+    FROM
+        Friendship
+    UNION
+    SELECT
+        user2_id AS user1_id,
+        user1_id AS user2_id
+    FROM
+        Friendship
+)
+
+SELECT
+    user1_id AS user_id,
+    l1.page_id,
+    COUNT(DISTINCT user2_id) as friends_likes
+FROM
+    Friends
+JOIN
+    Likes l1
+    -- friend likes the page
+    ON user2_id = l1.user_id
+LEFT JOIN
+    Likes l2
+    ON user1_id = l2.user_id AND l1.page_id = l2.page_id
+WHERE
+    -- user doesn't like the page
+    l2.page_id is NULL
+GROUP BY
+    user_id,
+    page_id
+;
+{% endhighlight %}
+
 ## CROSS JOIN
 
 Cartesian Product
@@ -1578,7 +1617,8 @@ WITH Friends AS (
     FROM
         Friendship
     UNION
-    SELECT user2_id AS user1_id,
+    SELECT
+        user2_id AS user1_id,
         user1_id AS user2_id
     FROM
         Friendship
@@ -1899,12 +1939,14 @@ FROM
 ;
 {% endhighlight %}
 
+Find max/min
+
 [Group Employees of the Same Salary][group-employees-of-the-same-salary]
 
 {% highlight sql %}
 SELECT
     *,
-    DENSE_RANK() OVER(ORDER BY salary) team_id
+    DENSE_RANK() OVER(ORDER BY salary) AS team_id
 FROM
     Employees
 WHERE

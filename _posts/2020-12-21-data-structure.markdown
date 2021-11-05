@@ -20,14 +20,18 @@ stack and minStack
 
 [Design A Leaderboard][design-a-leaderboard]
 
-* Map
-* TreeMap
+Map + TreeMap
 
 [All O`one Data Structure][all-oone-data-structure]
 
-* Doubly linked list (buckets)
-* Map (key -> count)
-* Map (count -> bucket)
+Doubly linked list (buckets)
++ Map (key -> count)
++ Map (count -> bucket)
+
+[Dinner Plate Stacks][dinner-plate-stacks]
+
+* List<Stack> + PriorityQueue to find the leftmost available stack
+* Map<Integer, Stack> + Set of available stacks
 
 [Find Median from Data Stream][find-median-from-data-stream]
 
@@ -502,6 +506,7 @@ class Skiplist {
 [design-movie-rental-system]: https://leetcode.com/problems/design-movie-rental-system/
 [design-phone-directory]: https://leetcode.com/problems/design-phone-directory/
 [design-skiplist]: https://leetcode.com/problems/design-skiplist/
+[dinner-plate-stacks]: https://leetcode.com/problems/dinner-plate-stacks/
 [find-median-from-data-stream]: https://leetcode.com/problems/find-median-from-data-stream/
 [lfu-cache]: https://leetcode.com/problems/lfu-cache/
 [lru-cache]: https://leetcode.com/problems/lru-cache/
