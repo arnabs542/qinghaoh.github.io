@@ -161,6 +161,57 @@ public int validSubarrays(int[] nums) {
 }
 {% endhighlight %}
 
+[Jump Game V][jump-game-v]
+
+It's easy to come up with an `O(nd)` top-down DP solution.
+
+{% highlight java %}
+// O(n)
+public int maxJumps(int[] arr, int d) {
+    int n = arr.length;
+
+    // dp[i]: max number of indices we can visit from index i
+    int[] dp = new int[n];
+    Arrays.fill(dp, 1);
+
+    // stack1 is the main stack
+    Deque<Integer> st1 = new ArrayDeque<>(), st2 = new ArrayDeque<>();
+    for (int i = 0; i <= n; i++) {
+        // stack1 is monotonically decreasing
+        // starts popping stack1 when the next element is greater, or it's the end of the array
+        while (!st1.isEmpty() && (i == n || arr[i] > arr[st1.peek()])) {
+            // top of the stack
+            int top = arr[st1.peek()];
+
+            // pops all indices in the stack whose elements equal top
+            while (!st1.isEmpty() && top == arr[st1.peek()]) {
+                // i -> j is a valid jump
+                int j = st1.pop();
+                if (i < n && i - j <= d) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+
+                // pushes the current index to the stack2
+                st2.push(j);
+            }
+
+            // stack2 stores all the indices whose elements equal the previous stack1.top
+            // pops and processes each
+            while (!st2.isEmpty()) {
+                int j = st2.pop();
+                // current stack1.top -> previous top is a valid jump
+                if (!st1.isEmpty() && j - st1.peek() <= d) {
+                    dp[st1.peek()] = Math.max(dp[st1.peek()], dp[j] + 1);
+                }
+            }
+        }
+        st1.push(i);
+    }
+
+    return Arrays.stream(dp).max().getAsInt();
+}
+{% endhighlight %}
+
 ## Previous/Next Less/Greater Element
 
 ### Templates
@@ -843,6 +894,7 @@ public int calculate(String s) {
 [final-prices-with-a-special-discount-in-a-shop]: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/
 [find-the-most-competitive-subsequence]: https://leetcode.com/problems/find-the-most-competitive-subsequence/
 [flatten-nested-list-iterator]: https://leetcode.com/problems/flatten-nested-list-iterator/
+[jump-game-v]: https://leetcode.com/problems/jump-game-v/
 [largest-rectangle-in-histogram]: https://leetcode.com/problems/largest-rectangle-in-histogram/
 [longest-valid-parentheses]: https://leetcode.com/problems/longest-valid-parentheses/
 [maximal-rectangle]: https://leetcode.com/problems/maximal-rectangle/

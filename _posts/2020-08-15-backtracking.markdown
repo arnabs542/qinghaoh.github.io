@@ -213,6 +213,43 @@ private int backtrack(int[] count) {
 }
 {% endhighlight %}
 
+[Maximum Score Words Formed by Letters][maximum-score-words-formed-by-letters]
+
+{% highlight java %}
+public int maxScoreWords(String[] words, char[] letters, int[] score) {
+    int[] count = new int[score.length];
+    for (char c : letters) {
+        count[c - 'a']++;
+    }
+    return backtrack(words, count, score, 0);
+}
+
+private int backtrack(String[] words, int[] count, int[] score, int index) {
+    int max = 0;
+    for (int i = index; i < words.length; i++) {
+        int sum = 0;
+        boolean isValid = true;
+        for (char c : words[i].toCharArray()) {
+            if (count[c - 'a']-- == 0) {
+                isValid = false;
+            }
+            sum += score[c - 'a'];
+        }
+
+        if (isValid) {
+            sum += backtrack(words, count, score, i + 1);
+            max = Math.max(sum, max);
+        }
+
+        for (char c : words[i].toCharArray()) {
+            count[c - 'a']++;
+            sum = 0;
+        }
+    }
+    return max;
+}
+{% endhighlight %}
+
 [Combination Sum][combination-sum]
 
 {% highlight java %}
@@ -924,6 +961,7 @@ private String serialize(int[] freq) {
 [generalized-abbreviation]: https://leetcode.com/problems/generalized-abbreviation/
 [letter-tile-possibilities]: https://leetcode.com/problems/letter-tile-possibilities/
 [matchsticks-to-square]: https://leetcode.com/problems/matchsticks-to-square/
+[maximum-score-words-formed-by-letters]: https://leetcode.com/problems/maximum-score-words-formed-by-letters/
 [optimal-account-balancing]: https://leetcode.com/problems/optimal-account-balancing/
 [palindrome-partitioning]: https://leetcode.com/problems/palindrome-partitioning/
 [palindrome-permutation-ii]: https://leetcode.com/problems/palindrome-permutation-ii/

@@ -216,25 +216,57 @@ private int updateCounters(int[] nums, int index) {
 [Subarrays with K Different Integers][subarrays-with-k-different-integers]
 
 {% highlight java %}
-public int subarraysWithKDistinct(int[] A, int K) {
-    return atMost(A, K) - atMost(A, K - 1);
+public int subarraysWithKDistinct(int[] nums, int k) {
+    return atMost(nums, k) - atMost(nums, k - 1);
 }
 
-private int atMost(int[] A, int K) {
-    int[] count = new int[A.length + 1];
+private int atMost(int[] nums, int k) {
+    int n = nums.length;
+    int[] count = new int[n + 1];
     int i = 0, j = 0, result = 0;
-    while (j < A.length) {
-        if (count[A[j++]]++ == 0) {
-            K--;
+    while (j < n) {
+        if (count[nums[j++]]++ == 0) {
+            k--;
         }
 
-        while (K < 0) {
-            if (--count[A[i++]] == 0) {
-                K++;
+        while (k < 0) {
+            if (--count[nums[i++]] == 0) {
+                k++;
             }
         }
 
         result += j - i;
+    }
+    return result;
+}
+{% endhighlight %}
+
+[Count Vowel Substrings of a String][count-vowel-substrings-of-a-string]
+
+{% highlight java %}
+public int countVowelSubstrings(String word) {
+    return atMost(word, 5) - atMost(word, 4);
+}
+
+private int atMost(String word, int k) {
+    Map<Character, Integer> count = new HashMap<>();
+    int i = 0, j = 0, result = 0;
+    while (j < word.length()) {
+        char cj = word.charAt(j);
+        if ("aeiou".indexOf(cj) < 0) {
+            i = ++j;
+            count.clear();
+            continue;
+        }
+
+        count.put(cj, count.getOrDefault(cj, 0) + 1);
+        while (count.size() > k) {
+            char ci = word.charAt(i);
+            count.put(ci, count.get(ci) - 1);
+            count.remove(ci, 0);
+            i++;
+        }
+        result += ++j - i;
     }
     return result;
 }
@@ -715,6 +747,7 @@ public int[] numMovesStonesII(int[] stones) {
 {% endhighlight %}
 
 [count-number-of-nice-subarrays]: https://leetcode.com/problems/count-number-of-nice-subarrays/
+[count-vowel-substrings-of-a-string]: https://leetcode.com/problems/count-vowel-substrings-of-a-string/
 [find-all-anagrams-in-a-string]: https://leetcode.com/problems/find-all-anagrams-in-a-string/
 [find-k-th-smallest-pair-distance]: https://leetcode.com/problems/find-k-th-smallest-pair-distance/
 [frequency-of-the-most-frequent-element]: https://leetcode.com/problems/frequency-of-the-most-frequent-element/

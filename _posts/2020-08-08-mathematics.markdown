@@ -261,6 +261,8 @@ C_{n}={\frac {1}{n+1}}{2n \choose n}={\frac {(2n)!}{(n+1)!\,n!}}=\prod \limits _
 C_{0}=1\quad {\text{and}}\quad C_{n+1}={\frac {2(2n+1)}{n+2}}C_{n}
 \\]
 
+[Unique Binary Search Trees][unique-binary-search-trees]
+
 [Handshakes That Don't Cross][handshakes-that-dont-cross]
 
 ```
@@ -705,3 +707,4 @@ public int numSquares(int n) {
 [robot-bounded-in-circle]: https://leetcode.com/problems/robot-bounded-in-circle/
 [smallest-good-base]: https://leetcode.com/problems/smallest-good-base/
 [sparse-matrix-multiplication]: https://leetcode.com/problems/sparse-matrix-multiplication/
+[unique-binary-search-trees]: https://leetcode.com/problems/unique-binary-search-trees/

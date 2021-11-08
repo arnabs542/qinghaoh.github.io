@@ -312,7 +312,7 @@ public TreeNode constructMaximumBinaryTree(int[] nums) {
     for (int num : nums) {
         TreeNode node = new TreeNode(num);
         // monotonically decreasing
-        while (!st.isEmpty() && st.peek().val < num) {
+        while (!st.isEmpty() && num > st.peek().val) {
             node.left = st.pop();
         }
         if (!st.isEmpty()) {

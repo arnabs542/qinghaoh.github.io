@@ -236,6 +236,54 @@ private String transform(String s) {
 }
 {% endhighlight %}
 
+# Run-length encoding
+
+[Run-length encoding (RLE)](https://en.wikipedia.org/wiki/Run-length_encoding): a form of lossless data compression in which runs of data (sequences in which the same data value occurs in many consecutive data elements) are stored as a single data value and count, rather than as the original run.
+
+[String Compression II][string-compression-ii]
+
+{% highlight java %}
+public int getLengthOfOptimalCompression(String s, int k) {
+    int n = s.length();
+    // dp[i][j]: i-th character and j characters are deleted
+    int[][] dp = new int[n + 1][k + 2];
+    for (int i = 0; i < dp.length; i++){
+        Arrays.fill(dp[i], n + 1);
+    }
+    dp[0][0] = 0;
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 0; j <= k; j++) {
+            // deletes current character
+            dp[i][j + 1] = Math.min(dp[i][j + 1], dp[i - 1][j]);
+
+            // checks how far it can go to delete every character that is not the same to the i-th character
+            // while making sure the total deletion <= k
+            int count = 0, deletion = 0;
+            for (int l = i; l <= n; l++) {
+                if (s.charAt(i - 1) == s.charAt(l - 1)) {
+                    count++;
+                } else {
+                    deletion++;
+                }
+
+                // more deletions than allowed
+                if (j + deletion > k) {
+                    break;
+                }
+
+                // length of the string representation of count
+                int length = count == 1 ? 0 : (int)Math.log10(count) + 1;
+
+                // +1 is the current character s.charAt(i)
+                dp[l][j + deletion] = Math.min(dp[l][j + deletion], dp[i - 1][j] + 1 + length);
+            }
+        }
+    }
+    return dp[n][k];
+}
+{% endhighlight %}
+
 [construct-binary-tree-from-string]: https://leetcode.com/problems/construct-binary-tree-from-string/
 [encode-and-decode-strings]: https://leetcode.com/problems/encode-and-decode-strings/
 [encode-and-decode-tinyurl]: https://leetcode.com/problems/encode-and-decode-tinyurl/
@@ -244,3 +292,4 @@ private String transform(String s) {
 [isomorphic-strings]: https://leetcode.com/problems/isomorphic-strings/
 [serialize-and-deserialize-binary-tree]: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
 [serialize-and-deserialize-n-ary-tree]: https://leetcode.com/problems/serialize-and-deserialize-n-ary-tree/
+[string-compression-ii]: https://leetcode.com/problems/string-compression-ii/

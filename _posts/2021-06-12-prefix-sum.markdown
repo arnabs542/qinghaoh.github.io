@@ -266,6 +266,85 @@ public int maxNonOverlapping(int[] nums, int target) {
 }
 {% endhighlight %}
 
+[Number of Ways to Separate Numbers][number-of-ways-to-separate-numbers]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int numberOfCombinations(String num) {
+    int n = num.length();
+    if (num.charAt(0) == '0') {
+        return 0;
+    }
+
+    // lcp[i][j]: length of the long common prefix of s.substring(i) and s.substring(j)
+    int[][] lcp = new int[n + 1][n + 1];
+    for (int i = n - 1; i >= 0 ; i--) {
+        for (int j = n - 1; j >= 0; j--) {
+            if (num.charAt(i) == num.charAt(j)) {
+                lcp[i][j] = lcp[i + 1][j + 1] + 1;
+            }
+        }
+    }
+
+    // dp[i][j]: number of ways when the last number is num[i, j]
+    // len = j - i + 1, length of the last number
+    // - Case 1:
+    //   second last number has less digits than last number
+    //   dp[i][j] += dp[i - len + 1][i - 1] + ... + dp[i - 1][i - 1]
+    // - Case 2:
+    //   second last number has the same number of digits as last number
+    //   if num[i - length : i - 1] <= num[i : j],
+    //   dp[i][j] += dp[i - length][i - 1]
+
+    // prefix sum:
+    // p[i + 1][j] = dp[0][j] + dp[1][j] ... + dp[i][j]
+    long[][] p = new long[n + 1][n];
+
+    // p[1][j] = dp[0][j] = 1
+    Arrays.fill(p[1], 1);
+
+    // last number is num[i:j]
+    for (int i = 1; i < n; i++) {
+        // no leading zero
+        if (num.charAt(i) == '0') {
+            p[i + 1] = p[i];
+            continue;
+        }
+
+        for (int j = i; j < n; j++) {
+            int len = j - i + 1, prevStart = i - len;
+
+            // number of ways introduced by the current digit
+            long count = 0;
+
+            // start of second last number must be >= 0
+            if (prevStart < 0) {
+                // Case 1 only:
+                // dp[0][i - 1] + dp[1][i - 1] + ... + dp[i - 1][i - 1]
+                // == p[i][i - 1]
+                count += p[i][i - 1];
+            } else {
+                // Case 1:
+                // dp[prevStart][i - 1] + ... + dp[i - 1][i - 1]
+                count += (p[i][i - 1] - p[prevStart + 1][i - 1] + MOD) % MOD;
+
+                // Case 2:
+                if (lcp[prevStart][i] >= len ||  // second last number == last number
+                    // second last number < last number
+                    num.charAt(prevStart + lcp[prevStart][i]) - num.charAt(i + lcp[prevStart][i]) < 0) {
+                    // dp[i - length][i - 1]
+                    long tmp = (p[prevStart + 1][i - 1] - p[prevStart][i - 1] + MOD) % MOD;
+                    count = (count + tmp + MOD) % MOD;
+                }
+            }
+            p[i + 1][j] = (p[i][j] + count) % MOD;
+        }
+    }
+    return (int)p[n][n - 1];
+}
+{% endhighlight %}
+
 ## Bounded Sum
 
 [Max Sum of Rectangle No Larger Than K][max-sum-of-rectangle-no-larger-than-k]
@@ -320,6 +399,7 @@ public int maxSumSubmatrix(int[][] matrix, int k) {
 [maximum-absolute-sum-of-any-subarray]: https://leetcode.com/problems/maximum-absolute-sum-of-any-subarray/
 [maximum-number-of-non-overlapping-subarrays-with-sum-equals-target]: https://leetcode.com/problems/maximum-number-of-non-overlapping-subarrays-with-sum-equals-target/
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
+[number-of-ways-to-separate-numbers]: https://leetcode.com/problems/number-of-ways-to-separate-numbers/
 [product-of-the-last-k-numbers]: https://leetcode.com/problems/product-of-the-last-k-numbers/
 [remove-zero-sum-consecutive-nodes-from-linked-list]: https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/
