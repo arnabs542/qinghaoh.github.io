@@ -594,10 +594,10 @@ private int find(int u) {
 }
 
 private void union(int u, int v) {
-    int uset = find(u), vset = find(v);
+    int pu = find(u), pv = find(v);
 
-    if (uset != vset) {
-        parent[uset] = vset;
+    if (pu != pv) {
+        parent[pu] = pv;
         regions--;
     }
 }
@@ -607,9 +607,37 @@ private int indexOf(int i, int j, Triangle t) {
 }
 {% endhighlight %}
 
+# Size of Each Set
+
+[Minimize Malware Spread][minimize-malware-spread]
+
+{% highlight java %}
+private int[] parents;
+
+public int minMalwareSpread(int[][] graph, int[] initial) {
+    int n = graph.length;
+    this.parents = new int[n];
+    Arrays.fill(parents, -1);
+}
+
+private int find(int u) {
+    return parents[u] < 0 ? u : find(parents[u]);
+}
+
+private void union(int u, int v) {
+    int pu = find(u), pv = find(v);
+    if (pu != pv) {
+        // -parents[i] is the size of set i
+        parents[pv] += parents[pu];
+        parents[pu] = pv;
+    }
+}
+{% endhighlight %}
+
 [checking-existence-of-edge-length-limited-paths]: https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/
 [checking-existence-of-edge-length-limited-paths-ii]: https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths-ii/
 [evaluate-division]: https://leetcode.com/problems/evaluate-division/
+[minimize-malware-spread]: https://leetcode.com/problems/minimize-malware-spread/
 [most-stones-removed-with-same-row-or-column]: https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
 [number-of-connected-components-in-an-undirected-graph]: https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
 [rank-transform-of-a-matrix]: https://leetcode.com/problems/rank-transform-of-a-matrix/

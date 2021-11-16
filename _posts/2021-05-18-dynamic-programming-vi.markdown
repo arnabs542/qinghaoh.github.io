@@ -446,11 +446,154 @@ public int minSkips(int[] dist, int speed, int hoursBefore) {
 }
 {% endhighlight %}
 
+# Stack
+
+[Minimum Difficulty of a Job Schedule][minimum-difficulty-of-a-job-schedule]
+
+{% highlight java %}
+public int minDifficulty(int[] jobDifficulty, int d) {
+    int n = jobDifficulty.length;
+    if (n < d) {
+        return -1;
+    }
+
+    // dp[i][j]: minimum difficulty of a job schedule with jobs[0...j] in (i + 1) days
+    int[][] dp = new int[d][n];
+
+    // one day
+    dp[0][0] = jobDifficulty[0];
+    for (int i = 1; i < n; i++) {
+        dp[0][i] = Math.max(jobDifficulty[i], dp[0][i - 1]);
+    }
+
+    for (int i = 1; i < d; i++) {
+        for (int j = i; j < n; j++) {
+            // max of jobDifficulty[k...j]
+            int max = 0;
+            dp[i][j] = Integer.MAX_VALUE;
+            for (int k = j; k >= i; k--) {
+                max = Math.max(max, jobDifficulty[k]);
+                dp[i][j] = Math.min(dp[i][j], dp[i - 1][k - 1] + max);
+            }
+        }
+    }
+
+    return dp[d - 1][n - 1];
+}
+{% endhighlight %}
+
+Reduced to 1D:
+
+{% highlight java %}
+public int minDifficulty(int[] jobDifficulty, int d) {
+    int n = jobDifficulty.length;
+    if (n < d) {
+        return -1;
+    }
+
+    int[] dp = new int[n];
+
+    // one day
+    dp[0] = jobDifficulty[0];
+    for (int i = 1; i < n; i++) {
+        dp[i] = Math.max(dp[i - 1], jobDifficulty[i]);
+    }
+
+    for (int i = 1; i < d; i++) {
+        for (int j = n - 1; j >= i; j--) {
+            int max = 0;
+            dp[j] = Integer.MAX_VALUE;
+            for (int k = j; k >= i; k--) {
+                max = Math.max(max, jobDifficulty[k]);
+                dp[j] = Math.min(dp[j], dp[k - 1] + max);
+            }
+        }
+    }
+
+    return dp[n - 1];
+}
+{% endhighlight %}
+
+Stack:
+
+{% highlight java %}
+private static final int MAX_JOB_DIFFICULTY = 1000;
+
+// O(nd)
+public int minDifficulty(int[] jobDifficulty, int d) {
+    int n = jobDifficulty.length;
+    if (n < d) {
+        return -1;
+    }
+
+    // rolling DP
+    int[] dp = new int[n], dp2 = new int[n];
+    // initializes dp with max jobDifficulty of each day
+    Arrays.fill(dp, MAX_JOB_DIFFICULTY);
+
+    // with stack, we don't have to try all cuts
+    Deque<Integer> st = new ArrayDeque<>();
+    for (int i = 0; i < d; i++) {
+        // clears the stack
+        st.clear();
+
+        // dp[j]: for i days with j jobs
+        for (int j = i; j < n; j++) {
+            // dp is for the previous day
+            // first, assigns today's job difficulty to dp2[j]
+            // (we could possibly find better solutions with stack later)
+            dp2[j] = jobDifficulty[j] + (j == 0 ? 0 : dp[j - 1]);
+
+            // monotonically decreasing
+            //
+            // Case 1: difficulty of last day is jobDifficulty[top]
+            //
+            //   dp2[j] = dp2[top] + (jobDifficulty[j] - jobDifficulty[top])
+            //   adds the extra difficulity introduced by jobDifficulty[j]
+            //
+            // Case 2: difficulty of last day is jobDifficulty[k],
+            //   where k < top and jobDifficulty[top] <= jobDifficulty[k] <= jobDifficulty[j]
+            //   so dp2[top] = dp2[k]
+            //
+            //   dp2[top] - jobDifficulty[top] + jobDifficulty[j]
+            //   = dp2[k] - jobDifficulty[top] + jobDifficulty[j]
+            //   >= dp2[k] - jobDifficulty[k] + jobDifficulty[j]
+            //   which is already calculated when k was visited
+            while (!st.isEmpty() && jobDifficulty[j] >= jobDifficulty[st.peek()]) {
+                int top = st.pop();
+                dp2[j] = Math.min(dp2[j], dp2[top] - jobDifficulty[top] + jobDifficulty[j]);
+            }
+
+            // Case 3: max of last day is jobDifficulty[k],
+            //   where k < top and jobDifficulty[top] <= jobDifficulty[j] <= jobDifficulty[k] (because top is popped)
+            //   so dp2[top] = dp2[k]
+            //
+            //  st.peek() == k
+            //   dp2[top] - jobDifficulty[top] + jobDifficulty[j]
+            //   = dp2[k] - jobDifficulty[top] + jobDifficulty[j]
+            //   >= dp2[k]
+            if (!st.isEmpty()) {
+                dp2[j] = Math.min(dp2[j], dp2[st.peek()]);
+            }
+
+            st.push(j);
+        }
+
+        // swaps dp and dp2
+        int[] tmp = dp;
+        dp = dp2;
+        dp2 = tmp;
+    }
+    return dp[n - 1];
+}
+{% endhighlight %}
+
 [best-team-with-no-conflicts]: https://leetcode.com/problems/best-team-with-no-conflicts/
 [build-array-where-you-can-find-the-maximum-exactly-k-comparisons]: https://leetcode.com/problems/build-array-where-you-can-find-the-maximum-exactly-k-comparisons/
 [frog-jump]: https://leetcode.com/problems/frog-jump/
 [make-the-xor-of-all-segments-equal-to-zero]: https://leetcode.com/problems/make-the-xor-of-all-segments-equal-to-zero/
 [maximum-height-by-stacking-cuboids]: https://leetcode.com/problems/maximum-height-by-stacking-cuboids/
+[minimum-difficulty-of-a-job-schedule]: https://leetcode.com/problems/minimum-difficulty-of-a-job-schedule/
 [minimum-skips-to-arrive-at-meeting-on-time]: https://leetcode.com/problems/minimum-skips-to-arrive-at-meeting-on-time/
 [number-of-music-playlists]: https://leetcode.com/problems/number-of-music-playlists/
 [number-of-ways-to-rearrange-sticks-with-k-sticks-visible]: https://leetcode.com/problems/number-of-ways-to-rearrange-sticks-with-k-sticks-visible/

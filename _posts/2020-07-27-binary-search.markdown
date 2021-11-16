@@ -774,6 +774,34 @@ private boolean condition(int[] position, int d, int m) {
 }
 {% endhighlight %}
 
+[Divide Chocolate][divide-chocolate]
+
+{% highlight java %}
+public int maximizeSweetness(int[] sweetness, int k) {
+    int low = 1, high = (int)1e9 / (k + 1);
+    while (low < high) {
+        int mid = low + (high - low + 1) / 2;
+        if (condition(sweetness, mid, k)) {
+            low = mid;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return low;
+}
+
+private boolean condition(int[] sweetness, int minTotal, int k) {
+    int sum = 0, pieces = 0;
+    for (int s : sweetness) {
+        if ((sum += s) >= minTotal) {
+            sum = 0;
+            pieces++;
+        }
+    }
+    return pieces - k - 1 >= 0;
+}
+{% endhighlight %}
+
 [Maximum Font to Fit a Sentence in a Screen][maximum-font-to-fit-a-sentence-in-a-screen]
 
 {% highlight java %}
@@ -936,12 +964,53 @@ private boolean condition(int[] stations, int k, double penalty) {
 }
 {% endhighlight %}
 
+## Geometry
+
+[Minimum Time For K Virus Variants to Spread][minimum-time-for-k-virus-variants-to-spread]
+
+{% highlight java %}
+private static final int MAX_POINT = 100;
+
+public int minDayskVariants(int[][] points, int k) {
+    int low = 0, high = MAX_POINT * MAX_POINT;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (condition(points, mid, k)) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return low;
+}
+
+private boolean condition(int[][] points, int days, int k) {
+    for (int x = 1; x <= MAX_POINT; x++) {
+        for (int y = 1; y <= MAX_POINT; y++) {
+            int count = 0;
+            for (int[] p : points) {
+                // Manhattan distance
+                if (days >= Math.abs(x - p[0]) + Math.abs(y - p[1])) {
+                    count++;
+                }
+            }
+            if (count >= k) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+{% endhighlight %}
+
 ## Combination
 
 [Ways to Split Array Into Three Subarrays][ways-to-split-array-into-three-subarrays]
 
 # Java
+
 ## Arrays
+
 [public static \<T\> int binarySearch(T\[\] a, int fromIndex, int toIndex, T key, Comparator\<? super T\> c)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#binarySearch(T%5B%5D,int,int,T,java.util.Comparator))
 
 If the range contains multiple elements equal to the specified object, there is no guarantee which one will be found.
@@ -958,9 +1027,11 @@ if (insertionPoint < 0) {
 {% endhighlight %}
 
 ## Collections
+
 [public static \<T\> int binarySearch(List\<? extends T\> list, T key, Comparator\<? super T\> c)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collections.html#binarySearch(java.util.List,T,java.util.Comparator))
 
 [binary-search]: https://leetcode.com/problems/binary-search/
+[divide-chocolate]: https://leetcode.com/problems/divide-chocolate/
 [find-k-closest-elements]: https://leetcode.com/problems/find-k-closest-elements/
 [find-minimum-in-rotated-sorted-array]: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
 [find-minimum-in-rotated-sorted-array-ii]: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/
@@ -982,6 +1053,7 @@ if (insertionPoint < 0) {
 [maximum-width-ramp]: https://leetcode.com/problems/maximum-width-ramp/
 [minimize-max-distance-to-gas-station]: https://leetcode.com/problems/minimize-max-distance-to-gas-station/
 [minimum-limit-of-balls-in-a-bag]: https://leetcode.com/problems/minimum-limit-of-balls-in-a-bag/
+[minimum-time-for-k-virus-variants-to-spread]: https://leetcode.com/problems/minimum-time-for-k-virus-variants-to-spread/
 [minimum-number-of-days-to-make-m-bouquets]: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/
 [missing-element-in-sorted-array]: https://leetcode.com/problems/missing-element-in-sorted-array/
 [missing-number-in-arithmetic-progression]: https://leetcode.com/problems/missing-number-in-arithmetic-progression/

@@ -3,15 +3,15 @@ layout: post
 title:  "Sliding Window"
 tags: array
 ---
-## Index Map
+# Index Map
 
 [Longest Substring Without Repeating Characters][longest-substring-without-repeating-characters]
 
-## At Most
+# At Most
 
-### Max Length
+## Max Length
 
-#### Template
+### Template
 
 {% highlight java %}
 /**
@@ -170,11 +170,11 @@ public int maxFrequency(int[] nums, int k) {
 }
 {% endhighlight %}
 
-## At Most K Different Elements
+# At Most K Different Elements
 
-### Count
+## Count
 
-#### Template
+### Template
 
 {% highlight java %}
 /**
@@ -390,7 +390,7 @@ private boolean condition(int[] nums, int upper, int k) {
 }
 {% endhighlight %}
 
-## Min Length
+# Min Length
 
 [Minimum Size Subarray Sum][minimum-size-subarray-sum]
 
@@ -512,7 +512,7 @@ public String minWindow(String s1, String s2) {
 }
 {% endhighlight %}
 
-## At Least
+# At Least
 
 [Number of Substrings Containing All Three Characters][number-of-substrings-containing-all-three-characters]
 
@@ -669,7 +669,7 @@ public int minFlips(String s) {
 }
 {% endhighlight %}
 
-## Exact Size
+# Exact Size
 
 [Minimum Operations to Reduce X to Zero][minimum-operations-to-reduce-x-to-zero]
 
@@ -699,7 +699,7 @@ public int minOperations(int[] nums, int x) {
 
 Similar to: [Maximum Size Subarray Sum Equals k][maximum-size-subarray-sum-equals-k]
 
-## Elastic Size
+# Elastic Size
 
 [Moving Stones Until Consecutive II][moving-stones-until-consecutive-ii]
 
@@ -746,8 +746,57 @@ public int[] numMovesStonesII(int[] stones) {
 }
 {% endhighlight %}
 
+[Delivering Boxes from Storage to Ports][delivering-boxes-from-storage-to-ports]
+
+{% highlight java %}
+private static final int MAX_TRIPS = (int)2e5;
+
+public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWeight) {
+    int n = boxes.length;
+    // dp[i]: minimum number of trips to deliver boxes[0, i)
+    int[] dp = new int[n + 1];
+    Arrays.fill(dp, MAX_TRIPS);
+    dp[0] = 0;
+
+    // trips needed to deliver box(i, j]
+    int trips = 0, j = 0, prevJ = 0;
+    for (int i = 0; i < n; i++) {
+        // sliding window
+        while (j < n && maxBoxes > 0 && maxWeight >= boxes[j][1]) {
+            maxBoxes--;
+            maxWeight -= boxes[j][1];
+
+            // current port is different from previous port
+            if (j == 0 || boxes[j][0] != boxes[j - 1][0]) {
+                prevJ = j;
+                trips++;
+            }
+            j++;
+        }
+
+        // delivers boxes[prevJ...j] ('+1')
+        dp[j] = Math.min(dp[j], dp[i] + trips + 1);
+
+        // or, don't deliver boxes[prevJ...j] to save one trip (no '+1')
+        dp[prevJ] = Math.min(dp[prevJ], dp[i] + trips);
+
+        // gets ready to move the left pointer i forward
+        maxBoxes++;
+        maxWeight += boxes[i][1];
+
+        // if after moving the left pointer i forward, the port is different
+        // then the trips between the new i and j needs to decrement by 1
+        if (i < n - 1 && boxes[i][0] != boxes[i + 1][0]) {
+            trips--;
+        }
+    }
+    return dp[n];
+}
+{% endhighlight %}
+
 [count-number-of-nice-subarrays]: https://leetcode.com/problems/count-number-of-nice-subarrays/
 [count-vowel-substrings-of-a-string]: https://leetcode.com/problems/count-vowel-substrings-of-a-string/
+[delivering-boxes-from-storage-to-ports]: https://leetcode.com/problems/delivering-boxes-from-storage-to-ports/
 [find-all-anagrams-in-a-string]: https://leetcode.com/problems/find-all-anagrams-in-a-string/
 [find-k-th-smallest-pair-distance]: https://leetcode.com/problems/find-k-th-smallest-pair-distance/
 [frequency-of-the-most-frequent-element]: https://leetcode.com/problems/frequency-of-the-most-frequent-element/

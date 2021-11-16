@@ -337,6 +337,40 @@ public int longestPalindromeSubseq(String s) {
 }
 {% endhighlight %}
 
+[Palindrome Removal][palindrome-removal]
+
+{% highlight java %}
+public int minimumMoves(int[] arr) {
+    int n = arr.length;
+    // dp[i][j]: minimum number of moves for arr[i...j]
+    int[][] dp = new int[n][n];
+
+    for (int i = 0; i < n; i++) {
+        dp[i][i] = 1;
+    }
+
+    for (int i = 0; i < n - 1; i++) {
+        dp[i][i + 1] = arr[i] == arr[i + 1] ? 1 : 2;
+    }
+
+    for (int len = 3; len <= n; len++) {
+        for (int i = 0, j = i + len - 1; j < n; i++, j++) {
+            dp[i][j] = Integer.MAX_VALUE;
+
+            if (arr[i] == arr[j]) {
+                dp[i][j] = dp[i + 1][j - 1];
+            }
+
+            for (int k = i; k < j; k++) {
+                dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k + 1][j]);
+            }
+        }
+    }
+
+    return dp[0][n - 1];
+}
+{% endhighlight %}
+
 [Maximize Palindrome Length From Subsequences][maximize-palindrome-length-from-subsequences]
 
 {% highlight java %}

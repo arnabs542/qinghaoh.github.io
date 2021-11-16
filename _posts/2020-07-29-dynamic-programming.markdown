@@ -346,6 +346,52 @@ public int makeArrayIncreasing(int[] arr1, int[] arr2) {
 
 # Reverse
 
+[Coin Path][coin-path]
+
+{% highlight java %}
+public List<Integer> cheapestJump(int[] coins, int maxJump) {
+    int n = coins.length;
+    List<Integer> path = new ArrayList<>();
+    if (coins[n - 1] < 0){
+        return path;
+    }
+
+    // dp[i]: cost from coins[i] to coins[n - 1]
+    int[] dp = new int[n], next = new int[n];
+    Arrays.fill(dp, Integer.MAX_VALUE);
+    Arrays.fill(next, -1);
+
+    dp[n - 1] = coins[n - 1];
+
+    // reverse order
+    for (int i = n - 2; i >= 0; i--) {
+        if (coins[i] == -1) {
+            continue;
+        }
+
+        for (int j = i + 1; j <= Math.min(i + maxJump, n - 1); j++) {
+            // strict > guarantees lexicographical order
+            if (dp[i] > dp[j] + coins[i] && dp[j] != Integer.MAX_VALUE) {
+                dp[i] = dp[j] + coins[i];
+                next[i] = j;
+            }
+        }
+    }
+
+    if (dp[0] == Integer.MAX_VALUE) {
+        return path;
+    }
+
+    int index = 0;
+    while (index != -1) {
+        path.add(index + 1);
+        index = next[index];
+    }
+    return path;
+}
+{% endhighlight %}
+
+
 [Freedom Trail][freedom-trail]
 
 {% highlight java %}
@@ -428,6 +474,7 @@ private int[][] preProcess(String r, int orientation) {
 }
 {% endhighlight %}
 
+[coin-path]: https://leetcode.com/problems/coin-path/
 [delete-operation-for-two-strings]: https://leetcode.com/problems/delete-operation-for-two-strings/
 [distinct-subsequences]: https://leetcode.com/problems/distinct-subsequences/
 [edit-distance]: https://leetcode.com/problems/edit-distance/

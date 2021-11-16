@@ -4,6 +4,50 @@ title:  "Bit Mask"
 tags: math
 usemathjax: true
 ---
+# Iteration
+
+[Iterator for Combination][iterator-for-combination]
+
+{% highlight java %}
+class CombinationIterator {
+    private int bitmask = 0, n = 0, k = 0;
+    private String characters;
+
+    public CombinationIterator(String characters, int combinationLength) {
+        this.characters = characters;
+        this.n = characters.length();
+        this.k = combinationLength;
+
+        // 1(k)0(n - k)
+        this.bitmask = (1 << n) - (1 << (n - k));
+    }
+
+    public String next() {
+        // converts bitmask into combination
+        // 111 --> "abc", 000 --> ""
+        // 110 --> "ab", 101 --> "ac", 011 --> "bc"
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            if ((bitmask & (1 << (n - i - 1))) != 0) {
+                sb.append(characters.charAt(i));
+            }
+        }
+
+        // generates next bitmask
+        bitmask--;
+        while (bitmask > 0 && Integer.bitCount(bitmask) != k) {
+            bitmask--;
+        }
+
+        return sb.toString();
+    }
+
+    public boolean hasNext() {
+        return bitmask > 0;
+    }
+}
+{% endhighlight %}
+
 # Set Cover Problem
 
 [Set cover problem](https://en.wikipedia.org/wiki/Set_cover_problem): NP-complete
@@ -316,7 +360,8 @@ int dfs(List<Integer>[] h2p, int n, int hat, int mask, Integer[][] memo) {
 {% endhighlight %}
 
 [distribute-repeating-integers]: https://leetcode.com/problems/distribute-repeating-integers/
-[partition-to-k-equal-sum-subsets]: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
+[iterator-for-combination]: https://leetcode.com/problems/iterator-for-combination/
 [minimum-xor-sum-of-two-arrays]: https://leetcode.com/problems/minimum-xor-sum-of-two-arrays/
 [number-of-ways-to-wear-different-hats-to-each-other]: https://leetcode.com/problems/number-of-ways-to-wear-different-hats-to-each-other/
+[partition-to-k-equal-sum-subsets]: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
 [smallest-sufficient-team]: https://leetcode.com/problems/smallest-sufficient-team/

@@ -2,7 +2,7 @@
 layout: post
 title:  "Prefix Sum"
 ---
-## Template
+# Template
 
 {% highlight java %}
 int[] p = new int[n + 1];
@@ -11,7 +11,7 @@ for (int i = 0: i < n; i++) {
 }
 {% endhighlight %}
 
-## Basic
+# Basic
 
 [Subarray Sum Equals K][subarray-sum-equals-k]
 
@@ -80,8 +80,8 @@ public int findMaxLength(int[] nums) {
 }
 {% endhighlight %}
 
-## Variants
-### Multi-dimension
+# Variants
+## Multi-dimension
 
 [Sum of Beauty of All Substrings][sum-of-beauty-of-all-substrings]
 
@@ -94,7 +94,7 @@ for (int i = 0; i < n; i++) {
 }
 {% endhighlight %}
 
-### Exclusive Or
+## Exclusive Or
 
 [Count Triplets That Can Form Two Arrays of Equal XOR][count-triplets-that-can-form-two-arrays-of-equal-xor]
 
@@ -118,7 +118,7 @@ public List<Boolean> canMakePaliQueries(String s, int[][] queries) {
 }
 {% endhighlight %}
 
-### Product
+## Product
 
 [Product of the Last K Numbers][product-of-the-last-k-numbers]
 
@@ -145,7 +145,40 @@ public int getProduct(int k) {
 }
 {% endhighlight %}
 
-### Linked List
+## Mod
+
+[Make Sum Divisible by P][make-sum-divisible-by-p]
+
+{% highlight java %}
+public int minSubarray(int[] nums, int p) {
+    int n = nums.length;
+
+    int r = 0;
+    for (int num : nums) {
+        r = (r + num) % p;
+    }
+    if (r == 0) {
+        return 0;
+    }
+
+    // index
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(0, -1);
+
+    int min = n, m = 0;
+    for (int i = 0; i < n; i++) {
+        m = (m + nums[i] % p) % p;
+        int d = (m - r + p) % p;
+        if (map.containsKey(d)) {
+            min = Math.min(min, i - map.get(d));
+        }
+        map.put(m, i);
+    }
+    return min == n ? -1 : min;
+}
+{% endhighlight %}
+
+## Linked List
 
 [Remove Zero Sum Consecutive Nodes from Linked List][remove-zero-sum-consecutive-nodes-from-linked-list]
 
@@ -180,7 +213,7 @@ public ListNode removeZeroSumSublists(ListNode head) {
 abs(subarray) = p[i] - p[j] <= max(p) - min(p)
 ```
 
-## Rolling Prefix Sum
+# Rolling Prefix Sum
 
 [Maximize the Beauty of the Garden][maximize-the-beauty-of-the-garden]
 
@@ -242,7 +275,49 @@ public int minCharacters(String a, String b) {
 }
 {% endhighlight %}
 
-## Dynamic Programming
+# Pre-computation
+
+[Sum Of Special Evenly-Spaced Elements In Array][sum-of-special-evenly-spaced-elements-in-array]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int[] solve(int[] nums, int[][] queries) {
+    int n = nums.length;
+
+    // pre-computation (y ^ 2 <= n)
+    int sqrtn = (int)Math.sqrt(n) + 1;
+    // map[i][j]: when y == i, the answer from j to the end
+    int[][] map = new int[sqrtn][n];
+    for (int i = 1; i * i <= n; i++) {
+        for (int j = n - 1; j >= 0; j--) {
+            if (i + j >= n) {
+                map[i][j] = nums[j];
+            } else {
+                // sums backwards
+                map[i][j] = (map[i][i + j] + nums[j]) % MOD;
+            }
+        }
+    }
+
+    int m = queries.length;
+    int[] answer = new int[m];
+    for(int i = 0; i < m; i++) {
+        int x = queries[i][0], y = queries[i][1];
+        if ((long)y * (long)y <= n) {
+            answer[i] = map[y][x];
+        } else {
+            // y is large enough, no pre-computation
+            for (int j = x; j < n; j += y) {
+                answer[i] = (answer[i] + nums[j]) % MOD;
+            }
+        }
+    }
+    return answer;
+}
+{% endhighlight %}
+
+# Dynamic Programming
 
 [Maximum Number of Non-Overlapping Subarrays With Sum Equals Target][maximum-number-of-non-overlapping-subarrays-with-sum-equals-target]
 
@@ -345,7 +420,7 @@ public int numberOfCombinations(String num) {
 }
 {% endhighlight %}
 
-## Bounded Sum
+# Bounded Sum
 
 [Max Sum of Rectangle No Larger Than K][max-sum-of-rectangle-no-larger-than-k]
 
@@ -394,6 +469,7 @@ public int maxSumSubmatrix(int[][] matrix, int k) {
 [change-minimum-characters-to-satisfy-one-of-three-conditions]: https://leetcode.com/problems/change-minimum-characters-to-satisfy-one-of-three-conditions/
 [contiguous-array]: https://leetcode.com/problems/contiguous-array/
 [count-triplets-that-can-form-two-arrays-of-equal-xor]: https://leetcode.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/
+[make-sum-divisible-by-p]: https://leetcode.com/problems/make-sum-divisible-by-p/
 [max-sum-of-rectangle-no-larger-than-k]: https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/
 [maximize-the-beauty-of-the-garden]: https://leetcode.com/problems/maximize-the-beauty-of-the-garden/
 [maximum-absolute-sum-of-any-subarray]: https://leetcode.com/problems/maximum-absolute-sum-of-any-subarray/
@@ -403,4 +479,5 @@ public int maxSumSubmatrix(int[][] matrix, int k) {
 [product-of-the-last-k-numbers]: https://leetcode.com/problems/product-of-the-last-k-numbers/
 [remove-zero-sum-consecutive-nodes-from-linked-list]: https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/
+[sum-of-special-evenly-spaced-elements-in-array]: https://leetcode.com/problems/sum-of-special-evenly-spaced-elements-in-array/
 [sum-of-beauty-of-all-substrings]: https://leetcode.com/problems/sum-of-beauty-of-all-substrings/

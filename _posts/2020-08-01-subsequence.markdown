@@ -113,8 +113,43 @@ public int lengthOfLIS(int[] nums) {
 {% endhighlight %}
 
 Similar problems:
-* [Largest Divisible Subset][largest-divisible-subset]
-* [Russian Doll Envelopes][russian-doll-envelopes]: 2D
+
+[Largest Divisible Subset][largest-divisible-subset]
+
+{% highlight java %}
+public List<Integer> largestDivisibleSubset(int[] nums) {
+    Arrays.sort(nums);
+
+    int n = nums.length;
+    int[] count = new int[n], prev = new int[n];
+    int max = 0, index = -1;
+    for (int i = 0; i < n; i++) {
+        count[i] = 1;
+        prev[i] = -1;
+        for (int j = i - 1; j >= 0; j--) {
+            if (nums[i] % nums[j] == 0) {
+                if (count[j] + 1 > count[i]) {
+                    count[i] = count[j] + 1;
+                    prev[i] = j;
+                }
+            }
+        }
+        if (count[i] > max) {
+            max = count[i];
+            index = i;
+        }
+    }
+
+    List<Integer> list = new ArrayList<>();
+    while (index != -1) {
+        list.add(nums[index]);
+        index = prev[index];
+    }
+    return list;
+}
+{% endhighlight %}
+
+[Russian Doll Envelopes][russian-doll-envelopes]: 2D
 
 A quicker solution is [Patience sorting](https://en.wikipedia.org/wiki/Patience_sorting). [This](https://www.cs.princeton.edu/courses/archive/spring13/cos423/lectures/LongestIncreasingSubsequence.pdf) is a Princeton lecture for it.
 
@@ -179,6 +214,39 @@ public int maxEnvelopes(int[][] envelopes) {
     }
 
     return lengthOfLIS(h);
+}
+{% endhighlight %}
+
+[Minimum Operations to Make a Subsequence][minimum-operations-to-make-a-subsequence]
+
+{% highlight java %}
+public int minOperations(int[] target, int[] arr) {
+    int n = target.length;
+    // since target has distinct elements,
+    // stores the index of each target element
+    Map<Integer, Integer> map = new HashMap<>();
+    for (int i = 0; i < n; ++i) {
+        map.put(target[i], i);
+    }
+
+    // finds Longest Increasing Subsequence of target element indices in arr
+    int lis = 0;
+    int[] piles = new int[n];
+    for (int a : arr) {
+        // ignores arr element that is not in target
+        if (map.containsKey(a)) {
+            int i = Arrays.binarySearch(piles, 0, lis, map.get(a));
+            if (i < 0) {
+                i = ~i;
+            }
+
+            piles[i] = map.get(a);
+            if (i == lis) {
+                lis++;
+            }
+        }
+    }
+    return n - lis;
 }
 {% endhighlight %}
 
@@ -402,6 +470,7 @@ count: 3
 [longest-arithmetic-subsequence]: https://leetcode.com/problems/longest-arithmetic-subsequence/
 [longest-arithmetic-subsequence-of-given-difference]: https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
 [longest-increasing-subsequence]: https://leetcode.com/problems/longest-increasing-subsequence/
+[minimum-operations-to-make-a-subsequence]: https://leetcode.com/problems/minimum-operations-to-make-a-subsequence/
 [number-of-matching-subsequences]: https://leetcode.com/problems/number-of-matching-subsequences/
 [russian-doll-envelopes]: https://leetcode.com/problems/russian-doll-envelopes/
 [shortest-common-subsequence]: https://leetcode.com/problems/shortest-common-subsequence/

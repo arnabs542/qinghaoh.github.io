@@ -84,6 +84,48 @@ public int[][] averageHeightOfBuildings(int[][] buildings) {
 }
 {% endhighlight %}
 
+[The Skyline Problem][the-skyline-problem]
+
+{% highlight java %}
+public List<List<Integer>> getSkyline(int[][] buildings) {
+    List<int[]> heights = new ArrayList<>();
+    for (int[] b: buildings) {
+        // height at start is stored as negative
+        heights.add(new int[]{b[0], -b[2]});
+        // height at end is stored as positive
+        heights.add(new int[]{b[1], b[2]});
+    }
+
+    Collections.sort(heights, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
+
+    TreeMap<Integer, Integer> map = new TreeMap<>();
+    // a trick to deal with last building in a block
+    map.put(0, 1);
+
+    List<List<Integer>> list = new ArrayList<>();
+    int prev = 0;
+    for (int[] h: heights) {
+        if (h[1] < 0) {
+            // if it's start, puts/increments the height to map
+            map.put(-h[1], map.getOrDefault(-h[1], 0) + 1);
+        } else {
+            // if it's end, removes/decrements the height from map
+            map.put(h[1], map.get(h[1]) - 1);
+            map.remove(h[1], 0);
+        }
+
+        // gets the max height
+        int curr = map.firstKey();
+        // no consecutive horizontal lines of equal height
+        if (prev != curr) {
+            list.add(Arrays.asList(h[0], curr));
+            prev = curr;
+        }
+    }
+    return list;
+}
+{% endhighlight %}
+
 # Priority Queue
 
 [Average Height of Buildings in Each Segment][average-height-of-buildings-in-each-segment]
@@ -126,3 +168,4 @@ public int[][] averageHeightOfBuildings(int[][] buildings) {
 
 [average-height-of-buildings-in-each-segment]: https://leetcode.com/problems/average-height-of-buildings-in-each-segment/
 [describe-the-painting]: https://leetcode.com/problems/describe-the-painting/
+[the-skyline-problem]: https://leetcode.com/problems/the-skyline-problem/

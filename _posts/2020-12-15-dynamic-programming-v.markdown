@@ -98,6 +98,43 @@ private int rob(int[] nums, int start, int end) {
 }
 {% endhighlight %}
 
+[Pizza With 3n Slices][pizza-with-3n-slices]
+
+{% highlight java %}
+public int maxSizeSlices(int[] slices) {
+    int m = slices.length, n = m / 3;
+
+    // picks n non-adjacent elements from circular array 3n
+    // slices[0] and slices[m - 1] can't be chosen at the same time
+    int[] slices1 = Arrays.copyOfRange(slices, 0, m - 1);
+    int[] slices2 = Arrays.copyOfRange(slices, 1, m);
+
+    return Math.max(maxSizeSlices(slices1, n), maxSizeSlices(slices2, n));
+}
+
+private int maxSizeSlices(int[] slices, int n) {
+    int m = slices.length;
+    // dp[i][j]: maximum sum of j elements from slices[0...(i - 1)]
+    int[][] dp = new int[m + 1][n + 1];
+
+    // dp[i][0] = 0
+    // dp[0][j] = 0
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (i == 1) {
+                // slices has only one element
+                dp[i][j] = slices[0];
+            } else {
+                // skips slices[i - 1]
+                // or picks slices[i - 1]
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i - 2][j - 1] + slices[i - 1]);
+            }
+        }
+    }
+    return dp[m][n];
+}
+{% endhighlight %}
+
 [Delete and Earn][delete-and-earn]
 
 {% highlight java %}
@@ -382,4 +419,5 @@ public int minCostII(int[][] costs) {
 [paint-fence]: https://leetcode.com/problems/paint-fence/
 [paint-house-ii]: https://leetcode.com/problems/paint-house-ii/
 [painting-a-grid-with-three-different-colors]: https://leetcode.com/problems/painting-a-grid-with-three-different-colors/
+[pizza-with-3n-slices]: https://leetcode.com/problems/pizza-with-3n-slices/
 [wiggle-subsequence]: https://leetcode.com/problems/wiggle-subsequence/

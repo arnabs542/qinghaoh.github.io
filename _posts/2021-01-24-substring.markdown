@@ -232,6 +232,32 @@ private String search(String s, int len) {
 }
 {% endhighlight %}
 
+# Sliding Window
+
+[Distinct Echo Substrings][distinct-echo-substrings]
+
+{% highlight java %}
+public int distinctEchoSubstrings(String text) {
+    Set<String> set = new HashSet<>();
+    int n = text.length();
+    for (int len = 1; len <= n / 2; len++) {
+        for (int l = 0, r = len, count = 0; l < n - len; l++, r++) {
+            if (text.charAt(l) == text.charAt(r)) {
+                count++;
+            } else {
+                count = 0;
+            }
+
+            if (count == len) {
+                set.add(text.substring(l - len + 1, l + 1));
+                count--;
+            }
+        }
+    }
+    return set.size();
+}
+{% endhighlight %}
+
 # Greedy
 
 [Stamping The Sequence][stamping-the-sequence]
@@ -289,6 +315,7 @@ private void doStamp(int pos) {
 }
 {% endhighlight %}
 
+[distinct-echo-substrings]: https://leetcode.com/problems/distinct-echo-substrings/
 [encode-string-with-shortest-length]: https://leetcode.com/problems/encode-string-with-shortest-length/
 [longest-duplicate-substring]: https://leetcode.com/problems/longest-duplicate-substring/
 [longest-repeating-substring]: https://leetcode.com/problems/longest-repeating-substring/

@@ -208,6 +208,51 @@ This solution includes all possibilities, and uses a set as termination conditio
 
 [Lexicographical Numbers][lexicographical-numbers]
 
+# Transitions
+
+[The Earliest and Latest Rounds Where Players Compete][the-earliest-and-latest-rounds-where-players-compete]
+
+{% highlight java %}
+private int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+
+public int[] earliestAndLatest(int n, int firstPlayer, int secondPlayer) {
+    dfs(firstPlayer, n - secondPlayer + 1, n, 1);
+    return new int[]{min, max};
+}
+
+// @param l length of [1, first player]
+// @param r length of [second player, n]
+private void dfs(int l, int r, int n, int round) {
+    if (l == r) {
+        min = Math.min(min, round);
+        max = Math.max(max, round);
+        return;
+    }
+
+    // makes sure l < r
+    if (l > r) {
+        int tmp = l;
+        l = r;
+        r = tmp;
+    }
+
+    // i players on the left win
+    for (int i = 1; i <= l; i++) {
+        // (l - i) palyers on the right win
+        // assumes second player is champion (+1)
+        // players in the next round: (n + 1) / 2
+        for (int j = l - i + 1; i + j <= Math.min(r, (n + 1) / 2); j++) {
+            // losers = (l - i) + (r - j)
+            if ((l - i) + (r - j) <= n / 2) {
+                dfs(i, j, (n + 1) / 2, round + 1);
+            }
+        }
+    }
+}
+{% endhighlight %}
+
+![Transition](/assets/the_earliest_and_latest_rounds_where_players_compete.png)
+
 # DFS + BFS
 
 [Shortest Path in a Hidden Grid][shortest-path-in-a-hidden-grid]
@@ -300,4 +345,5 @@ private void dfs(int i, int j, GridMaster master, Cell[][] grid) {
 [number-of-distinct-islands]: https://leetcode.com/problems/number-of-distinct-islands/
 [pyramid-transition-matrix]: https://leetcode.com/problems/pyramid-transition-matrix/
 [shortest-path-in-a-hidden-grid]: https://leetcode.com/problems/shortest-path-in-a-hidden-grid/
+[the-earliest-and-latest-rounds-where-players-compete]: https://leetcode.com/problems/the-earliest-and-latest-rounds-where-players-compete/
 [time-needed-to-inform-all-employees]: https://leetcode.com/problems/time-needed-to-inform-all-employees/
