@@ -166,6 +166,56 @@ public int[][] averageHeightOfBuildings(int[][] buildings) {
 }
 {% endhighlight %}
 
+# Arc Sweep
+
+[Maximum Number of Darts Inside of a Circular Dartboard][maximum-number-of-darts-inside-of-a-circular-dartboard]
+
+![Arc sweep (created by https://www.geogebra.org/)](/assets/maximum_number_of_darts_inside_of_a_circular_dartboard.png)
+
+{% highlight java %}
+public int numPoints(int[][] points, int r) {
+    // at least 1 point can be included by the circle
+    int max = 1;
+
+    for (int[] p : points) {
+        List<double[]> angles = new ArrayList<>();
+        for (int [] q : points) {
+            // for all q that are within 2r radius of p
+            if (p[0] != q[0] || p[1] != q[1]) {
+                double d = distance(p, q);
+                if (d <= 2 * r) {
+                    // angle between line p-q and the positive x axis.
+                    double angle = Math.atan2(q[1] - p[1], q[0] - p[0]);
+
+                    // half of the span between entry and exit
+                    double delta = Math.acos(d / (2 * r));
+
+                    // entry
+                    angles.add(new double[]{angle - delta, 1});
+                    // exit
+                    angles.add(new double[]{angle + delta, -1});
+                }
+            }
+
+            Collections.sort(angles, (a, b) -> a[0] == b[0] ? Double.compare(b[1], a[1]) : Double.compare(a[0], b[0]));
+
+            // p is included
+            int count = 1;
+            for (var e : angles) {
+                max = Math.max(max, count += e[1]);
+            }
+        }
+    }
+
+    return max;
+}
+
+private double distance(int[] p1, int[] p2) {
+    return Math.sqrt((p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]));
+}
+{% endhighlight %}
+
 [average-height-of-buildings-in-each-segment]: https://leetcode.com/problems/average-height-of-buildings-in-each-segment/
 [describe-the-painting]: https://leetcode.com/problems/describe-the-painting/
+[maximum-number-of-darts-inside-of-a-circular-dartboard]: https://leetcode.com/problems/maximum-number-of-darts-inside-of-a-circular-dartboard/
 [the-skyline-problem]: https://leetcode.com/problems/the-skyline-problem/

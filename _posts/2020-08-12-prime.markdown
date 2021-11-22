@@ -42,6 +42,60 @@ Proof: [Divergence of the Sum of the Reciprocals of the Primes](https://en.wikip
 [Shor's algorithm](https://en.wikipedia.org/wiki/Shor's_algorithm): a polynomial-time quantum computer algorithm for integer factorization.
 [General number field sieve (GNFS)](https://en.wikipedia.org/wiki/General_number_field_sieve): the most efficient classical algorithm known for factoring integers larger than \\(10^100\\)
 
+[GCD Sort of an Array][gcd-sort-of-an-array]
+
+{% highlight java %}
+public boolean gcdSort(int[] nums) {
+    int[] minPrime = sieve(Arrays.stream(nums).max().getAsInt() + 1);
+
+    for (int num : nums) {
+        for (int p : primeFactorization(num, minPrime)) {
+            union(num, p);
+        }
+    }
+
+    int n = nums.length;
+    int[] sorted = Arrays.copyOf(nums, n);
+    Arrays.sort(sorted);
+
+    for (int i = 0; i < n; i++) {
+        if (find(nums[i]) != find(sorted[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+private int[] sieve(int n) {
+    int[] minPrime = new int[n];
+
+    for (int i = 2; i < n; i++) {
+        minPrime[i] = i;
+    }
+
+    for (int i = 2; i * i < n; i++) {
+        if (minPrime[i] == i) {
+            for (int j = i * i; j < n; j += i) {
+                if (minPrime[j] > i) {
+                    minPrime[j] = i;
+                }
+            }
+        }
+    }
+
+    return minPrime;
+}
+
+private List<Integer> primeFactorization(int n, int[] minPrime) {
+    List<Integer> list = new ArrayList<>();
+    while (n > 1) {
+        list.add(minPrime[n]);
+        n /= minPrime[n];
+    }
+    return list;
+}
+{% endhighlight %}
+
 [2 Keys Keyboard][2-keys-keyboard]
 
 {% highlight java %}
@@ -128,4 +182,5 @@ public int consecutiveNumbersSum(int n) {
 [2-keys-keyboard]: https://leetcode.com/problems/2-keys-keyboard/
 [consecutive-numbers-sum]: https://leetcode.com/problems/consecutive-numbers-sum/
 [count-primes]: https://leetcode.com/problems/count-primes/
+[gcd-sort-of-an-array]: https://leetcode.com/problems/gcd-sort-of-an-array/
 [integer-break]: https://leetcode.com/problems/integer-break/

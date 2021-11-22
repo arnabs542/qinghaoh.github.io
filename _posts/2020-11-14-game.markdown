@@ -47,6 +47,29 @@ public boolean sumGame(String num) {
 }
 {% endhighlight %}
 
+[Stone Game IX][stone-game-ix]
+
+{% highlight java %}
+public boolean stoneGameIX(int[] stones) {
+    int[] remainders = new int[3];
+    for (int s : stones) {
+        remainders[s % 3]++;
+    }
+
+    // Alice will always win if remainders[0] == 0 by picking the mod with less frequency
+    // if remainders[0] is even, Alice can always pick a 3 when Bob picks a 3
+    // so that's equivalent
+    if (remainders[0] % 2 == 0) {
+        return remainders[1] > 0 && remainders[2] > 0;
+    }
+
+    // because of the extra 3, Alice needs to pick mod with more frequency instead
+    // after popping the more frequency mod twice,
+    // Alice should keep the invariant that the less frequency mod is still the less frequency mod
+    return Math.abs(remainders[1] - remainders[2]) > 2;
+}
+{% endhighlight %}
+
 # Dynamic Programming
 
 ## Bottom-up
@@ -394,7 +417,7 @@ In combinatorial game theory, the normal play convention of an impartial game is
 
 [Nim](https://en.wikipedia.org/wiki/Nim)
 
-Nim is a mathematical game of strategy in which two players take turns removing (or "nimming") objects from distinct heaps or piles. On each turn, a player must remove at least one object, and may remove any number of objects provided they all come from the **same** heap or pile. The game is either to take the last object.
+Nim is a mathematical game of strategy in which two players take turns removing (or "nimming") objects from distinct heaps or piles. On each turn, a player must remove at least one object, and may remove any number of objects provided they all come from the **same** heap or pile. The game is to take the last object.
 
 Nim-sum is the bitwise xor of the heap sizes.
 
@@ -479,6 +502,21 @@ public boolean canWin(String s) {
 }
 {% endhighlight %}
 
+[Subtree Removal Game with Fibonacci Tree][subtree-removal-game-with-fibonacci-tree]
+
+[Colon principle](https://en.wikipedia.org/wiki/Hackenbush#Proof_of_Colon_Principle): when branches come together at a vertex, one may replace the branches by a non-branching stalk of length equal to their nim sum.
+
+{% highlight java %}
+public boolean findGameWinner(int n) {
+    // The Grundy value of a node is the nim sum of the Grundy values of its children.
+    // SG(1) = 0
+    // SG(2) = 1
+    // SG(n) = (SG(n - 1) + 1) xor (SG(n - 2) + 1)
+    // SG: [null, 0, 1, 3, 6, 3, 3, 0, 5, 7, 14, 7, 7, 0, 9, 11, 6, 11, 11, 0, 13, ...]
+    return n % 6 != 1;
+}
+{% endhighlight %}
+
 [can-i-win]: https://leetcode.com/problems/can-i-win/
 [cat-and-mouse]: https://leetcode.com/problems/cat-and-mouse/
 [cat-and-mouse-ii]: https://leetcode.com/problems/cat-and-mouse-ii/
@@ -488,4 +526,6 @@ public boolean canWin(String s) {
 [stone-game-ii]: https://leetcode.com/problems/stone-game-ii/
 [stone-game-iv]: https://leetcode.com/problems/stone-game-iv/
 [stone-game-vi]: https://leetcode.com/problems/stone-game-vi/
+[stone-game-ix]: https://leetcode.com/problems/stone-game-ix/
+[subtree-removal-game-with-fibonacci-tree]: https://leetcode.com/problems/subtree-removal-game-with-fibonacci-tree/
 [sum-game]: https://leetcode.com/problems/sum-game/

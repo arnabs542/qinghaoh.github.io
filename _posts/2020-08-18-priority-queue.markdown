@@ -20,6 +20,8 @@ public int largestSumAfterKNegations(int[] A, int K) {
 }
 {% endhighlight %}
 
+# K-th
+
 [Kth Smallest Element in a Sorted Matrix][kth-smallest-element-in-a-sorted-matrix]
 
 {% highlight java %}
@@ -37,6 +39,29 @@ public int kthSmallest(int[][] matrix, int k) {
         }
     }
     return matrix[pq.peek()[0]][pq.peek()[1]];
+}
+{% endhighlight %}
+
+[Find K Pairs with Smallest Sums][find-k-pairs-with-smallest-sums]
+
+{% highlight java %}
+public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+    // {nums1 index, nums2 index}
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> nums1[a[0]] + nums2[a[1]]));
+    for (int j = 0; j < nums2.length; j++) {
+        pq.offer(new int[]{0, j});
+    }
+
+    List<List<Integer>> list = new ArrayList<>();
+    while (!pq.isEmpty() && k-- > 0) {
+        int[] index = pq.poll();
+        list.add(Arrays.asList(nums1[index[0]], nums2[index[1]]));
+
+        if (index[0] + 1 < nums1.length) {
+            pq.offer(new int[]{index[0] + 1, index[1]});
+        }
+    }
+    return list;
 }
 {% endhighlight %}
 
@@ -275,7 +300,7 @@ public int maxPerformance(int n, int[] speed, int[] efficiency, int k) {
 }
 {% endhighlight %}
 
-## "BFS"
+# "BFS"
 
 [Minimum Number of Refueling Stops][minimum-number-of-refueling-stops]
 
@@ -306,6 +331,7 @@ public int minRefuelStops(int target, int startFuel, int[][] stations) {
 {% endhighlight %}
 
 [construct-target-array-with-multiple-sums]: https://leetcode.com/problems/construct-target-array-with-multiple-sums/
+[find-k-pairs-with-smallest-sums]: https://leetcode.com/problems/find-k-pairs-with-smallest-sums/
 [furthest-building-you-can-reach]: https://leetcode.com/problems/furthest-building-you-can-reach/
 [k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
 [kth-smallest-element-in-a-sorted-matrix]: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/

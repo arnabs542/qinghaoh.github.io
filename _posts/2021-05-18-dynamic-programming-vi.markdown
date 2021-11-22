@@ -588,6 +588,43 @@ public int minDifficulty(int[] jobDifficulty, int d) {
 }
 {% endhighlight %}
 
+# Map
+
+[Tallest Billboard][tallest-billboard]
+
+{% highlight java %}
+public int tallestBillboard(int[] rods) {
+    // dp[i]: pair (a, b) with max a and b - a == i > 0
+    Map<Integer, Integer> dp = new HashMap<>(), tmp;
+    dp.put(0, 0);
+
+    for (int r : rods) {
+        tmp = new HashMap<>(dp);
+        for (int d : tmp.keySet()) {
+            // Case 1: put r to the long side
+            // ---- v ----|-- d --|--- r ---|
+            // ---- v ----|
+            // dp[d + r] = max(dp[d + r], v)
+            dp.put(d + r, Math.max(dp.getOrDefault(r + d, 0), tmp.get(d)));
+
+            // Case 2: put r to the short side
+            // ---- v ----|-- d --|
+            // ---- v ----|--- r ---|
+            // dp[r - d] = max(dp[r - d], v + d)
+            // or
+            // ---- v ----|-- d --|
+            // ---- v ----|- r -|
+            // dp[d - r] = max(dp[d - r], v + r)
+            //
+            // in summary,
+            // dp[abs(d - r)] = max(dp[abs[d - r]], v + min(d, r))
+            dp.put(Math.abs(d - r), Math.max(dp.getOrDefault(Math.abs(d - r), 0), tmp.get(d) + Math.min(d, r)));
+        }
+    }
+    return dp.get(0);
+}
+{% endhighlight %}
+
 [best-team-with-no-conflicts]: https://leetcode.com/problems/best-team-with-no-conflicts/
 [build-array-where-you-can-find-the-maximum-exactly-k-comparisons]: https://leetcode.com/problems/build-array-where-you-can-find-the-maximum-exactly-k-comparisons/
 [frog-jump]: https://leetcode.com/problems/frog-jump/
@@ -599,3 +636,4 @@ public int minDifficulty(int[] jobDifficulty, int d) {
 [number-of-ways-to-rearrange-sticks-with-k-sticks-visible]: https://leetcode.com/problems/number-of-ways-to-rearrange-sticks-with-k-sticks-visible/
 [paint-house-iii]: https://leetcode.com/problems/paint-house-iii/
 [stone-game-v]: https://leetcode.com/problems/stone-game-v/
+[tallest-billboard]: https://leetcode.com/problems/tallest-billboard/

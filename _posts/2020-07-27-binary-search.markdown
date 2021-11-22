@@ -122,6 +122,28 @@ public int findMin(int[] nums) {
 }
 {% endhighlight %}
 
+[Single Element in a Sorted Array][single-element-in-a-sorted-array]
+
+{% highlight java %}
+public int singleNonDuplicate(int[] nums) {
+    int low = 0, high = nums.length - 1;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        // binary search on even indexes only
+        if (mid % 2 == 1) {
+            mid--;
+        }
+
+        if (nums[mid] == nums[mid + 1]) {
+            low = mid + 2;
+        } else {
+            high = mid;
+        }
+    }
+    return nums[low];
+}
+{% endhighlight %}
+
 [Find Minimum in Rotated Sorted Array II][find-minimum-in-rotated-sorted-array-ii]
 
 {% highlight java %}
@@ -1057,10 +1079,11 @@ if (insertionPoint < 0) {
 [minimum-number-of-days-to-make-m-bouquets]: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/
 [missing-element-in-sorted-array]: https://leetcode.com/problems/missing-element-in-sorted-array/
 [missing-number-in-arithmetic-progression]: https://leetcode.com/problems/missing-number-in-arithmetic-progression/
-[split-array-largest-sum]: https://leetcode.com/problems/split-array-largest-sum/
 [search-insert-position]: https://leetcode.com/problems/search-insert-position/
 [search-in-rotated-sorted-array]: https://leetcode.com/problems/search-in-rotated-sorted-array/
 [search-in-rotated-sorted-array-ii]: https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
 [search-suggestions-system]: https://leetcode.com/problems/search-suggestions-system/
+[single-element-in-a-sorted-array]: https://leetcode.com/problems/single-element-in-a-sorted-array/
+[split-array-largest-sum]: https://leetcode.com/problems/split-array-largest-sum/
 [the-k-weakest-rows-in-a-matrix]: https://leetcode.com/problems/the-k-weakest-rows-in-a-matrix/
 [ways-to-split-array-into-three-subarrays]: https://leetcode.com/problems/ways-to-split-array-into-three-subarrays/

@@ -59,6 +59,36 @@ public boolean isCovered(int[][] ranges, int left, int right) {
 }
 {% endhighlight %}
 
+# BFS
+
+[Minimum Number of Taps to Open to Water a Garden][minimum-number-of-taps-to-open-to-water-a-garden]
+
+{% highlight java %}
+public int minTaps(int n, int[] ranges) {
+    // arr[i]: rightmost end where i is the left of the interval
+    int[] arr = new int[n + 1];
+    for (int i = 0; i < ranges.length; i++) {
+        if (ranges[i] > 0) {
+            int left = Math.max(0, i - ranges[i]);
+            arr[left] = Math.max(arr[left], i + ranges[i]);
+        }
+    }
+
+    // bfs
+    int end = 0, reach = 0, count = 0;
+    for (int i = 0; i < n + 1 && end < n; end = reach) {
+        count++;
+        while (i < n + 1 && i <= end) {
+            reach = Math.max(reach, arr[i++]);
+        }
+        if (end == reach) {
+            return -1;
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
 [Video Stitching][video-stitching]
 
 {% highlight java %}
@@ -787,6 +817,7 @@ class Interval implements Comparable<Interval> {
 [meeting-scheduler]: https://leetcode.com/problems/meeting-scheduler/
 [merge-intervals]: https://leetcode.com/problems/merge-intervals/
 [minimum-number-of-arrows-to-burst-balloons]: https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/
+[minimum-number-of-taps-to-open-to-water-a-garden]: https://leetcode.com/problems/minimum-number-of-taps-to-open-to-water-a-garden/
 [non-overlapping-intervals]: https://leetcode.com/problems/non-overlapping-intervals/
 [range-module]: https://leetcode.com/problems/range-module/
 [remove-covered-intervals]: https://leetcode.com/problems/remove-covered-intervals/

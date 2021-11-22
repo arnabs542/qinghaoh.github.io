@@ -2,7 +2,7 @@
 layout: post
 title:  "Expression Evaluation"
 ---
-## Basic
+# Basic
 
 |    Infix    |  Prefix   |  Postfix  |
 |-----------------------------------|
@@ -10,7 +10,7 @@ title:  "Expression Evaluation"
 |  a + b * c  | + a * b c | a b c * + |
 | (a + b) * c | * + a b c | a b + c * |
 
-## Expression Tree
+# Expression Tree
 
 [Build Binary Expression Tree From Infix Expression][build-binary-expression-tree-from-infix-expression]
 
@@ -130,5 +130,79 @@ private int operate(Deque<Integer> operands, Deque<Character> operators) {
 }
 {% endhighlight %}
 
+# Dynamic Programming
+
+[The Score of Students Solving Math Expression][the-score-of-students-solving-math-expression]
+
+{% highlight java %}
+private static final int MAX_ANSWER = 1000;
+
+public int scoreOfStudents(String s, int[] answers) {
+    // number of digits
+    int n = s.length() / 2 + 1;
+    // dp[i][j]: set of possible results of s[i...j], where the index is of digits only
+    // e.g. 1 + 2 * 3, index 2 stands for 3
+    Set<Integer>[][] dp = new Set[n][n];
+    for (int i = 0; i < n; ++i) {
+        dp[i][i] = new HashSet<>();
+        // 2 * i is the actual index of the digit in the stringg
+        dp[i][i].add(s.charAt(2 * i) - '0');
+    }
+
+    for (int len = 1; len < n; len++) {
+        for (int i = 0; i + len < n; i++) {
+            int j = i + len;
+            dp[i][j] = new HashSet<>();
+            // index of operators
+            for (int k = 2 * i + 1; k < 2 * j; k += 2) {
+                for (int a : dp[i][k / 2]) {
+                    for (int b : dp[k / 2 + 1][j]) {
+                        if (s.charAt(k) == '+' && a + b <= MAX_ANSWER) {
+                            dp[i][j].add(a + b);
+                        } else if (s.charAt(k) == '*' && a * b <= MAX_ANSWER) {
+                            dp[i][j].add(a * b);
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    int val = evaluate(s), points = 0;
+    for (int a : answers) {
+        if (a == val) {
+            points += 5;
+        } else if (dp[0][n - 1].contains(a)) {
+            points += 2;
+        }
+    }
+    return points;
+}
+
+// evaluate
+private int evaluate(String s) {
+    Deque<Integer> st = new ArrayDeque<>();
+    char operator = '+';
+    int i = 0, num = 0;
+    while (i < s.length()) {
+        char ch = s.charAt(i++);
+        if (Character.isDigit(ch)) {
+            num = ch - '0';
+        }
+        if (i >= s.length() || ch == '+' || ch == '*') {
+            if (operator == '+') {
+                st.push(num);
+            } else if (operator == '*') {
+                st.push(st.pop() * num);
+            }
+            operator = ch;
+        }
+    }
+    return st.stream().mapToInt(Integer::intValue).sum();
+}
+{% endhighlight %}
+
 [basic-calculator-iii]: https://leetcode.com/problems/basic-calculator-iii/
 [build-binary-expression-tree-from-infix-expression]: https://leetcode.com/problems/build-binary-expression-tree-from-infix-expression/
+[the-score-of-students-solving-math-expression]: https://leetcode.com/problems/the-score-of-students-solving-math-expression/

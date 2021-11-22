@@ -367,46 +367,6 @@ It's a more intuitive way to process the numbers bit by bit.
 
 {% highlight java %}
 public int findMaximumXOR(int[] nums) {
-TrieNode root = new TrieNode();
-    for (int num : nums) {
-        TrieNode node = root;
-        for (int i = 31; i >= 0; i--) {
-            int bit = (num >> i) & 1;
-            if (node.children[bit] == null) {
-                node.children[bit] = new TrieNode();
-            }
-            node = node.children[bit];
-        }
-    }
-
-    int max = 0;
-    for (int num: nums) {
-        TrieNode node = root;
-        int value = 0;
-        for (int i = 31; i >= 0; i--) {
-            int bit = (num >> i) & 1;
-            if (node.children[bit ^ 1] != null) {
-                // complement at the bit of this num exists
-                // so the xor at the bit is 1, and the max at this bit will be 1
-                node = node.children[bit ^ 1];
-                value += 1 << i;
-            } else {
-                node = node.children[bit];
-            }
-        }
-        max = Math.max(max, value);
-    }
-    return max;
-}
-}
-
-class TrieNode {
-    TrieNode[] children = new TrieNode[2];
-}
-{% endhighlight %}
-
-{% highlight java %}
-public int findMaximumXOR(int[] nums) {
     TrieNode root = new TrieNode();
     int max = 0;
     for (int num : nums) {
@@ -544,6 +504,94 @@ private int countSmallerPairs(int[] nums, int x) {
 
     // i < j
     return pairs / 2;
+}
+{% endhighlight %}
+
+### Backtracking/DFS
+
+[Maximum Genetic Difference Query][maximum-genetic-difference-query]
+
+{% highlight java %}
+private static final int NUM_BITS = 17;  // 10 ^ 5
+private TrieNode trieRoot = new TrieNode();
+private List<Integer>[] tree, queryIndexes;
+private int[][] queries;
+
+public int[] maxGeneticDifference(int[] parents, int[][] queries) {
+    int n = parents.length, m = queries.length, root = -1;
+    // builds tree
+    this.tree = new List[n];
+    for (int i = 0; i < n; i++) {
+        tree[i] = new ArrayList<>();
+    }
+    for (int i = 0; i < n; i++) {
+        if (parents[i] == -1) {
+            root = i;
+        } else {
+            tree[parents[i]].add(i);
+        }
+    }
+
+    this.queries = queries;
+    this.queryIndexes = new List[n];
+    for (int i = 0; i < n; i++) {
+        queryIndexes[i] = new ArrayList<>();
+    }
+    for (int i = 0; i < m; i++) {
+        queryIndexes[queries[i][0]].add(i);
+    }
+
+    int[] ans = new int[m];
+    backtrack(root, ans);
+    return ans;
+}
+
+private void backtrack(int node, int[] ans) {
+    // adds the node to the trie
+    trieRoot.insert(node, true);
+
+    for (int i : queryIndexes[node]) {
+        ans[i] = trieRoot.maxDiff(queries[i][1]);
+    }
+
+    for (int child: tree[node]) {
+        backtrack(child, ans);
+    }
+
+    // removes the node from the trie (by decrementing the counter of each node on the path)
+    trieRoot.insert(node, false);
+}
+
+class TrieNode {
+    TrieNode[] child = new TrieNode[2];
+    int countOfTreeNodes = 0; // count of tree nodes go through this trie node
+
+    public void insert(int number, boolean toAdd) {
+        TrieNode node = this;
+        for (int i = NUM_BITS; i >= 0; i--) {
+            int bit = (number >> i) & 1;
+            if (node.child[bit] == null) {
+                node.child[bit] = new TrieNode();
+            }
+            node = node.child[bit];
+            node.countOfTreeNodes += toAdd ? 1 : -1;
+        }
+    }
+
+    public int maxDiff(int val) {
+        TrieNode node = this;
+        int ans = 0;
+        for (int i = NUM_BITS; i >= 0; i--) {
+            int bit = (val >> i) & 1;
+            if (node.child[1 - bit] != null && node.child[1 - bit].countOfTreeNodes > 0) {
+                node = node.child[1 - bit];
+                ans |= (1 << i);
+            } else {
+                node = node.child[bit];
+            }
+        }
+        return ans;
+    }
 }
 {% endhighlight %}
 
@@ -726,6 +774,7 @@ public boolean validUtf8(int[] data) {
 [flip-columns-for-maximum-number-of-equal-rows]: https://leetcode.com/problems/flip-columns-for-maximum-number-of-equal-rows/
 [integer-replacement]: https://leetcode.com/problems/integer-replacement/
 [k-th-symbol-in-grammar]: https://leetcode.com/problems/k-th-symbol-in-grammar/
+[maximum-genetic-difference-query]: https://leetcode.com/problems/maximum-genetic-difference-query/
 [maximum-xor-of-two-numbers-in-an-array]: https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/
 [minimum-one-bit-operations-to-make-integers-zero]: https://leetcode.com/problems/minimum-one-bit-operations-to-make-integers-zero/
 [missing-number]: https://leetcode.com/problems/missing-number/

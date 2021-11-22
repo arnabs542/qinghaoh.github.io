@@ -4,6 +4,36 @@ title:  "Recursion"
 tags: recursion
 ---
 
+[Special Binary String][special-binary-string]
+
+{% highlight java %}
+public String makeLargestSpecial(String s) {
+    List<String> list = new ArrayList<>();
+    int count = 0, i = 0, j = 0;
+    // splits s into as many special strings as possible
+    while (j < s.length()) {
+        // count('1') - count('0')
+        if (s.charAt(j) == '1') {
+            count++;
+        } else {
+            count--;
+        }
+
+        if (count == 0) {
+            // 1M0: M must be another special string.
+            // proof:
+            // If there is a prefix P of M which has one less 1's than 0's
+            // 1P would have been processed as the prefix of a special string in earlier recursions
+            list.add('1' + makeLargestSpecial(s.substring(i + 1, j)) + '0');
+            i = j + 1;
+        }
+        j++;
+    }
+    Collections.sort(list, Collections.reverseOrder());
+    return String.join("", list);
+}
+{% endhighlight %}
+
 [Strobogrammatic Number II][strobogrammatic-number-ii]
 
 {% highlight java %}
@@ -136,6 +166,75 @@ public void dfs(String s, int iStart, int jStart, char c1, char c2, List<String>
         dfs(reversed, 0, 0, ')','(', list);
     } else {
         list.add(reversed);
+    }
+}
+{% endhighlight %}
+
+[Minimum Cost to Change the Final Value of Expression][minimum-cost-to-change-the-final-value-of-expression]
+
+{% highlight java %}
+// index of matching '('
+private Map<Integer, Integer> map = new HashMap<>();
+
+public int minOperationsToFlip(String expression) {
+    int n = expression.length();
+    Deque<Integer> st = new ArrayDeque<>();
+    for (int i = 0; i < n; i++) {
+        char ch = expression.charAt(i);
+        if (ch == '(') {
+            st.push(i);
+        } else if (ch == ')') {
+            map.put(i, st.pop());
+        }
+    }
+    return evaluate(expression, 0, n - 1)[1];
+}
+
+// {value before operations, number of operations}
+private int[] evaluate(String expression, int i, int j) {
+    if (i == j) {
+        return new int[]{expression.charAt(i) - '0', 1};
+    }
+
+    char op = 0;
+    int[] left, right;
+    if (Character.isDigit(expression.charAt(j))) {
+        // oj = map.get(j)
+        // (0 & 0) & 0
+        // i         j
+        left = evaluate(expression, i, j - 2);
+        right = evaluate(expression, j, j);
+        op = expression.charAt(j - 1);
+    } else {
+        // recursion
+        if (map.get(j) == i) {
+            return evaluate(expression, i + 1, j - 1);
+        }
+
+        // oj = map.get(j)
+        // (0 & 0) & (0 & 0 & 0)
+        // i         oj        j
+        left = evaluate(expression, i, map.get(j) - 2);
+        right = evaluate(expression, map.get(j), j);
+        op = expression.charAt(map.get(j) - 1);
+    }
+
+    if (op == '&') {
+        if ((left[0] ^ right[0]) == 1) {
+            return new int[]{0, 1};
+        }
+        if ((left[0] & right[0]) == 1) {
+            return new int[]{1, Math.min(left[1], right[1])};
+        }
+        return new int[]{0, 1 + Math.min(left[1], right[1])};
+    } else {
+        if ((left[0] ^ right[0]) == 1) {
+            return new int[]{1, 1};
+        }
+        if ((left[0] & right[0]) == 1) {
+            return new int[]{1, 1 + Math.min(left[1], right[1])};
+        }
+        return new int[]{0, Math.min(left[1], right[1])};
     }
 }
 {% endhighlight %}
@@ -327,8 +426,10 @@ public int lastRemaining(int n) {
 [elimination-game]: https://leetcode.com/problems/elimination-game/
 [largest-merge-of-two-strings]: https://leetcode.com/problems/largest-merge-of-two-strings/
 [least-operators-to-express-number]: https://leetcode.com/problems/least-operators-to-express-number/
+[minimum-cost-to-change-the-final-value-of-expression]: https://leetcode.com/problems/minimum-cost-to-change-the-final-value-of-expression/
 [race-car]: https://leetcode.com/problems/race-car/
 [remove-invalid-parentheses]: https://leetcode.com/problems/remove-invalid-parentheses/
 [self-crossing]: https://leetcode.com/problems/self-crossing/
+[special-binary-string]: https://leetcode.com/problems/special-binary-string/
 [strobogrammatic-number-ii]: https://leetcode.com/problems/strobogrammatic-number-ii/
 [strobogrammatic-number-iii]: https://leetcode.com/problems/strobogrammatic-number-iii/

@@ -62,6 +62,36 @@ public boolean backspaceCompare(String S, String T) {
 }
 {% endhighlight %}
 
+[Maximum Number of People That Can Be Caught in Tag][maximum-number-of-people-that-can-be-caught-in-tag]
+
+{% highlight java %}
+public int catchMaximumAmountofPeople(int[] team, int dist) {
+    int n = team.length, count = 0;
+    // i: it
+    // j: non-it
+    for (int i = 0, j = 0; i < n; i++){
+        if (team[i] == 1) {
+            // out of reach
+            while (j < i - dist) {
+                j++;
+            }
+
+            // attempts to finds the next non-it that can be caught
+            // non-strict < ensures j is still within range after j++
+            while (j < Math.min(i + dist, n) && team[j] == 1) {
+                j++;
+            }
+
+            if (j < n && team[j] == 0) {
+                count++;
+                j++;
+            }
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
 [Trapping Rain Water][trapping-rain-water]
 
 {% highlight java %}
@@ -392,6 +422,7 @@ public int maxSum(int[] nums1, int[] nums2) {
 [count-unique-characters-of-all-substrings-of-a-given-string]: https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/
 [get-the-maximum-score]: https://leetcode.com/problems/get-the-maximum-score/
 [intersection-of-three-sorted-arrays]: https://leetcode.com/problems/intersection-of-three-sorted-arrays/
+[maximum-number-of-people-that-can-be-caught-in-tag]: https://leetcode.com/problems/maximum-number-of-people-that-can-be-caught-in-tag/
 [maximum-score-of-a-good-subarray]: https://leetcode.com/problems/maximum-score-of-a-good-subarray/
 [number-of-subsequences-that-satisfy-the-given-sum-condition]: https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/
 [one-edit-distance]: https://leetcode.com/problems/one-edit-distance/

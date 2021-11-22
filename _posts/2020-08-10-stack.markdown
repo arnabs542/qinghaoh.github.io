@@ -55,6 +55,34 @@ public int[] mostCompetitive(int[] nums, int k) {
 }
 {% endhighlight %}
 
+[Binary Searchable Numbers in an Unsorted Array][binary-searchable-numbers-in-an-unsorted-array]
+
+{% highlight java %}
+public int binarySearchableNumbers(int[] nums) {
+    int n = nums.length;
+    // for an element to be found,
+    // it should be greater that all elements before it,
+    // and smaller than all element after it
+    Deque<Integer> st = new ArrayDeque();
+    int max = Integer.MIN_VALUE;
+    for (int num : nums) {
+        // monotonically increasing
+        // pops stack element if it's greater than num
+        // ensures in-stack elements always < later elements
+        while (!st.isEmpty() && num < st.peek()) {
+            st.pop();
+        }
+
+        // num > all previous elements
+        if (num > max) {
+            st.push(num);
+            max = num;
+        }
+    }
+    return st.size();
+}
+{% endhighlight %}
+
 [Create Maximum Number][create-maximum-number]
 
 {% highlight java %}
@@ -332,6 +360,34 @@ public int sumSubarrayMins(int[] A) {
         st.push(i);
     }
     return result;
+}
+{% endhighlight %}
+
+[Maximum of Minimum Values in All Subarrays][maximum-of-minimum-values-in-all-subarrays]
+
+{% highlight java %}
+public int[] findMaximums(int[] nums) {
+    int n = nums.length;
+    int[] ans = new int[n];
+
+    Deque<Integer> st = new ArrayDeque<>();
+    // appends 0 to the end of the array
+    for (int i = 0; i <= n; i++) {
+        // monotonically increasing stack
+        while (!st.isEmpty() && (i == n || nums[i] <= nums[st.peek()])) {
+            int top = st.pop();
+            // len = right - left - 1
+            int len = i - (st.isEmpty() ? -1 : st.peek()) - 1;
+            ans[len - 1] = Math.max(ans[len - 1], nums[top]);
+        }
+        st.push(i);
+    }
+
+    // ans is non-increasing
+    for (int i = n - 1; i > 0; i--) {
+        ans[i - 1] = Math.max(ans[i - 1], ans[i]);
+    }
+    return ans;
 }
 {% endhighlight %}
 
@@ -889,6 +945,7 @@ public int calculate(String s) {
 
 [132-pattern]: https://leetcode.com/problems/132-pattern/
 [basic-calculator]: https://leetcode.com/problems/basic-calculator/
+[binary-searchable-numbers-in-an-unsorted-array]: https://leetcode.com/problems/binary-searchable-numbers-in-an-unsorted-array/
 [count-submatrices-with-all-ones]: https://leetcode.com/problems/count-submatrices-with-all-ones/
 [create-maximum-number]: https://leetcode.com/problems/create-maximum-number/
 [final-prices-with-a-special-discount-in-a-shop]: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/
@@ -899,6 +956,7 @@ public int calculate(String s) {
 [longest-valid-parentheses]: https://leetcode.com/problems/longest-valid-parentheses/
 [maximal-rectangle]: https://leetcode.com/problems/maximal-rectangle/
 [maximum-nesting-depth-of-two-valid-parentheses-strings]: https://leetcode.com/problems/maximum-nesting-depth-of-two-valid-parentheses-strings/
+[maximum-of-minimum-values-in-all-subarrays]: https://leetcode.com/problems/maximum-of-minimum-values-in-all-subarrays/
 [maximum-width-ramp]: https://leetcode.com/problems/maximum-width-ramp/
 [minimum-add-to-make-parentheses-valid]: https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/
 [minimum-cost-tree-from-leaf-values]: https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/
