@@ -873,6 +873,61 @@ private void backtrack(int[] jobs, int index, int[] workers, int max) {
 }
 {% endhighlight %}
 
+# NP-hard
+
+[Maximum Number of Groups Getting Fresh Donuts][maximum-number-of-groups-getting-fresh-donuts]
+
+{% highlight java %}
+private Map<List<Integer>, Integer> memo = new HashMap<>();
+
+// NP-hard
+public int maxHappyGroups(int batchSize, int[] groups) {
+    // list[i]: count of elements with remainder == i
+    List<Integer> list = new ArrayList<>(batchSize);
+    while (list.size() < batchSize) {
+        list.add(0);
+    }
+
+    // greedily combines 2 groups whose remainders sum to 0
+    int count = 0;
+    for (int g : groups) {
+        if (g % batchSize == 0) {
+            count++;
+        } else if (list.get(batchSize - g % batchSize) > 0) {
+            list.set(batchSize - g % batchSize, list.get(batchSize - g % batchSize) - 1);
+            count++;
+        } else {
+            list.set(g % batchSize, list.get(g % batchSize) + 1);
+        }
+    }
+
+    // k-group combinations (k > 2)
+    return backtrack(list, 0) + count;
+}
+
+// diff = sum(each element in the current list % n) - sum(each element in the original list % n)
+// diff is determined by list, so there's no need to use it as a cache key
+private int backtrack(List<Integer> list, int diff) {
+    if (memo.containsKey(list)) {
+        return memo.get(list);
+    }
+
+    int max = 0, batchSize = list.size();
+    for (int i = 1; i < batchSize; i++) {
+        if (list.get(i) > 0) {
+            list.set(i, list.get(i) - 1);
+            // diff == 0 means the current list is a happy combination
+            // so we increment the number of happy groups by one
+            max = Math.max(max, (diff == 0 ? 1 : 0) + backtrack(list, (diff - i + batchSize) % batchSize));
+            list.set(i, list.get(i) + 1);
+        }
+    }
+
+    memo.put(new ArrayList<>(list), max);
+    return max;
+}
+{% endhighlight %}
+
 # Memoization
 
 [Zuma Game][zuma-game]
@@ -947,6 +1002,83 @@ private String serialize(int[] freq) {
 }
 {% endhighlight %}
 
+# Choices & Decision Space
+
+Backtracking explores all the branches of a solution space.
+
+[Maximum Number of Achievable Transfer Requests][maximum-number-of-achievable-transfer-requests]
+
+{% highlight java %}
+private int max = 0;
+
+public int maximumRequests(int n, int[][] requests) {
+    helper(requests, 0, new int[n], 0);
+    return max;
+}
+
+private void helper(int[][] requests, int index, int[] count, int num) {
+    // traverses all n buildings to see if they are all 0
+    // i.e. balanced
+    if (index == requests.length) {
+        for (int i : count) {
+            if (i > 0) {
+                return;
+            }
+        }
+        max = Math.max(max, num);
+        return;
+    }
+
+    // achieves this request
+    count[requests[index][0]]++;
+    count[requests[index][1]]--;
+    helper(requests, index + 1, count, num + 1);
+    count[requests[index][0]]--;
+    count[requests[index][1]]++;
+
+    // not achieves this request
+    helper(requests, index + 1, count, num);
+}
+{% endhighlight %}
+
+[Shopping Offers][shopping-offers]
+
+{% highlight java %}
+public int shoppingOffers(List<Integer> price, List<List<Integer>> special, List<Integer> needs) {
+    return backtrack(price, special, needs);
+}
+
+private int backtrack(List<Integer> price, List<List<Integer>> special, List<Integer> needs) {
+    // direct purchase
+    int min = 0;
+    for (int i = 0; i < needs.size(); i++) {
+        min += price.get(i) * needs.get(i);
+    }
+
+    // special offer
+    for (List<Integer> offer : special) {
+        if (isValid(offer, needs)) {
+            List<Integer> tmp = new ArrayList<>();
+            for (int i = 0; i < needs.size(); i++) {
+                tmp.add(needs.get(i) - offer.get(i));
+            }
+            min = Math.min(min, backtrack(price, special, tmp) + offer.get(offer.size() - 1));
+        }
+    }
+
+    return min;
+}
+
+private boolean isValid(List<Integer> offer, List<Integer> needs) {
+    for (int i = 0; i < needs.size(); i++) {
+        if (needs.get(i) < offer.get(i)) {
+            return false;
+        }
+    }
+    return true;
+}
+{% endhighlight %}
+
 [24-game]: https://leetcode.com/problems/24-game/
 [android-unlock-patterns]: https://leetcode.com/problems/android-unlock-patterns/
 [beautiful-arrangement]: https://leetcode.com/problems/beautiful-arrangement/
@@ -961,6 +1093,8 @@ private String serialize(int[] freq) {
 [generalized-abbreviation]: https://leetcode.com/problems/generalized-abbreviation/
 [letter-tile-possibilities]: https://leetcode.com/problems/letter-tile-possibilities/
 [matchsticks-to-square]: https://leetcode.com/problems/matchsticks-to-square/
+[maximum-number-of-achievable-transfer-requests]: https://leetcode.com/problems/maximum-number-of-achievable-transfer-requests/
+[maximum-number-of-groups-getting-fresh-donuts]: https://leetcode.com/problems/maximum-number-of-groups-getting-fresh-donuts/
 [maximum-score-words-formed-by-letters]: https://leetcode.com/problems/maximum-score-words-formed-by-letters/
 [optimal-account-balancing]: https://leetcode.com/problems/optimal-account-balancing/
 [palindrome-partitioning]: https://leetcode.com/problems/palindrome-partitioning/
@@ -970,6 +1104,7 @@ private String serialize(int[] freq) {
 [permutations]: https://leetcode.com/problems/permutations/
 [permutations-ii]: https://leetcode.com/problems/permutations-ii/
 [robot-room-cleaner]: https://leetcode.com/problems/robot-room-cleaner/
+[shopping-offers]: https://leetcode.com/problems/shopping-offers/
 [subsets]: https://leetcode.com/problems/subsets/
 [subsets-ii]: https://leetcode.com/problems/subsets-ii/
 [zuma-game]: https://leetcode.com/problems/zuma-game/

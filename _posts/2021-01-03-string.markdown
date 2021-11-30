@@ -157,6 +157,47 @@ public String decodeAtIndex(String S, int K) {
 
 For example, `s = "leet2code3", k = 10`
 
+# Swap
+
+[Check If String Is Transformable With Substring Sort Operations][check-if-string-is-transformable-with-substring-sort-operations]
+
+{% highlight java %}
+public boolean isTransformable(String s, String t) {
+    // we can move a char freely to the left until it hits a smaller char
+    // e.g. "0231" > "0213" > "0123"
+    // checks if we can move required char in s to the left to get t
+    Deque<Integer> indexes[] = new Deque[10];
+    for (int i = 0; i < indexes.length; i++) {
+        indexes[i] = new ArrayDeque<>();
+    }
+
+    // decreasing stack
+    int n = s.length();
+    for (int i = n - 1; i >= 0; i--) {
+        indexes[s.charAt(i) - '0'].push(i);
+    }
+
+    for (char ch : t.toCharArray()) {
+        // s has available d
+        int d = ch - '0';
+        if (indexes[d].isEmpty()) {
+            return false;
+        }
+
+        for (int i = 0; i < d; i++) {
+            // check if there is a digit < d on the left of d
+            // e.g. s = "12345", t = "12435"
+            if (!indexes[i].isEmpty() && indexes[i].peek() < indexes[d].peek()) {
+                return false;
+            }
+        }
+        indexes[d].pop();
+    }
+    return true;
+}
+{% endhighlight %}
+
+[check-if-string-is-transformable-with-substring-sort-operations]: https://leetcode.com/problems/check-if-string-is-transformable-with-substring-sort-operations/
 [decoded-string-at-index]: https://leetcode.com/problems/decoded-string-at-index/
 [orderly-queue]: https://leetcode.com/problems/orderly-queue/
 [sentence-screen-fitting]: https://leetcode.com/problems/sentence-screen-fitting/

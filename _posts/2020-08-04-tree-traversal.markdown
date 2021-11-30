@@ -127,6 +127,53 @@ public List<Integer> postorderTraversal(TreeNode root) {
 }
 {% endhighlight %}
 
+## Cache
+
+[Binary Search Tree Iterator II][binary-search-tree-iterator-ii]
+
+{% highlight java %}
+class BSTIterator {
+    private Deque<TreeNode> stack = new ArrayDeque<>();
+    // precomputed values
+    private List<Integer> list = new ArrayList<>();
+    private TreeNode node;
+    // index of the node in list
+    private int index = -1;
+
+    public BSTIterator(TreeNode root) {
+        this.node = root;
+    }
+    
+    public boolean hasNext() {
+        return node != null || !stack.isEmpty() || index < list.size() - 1;
+    }
+    
+    public int next() {
+        // check if it's out of the range of list
+        if (++index == list.size()) {
+            while (node != null) {
+                stack.push(node);
+                node = node.left;
+            }
+            
+            node = stack.pop();
+            list.add(node.val);  // inorder
+            node = node.right;
+        }
+        
+        return list.get(index);
+    }
+    
+    public boolean hasPrev() {
+        return index > 0;
+    }
+    
+    public int prev() {
+        return list.get(--index);
+    }
+}
+{% endhighlight %}
+
 ## Vertical
 
 [Binary Tree Vertical Order Traversal][binary-tree-vertical-order-traversal]
@@ -653,6 +700,7 @@ public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
 
 [all-elements-in-two-binary-search-trees/submissions]: https://leetcode.com/problems/all-elements-in-two-binary-search-trees/submissions/
 [binary-search-tree-iterator]: https://leetcode.com/problems/binary-search-tree-iterator/
+[binary-search-tree-iterator-ii]: https://leetcode.com/problems/binary-search-tree-iterator-ii/
 [binary-tree-vertical-order-traversal]: https://leetcode.com/problems/binary-tree-vertical-order-traversal
 [binary-tree-preorder-traversal]: https://leetcode.com/problems/binary-tree-preorder-traversal
 [binary-tree-inorder-traversal]: https://leetcode.com/problems/binary-tree-inorder-traversal

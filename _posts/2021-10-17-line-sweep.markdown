@@ -215,7 +215,35 @@ private double distance(int[] p1, int[] p2) {
 }
 {% endhighlight %}
 
+# Inclusive End
+
+[Brightest Position on Street][brightest-position-on-street]
+
+{% highlight java %}
+public int brightestPosition(int[][] lights) {
+    int n = lights.length;
+    Map<Integer, Integer> map = new TreeMap<>();
+    for (int i = 0; i < n; i++) {
+        int start = lights[i][0] - lights[i][1];
+        int end = lights[i][0] + lights[i][1] + 1;
+        map.put(start, map.getOrDefault(start, 0) + 1);
+        map.put(end, map.getOrDefault(end, 0) - 1);
+    }
+
+    int max = 0, index = 0, count = 0;
+    for (int p : map.keySet()) {
+        count += map.get(p);
+        if (count > max) {
+            max = count;
+            index = p;
+        }
+    }
+    return index;
+}
+{% endhighlight %}
+
 [average-height-of-buildings-in-each-segment]: https://leetcode.com/problems/average-height-of-buildings-in-each-segment/
+[brightest-position-on-street]: https://leetcode.com/problems/brightest-position-on-street/
 [describe-the-painting]: https://leetcode.com/problems/describe-the-painting/
 [maximum-number-of-darts-inside-of-a-circular-dartboard]: https://leetcode.com/problems/maximum-number-of-darts-inside-of-a-circular-dartboard/
 [the-skyline-problem]: https://leetcode.com/problems/the-skyline-problem/

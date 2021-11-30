@@ -40,7 +40,8 @@ Proof: [Divergence of the Sum of the Reciprocals of the Primes](https://en.wikip
 # Prime Factorization
 
 [Shor's algorithm](https://en.wikipedia.org/wiki/Shor's_algorithm): a polynomial-time quantum computer algorithm for integer factorization.
-[General number field sieve (GNFS)](https://en.wikipedia.org/wiki/General_number_field_sieve): the most efficient classical algorithm known for factoring integers larger than \\(10^100\\)
+
+[General number field sieve (GNFS)](https://en.wikipedia.org/wiki/General_number_field_sieve): the most efficient classical algorithm known for factoring integers larger than \\(10^{100}\\)
 
 [GCD Sort of an Array][gcd-sort-of-an-array]
 

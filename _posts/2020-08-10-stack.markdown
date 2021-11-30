@@ -55,6 +55,28 @@ public int[] mostCompetitive(int[] nums, int k) {
 }
 {% endhighlight %}
 
+[Minimum Number of Swaps to Make the String Balanced][minimum-number-of-swaps-to-make-the-string-balanced]
+
+Use counter as a stack.
+
+{% highlight java %}
+public int minSwaps(String s) {
+    int stackSize = 0;
+    // cancels out all the valid pairs
+    for (char ch : s.toCharArray()) {
+        if (ch == '[') {
+            stackSize++;
+        } else if (stackSize > 0) {
+            stackSize--;
+        }
+    }
+    // ]]]][[[[
+    // stack size == 4, swaps == (4 + 1) / 2
+    // same applies when stack size is odd
+    return (stackSize + 1) / 2;
+}
+{% endhighlight %}
+
 [Binary Searchable Numbers in an Unsorted Array][binary-searchable-numbers-in-an-unsorted-array]
 
 {% highlight java %}
@@ -961,6 +983,7 @@ public int calculate(String s) {
 [minimum-add-to-make-parentheses-valid]: https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/
 [minimum-cost-tree-from-leaf-values]: https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/
 [minimum-insertions-to-balance-a-parentheses-string]: https://leetcode.com/problems/minimum-insertions-to-balance-a-parentheses-string/
+[minimum-number-of-swaps-to-make-the-string-balanced]: https://leetcode.com/problems/minimum-number-of-swaps-to-make-the-string-balanced/
 [next-greater-element-ii]: https://leetcode.com/problems/next-greater-element-ii/
 [next-greater-node-in-linked-list]: https://leetcode.com/problems/next-greater-node-in-linked-list/
 [number-of-valid-subarrays]: https://leetcode.com/problems/number-of-valid-subarrays/

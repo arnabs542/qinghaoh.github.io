@@ -118,7 +118,12 @@ public int[] findBall(int[][] grid) {
 }
 {% endhighlight %}
 
+[Number of Spaces Cleaning Robot Cleaned][number-of-spaces-cleaning-robot-cleaned]
+
+When the robot reaches a space that it has already cleaned and is facing the same direction as before, we can stop the simulation.
+
 [champagne-tower]: https://leetcode.com/problems/champagne-tower/
 [dota2-senate]: https://leetcode.com/problems/dota2-senate/
+[number-of-spaces-cleaning-robot-cleaned]: https://leetcode.com/problems/number-of-spaces-cleaning-robot-cleaned/
 [pour-water]: https://leetcode.com/problems/pour-water/
 [where-will-the-ball-fall]: https://leetcode.com/problems/where-will-the-ball-fall/

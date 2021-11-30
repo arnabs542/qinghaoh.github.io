@@ -218,7 +218,7 @@ public int maxCoins(int[] nums) {
     for (int len = 1; len <= n; len++) {
         for (int left = 0; left + len - 1 < n; left++) {
             int right = left + len - 1;
-            // reverse thinking: finds the balloon that's last to burst
+            // reverse thinking: for each balloon i that's last to burst
             // every element of the range [left, right] could be the last balloon to burst
             for (int i = left; i <= right; i++) {
                 int leftNum = (left == 0) ? 1 : nums[left - 1];
@@ -240,9 +240,53 @@ public int maxCoins(int[] nums) {
 {% highlight java %}
 {% endhighlight %}
 
+[Minimum Cost to Merge Stones][minimum-cost-to-merge-stones]
+
+{% highlight java %}
+public int mergeStones(int[] stones, int k) {
+    int n = stones.length;
+
+    // k + (k - 1) * m == n
+    if ((n - 1) % (k - 1) != 0) {
+        return -1;
+    }
+
+    // prefix sum
+    int[] p = new int[n + 1];
+    for (int i = 0; i < n; i++) {
+        p[i + 1] = p[i] + stones[i];
+    }
+
+    // dp[i][j]: minimum cost to merge k consecutive piles in stones[i...j]
+    // into as few piles as possible (one or more piles, not exactly into one pile)
+    // the final number of piles is dependent on the range length
+    // e.g. dp[1][8], k = 5, then the number of piles = 3
+    int[][] dp = new int[n][n];
+
+    for (int len = k; len <= n; len++) {
+        for (int i = 0; i + len <= n; i++) {
+            int j = i + len - 1;
+            dp[i][j] = Integer.MAX_VALUE;
+            // step == k - 1, because it ensures stones[i...m] can be merged to one pile
+            for (int m = i; m < j; m += k - 1) {
+                dp[i][j] = Math.min(dp[i][j], dp[i][m] + dp[m + 1][j]);
+            }
+
+            // (j - i) % (k - 1) stones remained from the above loop
+            // if it's 0, merges stones[i...j] into one pile
+            if ((j - i) % (k - 1) == 0) {
+                dp[i][j] += p[j + 1] - p[i];
+            }
+        }
+    }
+
+    return dp[0][n - 1];
+}
+{% endhighlight %}
 
 [burst-balloons]: https://leetcode.com/problems/burst-balloons/
 [largest-sum-of-averages]: https://leetcode.com/problems/largest-sum-of-averages/
 [maximum-score-from-performing-multiplication-operations]: https://leetcode.com/problems/maximum-score-from-performing-multiplication-operations/
+[minimum-cost-to-merge-stones]: https://leetcode.com/problems/minimum-cost-to-merge-stones/
 [minimum-score-triangulation-of-polygon]: https://leetcode.com/problems/minimum-score-triangulation-of-polygon/
 [remove-boxes]: https://leetcode.com/problems/remove-boxes/

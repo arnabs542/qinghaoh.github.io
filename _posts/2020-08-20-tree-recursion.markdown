@@ -1025,6 +1025,75 @@ private void dfs(int[] nums, int node) {
 }
 {% endhighlight %}
 
+[Number Of Ways To Reconstruct A Tree][number-of-ways-to-reconstruct-a-tree]
+
+{% highlight java %}
+public int checkWays(int[][] pairs) {
+    // builds graph
+    Map<Integer, Set<Integer>> graph = new HashMap<>();
+    for (int[] p : pairs) {
+        graph.computeIfAbsent(p[0], v -> new HashSet<>()).add(p[1]);
+        graph.computeIfAbsent(p[1], v -> new HashSet<>()).add(p[0]);
+    }
+
+    // {node, degree}
+    // the degree is of the graph node, not of the tree node
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> -a[1]));
+    for (var e : graph.entrySet()) {
+        pq.offer(new int[]{e.getKey(), e.getValue().size()});
+    }
+
+    // number of nodes
+    int n = graph.size();
+    Set<Integer> visited = new HashSet<>();
+    boolean isMultiple = false;
+
+    // selects the node with the greatest graph degree greedily
+    while (!pq.isEmpty()) {
+        int[] curr = pq.poll();
+
+        // a node's parent's pairs always contain all of the node's pairs
+        // so parent's degree is always >= the child node's degree
+        //
+        // we are processing from max degree to min in descending order
+        // so the already visited neighbors are the node's ancestors
+        // and the one with least degree is its parent
+        int parent = 0, minDegree = n;
+        for (int neighbor : graph.get(curr[0])) {
+            if (visited.contains(neighbor) && graph.get(neighbor).size() < minDegree) {
+                parent = neighbor;
+                minDegree = graph.get(neighbor).size();
+            }
+        }
+
+        visited.add(curr[0]);
+
+        // current node is a root candidate (parent == 0)
+        if (parent == 0) {
+            // if the node has degree < n - 1, there's no root
+            if (curr[1] != n - 1) {
+                return 0;
+            }
+            continue;
+        }
+
+        // parent's pairs must contain the current node's neighbor
+        for (int neighbor : graph.get(curr[0])) {
+            if (neighbor != parent && !graph.get(parent).contains(neighbor)) {
+                return 0;
+            }
+        }
+
+        // parent's degree = current node's degree
+        if (minDegree == curr[1]) {
+            isMultiple = true;
+        }
+    }
+
+    return isMultiple ? 2 : 1;
+}
+{% endhighlight %}
+
 [all-nodes-distance-k-in-binary-tree]: https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/
 [binary-tree-cameras]: https://leetcode.com/problems/binary-tree-cameras/
 [binary-tree-maximum-path-sum]: https://leetcode.com/problems/binary-tree-maximum-path-sum/
@@ -1049,6 +1118,7 @@ private void dfs(int[] nums, int node) {
 [minimum-absolute-difference-in-bst]: https://leetcode.com/problems/minimum-absolute-difference-in-bst/
 [n-ary-tree-level-order-traversal]: https://leetcode.com/problems/n-ary-tree-level-order-traversal/
 [number-of-good-leaf-nodes-pairs]: https://leetcode.com/problems/number-of-good-leaf-nodes-pairs/
+[number-of-ways-to-reconstruct-a-tree]: https://leetcode.com/problems/number-of-ways-to-reconstruct-a-tree/
 [path-sum-iii]: https://leetcode.com/problems/path-sum-iii/
 [pseudo-palindromic-paths-in-a-binary-tree]: https://leetcode.com/problems/pseudo-palindromic-paths-in-a-binary-tree/
 [second-minimum-node-in-a-binary-tree]: https://leetcode.com/problems/second-minimum-node-in-a-binary-tree/

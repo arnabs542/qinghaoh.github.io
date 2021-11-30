@@ -677,6 +677,10 @@ private void dfs(int r, int c) {
 
 [Sliding Puzzle][sliding-puzzle]
 
+# Construction
+
+[Smallest Greater Multiple Made of Two Digits][smallest-greater-multiple-made-of-two-digits]
+
 # Total Distance
 
 [Shortest Distance from All Buildings][shortest-distance-from-all-buildings]
@@ -763,6 +767,7 @@ private void bfs(int[][] grid, int[][][] distances, int i, int j) {
 [shortest-path-in-a-grid-with-obstacles-elimination]: https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/
 [shortest-path-with-alternating-colors]: https://leetcode.com/problems/shortest-path-with-alternating-colors/
 [sliding-puzzle]: https://leetcode.com/problems/sliding-puzzle/
+[smallest-greater-multiple-made-of-two-digits]: https://leetcode.com/problems/smallest-greater-multiple-made-of-two-digits/
 [the-maze]: https://leetcode.com/problems/the-maze/
 [the-maze-ii]: https://leetcode.com/problems/the-maze-ii/
 [trapping-rain-water-ii]: https://leetcode.com/problems/trapping-rain-water-ii/

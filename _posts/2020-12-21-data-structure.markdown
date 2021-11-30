@@ -22,6 +22,13 @@ stack and minStack
 
 Map + TreeMap
 
+[Implement Magic Dictionary][implement-magic-dictionary]
+
+{% highlight java %}
+// {length : words}
+private Map<Integer, List<String>> map = new HashMap<>();
+{% endhighlight %}
+
 [All O`one Data Structure][all-oone-data-structure]
 
 Doubly linked list (buckets)
@@ -44,6 +51,14 @@ if (left.size() == right.size()) {
     left.offer(num);
     right.offer(left.poll());
 }
+{% endhighlight %}
+
+[Find Servers That Handled Most Number of Requests][find-servers-that-handled-most-number-of-requests]
+
+{% highlight java %}
+TreeSet<Integer> availableServers = new TreeSet<>();
+// {busy server, available time}
+Queue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] == b[1] ? a[0] - b[0] : a[1] - b[1]);
 {% endhighlight %}
 
 [Sliding Window Median][sliding-window-median]
@@ -508,6 +523,8 @@ class Skiplist {
 [design-skiplist]: https://leetcode.com/problems/design-skiplist/
 [dinner-plate-stacks]: https://leetcode.com/problems/dinner-plate-stacks/
 [find-median-from-data-stream]: https://leetcode.com/problems/find-median-from-data-stream/
+[find-servers-that-handled-most-number-of-requests]: https://leetcode.com/problems/find-servers-that-handled-most-number-of-requests/
+[implement-magic-dictionary]: https://leetcode.com/problems/implement-magic-dictionary/
 [lfu-cache]: https://leetcode.com/problems/lfu-cache/
 [lru-cache]: https://leetcode.com/problems/lru-cache/
 [max-stack]: https://leetcode.com/problems/max-stack/

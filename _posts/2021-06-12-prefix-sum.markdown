@@ -145,6 +145,28 @@ public int getProduct(int k) {
 }
 {% endhighlight %}
 
+[Product of Array Except Self][product-of-array-except-self]
+
+{% highlight java %}
+public int[] productExceptSelf(int[] nums) {
+    int n = nums.length;
+    int[] answer = new int[n];
+
+    // prefix product, no last element
+    answer[0] = 1;
+    for (int i = 0; i < n - 1; i++) {
+        answer[i + 1] = nums[i] * answer[i];
+    }
+
+    int product = 1;
+    for (int i = n - 1; i >= 0; i--) {
+        answer[i] *= product;
+        product *= nums[i];
+    }
+    return answer;
+}
+{% endhighlight %}
+
 ## Mod
 
 [Make Sum Divisible by P][make-sum-divisible-by-p]
@@ -341,6 +363,45 @@ public int maxNonOverlapping(int[] nums, int target) {
 }
 {% endhighlight %}
 
+[Count Subarrays With More Ones Than Zeros][count-subarrays-with-more-ones-than-zeros]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int subarraysWithMoreZerosThanOnes(int[] nums) {
+    int n = nums.length;
+    // dp[i]: count of subarrays ending at i
+    int[] dp = new int[n];
+
+    // {sum : last index}
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(0, -1);
+
+    // like sin(x)
+    int sum = 0, count = 0;
+    for (int i = 0; i < n; i++) {
+        // prefix sum of #1 - #0
+        sum += nums[i] == 0 ? -1 : 1;
+        if (map.containsKey(sum)) {
+            // between curr and prev, #0 == #1
+            int prev = map.get(sum);
+            dp[i] = prev < 0 ? 0 : dp[prev];
+
+            // valley between curr and prev
+            if (nums[i] == 1) {
+                dp[i] += i - prev - 1;
+            }
+        } else if (sum > 0) {
+            // the subarray ending at i has more ones than zeros
+            dp[i] = i + 1;
+        }
+        count = (count + dp[i]) % MOD;
+        map.put(sum, i);
+    }
+    return count;
+}
+{% endhighlight %}
+
 [Number of Ways to Separate Numbers][number-of-ways-to-separate-numbers]
 
 {% highlight java %}
@@ -468,6 +529,7 @@ public int maxSumSubmatrix(int[][] matrix, int k) {
 [can-make-palindrome-from-substring]: https://leetcode.com/problems/can-make-palindrome-from-substring/
 [change-minimum-characters-to-satisfy-one-of-three-conditions]: https://leetcode.com/problems/change-minimum-characters-to-satisfy-one-of-three-conditions/
 [contiguous-array]: https://leetcode.com/problems/contiguous-array/
+[count-subarrays-with-more-ones-than-zeros]: https://leetcode.com/problems/count-subarrays-with-more-ones-than-zeros/
 [count-triplets-that-can-form-two-arrays-of-equal-xor]: https://leetcode.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/
 [make-sum-divisible-by-p]: https://leetcode.com/problems/make-sum-divisible-by-p/
 [max-sum-of-rectangle-no-larger-than-k]: https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/
@@ -476,6 +538,7 @@ public int maxSumSubmatrix(int[][] matrix, int k) {
 [maximum-number-of-non-overlapping-subarrays-with-sum-equals-target]: https://leetcode.com/problems/maximum-number-of-non-overlapping-subarrays-with-sum-equals-target/
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
 [number-of-ways-to-separate-numbers]: https://leetcode.com/problems/number-of-ways-to-separate-numbers/
+[product-of-array-except-self]: https://leetcode.com/problems/product-of-array-except-self/
 [product-of-the-last-k-numbers]: https://leetcode.com/problems/product-of-the-last-k-numbers/
 [remove-zero-sum-consecutive-nodes-from-linked-list]: https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/

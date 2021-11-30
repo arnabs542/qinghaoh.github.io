@@ -564,6 +564,126 @@ public int minSwaps(int[] data) {
 }
 {% endhighlight %}
 
+[Number of Equal Count Substrings][number-of-equal-count-substrings]
+
+{% highlight java %}
+public int equalCountSubstrings(String s, int count) {
+    int result = 0;
+    int unique = s.chars().mapToObj(i -> (char)i).collect(Collectors.toSet()).size();
+    for (int k = 1; k <= unique; k++) {
+        int windowSize = k * count;
+        int[] c = new int[26];
+        // count of chars in the window is k
+        int equalCount = 0;
+        for (int j = 0; j < s.length(); j++) {
+            if (++c[s.charAt(j) - 'a'] == count) {
+                equalCount++;
+            }
+            if (j >= windowSize && c[s.charAt(j - windowSize) - 'a']-- == count) {
+                equalCount--;
+            }
+            if (equalCount == k) {
+                result++;
+            }
+        }
+    }
+    return result;
+}
+{% endhighlight %}
+
+[Minimum Adjacent Swaps for K Consecutive Ones][minimum-adjacent-swaps-for-k-consecutive-ones]
+
+{% highlight java %}
+public int minMoves(int[] nums, int k) {
+    if (k == 1) {
+        return 0;
+    }
+
+    // indexes of ones
+    List<Integer> ones = new ArrayList<>();
+    for (int i = 0; i < nums.length; i++) {
+        if (nums[i] == 1) {
+            ones.add(i);
+        }
+    }
+
+    // prefix sum
+    int m = ones.size();
+    int[] p = new int[m + 1];
+    for (int i = 0; i < m; i++) {
+        p[i + 1] = p[i] + ones.get(i);
+    }
+
+    int min = Integer.MAX_VALUE;
+    // sliding window [i...j] of length k
+    for (int i = 0, j = k - 1; j < m; i++, j++) {
+        // mid point
+        int mid = (i + j) / 2;
+        // number of elements on each side
+        int radius = mid - i;
+
+        int left = p[mid] - p[i];
+        int right = p[j + 1] - p[mid + 1];
+
+        int subtrahend = radius * (radius + 1);
+        if (k % 2 == 0) {
+            // e.g. [0, 2, 4, 6, 7, 9]
+            // k = 6
+            //
+            // Step 1:
+            // -> [4, 4, 4, 4, 4, 4]
+            // left = 0 + 2 (+ 4)
+            // right = 6 + 7 + 9
+            // radius = 2
+            // swap = (4 - 0) + (4 - 2) + (9 - 4) + (7 - 4) + (6 - 4)
+            //    = (9 + 7 + 6) - (0 + 2 + 4)
+            //
+            // Step2:
+            // -> [2, 3, 4, 5, 6, 7]
+            // swap -= 1 + 2 + 0 + 1 + 2 + 3
+            //   -= (radius + 1) * radius + (radius + 1)
+            left += ones.get(mid);
+            subtrahend += radius + 1;
+        }
+        min = Math.min(min, right - left - subtrahend);
+    }
+    return min;
+}
+{% endhighlight %}
+
+[Minimum Number of Operations to Make Array Continuous][minimum-number-of-operations-to-make-array-continuous]
+
+{% highlight java %}
+public int minOperations(int[] nums) {
+    Arrays.sort(nums);
+
+    // de-dupe, m is the number of unique elements
+    int n = nums.length, m = 1;
+    for (int i = 1; i < n; i++) {
+        if (nums[i] != nums[i - 1]) {
+            nums[m++] = nums[i];
+        }
+    }
+
+    // uses each num as the start of the range
+    // finds the range which requires minimum operations
+    int j = 0, min = n;
+    for (int i = 0; i < m; i++) {
+        // start = nums[i]
+        // end = nums[i] + n - 1
+        // range = [start, end], len = n
+        // finds the first out-of-range element
+        while (j < m && nums[j] <= n + nums[i] - 1) {
+            j++;
+        }
+
+        // number of unique elements in the range is n - j + i
+        min = Math.min(min, n - j + i);
+    }
+    return min;
+}
+{% endhighlight %}
+
 [Find All Anagrams in a String][find-all-anagrams-in-a-string]
 
 {% highlight java %}
@@ -811,14 +931,17 @@ public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWei
 [max-consecutive-ones-iii]: https://leetcode.com/problems/max-consecutive-ones-iii/
 [maximum-points-you-can-obtain-from-cards]: https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
+[minimum-adjacent-swaps-for-k-consecutive-ones]: https://leetcode.com/problems/minimum-adjacent-swaps-for-k-consecutive-ones/
 [minimum-difference-between-largest-and-smallest-value-in-three-moves]: https://leetcode.com/problems/minimum-difference-between-largest-and-smallest-value-in-three-moves/
 [minimum-number-of-flips-to-make-the-binary-string-alternating]: https://leetcode.com/problems/minimum-number-of-flips-to-make-the-binary-string-alternating/
+[minimum-number-of-operations-to-make-array-continuous]: https://leetcode.com/problems/minimum-number-of-operations-to-make-array-continuous/
 [minimum-operations-to-reduce-x-to-zero]: https://leetcode.com/problems/minimum-operations-to-reduce-x-to-zero/
 [minimum-size-subarray-sum]: https://leetcode.com/problems/minimum-size-subarray-sum/
 [minimum-swaps-to-group-all-1s-together]: https://leetcode.com/problems/minimum-swaps-to-group-all-1s-together/
 [minimum-window-subsequence]: https://leetcode.com/problems/minimum-window-subsequence/
 [minimum-window-substring]: https://leetcode.com/problems/minimum-window-substring/
 [moving-stones-until-consecutive-ii]: https://leetcode.com/problems/moving-stones-until-consecutive-ii/
+[number-of-equal-count-substrings]: https://leetcode.com/problems/number-of-equal-count-substrings/
 [number-of-substrings-containing-all-three-characters]: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
 [replace-the-substring-for-balanced-string]: https://leetcode.com/problems/replace-the-substring-for-balanced-string/
 [subarray-product-less-than-k]: https://leetcode.com/problems/subarray-product-less-than-k/submissions/
