@@ -23,6 +23,30 @@ public int maxSubArray(int[] nums) {
 
 This can be viewed as a simple/trivial example of dynamic programming.
 
+[Maximum Product Subarray][maximum-product-subarray]
+
+{% highlight java %}
+public int maxProduct(int[] nums) {
+    int max = nums[0], min = nums[0];
+    int product = max;
+
+    for (int i = 1; i < nums.length; i++) {
+        if (nums[i] < 0) {
+            int tmp = max;
+            max = min;
+            min = tmp;
+        }
+
+        max = Math.max(nums[i], max * nums[i]);
+        min = Math.min(nums[i], min * nums[i]);
+
+        product = Math.max(product, max);
+    }
+
+    return product;
+}
+{% endhighlight %}
+
 [Maximum Alternating Subarray Sum][maximum-alternating-subarray-sum]
 
 {% highlight java %}
@@ -205,6 +229,7 @@ public int maxSatisfaction(int[] satisfaction) {
 [best-time-to-buy-and-sell-stock]: https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
 [max-dot-product-of-two-subsequences]: https://leetcode.com/problems/max-dot-product-of-two-subsequences/
 [maximum-alternating-subarray-sum]: https://leetcode.com/problems/maximum-alternating-subarray-sum/
+[maximum-product-subarray]: https://leetcode.com/problems/maximum-product-subarray/
 [maximum-subarray]: https://leetcode.com/problems/maximum-subarray/
 [maximum-subarray-sum-after-one-operation]: https://leetcode.com/problems/maximum-subarray-sum-after-one-operation/
 [maximum-subarray-sum-with-one-deletion]: https://leetcode.com/problems/maximum-subarray-sum-with-one-deletion/

@@ -327,10 +327,50 @@ private List<Integer> recover(int[] sums) {
 }
 {% endhighlight %}
 
+## Dynamic Programming
+
+[Odd Even Jump][odd-even-jump]
+
+{% highlight java %}
+public int oddEvenJumps(int[] arr) {
+    int n  = arr.length;
+    // whether has higher or lower later elements
+    boolean[] hasHigher = new boolean[n], hasLower = new boolean[n];
+    hasHigher[n - 1] = hasLower[n - 1] = true;
+
+    // {element, index}
+    TreeMap<Integer, Integer> map = new TreeMap<>();
+    map.put(arr[n - 1], n - 1);
+
+    // in reverse order
+    int count = 1;
+    for (int i = n - 2; i >= 0; i--) {
+        var c = map.ceilingEntry(arr[i]);
+        var f = map.floorEntry(arr[i]);
+        if (c != null) {
+            hasHigher[i] = hasLower[c.getValue()];
+        }
+        if (f != null) {
+            hasLower[i] = hasHigher[f.getValue()];
+        }
+
+        // odd numbered jumps are higher
+        if (hasHigher[i]) {
+            count++;
+        }
+        map.put(arr[i], i);
+    }
+    return count;
+}
+{% endhighlight %}
+
+Another solution is using Stack (next greater/less element).
+
 [array-of-doubled-pairs]: https://leetcode.com/problems/array-of-doubled-pairs/
 [contains-duplicate-iii]: https://leetcode.com/problems/contains-duplicate-iii/
 [depth-of-bst-given-insertion-order]: https://leetcode.com/problems/depth-of-bst-given-insertion-order/
 [find-array-given-subset-sums]: https://leetcode.com/problems/find-array-given-subset-sums/
 [making-file-names-unique]: https://leetcode.com/problems/making-file-names-unique/
+[odd-even-jump]: https://leetcode.com/problems/odd-even-jump/
 [tuple-with-same-product]: https://leetcode.com/problems/tuple-with-same-product/
 [vowel-spellchecker]: https://leetcode.com/problems/vowel-spellchecker/

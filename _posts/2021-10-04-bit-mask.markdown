@@ -216,6 +216,54 @@ private boolean dfs(int index, int mask, List<Long> freq, List<Integer> quantity
 }
 {% endhighlight %}
 
+[Minimum Cost to Connect Two Groups of Points][minimum-cost-to-connect-two-groups-of-points]
+
+{% highlight java %}
+private List<List<Integer>> cost;
+private int[][] memo;
+
+public int connectTwoGroups(List<List<Integer>> cost) {
+    this.cost = cost;
+
+    int n1 = cost.size(), n2 = cost.get(0).size();
+    this.memo = new int[n1 + 1][1 << n2];
+
+    // rightMinCost[j]: min cost among all possible connections between group1(i) to group2(j)
+    int[] rightMinCost = new int[n2];
+    Arrays.fill(rightMinCost, Integer.MAX_VALUE);
+    for (int j = 0; j < n2; j++) {
+        for (int i = 0; i < n1; i++) {
+            rightMinCost[j] = Math.min(rightMinCost[j], cost.get(i).get(j));
+        }
+    }
+    return dfs(0, rightMinCost, 0);
+}
+
+private int dfs(int i, int[] rightMinCost, int mask) {
+    if (memo[i][mask] > 0) {
+        return memo[i][mask];
+    }
+
+    int min = 0;
+    if (i < cost.size()) {
+        // connects group1[i] and group2[j]
+        min = Integer.MAX_VALUE;
+        for (int j = 0; j < cost.get(0).size(); j++) {
+            min = Math.min(min, cost.get(i).get(j) + dfs(i + 1, rightMinCost, mask | (1 << j)));
+        }
+    } else {
+        // all points in group1 are connected
+        // the unmatched groups can be connected using the precomputed min cost array
+        for (int j = 0; j < cost.get(0).size(); j++) {
+            if ((mask & (1 << j)) == 0) {
+                min += rightMinCost[j];
+            }
+        }
+    }
+    return memo[i][mask] = min;
+}
+{% endhighlight %}
+
 # Bottom-up
 
 [Partition to K Equal Sum Subsets][partition-to-k-equal-sum-subsets]
@@ -361,6 +409,7 @@ int dfs(List<Integer>[] h2p, int n, int hat, int mask, Integer[][] memo) {
 
 [distribute-repeating-integers]: https://leetcode.com/problems/distribute-repeating-integers/
 [iterator-for-combination]: https://leetcode.com/problems/iterator-for-combination/
+[minimum-cost-to-connect-two-groups-of-points]: https://leetcode.com/problems/minimum-cost-to-connect-two-groups-of-points/
 [minimum-xor-sum-of-two-arrays]: https://leetcode.com/problems/minimum-xor-sum-of-two-arrays/
 [number-of-ways-to-wear-different-hats-to-each-other]: https://leetcode.com/problems/number-of-ways-to-wear-different-hats-to-each-other/
 [partition-to-k-equal-sum-subsets]: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/

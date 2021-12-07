@@ -97,19 +97,52 @@ return s.substring(index) + s.substring(0, index);
 {% highlight java %}
 public int wordsTyping(String[] sentence, int rows, int cols) {
     String s = String.join(" ", sentence) + " ";
-    int start = 0, l = s.length();
+
+    // puts s in one line repeatedly
+    // finds the start position (0 index) of each row
+    // e.g. rows = 4, cols = 6
+    // "abc de f abc de f abc de f ..."
+    //  0      7     13   18     25
+    int start = 0, n = s.length();
     for (int i = 0; i < rows; i++) {
         start += cols;
-        if (s.charAt(start % l) == ' ') {
-            start++;
-        } else {
-            while (start > 0 && s.charAt((start - 1) % l) != ' ') {
-                start--;
-            }
+
+        // adjustments
+        // moves the pointer backward to a space
+        while (start > 0 && s.charAt(start % n) != ' ') {
+            start--;
         }
+        // moves the pointer forward to a letter
+        start++;
     }
 
-    return start / s.length();
+    return start / n;
+}
+{% endhighlight %}
+
+We can preprocess the adjustment of every possible start:
+
+{% highlight java %}
+public int wordsTyping(String[] sentence, int rows, int cols) {
+    String s = String.join(" ", sentence) + " ";
+    int start = 0, n = s.length();
+
+    // move[i]: the number of moves to adjust the start in s
+    // if s[i] is a space, move[i] == 1 (next char)
+    // else, move[i] = move[i - 1] - 1 (moves to the first letter of the current work)
+    int[] move = new int[n];
+
+    // move[0] = 0 because the first char is always a letter
+    for (int i = 1; i < n; i++) {
+        move[i] = s.charAt(i) == ' ' ? 1 : move[i - 1] - 1;
+    }
+
+    for (int i = 0; i < rows; i++) {
+        start += cols;
+        start += move[start % n];
+    }
+
+    return start / n;
 }
 {% endhighlight %}
 

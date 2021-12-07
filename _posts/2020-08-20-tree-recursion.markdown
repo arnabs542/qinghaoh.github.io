@@ -394,8 +394,7 @@ private int[] dfs(TreeNode node) {
         return new int[]{-1, -1, -1};
     }
 
-    int[] left = dfs(node.left);
-    int[] right = dfs(node.right);
+    int[] left = dfs(node.left), right = dfs(node.right);
 
     // left[1], right[0] makes the path zigzag
     // leaves will have zigzag path == -1 + 1 == 0
@@ -442,8 +441,7 @@ private int[] dfs(TreeNode root) {
         return dp;
     }
 
-    int[] left = dfs(root.left);
-    int[] right = dfs(root.right);
+    int[] left = dfs(root.left), right = dfs(root.right);
 
     dp[0] = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
     dp[1] = root.val + left[0] + right[0];

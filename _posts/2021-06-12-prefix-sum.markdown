@@ -112,9 +112,34 @@ public List<Boolean> canMakePaliQueries(String s, int[][] queries) {
     List<Boolean> answer = new ArrayList<>();
     for (int[] q : queries) {
         int odd = Integer.bitCount(p[q[1] + 1] ^ p[q[0]]);
-        answer.add((odd - 1) <= 2 * q[2]);
+        answer.add(odd - 1 <= 2 * q[2]);
     }
     return answer;
+}
+{% endhighlight %}
+
+[Number of Wonderful Substrings][number-of-wonderful-substrings]
+
+{% highlight java %}
+private static final int NUM_CHARS = 10;
+
+public long wonderfulSubstrings(String word) {
+    // map[i]: count of bit mask i
+    long[] map = new long[1 << NUM_CHARS];
+    map[0] = 1;
+
+    // bits to represent prefix xor
+    long count = 0;
+    int p = 0;
+    for (int i = 0; i < word.length(); i++) {
+        p ^= 1 << (word.charAt(i) - 'a');
+        count += map[p];
+        for (int j = 0; j < NUM_CHARS; j++) {
+            count += map[p ^ (1 << j)];
+        }
+        map[p]++;
+    }
+    return count;
 }
 {% endhighlight %}
 
@@ -538,6 +563,7 @@ public int maxSumSubmatrix(int[][] matrix, int k) {
 [maximum-number-of-non-overlapping-subarrays-with-sum-equals-target]: https://leetcode.com/problems/maximum-number-of-non-overlapping-subarrays-with-sum-equals-target/
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
 [number-of-ways-to-separate-numbers]: https://leetcode.com/problems/number-of-ways-to-separate-numbers/
+[number-of-wonderful-substrings]: https://leetcode.com/problems/number-of-wonderful-substrings/
 [product-of-array-except-self]: https://leetcode.com/problems/product-of-array-except-self/
 [product-of-the-last-k-numbers]: https://leetcode.com/problems/product-of-the-last-k-numbers/
 [remove-zero-sum-consecutive-nodes-from-linked-list]: https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/

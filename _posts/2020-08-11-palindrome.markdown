@@ -314,6 +314,35 @@ public String longestPalindrome(String s) {
 
 # Dynamic Programming
 
+[Palindrome Partitioning IV][palindrome-partitioning-iv]
+
+{% highlight java %}
+public boolean checkPartitioning(String s) {
+    int n = s.length();
+    // dp[i][j]: s.substring(i, j + 1)
+    boolean[][] dp = new boolean[n][n];
+
+    for (int i = n - 1; i >= 0; i--) {
+        for (int j = i; j < n; j++) {
+            if (s.charAt(i) == s.charAt(j)) {
+                dp[i][j] = (i > j - 2 ? true : dp[i + 1][j - 1]);
+            } else {
+                dp[i][j] = false;
+            }
+        }
+    }
+
+    for (int i = 1; i < n - 1; i++) {
+        for (int j = i; j < n - 1; j++) {
+            if (dp[0][i - 1] && dp[i][j] && dp[j + 1][n - 1]) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+{% endhighlight %}
+
 [Longest Palindromic Subsequence][longest-palindromic-subsequence]
 
 {% highlight java %}
@@ -459,6 +488,8 @@ public int countPalindromicSubsequences(String S) {
 [palindrome-number]: https://leetcode.com/problems/palindrome-number/
 [palindrome-pairs]: https://leetcode.com/problems/palindrome-pairs/
 [palindrome-partitioning-ii]: https://leetcode.com/problems/palindrome-partitioning-ii/
+[palindrome-partitioning-iv]: https://leetcode.com/problems/palindrome-partitioning-iv/
+[palindrome-removal]: https://leetcode.com/problems/palindrome-removal/
 [palindromic-substring]: https://leetcode.com/problems/palindromic-substring/
 [prime-palindrome]: https://leetcode.com/problems/prime-palindrome/
 [super-palindromes]: https://leetcode.com/problems/super-palindromes/

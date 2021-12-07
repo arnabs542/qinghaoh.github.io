@@ -591,6 +591,36 @@ public int equalCountSubstrings(String s, int count) {
 }
 {% endhighlight %}
 
+[Minimum Number of K Consecutive Bit Flips][minimum-number-of-k-consecutive-bit-flips]
+
+{% highlight java %}
+public int minKBitFlips(int[] nums, int k) {
+    // accumulated is the number of flips contributed by the preceding window nums[i - k + 1, ..., i - 1]
+    // flipping the windows starting with these indices will also flip nums[i]
+    int accumulated = 0, flips = 0, n = nums.length;
+    // sliding window (i - k, i]
+    for (int i = 0; i < n; i++) {
+        if (i >= k && nums[i - k] > 1) {
+            accumulated--;
+            nums[i - k] -= 2;
+        }
+
+        // needs flipping
+        if (accumulated % 2 == nums[i]) {
+            if (i + k > n) {
+                return -1;
+            }
+
+            // a lazy way to mark nums[i] is flipped
+            nums[i] += 2;
+            accumulated++;
+            flips++;
+        }
+    }
+    return flips;
+}
+{% endhighlight %}
+
 [Minimum Adjacent Swaps for K Consecutive Ones][minimum-adjacent-swaps-for-k-consecutive-ones]
 
 {% highlight java %}
@@ -934,6 +964,7 @@ public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWei
 [minimum-adjacent-swaps-for-k-consecutive-ones]: https://leetcode.com/problems/minimum-adjacent-swaps-for-k-consecutive-ones/
 [minimum-difference-between-largest-and-smallest-value-in-three-moves]: https://leetcode.com/problems/minimum-difference-between-largest-and-smallest-value-in-three-moves/
 [minimum-number-of-flips-to-make-the-binary-string-alternating]: https://leetcode.com/problems/minimum-number-of-flips-to-make-the-binary-string-alternating/
+[minimum-number-of-k-consecutive-bit-flips]: https://leetcode.com/problems/minimum-number-of-k-consecutive-bit-flips/
 [minimum-number-of-operations-to-make-array-continuous]: https://leetcode.com/problems/minimum-number-of-operations-to-make-array-continuous/
 [minimum-operations-to-reduce-x-to-zero]: https://leetcode.com/problems/minimum-operations-to-reduce-x-to-zero/
 [minimum-size-subarray-sum]: https://leetcode.com/problems/minimum-size-subarray-sum/

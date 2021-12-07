@@ -316,27 +316,6 @@ public int maximumScore(int[] nums, int k) {
 }
 {% endhighlight %}
 
-# Three Pointers
-
-[Intersection of Three Sorted Arrays][intersection-of-three-sorted-arrays]
-
-{% highlight java %}
-if (arr1[p1] == arr2[p2] && arr2[p2] == arr3[p3]) {
-    list.add(arr1[p1]);
-    p1++;
-    p2++;
-    p3++;
-} else {
-    if (arr1[p1] < arr2[p2]) {
-        p1++;
-    } else if (arr2[p2] < arr3[p3]) {
-        p2++;
-    } else {  // arr1[p1] >= arr2[p2] && arr2[p2] >= arr3[p3]
-        p3++;
-    }
-}
-{% endhighlight %}
-
 # Two Passes
 
 [Push Dominoes][push-dominoes]
@@ -416,12 +395,59 @@ public int maxSum(int[] nums1, int[] nums2) {
 }
 {% endhighlight %}
 
+# K Pointers
+
+[Intersection of Three Sorted Arrays][intersection-of-three-sorted-arrays]
+
+{% highlight java %}
+if (arr1[p1] == arr2[p2] && arr2[p2] == arr3[p3]) {
+    list.add(arr1[p1]);
+    p1++;
+    p2++;
+    p3++;
+} else {
+    if (arr1[p1] < arr2[p2]) {
+        p1++;
+    } else if (arr2[p2] < arr3[p3]) {
+        p2++;
+    } else {  // arr1[p1] >= arr2[p2] && arr2[p2] >= arr3[p3]
+        p3++;
+    }
+}
+{% endhighlight %}
+
+[Longest Chunked Palindrome Decomposition][longest-chunked-palindrome-decomposition]
+
+{% highlight java %}
+public int longestDecomposition(String text) {
+    // greedy
+    int n = text.length(), count = 0;
+    int left = 0, right = n;
+    int low = left + 1, high = right - 1;
+    while (low <= high) {
+        if (text.substring(left, low).equals(text.substring(high, right))) {
+            count += 2;
+            left = low;
+            right = high;
+        }
+        low++;
+        high--;
+    }
+
+    if (left < right) {
+        count++;
+    }
+    return count;
+}
+{% endhighlight %}
+
 [backspace-string-compare]: https://leetcode.com/problems/backspace-string-compare/
 [container-with-most-water]: https://leetcode.com/problems/container-with-most-water/
 [count-substrings-that-differ-by-one-character]: https://leetcode.com/problems/count-substrings-that-differ-by-one-character/
 [count-unique-characters-of-all-substrings-of-a-given-string]: https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/
 [get-the-maximum-score]: https://leetcode.com/problems/get-the-maximum-score/
 [intersection-of-three-sorted-arrays]: https://leetcode.com/problems/intersection-of-three-sorted-arrays/
+[longest-chunked-palindrome-decomposition]: https://leetcode.com/problems/longest-chunked-palindrome-decomposition/
 [maximum-number-of-people-that-can-be-caught-in-tag]: https://leetcode.com/problems/maximum-number-of-people-that-can-be-caught-in-tag/
 [maximum-score-of-a-good-subarray]: https://leetcode.com/problems/maximum-score-of-a-good-subarray/
 [number-of-subsequences-that-satisfy-the-given-sum-condition]: https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/

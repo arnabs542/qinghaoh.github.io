@@ -229,7 +229,7 @@ public String findShortestWay(int[][] maze, int[] ball, int[] hole) {
 }
 {% endhighlight %}
 
-## Within K Steps
+## Multiple Constraints
 
 [Cheapest Flights Within K Stops][cheapest-flights-within-k-stops]
 
@@ -266,6 +266,56 @@ public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
     }
 
     return -1;
+}
+{% endhighlight %}
+
+[Minimum Cost to Reach Destination in Time][minimum-cost-to-reach-destination-in-time]
+
+{% highlight java %}
+public int minCost(int maxTime, int[][] edges, int[] passingFees) {
+    // {city : {neighbor, time}}
+    Map<Integer, List<int[]>> graph = new HashMap<>();
+    for (int[] e : edges) {
+        graph.computeIfAbsent(e[0], k -> new ArrayList<>()).add(new int[]{e[1], e[2]});
+        graph.computeIfAbsent(e[1], k -> new ArrayList<>()).add(new int[]{e[0], e[2]});
+    }
+
+    int n = passingFees.length;
+    int[] costs = new int[n], times = new int[n];
+    Arrays.fill(costs, Integer.MAX_VALUE);
+    costs[0] = passingFees[0];
+
+    Arrays.fill(times, Integer.MAX_VALUE);
+    times[0] = 0;
+
+    // {city, cost, time}
+    Queue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] == b[1] ? a[2] - b[2] : a[1] - b[1]);
+    pq.add(new int[]{0, costs[0], times[0]});
+
+    while (!pq.isEmpty()) {
+        int[] node = pq.poll();
+        int city = node[0], cost = node[1], time = node[2];
+
+        if (city == n - 1) {
+            return cost;
+        }
+
+        for (int[] neighborNode : graph.get(city)) {
+            int neighbor = neighborNode[0];
+            int neighborCost = passingFees[neighbor], neighborTime = neighborNode[1];
+
+            if (time + neighborTime <= maxTime) {
+                // if cost will decrease or time will decrease
+                if (cost + neighborCost < costs[neighbor] || time + neighborTime < times[neighbor]) {
+                    costs[neighbor] = cost + neighborCost;
+                    times[neighbor] = time + neighborTime;
+                    pq.offer(new int[]{neighbor, costs[neighbor], times[neighbor]});
+                }
+            }
+        }
+    }
+
+    return costs[n - 1] == Integer.MAX_VALUE ? -1 : costs[n - 1];
 }
 {% endhighlight %}
 
@@ -723,6 +773,7 @@ private int paint(int[][] grid, int i, int j, int color) {
 [course-schedule-iv]: https://leetcode.com/problems/course-schedule-iv/
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [making-a-large-island]: https://leetcode.com/problems/making-a-large-island/
+[minimum-cost-to-reach-destination-in-time]: https://leetcode.com/problems/minimum-cost-to-reach-destination-in-time/
 [minimum-number-of-days-to-disconnect-island]: https://leetcode.com/problems/minimum-number-of-days-to-disconnect-island/
 [number-of-restricted-paths-from-first-to-last-node]: https://leetcode.com/problems/number-of-restricted-paths-from-first-to-last-node/
 [path-with-maximum-minimum-value]: https://leetcode.com/problems/path-with-maximum-minimum-value/

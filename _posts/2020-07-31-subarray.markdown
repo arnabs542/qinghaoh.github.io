@@ -29,7 +29,7 @@ public int[] getModifiedArray(int length, int[][] updates) {
     }
 
     // accumulates pulses
-    for(int i = 1; i < length; i++) {
+    for (int i = 1; i < length; i++) {
         result[i] += result[i - 1];
     }
 
