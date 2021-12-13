@@ -149,6 +149,32 @@ public List<Integer> largestDivisibleSubset(int[] nums) {
 }
 {% endhighlight %}
 
+[Delete Columns to Make Sorted III][delete-columns-to-make-sorted-iii]
+
+{% highlight java %}
+public int minDeletionSize(String[] strs) {
+    int m = strs.length, n = strs[0].length(), min = n - 1;
+    int[] dp = new int[n];
+    Arrays.fill(dp, 1);
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < i; j++) {
+            int k = 0;
+            for (k = 0; k < m; k++) {
+                if (strs[k].charAt(j) > strs[k].charAt(i)) {
+                    break;
+                }
+            }
+            if (k == m) {
+                dp[i] = Math.max(dp[i], dp[j] + 1);
+            }
+        }
+        min = Math.min(min, n - dp[i]);
+    }
+    return min;
+}
+{% endhighlight %}
+
 [Russian Doll Envelopes][russian-doll-envelopes]: 2D
 
 A quicker solution is [Patience sorting](https://en.wikipedia.org/wiki/Patience_sorting). [This](https://www.cs.princeton.edu/courses/archive/spring13/cos423/lectures/LongestIncreasingSubsequence.pdf) is a Princeton lecture for it.
@@ -392,6 +418,30 @@ public int longestSubsequence(int[] arr, int difference) {
 }
 {% endhighlight %}
 
+[Number of Unique Good Subsequences][number-of-unique-good-subsequences]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int numberOfUniqueGoodSubsequences(String binary) {
+    // count of subsequences ending with 0 and 1, respectively
+    int dp0 = 0, dp1 = 0;
+    boolean has0 = false;
+    for (int i = 0; i < binary.length(); ++i) {
+        if (binary.charAt(i) == '0') {
+            // appends '0'
+            dp0 = (dp0 + dp1) % MOD;
+            has0 = true;
+        } else {
+            // appends '1'
+            // +1 means adding this new char as the subsequence "1"
+            dp1 = (dp0 + dp1 + 1) % MOD;
+        }
+    }
+    return (dp0 + dp1 + (has0 ? 1 : 0)) % MOD;
+}
+{% endhighlight %}
+
 # Buckets
 
 [Number of Matching Subsequences][number-of-matching-subsequences]
@@ -464,6 +514,7 @@ count: 3
 ```
 
 [arithmetic-slices-ii-subsequence]: https://leetcode.com/problems/arithmetic-slices-ii-subsequence/
+[delete-columns-to-make-sorted-iii]: https://leetcode.com/problems/delete-columns-to-make-sorted-iii/
 [is-subsequence]: https://leetcode.com/problems/is-subsequence/
 [largest-divisible-subset]: https://leetcode.com/problems/largest-divisible-subset/
 [length-of-longest-fibonacci-subsequence]: https://leetcode.com/problems/length-of-longest-fibonacci-subsequence/
@@ -472,6 +523,7 @@ count: 3
 [longest-increasing-subsequence]: https://leetcode.com/problems/longest-increasing-subsequence/
 [minimum-operations-to-make-a-subsequence]: https://leetcode.com/problems/minimum-operations-to-make-a-subsequence/
 [number-of-matching-subsequences]: https://leetcode.com/problems/number-of-matching-subsequences/
+[number-of-unique-good-subsequences]: https://leetcode.com/problems/number-of-unique-good-subsequences/
 [russian-doll-envelopes]: https://leetcode.com/problems/russian-doll-envelopes/
 [shortest-common-subsequence]: https://leetcode.com/problems/shortest-common-subsequence/
 [smallest-range-ii]: https://leetcode.com/problems/smallest-range-ii/

@@ -260,6 +260,63 @@ public ListNode removeZeroSumSublists(ListNode head) {
 abs(subarray) = p[i] - p[j] <= max(p) - min(p)
 ```
 
+## Range Sum
+
+[Number of Ways of Cutting a Pizza][number-of-ways-of-cutting-a-pizza]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+private Integer[][][] memo;
+
+public int ways(String[] pizza, int k) {
+    int m = pizza.length, n = pizza[0].length();
+    this.memo = new Integer[k][m][n];
+
+    // p[i][j] is the total number of apples in pizza[i:][j:]
+    int[][] p = new int[m + 1][n + 1];
+    for (int i = m - 1; i >= 0; i--) {
+        for (int j = n - 1; j >= 0; j--) {
+            p[i][j] = p[i][j + 1] + p[i + 1][j] - p[i + 1][j + 1] + (pizza[i].charAt(j) == 'A' ? 1 : 0);
+        }
+    }
+    return dfs(m, n, k - 1, 0, 0, p);
+}
+
+private int dfs(int m, int n, int cuts, int i, int j, int[][] p) {
+    // if the remain piece has no apple
+    if (p[i][j] == 0) {
+        return 0;
+    }
+
+    // found valid way after using k - 1 cuts
+    if (cuts == 0) {
+        return 1;
+    }
+
+    if (memo[cuts][i][j] != null) {
+        return memo[cuts][i][j];
+    }
+
+    int count = 0;
+    // cuts in horizontal
+    for (int r = i + 1; r < m; r++)  {
+        // cuts if the upper piece contains at least one apple
+        if (p[i][j] - p[r][j] > 0) {
+            count = (count + dfs(m, n, cuts - 1, r, j, p)) % MOD;
+        }
+    }
+
+    // cuts in vertical
+    for (int c = j + 1; c < n; c++) {
+        // cuts if the left piece contains at least one apple
+        if (p[i][j] - p[i][c] > 0) {
+            count = (count + dfs(m, n, cuts - 1, i, c, p)) % MOD;
+        }
+    }
+    return memo[cuts][i][j] = count;
+}
+{% endhighlight %}
+
 # Rolling Prefix Sum
 
 [Maximize the Beauty of the Garden][maximize-the-beauty-of-the-garden]
@@ -562,6 +619,7 @@ public int maxSumSubmatrix(int[][] matrix, int k) {
 [maximum-absolute-sum-of-any-subarray]: https://leetcode.com/problems/maximum-absolute-sum-of-any-subarray/
 [maximum-number-of-non-overlapping-subarrays-with-sum-equals-target]: https://leetcode.com/problems/maximum-number-of-non-overlapping-subarrays-with-sum-equals-target/
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
+[number-of-ways-of-cutting-a-pizza]: https://leetcode.com/problems/number-of-ways-of-cutting-a-pizza/
 [number-of-ways-to-separate-numbers]: https://leetcode.com/problems/number-of-ways-to-separate-numbers/
 [number-of-wonderful-substrings]: https://leetcode.com/problems/number-of-wonderful-substrings/
 [product-of-array-except-self]: https://leetcode.com/problems/product-of-array-except-self/

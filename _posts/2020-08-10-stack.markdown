@@ -55,28 +55,6 @@ public int[] mostCompetitive(int[] nums, int k) {
 }
 {% endhighlight %}
 
-[Minimum Number of Swaps to Make the String Balanced][minimum-number-of-swaps-to-make-the-string-balanced]
-
-Use counter as a stack.
-
-{% highlight java %}
-public int minSwaps(String s) {
-    int stackSize = 0;
-    // cancels out all the valid pairs
-    for (char ch : s.toCharArray()) {
-        if (ch == '[') {
-            stackSize++;
-        } else if (stackSize > 0) {
-            stackSize--;
-        }
-    }
-    // ]]]][[[[
-    // stack size == 4, swaps == (4 + 1) / 2
-    // same applies when stack size is odd
-    return (stackSize + 1) / 2;
-}
-{% endhighlight %}
-
 [Binary Searchable Numbers in an Unsorted Array][binary-searchable-numbers-in-an-unsorted-array]
 
 {% highlight java %}
@@ -655,9 +633,9 @@ public String removeDuplicateLetters(String s) {
     for (int i = 0; i < s.length(); i++) {
         int c = s.charAt(i) - 'a';
         if (!visited[c]) {
-            // if c is greater than stack top, and the top appears later,
+            // if c is less than stack top, and the top will appear later,
             // pops the top
-            while (!st.isEmpty() && st.peek() > c && i < last[st.peek()]) {
+            while (!st.isEmpty() && c < st.peek() && i < last[st.peek()]) {
                 visited[st.pop()] = false;
             }
             st.push(c);
@@ -785,6 +763,26 @@ public int minInsertions(String s) {
     }
 
     return count + notClosed;
+}
+{% endhighlight %}
+
+[Minimum Number of Swaps to Make the String Balanced][minimum-number-of-swaps-to-make-the-string-balanced]
+
+{% highlight java %}
+public int minSwaps(String s) {
+    int stackSize = 0;
+    // cancels out all the valid pairs
+    for (char ch : s.toCharArray()) {
+        if (ch == '[') {
+            stackSize++;
+        } else if (stackSize > 0) {
+            stackSize--;
+        }
+    }
+    // ]]]][[[[
+    // stack size == 4, swaps == (4 + 1) / 2
+    // same applies when stack size is odd
+    return (stackSize + 1) / 2;
 }
 {% endhighlight %}
 

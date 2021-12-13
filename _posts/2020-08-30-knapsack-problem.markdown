@@ -286,6 +286,42 @@ public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {
 }
 {% endhighlight %}
 
+[Split Array With Same Average][split-array-with-same-average]
+
+{% highlight java %}
+// NP
+public boolean splitArraySameAverage(int[] nums) {
+    int n = nums.length, sum = 0;
+    for (int num : nums) {
+        sum += num;
+    }
+
+    // if avg(A) = avg(B) = avg(nums)
+    // assumes size(A) <= size(B)
+    // sum(A) = avg(nums) * size(A)
+    //        = sum * size(A) / n
+
+    // dp[i][j]: whether it's possible to sum to i using j elements
+    boolean[][] dp = new boolean[sum + 1][n / 2 + 1];
+    dp[0][0] = true;
+
+    for (int num : nums) {
+        for (int i = sum; i >= num; i--) {
+            for (int j = 1; j <= n / 2; j++) {
+                dp[i][j] = dp[i][j] || dp[i - num][j - 1];
+            }
+        }
+    }
+
+    for (int i = 1; i <= n / 2; i++)  {
+        if (sum * i % n == 0 && dp[sum * i / n][i]) {
+            return true;
+        }
+    }
+    return false;
+}
+{% endhighlight %}
+
 # Unbounded Knapsack Problem (UKP)
 
 maximize $$ \sum _{i=1}^{n}v_{i}x_{i} $$
@@ -431,5 +467,6 @@ public int coinChange(int[] coins, int amount) {
 [ones-and-zeroes]: https://leetcode.com/problems/ones-and-zeroes/
 [partition-equal-subset-sum]: https://leetcode.com/problems/partition-equal-subset-sum/
 [profitable-schemes]: https://leetcode.com/problems/profitable-schemes/
+[split-array-with-same-average]: https://leetcode.com/problems/split-array-with-same-average/
 [target-sum]: https://leetcode.com/problems/target-sum/
 [toss-strange-coins]: https://leetcode.com/problems/toss-strange-coins/

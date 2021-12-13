@@ -234,37 +234,41 @@ public String findShortestWay(int[][] maze, int[] ball, int[] hole) {
 [Cheapest Flights Within K Stops][cheapest-flights-within-k-stops]
 
 {% highlight java %}
-public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
+public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
     // buils graph
-    Map<Integer, List<int[]>> graph = new HashMap<>();
+    int[][] graph = new int[n][n];
     for (int[] f : flights) {
-        graph.computeIfAbsent(f[0], k -> new ArrayList<>()).add(new int[]{f[1], f[2]});
+        graph[f[0]][f[1]] = f[2];
     }
 
     // Dijkstra
-    int[] node = {src, 0, K};  // city, price, stops
+    // the stops of visited node
+    int[] visited = new int[n];
+    Arrays.fill(visited, Integer.MAX_VALUE);
+
+    int[] node = {src, 0, 0};  // city, price, stops
     Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
-    pq.add(node);
+    pq.offer(node);
 
     while (!pq.isEmpty()) {
         node = pq.poll();
+        int city = node[0], cost = node[1], stops = node[2];
+        visited[city] = stops;
 
-        if (node[0] == dst) {
-            return node[1];
+        if (city == dst) {
+            return cost;
         }
 
-        if (node[2] >= 0) {
-            if (!graph.containsKey(node[0])) {
-                continue;
-            }
-
-            for (int[] pair : graph.get(node[0])) {
-                // some nodes may have the same city due to different paths
-                pq.offer(new int[]{pair[0], node[1] + pair[1], node[2] - 1});
+        if (stops <= k) {
+            for (int neighbor = 0; neighbor < n; neighbor++) {
+                // visited nodes should have more stops than current
+                // otherwise, that visited node is a better candidate of the current one
+                if (graph[city][neighbor] > 0 && visited[neighbor] > stops) {
+                    pq.offer(new int[]{neighbor, cost + graph[city][neighbor], stops + 1});
+                }
             }
         }
     }
-
     return -1;
 }
 {% endhighlight %}
@@ -307,9 +311,8 @@ public int minCost(int maxTime, int[][] edges, int[] passingFees) {
             if (time + neighborTime <= maxTime) {
                 // if cost will decrease or time will decrease
                 if (cost + neighborCost < costs[neighbor] || time + neighborTime < times[neighbor]) {
-                    costs[neighbor] = cost + neighborCost;
-                    times[neighbor] = time + neighborTime;
-                    pq.offer(new int[]{neighbor, costs[neighbor], times[neighbor]});
+                    costs[neighbor] = Math.min(costs[neighbor], cost + neighborCost);
+                    pq.offer(new int[]{neighbor, cost + neighborCost, times[neighbor] = time + neighborTime});
                 }
             }
         }

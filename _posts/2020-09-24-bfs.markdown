@@ -7,58 +7,6 @@ tags: bfs
 
 ## Queue
 
-[Cheapest Flights Within K Stops][cheapest-flights-within-k-stops]
-
-{% highlight java %}
-private int MAX = 100 * (100 - 1) / 2 * 10000 + 1;
-
-public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
-    // buils graph
-    Map<Integer, List<int[]>> graph = new HashMap<>();
-    for (int[] f : flights) {
-        graph.computeIfAbsent(f[0], k -> new ArrayList<>()).add(new int[]{f[1], f[2]});
-    }
-
-    // BFS
-    Queue<int[]> q = new LinkedList<>();
-    int[] node = {src, 0};  // city, price
-    q.offer(node);
-
-    int stop = -1, min = MAX;
-    while (!q.isEmpty() && stop <= K) {
-        // level traversal
-        for (int i = q.size(); i > 0; i--) {
-            node = q.poll();
-
-            if (node[0] == dst) {
-                min = Math.min(min, node[1]);
-            }
-
-            if (stop == K || !graph.containsKey(node[0])) {
-                continue;
-            }
-
-            for (int[] pair : graph.get(node[0])) {
-                int neighbor = pair[0], price = pair[1];
-
-                // pruning
-                if (node[1] + price > min) {
-                    continue;
-                }
-
-                // adds city:price pair.
-                // some pairs may have the same city due to different paths
-                q.offer(new int[]{neighbor, node[1] + price});
-            }
-        }
-
-        stop++;
-    }
-
-    return min == MAX ? -1 : min;
-}
-{% endhighlight %}
-
 # Deduplication
 
 [Perfect Squares][perfect-squares]
@@ -673,6 +621,10 @@ private void dfs(int r, int c) {
 }
 {% endhighlight %}
 
+# Priority Queue + BFS
+
+[Cut Off Trees for Golf Event][cut-off-trees-for-golf-event]
+
 # Shape Transformation
 
 [Sliding Puzzle][sliding-puzzle]
@@ -753,6 +705,7 @@ private void bfs(int[][] grid, int[][][] distances, int i, int j) {
 {% endhighlight %}
 
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
+[cut-off-trees-for-golf-event]: https://leetcode.com/problems/cut-off-trees-for-golf-event/
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
 [k-similar-strings]: https://leetcode.com/problems/k-similar-strings/
 [map-of-highest-peak]: https://leetcode.com/problems/map-of-highest-peak/

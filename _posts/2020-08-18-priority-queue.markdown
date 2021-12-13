@@ -330,9 +330,39 @@ public int minRefuelStops(int target, int startFuel, int[][] stations) {
 }
 {% endhighlight %}
 
+# Multiple Priority Queues
+
+[IPO][ipo]
+
+{% highlight java %}
+public int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
+    Queue<Integer> pqCapital = new PriorityQueue<>(Comparator.comparingInt(i -> capital[i]));
+    Queue<Integer> pqProfit = new PriorityQueue<>(Comparator.comparingInt(i -> -profits[i]));
+
+    for (int i = 0; i < capital.length; i++) {
+        pqCapital.offer(i);
+    }
+
+    while (k-- > 0) {
+        while (!pqCapital.isEmpty() && capital[pqCapital.peek()] <= w) {
+            pqProfit.offer(pqCapital.poll());
+        }
+
+        // "cache"
+        if (pqProfit.isEmpty()) {
+            break;
+        }
+
+        w += profits[pqProfit.poll()];
+    }
+    return w;
+}
+{% endhighlight %}
+
 [construct-target-array-with-multiple-sums]: https://leetcode.com/problems/construct-target-array-with-multiple-sums/
 [find-k-pairs-with-smallest-sums]: https://leetcode.com/problems/find-k-pairs-with-smallest-sums/
 [furthest-building-you-can-reach]: https://leetcode.com/problems/furthest-building-you-can-reach/
+[ipo]: https://leetcode.com/problems/ipo/
 [k-th-smallest-prime-fraction]: https://leetcode.com/problems/k-th-smallest-prime-fraction/
 [kth-smallest-element-in-a-sorted-matrix]: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
 [maximize-sum-of-array-after-k-negations]: https://leetcode.com/problems/maximize-sum-of-array-after-k-negations/

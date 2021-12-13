@@ -253,6 +253,76 @@ private void dfs(int l, int r, int n, int round) {
 
 ![Transition](/assets/the_earliest_and_latest_rounds_where_players_compete.png)
 
+# Reverse
+
+[Bricks Falling When Hit][bricks-falling-when-hit]
+
+{% highlight java %}
+{% raw %}
+private static final int[][] DIRECTIONS = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+{% endraw %}
+private int[][] grid;
+
+public int[] hitBricks(int[][] grid, int[][] hits) {
+    this.grid = grid;
+
+    int m = grid.length, n = grid[0].length;
+    // modifies the grid by decrementing the value of hit bricks
+    for (int[] h : hits) {
+        grid[h[0]][h[1]]--;
+    }
+
+    for (int i = 0; i < n; i++) {
+        dfs(0, i);
+    }
+
+    // reversely adding the erased bricks
+    int[] result = new int[hits.length];
+    for (int k = hits.length - 1; k >= 0; k--) {
+        int[] h = hits[k];
+        int i = h[0], j = h[1];
+        // if the new brick can be stable after being added,
+        // adds it
+        if (grid[i][j]++ == 0 && isStable(i, j)) {
+            // minus the brick itself
+            result[k] = dfs(i, j) - 1;
+        }
+    }
+    return result;
+}
+
+// returns number of stable bricks in (self + its subtree)
+private int dfs(int i, int j) {
+    // now grid[i][j] means stable after erasing all hit bricks
+    if (i < 0 || i == grid.length || j < 0 || j == grid[0].length || grid[i][j] != 1) {
+        return 0;
+    }
+
+    // marks stable bricks
+    grid[i][j] = 2;
+    int count = 1;
+    for (int[] d : DIRECTIONS) {
+        count += dfs(i + d[0], j + d[1]);
+    }
+    return count;
+}
+
+private boolean isStable(int i, int j) {
+    // top row
+    if (i == 0) {
+        return true;
+    }
+
+    for (int[] d : DIRECTIONS) {
+        int r = i + d[0], c = j + d[1];
+        if (r >= 0 && r < grid.length && c >= 0 && c < grid[0].length && grid[r][c] == 2) {
+            return true;
+        }
+    }
+    return false;
+}
+{% endhighlight %}
+
 # DFS + BFS
 
 [Shortest Path in a Hidden Grid][shortest-path-in-a-hidden-grid]
@@ -338,6 +408,7 @@ private void dfs(int i, int j, GridMaster master, Cell[][] grid) {
 }
 {% endhighlight %}
 
+[bricks-falling-when-hit]: https://leetcode.com/problems/bricks-falling-when-hit/
 [clone-graph]: https://leetcode.com/problems/clone-graph/
 [keys-and-rooms]: https://leetcode.com/problems/keys-and-rooms/
 [lexicographical-numbers]: https://leetcode.com/problems/lexicographical-numbers/

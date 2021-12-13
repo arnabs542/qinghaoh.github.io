@@ -254,6 +254,22 @@ public int maxChunksToSorted(int[] arr) {
 }
 {% endhighlight %}
 
+# Shift
+
+[Minimum Number of Operations to Reinitialize a Permutation][minimum-number-of-operations-to-reinitialize-a-permutation]
+
+{% highlight java %}
+public int reinitializePermutation(int n) {
+    // tracks 1's index
+    int operations = 0, index = 1;
+    while (operations == 0 || index > 1) {
+        index = index * 2 % (n - 1);
+        operations++;
+    }
+    return operations;
+}
+{% endhighlight %}
+
 # Swapping
 
 [Swap Adjacent in LR String][swap-adjacent-in-lr-string]
@@ -430,6 +446,44 @@ public int candy(int[] ratings) {
 }
 {% endhighlight %}
 
+[Maximum Building Height][maximum-building-height]
+
+{% highlight java %}
+public int maxBuilding(int n, int[][] restrictions) {
+    Arrays.sort(restrictions, Comparator.comparingInt(a -> a[0]));
+
+    // updates restrictions from left to right
+    // there are two implicit restrictions:
+    // [1, 0] and [n, n - 1]
+    int prevId = 1, prevHeight = 0;
+    for (int[] r : restrictions) {
+        r[1] = Math.min(r[1], prevHeight + r[0] - prevId);
+        prevId = r[0];
+        prevHeight = r[1];
+    }
+    int lastHeight = Math.min(n - 1, prevHeight + n - prevId);
+
+    // updates restrictions from right to left
+    for (int i = restrictions.length - 2; i >= 0; i--) {
+        restrictions[i][1] = Math.min(restrictions[i][1], restrictions[i + 1][1] + restrictions[i + 1][0] - restrictions[i][0]);
+    }
+
+    // calculates the max height between each adjacent restriction pair
+    // max height is the mountain peak between left and right restriction heights
+    //   hm - hr <= r - m
+    //   hm - hl <= m - l
+    // therefore,
+    //   hm <= (r - l + hl + hr) / 2
+    int left = 1, height = 0, max = 0;
+    for (int[] r : restrictions) {
+        max = Math.max(max, (r[0] - left + r[1] + height) / 2);
+        left = r[0];
+        height = r[1];
+    }
+    return Math.max(max, (n - left + lastHeight + height) / 2);
+}
+{% endhighlight %}
+
 # Marking
 
 [Find All Duplicates in an Array][find-all-duplicates-in-an-array]
@@ -461,7 +515,9 @@ public List<Integer> findDuplicates(int[] nums) {
 [first-missing-positive]: https://leetcode.com/problems/first-missing-positive/
 [longest-consecutive-sequence]: https://leetcode.com/problems/longest-consecutive-sequence/
 [max-chunks-to-make-sorted-ii]: https://leetcode.com/problems/max-chunks-to-make-sorted-ii/
+[maximum-building-height]: https://leetcode.com/problems/maximum-building-height/
 [minimum-number-of-flips-to-make-the-binary-string-alternating]: https://leetcode.com/problems/minimum-number-of-flips-to-make-the-binary-string-alternating/
+[minimum-number-of-operations-to-reinitialize-a-permutation]: https://leetcode.com/problems/minimum-number-of-operations-to-reinitialize-a-permutation/
 [patching-array]: https://leetcode.com/problems/patching-array/
 [reverse-words-in-a-string-ii]: https://leetcode.com/problems/reverse-words-in-a-string-ii/
 [rotate-array]: https://leetcode.com/problems/rotate-array/
