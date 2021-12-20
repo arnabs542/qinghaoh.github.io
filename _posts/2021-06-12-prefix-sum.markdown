@@ -225,6 +225,49 @@ public int minSubarray(int[] nums, int p) {
 }
 {% endhighlight %}
 
+## Frequency
+
+[Sum of Floored Pairs][sum-of-floored-pairs]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int sumOfFlooredPairs(int[] nums) {
+    int max = Arrays.stream(nums).max().getAsInt();
+
+    int[] freq = new int[max + 1];
+    for (int num : nums) {
+        freq[num]++;
+    }
+
+    for (int i = 1; i < freq.length; i++) {
+        freq[i] += freq[i - 1];
+    }
+
+    // if floor(nums[i] / nums[j]) = k,
+    // then k * nums[j] <= nums[i] < ((k + 1) * nums[j])
+    Integer[] dp = new Integer[max + 1];
+    int count = 0;
+    for (int num : nums) {
+        if (dp[num] != null) {
+            count = (count + dp[num]) % MOD;
+            continue;
+        }
+
+        // initial interval: [low, high]
+        int curr = 0, k = 1, low = num, high = Math.min(2 * num - 1, max);
+        while (low <= max) {
+            curr = (int)(curr + ((freq[high] - freq[low - 1]) * (long)k) % MOD) % MOD;
+            low += num;
+            high = Math.min(high + num, max);
+            k++;
+        }
+        count = (count + (dp[num] = curr)) % MOD;
+    }
+    return count;
+}
+{% endhighlight %}
+
 ## Linked List
 
 [Remove Zero Sum Consecutive Nodes from Linked List][remove-zero-sum-consecutive-nodes-from-linked-list]
@@ -626,5 +669,6 @@ public int maxSumSubmatrix(int[][] matrix, int k) {
 [product-of-the-last-k-numbers]: https://leetcode.com/problems/product-of-the-last-k-numbers/
 [remove-zero-sum-consecutive-nodes-from-linked-list]: https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/
+[sum-of-floored-pairs]: https://leetcode.com/problems/sum-of-floored-pairs/
 [sum-of-special-evenly-spaced-elements-in-array]: https://leetcode.com/problems/sum-of-special-evenly-spaced-elements-in-array/
 [sum-of-beauty-of-all-substrings]: https://leetcode.com/problems/sum-of-beauty-of-all-substrings/

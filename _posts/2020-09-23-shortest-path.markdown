@@ -273,6 +273,57 @@ public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
 }
 {% endhighlight %}
 
+[Minimum Cost to Reach City With Discounts][minimum-cost-to-reach-city-with-discounts]
+
+{% highlight java %}
+public int minimumCost(int n, int[][] highways, int discounts) {
+    // buils graph
+    List<int[]>[] graph = new List[n];
+    for (int i = 0; i < n; i++) {
+        graph[i] = new ArrayList<>();
+    }
+    for (int[] h : highways) {
+        graph[h[0]].add(new int[]{h[1], h[2]});
+        graph[h[1]].add(new int[]{h[0], h[2]});
+    }
+
+    // Dijkstra
+    // visited[i][j]: min cost of visited city i with j discounts
+    int[][] visited = new int[n][discounts + 1];
+    for (int i = 0; i < n; i++) {
+        Arrays.fill(visited[i], Integer.MAX_VALUE);
+    }
+    visited[0][0] = 0;
+
+    int[] node = {0, 0, 0};  // city, cost, discount
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+    pq.offer(node);
+
+    while (!pq.isEmpty()) {
+        node = pq.poll();
+        int city = node[0], cost = node[1], discount = node[2];
+
+        if (city == n - 1) {
+            return cost;
+        }
+
+        for (int[] next : graph[city]) {
+            int neighbor = next[0], weight = next[1];
+            // doesn't use discount
+            if (cost + weight < visited[neighbor][discount]) {
+                pq.offer(new int[]{neighbor, visited[neighbor][discount] = cost + weight, discount});
+            }
+
+            // uses discount
+            if (discount < discounts && cost + weight / 2 < visited[neighbor][discount + 1]) {
+                pq.offer(new int[]{neighbor, visited[neighbor][discount + 1] = cost + weight / 2, discount + 1});
+            }
+        }
+    }
+    return -1;
+}
+{% endhighlight %}
+
 [Minimum Cost to Reach Destination in Time][minimum-cost-to-reach-destination-in-time]
 
 {% highlight java %}
@@ -776,6 +827,7 @@ private int paint(int[][] grid, int i, int j, int color) {
 [course-schedule-iv]: https://leetcode.com/problems/course-schedule-iv/
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [making-a-large-island]: https://leetcode.com/problems/making-a-large-island/
+[minimum-cost-to-reach-city-with-discounts]: https://leetcode.com/problems/minimum-cost-to-reach-city-with-discounts/
 [minimum-cost-to-reach-destination-in-time]: https://leetcode.com/problems/minimum-cost-to-reach-destination-in-time/
 [minimum-number-of-days-to-disconnect-island]: https://leetcode.com/problems/minimum-number-of-days-to-disconnect-island/
 [number-of-restricted-paths-from-first-to-last-node]: https://leetcode.com/problems/number-of-restricted-paths-from-first-to-last-node/

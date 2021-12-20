@@ -162,6 +162,30 @@ public String shortestPalindrome(String s) {
 }
 {% endhighlight %}
 
+## Rolling Hash
+
+[Longest Happy Prefix][longest-happy-prefix]
+
+{% highlight java %}
+public String longestPrefix(String s) {
+    long h1 = 0, h2 = 0, mul = 1, mod = (long)1e9 + 7;
+    int len = 0;
+    for (int i = 0, j = s.length() - 1; j > 0; i++, j--) {
+        h1 = (h1 * 26 + s.charAt(i) - 'a') % mod;
+        h2 = (h2 + mul * (s.charAt(j) - 'a')) % mod;
+        mul = mul * 26 % mod;
+        if (h1 == h2) {
+            // compares the string every time you find a matching hash
+            // but only for characters we haven't checked before
+            if (s.substring(len, i + 1).compareTo(s.substring(j + len)) == 0) {
+                len = i + 1;
+            }
+        }
+    }
+    return s.substring(0, len);
+}
+{% endhighlight %}
+
 [Rabin-Karp algorithm](https://en.wikipedia.org/wiki/Rabin%E2%80%93Karp_algorithm): a string-searching algorithm that uses hashing to find an exact match of a pattern string in a text. It uses a rolling hash to quickly filter out positions of the text that cannot match the pattern, and then checks for a match at the remaining positions.
 
 [Longest Duplicate Substring][longest-duplicate-substring]
@@ -318,6 +342,7 @@ private void doStamp(int pos) {
 [distinct-echo-substrings]: https://leetcode.com/problems/distinct-echo-substrings/
 [encode-string-with-shortest-length]: https://leetcode.com/problems/encode-string-with-shortest-length/
 [longest-duplicate-substring]: https://leetcode.com/problems/longest-duplicate-substring/
+[longest-happy-prefix]: https://leetcode.com/problems/longest-happy-prefix/
 [longest-repeating-substring]: https://leetcode.com/problems/longest-repeating-substring/
 [shortest-palindrome]: https://leetcode.com/problems/shortest-palindrome/
 [stamping-the-sequence]: https://leetcode.com/problems/stamping-the-sequence/

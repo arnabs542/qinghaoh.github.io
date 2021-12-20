@@ -117,6 +117,29 @@ private boolean union(int[] parents, int u, int v) {
 }
 {% endhighlight %}
 
+[Graph Connectivity With Threshold][graph-connectivity-with-threshold]
+
+{% highlight java %}
+public List<Boolean> areConnected(int n, int threshold, int[][] queries) {
+    this.parents = new int[n + 1];
+
+    int factor = threshold + 1;
+    while (factor < n) {
+        int k = 2;
+        while (k * factor <= n) {
+            union(factor, k++ * factor);
+        }
+        factor++;
+    }
+
+    List<Boolean> answer = new ArrayList<>();
+    for (int[] q : queries) {
+        answer.add(find(q[0]) == find(q[1]));
+    }
+    return answer;
+}
+{% endhighlight %}
+
 # Path Compression
 
 [Checking Existence of Edge Length Limited Paths][checking-existence-of-edge-length-limited-paths]
@@ -637,6 +660,7 @@ private void union(int u, int v) {
 [checking-existence-of-edge-length-limited-paths]: https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/
 [checking-existence-of-edge-length-limited-paths-ii]: https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths-ii/
 [evaluate-division]: https://leetcode.com/problems/evaluate-division/
+[graph-connectivity-with-threshold]: https://leetcode.com/problems/graph-connectivity-with-threshold/
 [minimize-malware-spread]: https://leetcode.com/problems/minimize-malware-spread/
 [most-stones-removed-with-same-row-or-column]: https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
 [number-of-connected-components-in-an-undirected-graph]: https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/

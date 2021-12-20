@@ -944,6 +944,47 @@ public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWei
 }
 {% endhighlight %}
 
+# Variants
+
+[Maximum Number of Visible Points][maximum-number-of-visible-points]
+
+{% highlight java %}
+public int visiblePoints(List<List<Integer>> points, int angle, List<Integer> location) {
+    // list of radian degrees
+    List<Double> list = new ArrayList<>();
+    int locationPoints = 0;
+    for (List<Integer> p : points) {
+        if (p.equals(location)) {
+            locationPoints++;
+        } else {
+            list.add(Math.toDegrees(Math.atan2(p.get(1) - location.get(1), p.get(0) - location.get(0))));
+        }
+    }
+
+    Collections.sort(list);
+
+    // circular
+    int n = list.size();
+    for (int i = 0; i < n; i++) {
+        if (list.get(i) < 0) {
+            list.add(list.get(i) + 360);
+        }
+    }
+
+    // sliding window
+    int max = 0;
+    n = list.size();
+    for (int i = 0, j = 0; j < n; j++) {
+        while (list.get(j) - list.get(i) > angle) {
+            i++;
+        }
+        max = Math.max(max, j - i + 1);
+    }
+
+    return max + locationPoints;
+}
+{% endhighlight %}
+
 [count-number-of-nice-subarrays]: https://leetcode.com/problems/count-number-of-nice-subarrays/
 [count-vowel-substrings-of-a-string]: https://leetcode.com/problems/count-vowel-substrings-of-a-string/
 [delivering-boxes-from-storage-to-ports]: https://leetcode.com/problems/delivering-boxes-from-storage-to-ports/
@@ -959,6 +1000,7 @@ public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWei
 [longest-substring-with-at-most-k-distinct-characters]: https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/
 [longest-substring-without-repeating-characters]: https://leetcode.com/problems/longest-substring-without-repeating-characters/
 [max-consecutive-ones-iii]: https://leetcode.com/problems/max-consecutive-ones-iii/
+[maximum-number-of-visible-points]: https://leetcode.com/problems/maximum-number-of-visible-points/
 [maximum-points-you-can-obtain-from-cards]: https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
 [minimum-adjacent-swaps-for-k-consecutive-ones]: https://leetcode.com/problems/minimum-adjacent-swaps-for-k-consecutive-ones/

@@ -88,7 +88,7 @@ public boolean isSubsequence(String s, String t) {
 
 ## Dynamic Programming
 
-[Longest Increasing][longest-increasing-subsequence]
+[Longest Increasing Subsequence][longest-increasing-subsequence]
 
 {% highlight java %}
 // O(n ^ 2)

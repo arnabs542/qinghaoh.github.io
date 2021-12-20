@@ -112,6 +112,27 @@ public void rotate(int[] nums, int k) {
 
 [Shift 2D Grid][shift-2d-grid]
 
+[Smallest Rotation with Highest Score][smallest-rotation-with-highest-score]
+
+{% highlight java %}
+public int arrayNesting(int[] nums) {
+    int max = 0;
+    for (int i = 0; i < nums.length; i++) {
+        int length = 0, j = i;
+        // finds cycles
+        while (nums[j] >= 0) {
+            int next = nums[j];
+            // marks nums[j] as visited
+            nums[j] = -1;
+            j = next;
+            length++;
+        }
+        max = Math.max(max, length);
+    }
+    return max;
+}
+{% endhighlight %}
+
 [Array Nesting][array-nesting]
 
 {% highlight java %}
@@ -524,4 +545,5 @@ public List<Integer> findDuplicates(int[] nums) {
 [shift-2d-grid]: https://leetcode.com/problems/shift-2d-grid/
 [shortest-distance-to-a-character]: https://leetcode.com/problems/shortest-distance-to-a-character/
 [shortest-distance-to-target-color]: https://leetcode.com/problems/shortest-distance-to-target-color/
+[smallest-rotation-with-highest-score]: https://leetcode.com/problems/smallest-rotation-with-highest-score/
 [swap-adjacent-in-lr-string]: https://leetcode.com/problems/swap-adjacent-in-lr-string/

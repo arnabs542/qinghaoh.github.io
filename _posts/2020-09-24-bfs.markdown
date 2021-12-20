@@ -276,6 +276,12 @@ boolean[][][] visited = new boolean[n][n][2];
 visited[0][0][0] = true;
 {% endhighlight %}
 
+[Shortest Path to Get All Keys][shortest-path-to-get-all-keys]
+
+{% highlight java %}
+// {i, j, key mask}
+{% endhighlight %}
+
 [Shortest Path in a Grid with Obstacles Elimination][shortest-path-in-a-grid-with-obstacles-elimination]
 
 {% highlight java %}
@@ -718,6 +724,7 @@ private void bfs(int[][] grid, int[][][] distances, int i, int j) {
 [rotting-oranges]: https://leetcode.com/problems/rotting-oranges/
 [shortest-distance-from-all-buildings]: https://leetcode.com/problems/shortest-distance-from-all-buildings/
 [shortest-path-in-a-grid-with-obstacles-elimination]: https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/
+[shortest-path-to-get-all-keys]: https://leetcode.com/problems/shortest-path-to-get-all-keys/
 [shortest-path-with-alternating-colors]: https://leetcode.com/problems/shortest-path-with-alternating-colors/
 [sliding-puzzle]: https://leetcode.com/problems/sliding-puzzle/
 [smallest-greater-multiple-made-of-two-digits]: https://leetcode.com/problems/smallest-greater-multiple-made-of-two-digits/

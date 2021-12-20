@@ -5,7 +5,7 @@ tags: array
 ---
 [Selection algorithm](https://en.wikipedia.org/wiki/Selection_algorithm)
 
-## Heap Sort
+# Heap Sort
 
 [Kth Largest Element in an Array][kth-largest-element-in-an-array]
 
@@ -24,7 +24,7 @@ public int findKthLargest(int[] nums, int k) {
 }
 {% endhighlight %}
 
-## Bucket Sort
+# Bucket Sort
 
 [Top K Frequent Elements][top-k-frequent-elements]
 
@@ -59,7 +59,7 @@ public int[] topKFrequent(int[] nums, int k) {
 }
 {% endhighlight %}
 
-## Quickselect
+# Quickselect
 
 [Quickselect](https://en.wikipedia.org/wiki/Quickselect)
 [Partial sorting](https://en.wikipedia.org/wiki/Partial_sorting)
@@ -109,7 +109,7 @@ private void swap(int[] nums, int i, int j) {
 
 [Kth Largest Element in a Stream][kth-largest-element-in-a-stream]
 
-## Median of Medians
+# Median of Medians
 
 [Median of medians](https://en.wikipedia.org/wiki/Median_of_medians)
 
@@ -117,6 +117,56 @@ Time complexity:
 * Best: `O(n)`
 * Worst: `O(n)`
 
+# Binary Search
+
+[Kth Smallest Product of Two Sorted Arrays][kth-smallest-product-of-two-sorted-arrays]
+
+{% highlight java %}
+public long kthSmallestProduct(int[] nums1, int[] nums2, long k) {
+    long low = (long)-10e10, high = (long)10e10;
+    while (low < high) {
+        long mid = low + (high - low) / 2;;
+        if (condition(nums1, nums2, mid, k)) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return low;
+}
+
+// finds the count of num * nums2 <= target
+private boolean condition(int[] nums1, int[] nums2, long target, long k) {
+    long count = 0;
+    for (int num : nums1) {
+        if (num == 0) {
+            count += target >= 0 ? nums2.length : 0;
+        } else {
+            count += countPairs(nums2, num, target);
+        }
+    }
+    return count >= k;
+}
+
+private int countPairs(int[] nums2, long num1, long target) {
+    int low = 0, high = nums2.length;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        long product = num1 * nums2[mid];
+
+        // if num1 >= 0, product is ascending
+        // if num1 < 0, product is descending
+        if (num1 < 0 ? product <= target : product > target) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return num1 < 0 ? nums2.length - low : low;
+}
+{% endhighlight %}
+
 [kth-largest-element-in-a-stream]: https://leetcode.com/problems/kth-largest-element-in-a-stream/
 [kth-largest-element-in-an-array]: https://leetcode.com/problems/kth-largest-element-in-an-array/
+[kth-smallest-product-of-two-sorted-arrays]: https://leetcode.com/problems/kth-smallest-product-of-two-sorted-arrays/
 [top-k-frequent-elements]: https://leetcode.com/problems/top-k-frequent-elements/

@@ -20,6 +20,8 @@ stack and minStack
 
 [Design A Leaderboard][design-a-leaderboard]
 
+[Stock Price Fluctuation][stock-price-fluctuation]
+
 Map + TreeMap
 
 [Implement Magic Dictionary][implement-magic-dictionary]
@@ -531,3 +533,4 @@ class Skiplist {
 [maximum-frequency-stack]: https://leetcode.com/problems/maximum-frequency-stack/
 [min-stack]: https://leetcode.com/problems/min-stack/
 [sliding-window-median]: https://leetcode.com/problems/sliding-window-median/
+[stock-price-fluctuation]: https://leetcode.com/problems/stock-price-fluctuation/

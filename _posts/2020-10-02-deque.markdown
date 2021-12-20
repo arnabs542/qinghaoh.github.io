@@ -106,9 +106,10 @@ public int findMaxValueOfEquation(int[][] points, int k) {
 
 {% highlight java %}
 public int[] maxSlidingWindow(int[] nums, int k) {
-    int[] result = new int[nums.length - k + 1];
+    int n = nums.length;
+    int[] result = new int[n - k + 1];
     Deque<Integer> dq = new ArrayDeque<>();
-    for (int i = 0; i < nums.length; i++) {
+    for (int i = 0; i < n; i++) {
         // removes the out-of-window number
         if (!dq.isEmpty() && dq.peek() == i - k) {
             dq.poll();
@@ -116,7 +117,7 @@ public int[] maxSlidingWindow(int[] nums, int k) {
 
         // if i < j && nums[i] < nums[j], nums[j] is always the better candidate
         // monotonically decreasing
-        while (!dq.isEmpty() && nums[dq.peekLast()] < nums[i]) {
+        while (!dq.isEmpty() && nums[i] > nums[dq.peekLast()]) {
             dq.pollLast();
         }
 

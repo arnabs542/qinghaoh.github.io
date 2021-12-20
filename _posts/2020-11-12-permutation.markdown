@@ -65,5 +65,65 @@ private void swap(int[] nums, int i, int j) {
 }
 {% endhighlight %}
 
+[Numbers With Repeated Digits][numbers-with-repeated-digits]
+
+{% highlight java %}
+public int numDupDigitsAtMostN(int n) {
+    List<Integer> nums = new ArrayList<>();
+    int tmp = n + 1;
+    while (tmp != 0) {
+        nums.add(0, tmp % 10);
+        tmp /= 10;
+    }
+
+    // counts the number with digits < numDigits
+    // e.g. 8765
+    // xxx
+    // xx
+    // x
+    int numDigits = nums.size(), noRepeats = 0;
+    for (int i = 0; i < numDigits - 1; i++) {
+        // excludes leading 0
+        noRepeats += 9 * permutation(9, i);
+    }
+
+    // counts the number with same prefix
+    // e.g. 8765
+    // 1xxx ~ 7xxx
+    // 80xx ~ 86xx
+    // 870x ~ 875x
+    // 8760 ~ 8765
+    boolean[] used = new boolean[10];
+    for (int i = 0; i < numDigits; i++) {
+        int d = nums.get(i);
+        // skips leading 0
+        for (int j = i == 0 ? 1 : 0; j < d; j++) {
+            // if the number j is not a part of the prefix
+            if (!used[j]) {
+                // prefix has (i + 1) digits
+                noRepeats += permutation(10 - i - 1, numDigits - i - 1);
+            }
+        }
+
+        // prefix has repeated number
+        if (used[d]) {
+            break;
+        }
+        used[d] = true;
+    }
+    return n - noRepeats;
+}
+
+// A(n, m)
+private int permutation(int n, int m) {
+    int p = 1;
+    for (int i = 0; i < m; i++) {
+        p *= n--;
+    }
+    return p;
+}
+{% endhighlight %}
+
 [next-permutation]: https://leetcode.com/problems/next-permutation/
+[numbers-with-repeated-digits]: https://leetcode.com/problems/numbers-with-repeated-digits/
 [permutation-sequence]: https://leetcode.com/problems/permutation-sequence/

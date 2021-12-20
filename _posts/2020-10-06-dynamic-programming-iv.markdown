@@ -362,10 +362,6 @@ public int maximalSquare(char[][] matrix) {
 
 {% highlight java %}
 public int maximalRectangle(char[][] matrix) {
-    if (matrix.length == 0) {
-        return 0;
-    }
-
     int m = matrix.length, n = matrix[0].length;
     int area = 0;
 
