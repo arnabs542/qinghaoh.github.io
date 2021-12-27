@@ -657,11 +657,73 @@ private void union(int u, int v) {
 }
 {% endhighlight %}
 
+[Minimize Malware Spread II][minimize-malware-spread-ii]
+
+{% highlight java %}
+public int minMalwareSpread(int[][] graph, int[] initial) {
+    int n = graph.length;
+    this.parents = new int[n];
+    Arrays.fill(parents, -1);
+
+    Set<Integer> initialSet = Arrays.stream(initial).boxed().collect(Collectors.toSet());
+    // unions non-malware nodes
+    for (int i = 0; i < n; i++) {
+        if (initialSet.contains(i)) {
+            continue;
+        }
+        for (int j = i + 1; j < n; j++) {
+            if (!initialSet.contains(j) && graph[i][j] == 1) {
+                union(i, j);
+            }
+        }
+    }
+
+    // finds the infected nodes by each initial malware
+    Map<Integer, Set<Integer>> infected = new HashMap<>();
+
+    // singleSource[p]: group p were infected by a single initial malware
+    int[] numOfSources = new int[n];
+
+    for (int i : initial) {
+        for (int j = 0; j < n; j++) {
+            if (!initialSet.contains(j) && graph[i][j] == 1) {
+                int p = find(j);
+                infected.computeIfAbsent(i, k -> new HashSet<>()).add(p);
+            }
+        }
+        if (infected.containsKey(i)) {
+            for (int p : infected.get(i)) {
+                numOfSources[p]++;
+            }
+        }
+    }
+
+    int max = 0, index = -1;
+    for (int i : initial) {
+        if (infected.containsKey(i)) {
+            int count = 0;
+            for (var p : infected.get(i)) {
+                if (numOfSources[p] == 1) {
+                    count -= parents[p];
+                }
+            }
+            if (count > max || (count == max && i < index)) {
+                max = count;
+                index = i;
+            }
+        }
+
+    }
+    return index >= 0 ? index : Arrays.stream(initial).min().getAsInt();
+}
+{% endhighlight %}
+
 [checking-existence-of-edge-length-limited-paths]: https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/
 [checking-existence-of-edge-length-limited-paths-ii]: https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths-ii/
 [evaluate-division]: https://leetcode.com/problems/evaluate-division/
 [graph-connectivity-with-threshold]: https://leetcode.com/problems/graph-connectivity-with-threshold/
 [minimize-malware-spread]: https://leetcode.com/problems/minimize-malware-spread/
+[minimize-malware-spread-ii]: https://leetcode.com/problems/minimize-malware-spread-ii/
 [most-stones-removed-with-same-row-or-column]: https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
 [number-of-connected-components-in-an-undirected-graph]: https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
 [rank-transform-of-a-matrix]: https://leetcode.com/problems/rank-transform-of-a-matrix/

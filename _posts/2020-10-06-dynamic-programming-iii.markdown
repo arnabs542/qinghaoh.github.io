@@ -152,6 +152,37 @@ public int numRollsToTarget(int d, int f, int target) {
 }
 {% endhighlight %}
 
+[Strange Printer][strange-printer]
+
+{% highlight java %}
+public int strangePrinter(String s) {
+    int n = s.length();
+    int[][] dp = new int[n][n];
+
+    for (int i = 0; i < n; i++) {
+        dp[i][i] = 1;
+    }
+
+    for (int i = n - 1; i >= 0; i--) {
+        for (int len = 1; i + len < n; len++) {
+            int j = i + len;
+            if (s.charAt(i) == s.charAt(j)) {
+                // skips same characters
+                dp[i][j] = dp[i][j - 1];
+            } else {
+                // splits the string in many ways
+                dp[i][j] = Integer.MAX_VALUE;
+                for (int k = i; k + 1 <= j; k++) {
+                    dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k + 1][j]);
+                }
+            }
+        }
+    }
+
+    return dp[0][n - 1];
+}
+{% endhighlight %}
+
 # Cumulative Sum
 
 [Dice Roll Simulation][dice-roll-simulation]
@@ -262,3 +293,4 @@ return dp[n][k];
 [dice-roll-simulation]: https://leetcode.com/problems/dice-roll-simulation/
 [k-inverse-pairs-array]: https://leetcode.com/problems/k-inverse-pairs-array/
 [number-of-dice-rolls-with-target-sum]: https://leetcode.com/problems/number-of-dice-rolls-with-target-sum/
+[strange-printer]: https://leetcode.com/problems/strange-printer/

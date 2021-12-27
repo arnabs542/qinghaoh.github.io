@@ -408,6 +408,14 @@ public int minCostII(int[][] costs) {
 }
 {% endhighlight %}
 
+[Number of Ways to Stay in the Same Place After Some Steps][number-of-ways-to-stay-in-the-same-place-after-some-steps]
+
+{% highlight java %}
+int[][] dp = new int[arrLen][steps];
+// reduced to 1D
+int[] dp = new int[arrLen];
+{% endhighlight %}
+
 [decode-ways]: https://leetcode.com/problems/decode-ways/
 [delete-and-earn]: https://leetcode.com/problems/delete-and-earn/
 [flip-string-to-monotone-increasing]: https://leetcode.com/problems/flip-string-to-monotone-increasing/
@@ -416,6 +424,7 @@ public int minCostII(int[][] costs) {
 [minimum-deletions-to-make-string-balanced]: https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
 [number-of-ways-to-paint-n-3-grid]: https://leetcode.com/problems/number-of-ways-to-paint-n-3-grid/
+[number-of-ways-to-stay-in-the-same-place-after-some-steps]: https://leetcode.com/problems/number-of-ways-to-stay-in-the-same-place-after-some-steps/
 [paint-fence]: https://leetcode.com/problems/paint-fence/
 [paint-house-ii]: https://leetcode.com/problems/paint-house-ii/
 [painting-a-grid-with-three-different-colors]: https://leetcode.com/problems/painting-a-grid-with-three-different-colors/

@@ -91,6 +91,7 @@ Deque<Integer> stack = new ArrayDeque<Integer>();
 * [MIN_VALUE](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#MIN_VALUE): -2^31 = -2147483648 ~= -2e9 (10 digits)
 * [public static int bitCount(int i)](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#bitCount-int-)
 * [public int intValue()](https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#intValue--)
+* [public static int highestOneBit(int i)](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/lang/Integer.html#highestOneBit(int))
 * [public static int parseUnsignedInt(CharSequence s, int beginIndex, int endIndex, int radix) throws NumberFormatException](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html#parseUnsignedInt(java.lang.CharSequence,int,int,int))
 * [public static String toBinaryString(int i)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html#toBinaryString(int))
 * [public static String toString(int i,int radix)](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html#toString(int,int))

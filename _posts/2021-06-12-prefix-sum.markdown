@@ -651,6 +651,57 @@ public int maxSumSubmatrix(int[][] matrix, int k) {
 }
 {% endhighlight %}
 
+[Maximum Number of Ways to Partition an Array][maximum-number-of-ways-to-partition-an-array]
+
+{% highlight java %}
+public int waysToPartition(int[] nums, int k) {
+    int n = nums.length;
+    long sum = Arrays.stream(nums).	asLongStream().sum();
+
+    // sum of left part minus sum of right part
+    // diff[i] = (nums[0] + ... + nums[i - 1]) - (nums[i] + ... + nums[n - 1])
+    // where 1 <= i < n
+
+    // prefix and suffix
+    // frequency map of diff[1..i] and diff[(i + 1)..(n - 1)] respectively
+    Map<Long, Integer> p = new HashMap<>(), s = new HashMap<>();
+    // running sum
+    long left = 0, right = 0;
+    for (int i = 0; i < n - 1; i++) {
+        left += nums[i];
+        right = sum - left;
+        s.compute(left - right, (key, v) -> v == null ? 1 : v + 1);
+    }
+
+    // no replacement
+    int ways = s.getOrDefault(0l, 0);
+
+    // if we replace nums[i] with k,
+    // then diff[1...i] decrease by d, and diff[(i + 1)...(n - 1)] increase by d
+    // where d = k - nums[i]
+    // the ways is the number of 0s in this new diff array.
+    left = 0;
+    for (int i = 0; i < n; i++) {
+        left += nums[i];
+        right = sum - left;
+        long d = k - nums[i];
+
+        // replaces nums[i] with k
+        // we don't actually modify the diff arrays
+
+        // diff[1...i] decrease by d, which means we need to find p[d] before the replacement
+        // so that after the replacement, these diff elements with value d will become 0
+        // similarly, we need to find s[-d]
+        ways = Math.max(ways, p.getOrDefault(d, 0) + s.getOrDefault(-d, 0));
+
+        // transfers the frequency from suffix map to prefix map
+        s.compute(left - right, (key, v) -> v == null ? 1 : v - 1);
+        p.compute(left - right, (key, v) -> v == null ? 1 : v + 1);
+    }
+    return ways;
+}
+{% endhighlight %}
+
 [can-make-palindrome-from-substring]: https://leetcode.com/problems/can-make-palindrome-from-substring/
 [change-minimum-characters-to-satisfy-one-of-three-conditions]: https://leetcode.com/problems/change-minimum-characters-to-satisfy-one-of-three-conditions/
 [contiguous-array]: https://leetcode.com/problems/contiguous-array/
@@ -661,6 +712,7 @@ public int maxSumSubmatrix(int[][] matrix, int k) {
 [maximize-the-beauty-of-the-garden]: https://leetcode.com/problems/maximize-the-beauty-of-the-garden/
 [maximum-absolute-sum-of-any-subarray]: https://leetcode.com/problems/maximum-absolute-sum-of-any-subarray/
 [maximum-number-of-non-overlapping-subarrays-with-sum-equals-target]: https://leetcode.com/problems/maximum-number-of-non-overlapping-subarrays-with-sum-equals-target/
+[maximum-number-of-ways-to-partition-an-array]: https://leetcode.com/problems/maximum-number-of-ways-to-partition-an-array/
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
 [number-of-ways-of-cutting-a-pizza]: https://leetcode.com/problems/number-of-ways-of-cutting-a-pizza/
 [number-of-ways-to-separate-numbers]: https://leetcode.com/problems/number-of-ways-to-separate-numbers/

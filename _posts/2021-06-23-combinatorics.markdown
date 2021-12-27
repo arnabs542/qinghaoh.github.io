@@ -64,6 +64,49 @@ private long permutation(int[] arr) {
 }
 {% endhighlight %}
 
+## De Bruijn Sequence
+
+[de Bruijn Sequence](https://en.wikipedia.org/wiki/De_Bruijn_sequence): de Bruijn sequence of order `n` on a size-`k` alphabet `A` is a cyclic sequence in which every possible length-`n` string on `A` occurs exactly once as a substring (i.e., as a contiguous subsequence)
+
+The de Bruijn sequences can be constructed by taking a Hamiltonian path of an `n`-dimensional de Bruijn graph over `k` symbols (or equivalently, an Eulerian cycle of an `(n − 1)`-dimensional de Bruijn graph).
+
+[Cracking the Safe][cracking-the-safe]
+
+{% highlight java %}
+public String crackSafe(int n, int k) {
+    StringBuilder sb = new StringBuilder("0".repeat(n));
+
+    Set<String> visited = new HashSet<>();
+    visited.add(sb.toString());
+
+    backtrack(sb, visited, (int)Math.pow(k, n), n, k);
+
+    return sb.toString();
+}
+
+private boolean backtrack(StringBuilder sb, Set<String> visited, int target, int n, int k) {
+    if (visited.size() == target) {
+        return true;
+    }
+
+    // last (n - 1) digits
+    String lastDigits = sb.substring(sb.length() - n + 1);
+    for (char ch = '0'; ch < '0' + k; ch++) {
+        String password = lastDigits + ch;
+        if (visited.add(password))  {
+            sb.append(ch);
+            if (backtrack(sb, visited, target, n, k)) {
+                return true;
+            }
+            visited.remove(password);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+    }
+
+    return false;
+}
+{% endhighlight %}
+
 # Combinations
 
 [Count Sorted Vowel Strings][count-sorted-vowel-strings]
@@ -183,6 +226,7 @@ public int waysToDistribute(int n, int k) {
 
 [count-sorted-vowel-strings]: https://leetcode.com/problems/count-sorted-vowel-strings/
 [count-ways-to-distribute-candies]: https://leetcode.com/problems/count-ways-to-distribute-candies/
+[cracking-the-safe]: https://leetcode.com/problems/cracking-the-safe/
 [kth-smallest-instructions]: https://leetcode.com/problems/kth-smallest-instructions/
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
 [probability-of-a-two-boxes-having-the-same-number-of-distinct-balls]: https://leetcode.com/problems/probability-of-a-two-boxes-having-the-same-number-of-distinct-balls/

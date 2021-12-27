@@ -309,6 +309,108 @@ public int minCut(String s) {
 {% highlight java %}
 // O(n)
 public String longestPalindrome(String s) {
+    // string ms = s with a bogus character (eg. '#') inserted between each character
+    // (including outer boundaries)
+    StringJoiner sj = new StringJoiner("#", "#", "#");
+    for (char ch : s.toCharArray()) {
+        sj.add(String.valueOf(ch));
+    }
+    String ms = sj.toString();
+
+    int n = ms.length();
+
+    // radii[i]: radius of the longest palindrome centered at ms[i]
+    int[] radii = new int[n];
+
+    // center and right bound of the longest palindromic substring so far
+    int c = -1, r = -1;
+    int max = Integer.MIN_VALUE, pos = -1;
+
+
+    for (int i = 0; i < n; i++) {
+        // 2 * c - i is the mirrored center of i
+        // radius is bounded by the outer palindrome
+        // or it's a candidate
+        radii[i] = i < r ? Math.min(radii[2 * c - i], r - i) : 1;
+
+        // determines the longest palindrome in [center - radius, center + radius]
+        while (i - radii[i] >= 0 && i + radii[i] < n && ms.charAt(i + radii[i]) == ms.charAt(i - radii[i])) {
+            radii[i]++;
+        }
+
+        // updates r and c if current right bound is beyond r
+        if (i + radii[i] > r) {
+            r = i + radii[i];
+            c = i;
+        }
+
+        // tracks the max and its position
+        if (radii[i] > max) {
+            max = radii[i];
+            pos = i;
+        }
+    }
+
+    StringBuilder sb = new StringBuilder();
+    for (int i = pos - radii[pos] + 1; i <= pos + radii[pos] - 1; i++) {
+        if (ms.charAt(i) != '#') {
+            sb.append(ms.charAt(i));
+        }
+    }
+    return sb.toString();
+}
+{% endhighlight %}
+
+[Maximum Product of the Length of Two Palindromic Substrings][maximum-product-of-the-length-of-two-palindromic-substrings]
+
+{% highlight java %}
+public long maxProduct(String s) {
+    // Manacher's Algorithm (https://cp-algorithms.com/string/manacher.html)
+    int n = s.length();
+    int[] radii = new int[n];
+    for (int i = 0, l = 0, r = -1; i < n; i++) {
+        int k = (i > r) ? 1 : Math.min(radii[l + r - i], r - i + 1);
+        while (0 <= i - k && i + k < n && s.charAt(i - k) == s.charAt(i + k)) {
+            k++;
+        }
+
+        radii[i] = k--;
+        if (i + k > r) {
+            l = i - k;
+            r = i + k;
+        }
+    }
+
+    // r[i]: max length of palindrome whose left is i
+    int[] r = new int[n];
+    Queue<Integer> q1 = new LinkedList<>(), q2 = new LinkedList<>();;
+    // from right to left
+    // finds the max palindrome whose left bound >= i
+    for (int i = n - 1; i > 0; i--) {
+        // left bound = center - radius
+        // loops until the current index is covered by the palindrome in queue front
+        while (!q1.isEmpty() && q1.peek() - radii[q1.peek()] >= i) {
+            q1.poll();
+        }
+        r[i] = 1 + (q1.isEmpty() ? 0 : (q1.peek() - i) * 2);
+        q1.offer(i);
+    }
+
+    // l: max length of palindrome whose right is i
+    long l = 0, product = 0;
+    // from left to right
+    // finds the max palindrome whose right bound <= i
+    for (int i = 0; i < n - 1; i++) {
+        // right bound = center + radius
+        // loops until the current index is covered by the palindrome in queue front
+        while (!q2.isEmpty() && q2.peek() + radii[q2.peek()] <= i) {
+            q2.poll();
+        }
+        l = Math.max(l, 1 + (q2.isEmpty() ? 0 : (i - q2.peek()) * 2));
+        product = Math.max(product, l * r[i + 1]);
+        q2.offer(i);
+    }
+    return product;
 }
 {% endhighlight %}
 
@@ -400,6 +502,41 @@ public int minimumMoves(int[] arr) {
 }
 {% endhighlight %}
 
+[Palindrome Partitioning III][palindrome-partitioning-iii]
+
+{% highlight java %}
+public int palindromePartition(String s, int k) {
+    int n = s.length();
+
+    // dp1[i][j]: minimum steps to make s.substring(i, j + 1) palindrome
+    int[][] dp1 = new int[n][n];
+
+    for (int i = n - 1; i >= 0; i--) {
+        // dp1[i][i] == 0
+        for (int j = i + 1; j < n; j++) {
+            dp1[i][j] = dp1[i + 1][j - 1] + (s.charAt(i) == s.charAt(j) ? 0 : 1);
+        }
+    }
+
+    // dp[i][m]: s.substring(0, i), m chunks
+    int[][] dp2 = new int[n + 1][k + 1];
+    for (int i = 1; i <= n; i++) {
+        dp2[i][1] = dp1[0][i - 1];
+    }
+
+    for (int m = 2; m <= k; m++) {
+        // dp[m][m] = 0
+        for (int i = m + 1; i <= n; i++) {
+            dp2[i][m] = Integer.MAX_VALUE;
+            for (int j = m - 1; j < i; j++) {
+                dp2[i][m] = Math.min(dp2[i][m], dp2[j][m - 1] + dp1[j][i - 1]);
+            }
+        }
+    }
+    return dp2[n][k];
+}
+{% endhighlight %}
+
 [Maximize Palindrome Length From Subsequences][maximize-palindrome-length-from-subsequences]
 
 {% highlight java %}
@@ -485,9 +622,11 @@ public int countPalindromicSubsequences(String S) {
 [longest-palindromic-subsequence]: https://leetcode.com/problems/longest-palindromic-subsequence/
 [longest-palindromic-substring]: https://leetcode.com/problems/longest-palindromic-substring/
 [maximize-palindrome-length-from-subsequences]: https://leetcode.com/problems/maximize-palindrome-length-from-subsequences/
+[maximum-product-of-the-length-of-two-palindromic-substrings]: https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-substrings/
 [palindrome-number]: https://leetcode.com/problems/palindrome-number/
 [palindrome-pairs]: https://leetcode.com/problems/palindrome-pairs/
 [palindrome-partitioning-ii]: https://leetcode.com/problems/palindrome-partitioning-ii/
+[palindrome-partitioning-iii]: https://leetcode.com/problems/palindrome-partitioning-iii/
 [palindrome-partitioning-iv]: https://leetcode.com/problems/palindrome-partitioning-iv/
 [palindrome-removal]: https://leetcode.com/problems/palindrome-removal/
 [palindromic-substring]: https://leetcode.com/problems/palindromic-substring/

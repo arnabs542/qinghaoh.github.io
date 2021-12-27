@@ -543,7 +543,7 @@ A directed graph has an Eulerian trail if and only if at most one vertex has (ou
 [Reconstruct Itinerary][reconstruct-itinerary]
 
 {% highlight java %}
-private Map<String, Queue<String>> map = new HashMap<>();;
+private Map<String, Queue<String>> map = new HashMap<>();
 private List<String> list = new ArrayList<>();
 
 public List<String> findItinerary(List<List<String>> tickets) {

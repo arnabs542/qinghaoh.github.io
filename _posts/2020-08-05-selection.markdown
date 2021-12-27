@@ -99,15 +99,51 @@ private int partition(int[] nums, int low, int high) {
     swap(nums, i, high);
     return i;
 }
-
-private void swap(int[] nums, int i, int j) {
-    int tmp = nums[i];
-    nums[i] = nums[j];
-    nums[j] = tmp;
-}
 {% endhighlight %}
 
 [Kth Largest Element in a Stream][kth-largest-element-in-a-stream]
+
+Iterative:
+
+[K Closest Points to Origin][k-closest-points-to-origin]
+
+{% highlight java %}
+public int[][] kClosest(int[][] points, int k) {
+    int low = 0, high = points.length - 1;
+    while (low <= high) {
+        int mid = partition(points, low, high);
+        if (mid == k) {
+            break;
+        }
+        if (mid < k) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return Arrays.copyOfRange(points, 0, k);
+}
+
+private int partition(int[][] points, int low, int high) {
+    int[] pivot = points[low];
+    while (low < high) {
+        while (low < high && compare(points[high], pivot) >= 0) {
+            high--;
+        }
+        points[low] = points[high];
+        while (low < high && compare(points[low], pivot) <= 0) {
+            low++;
+        }
+        points[high] = points[low];
+    }
+    points[low] = pivot;
+    return low;
+}
+
+private int compare(int[] p1, int[] p2) {
+    return p1[0] * p1[0] + p1[1] * p1[1] - p2[0] * p2[0] - p2[1] * p2[1];
+}
+{% endhighlight %}
 
 # Median of Medians
 
@@ -166,6 +202,7 @@ private int countPairs(int[] nums2, long num1, long target) {
 }
 {% endhighlight %}
 
+[k-closest-points-to-origin]: https://leetcode.com/problems/k-closest-points-to-origin/
 [kth-largest-element-in-a-stream]: https://leetcode.com/problems/kth-largest-element-in-a-stream/
 [kth-largest-element-in-an-array]: https://leetcode.com/problems/kth-largest-element-in-an-array/
 [kth-smallest-product-of-two-sorted-arrays]: https://leetcode.com/problems/kth-smallest-product-of-two-sorted-arrays/

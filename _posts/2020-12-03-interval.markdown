@@ -163,6 +163,56 @@ public int eraseOverlapIntervals(int[][] intervals) {
 }
 {% endhighlight %}
 
+[Maximum Number of Non-Overlapping Substrings][maximum-number-of-non-overlapping-substrings]
+
+{% highlight java %}
+public List<String> maxNumOfSubstrings(String s) {
+    int n = s.length();
+    // {start, end}, n
+    int[][] intervals = new int[2][26];
+    Arrays.fill(intervals[0], n);
+
+    List<String> list = new ArrayList<>();
+    for (int i = 0; i < s.length(); ++i) {
+        int index = s.charAt(i) - 'a';
+        intervals[0][index] = Math.min(intervals[0][index], i);
+        intervals[1][index] = i;
+    }
+
+    int end = -1;
+    for (int i = 0; i < n; i++) {
+        if (intervals[0][s.charAt(i) - 'a'] == i) {
+            int newEnd = updateEnd(s, i, intervals);
+            if (newEnd != -1) {
+                // a new valid string which doesn't overlap the previous valid string
+                if (i > end) {
+                    list.add("");
+                }
+
+                // updates the last valid string with shorter inner string
+                // e.g. "abccba" -> "bccb" -> "cc"
+                end = newEnd;
+                list.set(list.size() - 1, s.substring(i, end + 1));
+            }
+        }
+    }
+    return list;
+}
+
+private int updateEnd(String s, int i, int[][] intervals) {
+    int end = intervals[1][s.charAt(i) - 'a'];
+    for (int j = i; j <= end; j++) {
+        // if a character appears before i
+        // so the string starting at i is invalid
+        if (intervals[0][s.charAt(j) - 'a'] < i) {
+            return -1;
+        }
+        end = Math.max(end, intervals[1][s.charAt(j) - 'a']);
+    }
+    return end;
+}
+{% endhighlight %}
+
 ### Weighted
 
 [Maximum Profit in Job Scheduling][maximum-profit-in-job-scheduling]
@@ -812,6 +862,7 @@ class Interval implements Comparable<Interval> {
 [maximum-number-of-eaten-apples]: https://leetcode.com/problems/maximum-number-of-eaten-apples/
 [maximum-number-of-events-that-can-be-attended]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/
 [maximum-number-of-events-that-can-be-attended-ii]: https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended-ii/
+[maximum-number-of-non-overlapping-substrings]: https://leetcode.com/problems/maximum-number-of-non-overlapping-substrings/
 [maximum-profit-in-job-scheduling]: https://leetcode.com/problems/maximum-profit-in-job-scheduling/
 [meeting-rooms-ii]: https://leetcode.com/problems/meeting-rooms-ii/
 [meeting-scheduler]: https://leetcode.com/problems/meeting-scheduler/

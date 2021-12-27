@@ -88,6 +88,8 @@ public boolean isSubsequence(String s, String t) {
 
 ## Dynamic Programming
 
+### LIS (Longest Increasing Subsequence)
+
 [Longest Increasing Subsequence][longest-increasing-subsequence]
 
 {% highlight java %}
@@ -177,6 +179,8 @@ public int minDeletionSize(String[] strs) {
 
 [Russian Doll Envelopes][russian-doll-envelopes]: 2D
 
+#### Patience Sorting
+
 A quicker solution is [Patience sorting](https://en.wikipedia.org/wiki/Patience_sorting). [This](https://www.cs.princeton.edu/courses/archive/spring13/cos423/lectures/LongestIncreasingSubsequence.pdf) is a Princeton lecture for it.
 
 1. Initially, there are no piles. The first card dealt forms a new pile consisting of the single card.
@@ -221,6 +225,43 @@ public int lengthOfLIS(int[] nums) {
         }
     }
     return count;
+}
+{% endhighlight %}
+
+#### Variants
+
+Longest Non-Decreasing Sequence
+
+[Find the Longest Valid Obstacle Course at Each Position][find-the-longest-valid-obstacle-course-at-each-position]
+
+{% highlight java %}
+public int[] longestObstacleCourseAtEachPosition(int[] obstacles) {
+    int n = obstacles.length;
+    int[] piles = new int[n], ans = new int[n];
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+        int index = binarySearch(piles, count, obstacles[i]);
+        piles[index] = obstacles[i];
+        ans[i] = index + 1;
+        if (index == count) {
+            count++;
+        }
+    }
+    return ans;
+}
+
+// finds the first element > target
+private int binarySearch(int[] piles, int end, int target) {
+    int low = 0, high = end;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (piles[mid] > target) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return low;
 }
 {% endhighlight %}
 
@@ -515,6 +556,7 @@ count: 3
 
 [arithmetic-slices-ii-subsequence]: https://leetcode.com/problems/arithmetic-slices-ii-subsequence/
 [delete-columns-to-make-sorted-iii]: https://leetcode.com/problems/delete-columns-to-make-sorted-iii/
+[find-the-longest-valid-obstacle-course-at-each-position]: https://leetcode.com/problems/find-the-longest-valid-obstacle-course-at-each-position/
 [is-subsequence]: https://leetcode.com/problems/is-subsequence/
 [largest-divisible-subset]: https://leetcode.com/problems/largest-divisible-subset/
 [length-of-longest-fibonacci-subsequence]: https://leetcode.com/problems/length-of-longest-fibonacci-subsequence/

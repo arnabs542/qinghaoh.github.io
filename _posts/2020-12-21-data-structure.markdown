@@ -31,6 +31,17 @@ Map + TreeMap
 private Map<Integer, List<String>> map = new HashMap<>();
 {% endhighlight %}
 
+Multisets
+
+[Finding MK Average][finding-mk-average]
+
+{% highlight java %}
+// {element: count}
+private TreeMap<Integer, Integer> left = new TreeMap<>(), middle = new TreeMap<>(), right = new TreeMap<>();
+// circular array
+private int[] arr;
+{% endhighlight %}
+
 [All O`one Data Structure][all-oone-data-structure]
 
 Doubly linked list (buckets)
@@ -526,6 +537,7 @@ class Skiplist {
 [dinner-plate-stacks]: https://leetcode.com/problems/dinner-plate-stacks/
 [find-median-from-data-stream]: https://leetcode.com/problems/find-median-from-data-stream/
 [find-servers-that-handled-most-number-of-requests]: https://leetcode.com/problems/find-servers-that-handled-most-number-of-requests/
+[finding-mk-average]: https://leetcode.com/problems/finding-mk-average/
 [implement-magic-dictionary]: https://leetcode.com/problems/implement-magic-dictionary/
 [lfu-cache]: https://leetcode.com/problems/lfu-cache/
 [lru-cache]: https://leetcode.com/problems/lru-cache/

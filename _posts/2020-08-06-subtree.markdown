@@ -87,6 +87,52 @@ public Node lowestCommonAncestor(Node p, Node q) {
 
 [Intersection of Two Linked Lists][intersection-of-two-linked-lists]
 
+# Binary Lifting
+
+[Kth Ancestor of a Tree Node][kth-ancestor-of-a-tree-node]
+
+{% highlight java %}
+// dp[i][j] = j-th node's 2^(i)th ancestor in the path
+private int[][] dp;
+private int maxPow;
+
+// binary lifting
+public TreeAncestor(int n, int[] parent) {
+    // log_base_2(n)
+    this.maxPow = (int)(Math.log(n) / Math.log(2)) + 1;
+    this.dp = new int[maxPow][n];
+
+    // dp[0][j] = parent[j]: first parent (2^0) of each node is given
+    dp[0] = parent;
+
+    for (int i = 1; i < maxPow; i++) {
+        for (int j = 0; j < n; j++) {
+            // to find the (2 ^ i)-th ancestor of j
+            // recursively finds j-th node's 2 ^ (i - 1)th ancestor's 2 ^ (i - 1)th ancestor
+            // 2 ^ i = 2 ^ (i - 1) + 2 ^ (i - 1)
+            int prev = dp[i - 1][j];
+            dp[i][j] = prev == -1 ? -1 : dp[i - 1][prev];
+        }
+    }
+}
+
+// binary search
+public int getKthAncestor(int node, int k) {
+    int currPow = maxPow;
+    while (k > 0 && node >= 0) {
+        if (k >= 1 << currPow) {
+            node = dp[currPow][node];
+            k -= 1 << currPow;
+        } else {
+            // takes smaller stride
+            currPow--;
+        }
+    }
+    return node;
+}
+{% endhighlight %}
+
+[kth-ancestor-of-a-tree-node]: https://leetcode.com/problems/kth-ancestor-of-a-tree-node/
 [intersection-of-two-linked-lists]: https://leetcode.com/problems/intersection-of-two-linked-lists/
 [lowest-common-ancestor-of-a-binary-tree]: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
 [lowest-common-ancestor-of-a-binary-tree-ii]: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree-ii/
