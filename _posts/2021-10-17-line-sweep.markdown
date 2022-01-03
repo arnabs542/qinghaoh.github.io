@@ -166,6 +166,44 @@ public int[][] averageHeightOfBuildings(int[][] buildings) {
 }
 {% endhighlight %}
 
+[Minimum Interval to Include Each Query][minimum-interval-to-include-each-query]
+
+{% highlight java %}
+public int[][] averageHeightOfBuildings(int[][] buildings) {
+    // {point, (+/-)height}
+    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+    for (int[] b : buildings) {
+        pq.offer(new int[]{b[0], b[2]});
+        pq.offer(new int[]{b[1], -b[2]});
+    }
+
+    Deque<int[]> dq = new ArrayDeque<>();
+    int prev = 0, sum = 0, count = 0;
+    while (!pq.isEmpty()) {
+        int[] curr = pq.poll();
+        if (count != 0 && curr[0] != prev) {
+            int avg = sum / count;
+            // updates end and average of prev int[]
+            if (!dq.isEmpty() && dq.peekLast()[1] == prev && dq.peekLast()[2] == avg) {
+                dq.peekLast()[1] = curr[0];
+                dq.peekLast()[2] = avg;
+            } else {
+                dq.offerLast(new int[] {prev, curr[0], avg});
+            }
+        }
+        prev = curr[0];
+        sum += curr[1];
+        count += curr[1] > 0 ? 1 : -1;
+    }
+
+    int[][] street = new int[dq.size()][];
+    for (int i = 0; i < street.length; i++) {
+        street[i] = dq.pollFirst();
+    }
+    return street;
+}
+{% endhighlight %}
+
 # Arc Sweep
 
 [Maximum Number of Darts Inside of a Circular Dartboard][maximum-number-of-darts-inside-of-a-circular-dartboard]
@@ -246,4 +284,5 @@ public int brightestPosition(int[][] lights) {
 [brightest-position-on-street]: https://leetcode.com/problems/brightest-position-on-street/
 [describe-the-painting]: https://leetcode.com/problems/describe-the-painting/
 [maximum-number-of-darts-inside-of-a-circular-dartboard]: https://leetcode.com/problems/maximum-number-of-darts-inside-of-a-circular-dartboard/
+[minimum-interval-to-include-each-query]: https://leetcode.com/problems/minimum-interval-to-include-each-query/
 [the-skyline-problem]: https://leetcode.com/problems/the-skyline-problem/

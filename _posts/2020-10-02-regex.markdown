@@ -22,4 +22,35 @@ public String validIPAddress(String IP) {
 }
 {% endhighlight %}
 
+# Quantifiers
+
+[Quantifiers](https://docs.oracle.com/javase/tutorial/essential/regex/quant.html)
+
+Greedy quantifiers are considered "greedy" because they force the matcher to read in, or eat, the entire input string prior to attempting the first match. If the first match attempt (the entire input string) fails, the matcher backs off the input string by one character and tries again, repeating the process until a match is found or there are no more characters left to back off from. Depending on the quantifier used in the expression, the last thing it will try matching against is 1 or 0 characters.
+
+The reluctant quantifiers, however, take the opposite approach: They start at the beginning of the input string, then reluctantly eat one character at a time looking for a match. The last thing they try is the entire input string.
+
+[Tag Validator][tag-validator]
+
+{% highlight java %}
+public boolean isValid(String code) {
+    if (code.equals("t")) {
+        return false;
+    }
+
+    // uses reluctant quantifiers .*? to match CDATA
+    code = code.replaceAll("<!\\[CDATA\\[.*?\\]\\]>", "c");
+
+    String prev = "";
+    while (!code.equals(prev)) {
+        prev = code;
+        // group matches the tag name
+        code = code.replaceAll("<([A-Z]{1,9})>[^<]*</\\1>", "t");
+    }
+
+    return code.equals("t");
+}
+{% endhighlight %}
+
+[tag-validator]: https://leetcode.com/problems/tag-validator/
 [validate-ip-address]: https://leetcode.com/problems/validate-ip-address/

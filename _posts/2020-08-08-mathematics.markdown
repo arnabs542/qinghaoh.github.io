@@ -619,6 +619,56 @@ private int drop(int n, int eggs) {
 }
 {% endhighlight %}
 
+Generalization:
+
+[Super Egg Drop][super-egg-drop]
+
+{% highlight java %}
+public int superEggDrop(int k, int n) {
+    int low = 1, high = n;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (f(mid, k, n) >= n) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return low;
+}
+
+// f(x) = sum_{i=1}^k{\binom{x}{i}}
+public int f(int x, int k, int n) {
+    int sum = 0, c = 1;
+    for (int i = 1; i <= k && sum < n; i++) {
+        c *= x - i + 1;
+        c /= i;
+        sum += c;
+    }
+    return sum;
+}
+{% endhighlight %}
+
+Dynamic Programming:
+
+{% highlight java %}
+public int superEggDrop(int k, int n) {
+    // dp[i][j]: max number of floor that we can test with i moves and j eggs
+    int[][] dp = new int[n + 1][k + 1];
+    int moves = 0;
+    while (dp[moves][k] < n) {
+        moves++;
+        for (int j = 1; j <= k; j++) {
+            // checks the floor dp[m - 1][j - 1] + 1
+            // if egg breaks, goes downstairs: 1 <= max floor <= dp[m - 1][j - 1]
+            // if egg doesn't break, goes upstairs: dp[m - 1][j - 1] + 2 <= max floor <= dp[m - 1][j - 1] + dp[m - 1][j] + 1
+            dp[moves][j] = 1 + dp[moves - 1][j - 1] + dp[moves - 1][j];
+        }
+    }
+    return moves;
+}
+{% endhighlight %}
+
 # Sequence
 
 [Reach a Number][reach-a-number]
@@ -707,4 +757,5 @@ public int numSquares(int n) {
 [robot-bounded-in-circle]: https://leetcode.com/problems/robot-bounded-in-circle/
 [smallest-good-base]: https://leetcode.com/problems/smallest-good-base/
 [sparse-matrix-multiplication]: https://leetcode.com/problems/sparse-matrix-multiplication/
+[super-egg-drop]: https://leetcode.com/problems/super-egg-drop/
 [unique-binary-search-trees]: https://leetcode.com/problems/unique-binary-search-trees/

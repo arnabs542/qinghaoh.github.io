@@ -240,6 +240,45 @@ public int maxJumps(int[] arr, int d) {
 }
 {% endhighlight %}
 
+[Car Fleet II][car-fleet-ii]
+
+{% highlight java %}
+public double[] getCollisionTimes(int[][] cars) {
+    int n = cars.length;
+    // monotonically decreasing stack wrt the collision time
+    Deque<Integer> st = new ArrayDeque<>();
+    double[] answer = new double[n];
+
+    // iterates backwards
+    for (int i = n - 1; i >= 0; i--) {
+        answer[i] = -1;
+        // top car doesn't collide with the current car if:
+        // 1. speed of i-th car is no greater than the top car, or
+        // 2. top car has already collided with another car (e.g. j-th car),
+        //    thus i-th car would possibly collide with j-th car instead, and we need to pop the top
+        //    iow, if i-th car can't catch (i + 1)-th car, before (i + 1)-th car catches (i + 2)-th car,
+        //    then we can think of (i + 2)-th car as the candidate, removing (i + 1)-th car
+        while (!st.isEmpty()
+               && (cars[i][1] <= cars[st.peek()][1]
+               || (computeTime(cars, i, st.peek()) >= answer[st.peek()] && answer[st.peek()] > 0))) {
+            st.pop();
+        }
+
+        if (!st.isEmpty()) {
+            answer[i] = computeTime(cars, i, st.peek());
+        }
+        st.push(i);
+    }
+    return answer;
+}
+
+// computes the time car i takes to catch car j
+// i is faster than j
+private double computeTime(int[][] cars, int i, int j) {
+    return (double)(cars[j][0] - cars[i][0]) / (cars[i][1] - cars[j][1]);
+}
+{% endhighlight %}
+
 ## Previous/Next Less/Greater Element
 
 ### Templates
@@ -623,23 +662,23 @@ public int numSubmat(int[][] mat) {
 public String removeDuplicateLetters(String s) {
     // last index
     int[] last = new int[26];
-    for (int i = 0; i < s.length(); ++i) {
+    for (int i = 0; i < s.length(); i++) {
         last[s.charAt(i) - 'a'] = i;
     }
 
+    // each character appears in the stack once and only once
     Deque<Integer> st = new ArrayDeque<>();
-    // if visited is true, it's already in the stack
-    boolean[] visited = new boolean[26];
+    boolean[] inStack = new boolean[26];
     for (int i = 0; i < s.length(); i++) {
         int c = s.charAt(i) - 'a';
-        if (!visited[c]) {
+        if (!inStack[c]) {
             // if c is less than stack top, and the top will appear later,
             // pops the top
             while (!st.isEmpty() && c < st.peek() && i < last[st.peek()]) {
-                visited[st.pop()] = false;
+                inStack[st.pop()] = false;
             }
             st.push(c);
-            visited[c] = true;
+            inStack[c] = true;
         }
     }
 
@@ -648,6 +687,49 @@ public String removeDuplicateLetters(String s) {
         sb.append((char)('a' + i));
     }
     return sb.reverse().toString();
+}
+{% endhighlight %}
+
+[Smallest K-Length Subsequence With Occurrences of a Letter][smallest-k-length-subsequence-with-occurrences-of-a-letter]
+
+{% highlight java %}
+public String smallestSubsequence(String s, int k, char letter, int repetition) {
+    // count of `letter`
+    int count = (int)s.chars().filter(ch -> ch == letter).count();
+    int n = s.length();
+
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < n; i++) {
+        char c = s.charAt(i);
+        // if the current character can improve the lexicographical order, we pop the top if:
+        // - there are enough remaining characters to construct a k-size string
+        // - if the top is the same as letter, then the number of remaining letters >= `repetition`.
+        //   number of remaining letter = count - 1 (-1 is the stack top)
+        while (sb.length() > 0 && c < sb.charAt(sb.length() - 1) && n - i > k - sb.length()
+               && (sb.charAt(sb.length() - 1) != letter || count > repetition)) {
+            // pops
+            char top = sb.charAt(sb.length() - 1);
+            sb.deleteCharAt(sb.length() - 1);
+            if (top == letter) {
+                repetition++;
+            }
+        }
+
+        if (sb.length() < k) {
+            if (c == letter) {
+                sb.append(c);
+                repetition--;
+            } else if (k - sb.length() > repetition) {
+                // k - st.size() - repetition is the number of non-letter characters that need to be pushed
+                sb.append(c);
+            }
+        }
+
+        if (c == letter) {
+            count--;
+        }
+    }
+    return sb.toString();
 }
 {% endhighlight %}
 
@@ -966,6 +1048,7 @@ public int calculate(String s) {
 [132-pattern]: https://leetcode.com/problems/132-pattern/
 [basic-calculator]: https://leetcode.com/problems/basic-calculator/
 [binary-searchable-numbers-in-an-unsorted-array]: https://leetcode.com/problems/binary-searchable-numbers-in-an-unsorted-array/
+[car-fleet-ii]: https://leetcode.com/problems/car-fleet-ii/
 [count-submatrices-with-all-ones]: https://leetcode.com/problems/count-submatrices-with-all-ones/
 [create-maximum-number]: https://leetcode.com/problems/create-maximum-number/
 [final-prices-with-a-special-discount-in-a-shop]: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/
@@ -991,6 +1074,7 @@ public int calculate(String s) {
 [remove-outermost-parentheses]: https://leetcode.com/problems/remove-outermost-parentheses/
 [reverse-substrings-between-each-pair-of-parentheses]: https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/
 [score-of-parentheses]: https://leetcode.com/problems/score-of-parentheses/
+[smallest-k-length-subsequence-with-occurrences-of-a-letter]: https://leetcode.com/problems/smallest-k-length-subsequence-with-occurrences-of-a-letter/
 [sum-of-subarray-minimums]: https://leetcode.com/problems/sum-of-subarray-minimums/
 [ternary-expression-parser]: https://leetcode.com/problems/ternary-expression-parser/
 [remove-k-digits]: https://leetcode.com/problems/remove-k-digits/

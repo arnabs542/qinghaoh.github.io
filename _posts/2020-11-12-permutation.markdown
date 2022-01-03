@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Permutation"
+usemathjax: true
 ---
 [Permutation Sequence][permutation-sequence]
 
@@ -24,6 +25,10 @@ public String getPermutation(int n, int k) {
     return sb.toString();
 }
 {% endhighlight %}
+
+# Lexicographically Sort
+
+## Next Permutation
 
 [Next Permutation][next-permutation]
 
@@ -62,6 +67,61 @@ private void swap(int[] nums, int i, int j) {
     int tmp = nums[i];
     nums[i] = nums[j];
     nums[j] = tmp;
+}
+{% endhighlight %}
+
+## Previous Permutation
+
+[Minimum Number of Operations to Make String Sorted][minimum-number-of-operations-to-make-string-sorted]
+
+$$\frac{n!}{\prod{\mathbf{card}(c)}!}$$
+
+where \\(n\\) is the number of characters, and \\(\mathbf{card}(c)\\) is the count of each unique character.
+
+https://www.geeksforgeeks.org/lexicographic-rank-string-duplicate-characters/
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+private static final int MAX_LENGTH = 3000;
+
+public int makeStringSorted(String s) {
+    int[] factorial = new int[MAX_LENGTH + 1], inverse = new int[MAX_LENGTH + 1];
+    factorial[0] = 1;
+    inverse[0] = 1;
+
+    for (int i = 1; i < factorial.length; i++) {
+        factorial[i] = (int)((long)i * factorial[i - 1] % MOD);
+        inverse[i] = (int)modPow(factorial[i], MOD - 2);
+    }
+
+    int n = s.length();
+    long ops = 1;
+    int[] count = new int[26];
+    // for each s[i],
+    // 1) counts the number of smaller characters on the right side of s[i] (less_than)
+    // 2) computes the product of factorials of repetitions of each character (d_fac)
+    // 3) computes (less_than * fac(n - i - 1)) / (d_fac).
+    for (int i = n - 1; i >= 0; i--) {
+        count[s.charAt(i) - 'a']++;
+        long perm = (long)Arrays.stream(count).limit(s.charAt(i) - 'a').sum() * factorial[n - i - 1] % MOD;
+        for (int c : count) {
+            perm = perm * inverse[c] % MOD;
+        }
+        ops = (ops + perm) % MOD;
+    }
+    return (int)(ops - 1);
+}
+
+private long modPow(long x, long y) {
+    long res = 1;
+    while (y > 0) {
+        if ((y & 1) == 1) {
+            res = res * x % MOD;
+        }
+        x = x * x % MOD;
+        y >>= 1;
+    }
+    return res;
 }
 {% endhighlight %}
 
@@ -124,6 +184,52 @@ private int permutation(int n, int m) {
 }
 {% endhighlight %}
 
+# Dynamic Programming
+
+[Valid Permutations for DI Sequence][valid-permutations-for-di-sequence]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int numPermsDISequence(String s) {
+    int n = s.length();
+    // dp[i][j]: number of permutations of [0, i], with DI-rule s.substring(0, i) and ending with digit j
+    int[][] dp = new int[n + 1][n + 1];
+    dp[0][0] = 1;
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 0; j <= i; j++) {
+            if (s.charAt(i - 1) == 'D') {
+                // e.g. DID, 1032 -> DIDD that ends with 2
+                // 1032 -> 1043 -> 10432
+                // steps:
+                // 1. increments digits that are larger than or equal to j
+                // 2. appends j
+                // k >= j, so k -> j is D
+                for (int k = j; k < i; k++) {
+                    dp[i][j] = (dp[i][j] + dp[i - 1][k]) % MOD;
+                }
+            } else {
+                // e.g. DID, 1032 -> DIDI that ends with 3
+                // 1032 -> 1042 -> 10423 (append)
+                // k < j, so k -> j is I
+                for (int k = 0; k < j; k++) {
+                    dp[i][j] = (dp[i][j] + dp[i - 1][k]) % MOD;
+                }
+            }
+        }
+    }
+
+    int count = 0;
+    for (int i = 0; i <= n; i++) {
+        count = (count + dp[n][i]) % MOD;
+    }
+    return count;
+}
+{% endhighlight %}
+
+[minimum-number-of-operations-to-make-string-sorted]: https://leetcode.com/problems/minimum-number-of-operations-to-make-string-sorted/
 [next-permutation]: https://leetcode.com/problems/next-permutation/
 [numbers-with-repeated-digits]: https://leetcode.com/problems/numbers-with-repeated-digits/
 [permutation-sequence]: https://leetcode.com/problems/permutation-sequence/
+[valid-permutations-for-di-sequence]: https://leetcode.com/problems/valid-permutations-for-di-sequence/

@@ -3,7 +3,7 @@ layout: post
 title:  "Linked List"
 tags: array
 ---
-## Cycle Detection
+# Cycle Detection
 
 [Floyd's Tortoise and Hare](https://en.wikipedia.org/wiki/Cycle_detection#Floyd's_Tortoise_and_Hare)
 
@@ -209,8 +209,43 @@ public Node copyRandomList(Node head) {
 }
 {% endhighlight %}
 
+# Tree
+
+[Populating Next Right Pointers in Each Node][populating-next-right-pointers-in-each-node]
+
+{% highlight java %}
+public Node connect(Node root) {
+    if (root == null) {
+        return root;
+    }
+
+    Node leftmost = root;
+    while (leftmost.left != null) {
+        // starts from leftmost node in each level
+        Node head = leftmost;
+
+        while (head != null) {
+            // inner connection
+            head.left.next = head.right;
+
+            // inter connection
+            if (head.next != null) {
+                head.right.next = head.next.left;
+            }
+
+            head = head.next;
+        }
+
+        // moves to the next level
+        leftmost = leftmost.left;
+    }
+    return root;
+}
+{% endhighlight %}
+
 [add-two-numbers-ii]: https://leetcode.com/problems/add-two-numbers-ii/
 [copy-list-with-random-pointer]: https://leetcode.com/problems/copy-list-with-random-pointer/
 [find-the-duplicate-number]: https://leetcode.com/problems/find-the-duplicate-number/
 [linked-list-cycle-ii]: https://leetcode.com/problems/linked-list-cycle-ii/
 [palindrome-linked-list]: https://leetcode.com/problems/palindrome-linked-list/
+[populating-next-right-pointers-in-each-node]: https://leetcode.com/problems/populating-next-right-pointers-in-each-node/

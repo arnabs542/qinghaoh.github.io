@@ -825,6 +825,27 @@ ORDER BY
 ;
 {% endhighlight %}
 
+[Build the Equation][build-the-equation]
+
+{% highlight sql %}
+SELECT
+    CONCAT(GROUP_CONCAT(term ORDER BY power DESC SEPARATOR ''), '=0') AS equation
+FROM (
+    SELECT
+        CONCAT(CASE WHEN factor > 0 THEN '+' ELSE '' END,
+               factor,
+               CASE WHEN power = 0 THEN '' ELSE 'X' END,
+               CASE WHEN power = 0 OR power = 1 THEN '' ELSE '^' END,
+               CASE WHEN power = 0 OR power = 1 THEN '' ELSE power END
+        ) term,
+        power
+    FROM
+        Terms
+    ORDER BY
+        power DESC) t
+;
+{% endhighlight %}
+
 # OVER
 
 [Calculate Salaries][calculate-salaries]
@@ -2173,6 +2194,7 @@ WHERE
 [all-people-report-to-the-given-manager]: https://leetcode.com/problems/all-people-report-to-the-given-manager/
 [all-valid-triplets-that-can-represent-a-country]: https://leetcode.com/problems/all-valid-triplets-that-can-represent-a-country/
 [biggest-window-between-visits]: https://leetcode.com/problems/biggest-window-between-visits/
+[build-the-equation]: https://leetcode.com/problems/build-the-equation/
 [calculate-salaries]: https://leetcode.com/problems/calculate-salaries/
 [classes-more-than-5-students]: https://leetcode.com/problems/classes-more-than-5-students/
 [consecutive-available-seats]: https://leetcode.com/problems/consecutive-available-seats/

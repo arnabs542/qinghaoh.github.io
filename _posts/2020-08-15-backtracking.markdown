@@ -1079,6 +1079,61 @@ private boolean isValid(List<Integer> offer, List<Integer> needs) {
 }
 {% endhighlight %}
 
+[Verbal Arithmetic Puzzle][verbal-arithmetic-puzzle]
+
+{% highlight java %}
+private static final int[] POW_10 = new int[]{1, 10, 100, 1000, 10000, 100000, 1000000};
+private boolean[] notZero = new boolean[26];
+private int[] weight = new int[26];
+
+public boolean isSolvable(String[] words, String result) {
+    Set<Character> charSet = new HashSet<>();
+
+    for (String w : words) {
+        int m = w.length();
+        if (m > 1) {
+            notZero[w.charAt(0) - 'A'] = true;
+        }
+        for (int i = 0; i < m; i++) {
+            charSet.add(w.charAt(i));
+            weight[w.charAt(i) - 'A'] += POW_10[m - i - 1];
+        }
+    }
+
+    // sum(words) - result = 0
+    int m = result.length();
+    if (m > 1) {
+        notZero[result.charAt(0) - 'A'] = true;
+    }
+    for (int i = 0; i < m; i++) {
+        charSet.add(result.charAt(i));
+        weight[result.charAt(i) - 'A'] -= POW_10[m - i - 1];
+    }
+
+    return backtrack(new boolean[10], new ArrayList<>(charSet), 0, 0);
+}
+
+// diff = sum(words) - rsult
+// used boolean array implicitly keeps a mapping
+private boolean backtrack(boolean[] used, List<Character> charList, int index, int diff) {
+    if (index == charList.size()) {
+        return diff == 0;
+    }
+
+    for (int d = 0; d <= 9; d++) {
+        char c = charList.get(index);
+        if (!used[d] && (d > 0 || !notZero[c - 'A'])) {
+            used[d] = true;
+            if (backtrack(used, charList, index + 1, diff + weight[c - 'A'] * d)) {
+                return true;
+            }
+            used[d] = false;
+        }
+    }
+    return false;
+}
+{% endhighlight %}
+
 [24-game]: https://leetcode.com/problems/24-game/
 [android-unlock-patterns]: https://leetcode.com/problems/android-unlock-patterns/
 [beautiful-arrangement]: https://leetcode.com/problems/beautiful-arrangement/
@@ -1107,4 +1162,5 @@ private boolean isValid(List<Integer> offer, List<Integer> needs) {
 [shopping-offers]: https://leetcode.com/problems/shopping-offers/
 [subsets]: https://leetcode.com/problems/subsets/
 [subsets-ii]: https://leetcode.com/problems/subsets-ii/
+[verbal-arithmetic-puzzle]: https://leetcode.com/problems/verbal-arithmetic-puzzle/
 [zuma-game]: https://leetcode.com/problems/zuma-game/

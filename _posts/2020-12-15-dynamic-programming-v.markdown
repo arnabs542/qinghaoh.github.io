@@ -416,6 +416,42 @@ int[][] dp = new int[arrLen][steps];
 int[] dp = new int[arrLen];
 {% endhighlight %}
 
+[Number of Ways to Form a Target String Given a Dictionary][number-of-ways-to-form-a-target-string-given-a-dictionary]
+
+2D:
+
+{% highlight java %}
+// dp[i][j]: number of ways to form target[0...j - 1] with words by the i-th index
+long[][] dp = new long[m + 1][n + 1];
+{% endhighlight %}
+
+Reduced to 1D:
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int numWays(String[] words, String target) {
+    int n = target.length(), m = words[0].length();
+    // dp[j]: number of ways to form target.substring(j)
+    long[] dp = new long[n + 1];
+    dp[0] = 1;
+
+    for (int i = 0; i < m; i++) {
+        // freq[j]: total frequency of letter j in the current position i
+        int[] freq = new int[26];
+        for (int j = 0; j < words.length; j++){
+            freq[words[j].charAt(i)-'a']++;
+        }
+
+        // iterates backwards
+        for (int j = Math.min(i + 1, n); j > 0; j--) {
+            dp[j] = (dp[j] + dp[j - 1] * freq[target.charAt(j - 1) -'a']) % MOD;
+        }
+    }
+    return (int)dp[n];
+}
+{% endhighlight %}
+
 [decode-ways]: https://leetcode.com/problems/decode-ways/
 [delete-and-earn]: https://leetcode.com/problems/delete-and-earn/
 [flip-string-to-monotone-increasing]: https://leetcode.com/problems/flip-string-to-monotone-increasing/
@@ -423,6 +459,7 @@ int[] dp = new int[arrLen];
 [house-robber-ii]: https://leetcode.com/problems/house-robber-ii/
 [minimum-deletions-to-make-string-balanced]: https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
+[number-of-ways-to-form-a-target-string-given-a-dictionary]: https://leetcode.com/problems/number-of-ways-to-form-a-target-string-given-a-dictionary/
 [number-of-ways-to-paint-n-3-grid]: https://leetcode.com/problems/number-of-ways-to-paint-n-3-grid/
 [number-of-ways-to-stay-in-the-same-place-after-some-steps]: https://leetcode.com/problems/number-of-ways-to-stay-in-the-same-place-after-some-steps/
 [paint-fence]: https://leetcode.com/problems/paint-fence/

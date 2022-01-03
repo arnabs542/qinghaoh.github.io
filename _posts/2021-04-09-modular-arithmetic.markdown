@@ -126,22 +126,22 @@ If \\(a \bmod 191 = 0\\), it's similar to the case above.
 
 Evaluate these remainders:
 
-\\[1 \bmod K, 11 \bmod K, \cdots, \underbrace{11\cdots1}_{K} \bmod K\\]
+\\[1 \bmod k, 11 \bmod k, \cdots, \underbrace{11\cdots1}_{k} \bmod k\\]
 
 * If any remainder is 0, then the smallest number of them is the result
-* If none is 0, there must be dupliated remainders as per Pigeonhole Principle, as the \\(K\\) remainders can only take at most \\(K - 1\\) different values excluding 0
+* If none is 0, there must be dupliated remainders as per Pigeonhole Principle, as the \\(k\\) remainders can only take at most \\(k - 1\\) different values excluding 0
 
-In the second case, if \\(a_{i} \bmod K\\) has a duplicate \\(a_{j} \bmod K\\), since \\(a_{i + 1} = 10a_{i} + 1\\), \\(a_{i + 1} \bmod K = a_{j + 1} \bmod K\\). Therefore, we will never see remainder = 0.
+In the second case, if \\(a_{i} \bmod k\\) has a duplicate \\(a_{j} \bmod k\\), since \\(a_{i + 1} = 10a_{i} + 1\\), \\(a_{i + 1} \bmod k = a_{j + 1} \bmod k\\). Therefore, we will never see remainder = 0.
 
 {% highlight java %}
-public int smallestRepunitDivByK(int K) {
-    if (K % 2 == 0 || K % 5 == 0) {
+public int smallestRepunitDivByK(int k) {
+    if (k % 2 == 0 || k % 5 == 0) {
         return -1;
     }
 
     int r = 0;
-    for (int n = 1; n <= K; n++) {
-        r = (r * 10 + 1) % K;
+    for (int n = 1; n <= k; n++) {
+        r = (r * 10 + 1) % k;
         if (r == 0) {
             return n;
         }

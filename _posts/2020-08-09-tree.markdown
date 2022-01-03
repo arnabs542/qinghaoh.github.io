@@ -228,6 +228,54 @@ public int createSortedArray(int[] instructions) {
 }
 {% endhighlight %}
 
+[Minimum Possible Integer After at Most K Adjacent Swaps On Digits][minimum-possible-integer-after-at-most-k-adjacent-swaps-on-digits]
+
+{% highlight java %}
+public String minInteger(String num, int k) {
+    // index of each digit
+    List<Queue<Integer>> list = new ArrayList<>(10);
+    for (int i = 0; i <= 9; i++) {
+        list.add(new LinkedList<>());
+    }
+
+    int n = num.length();
+    for (int i = 0; i < n; i++) {
+        list.get(num.charAt(i) - '0').offer(i);
+    }
+
+    StringBuilder sb = new StringBuilder();
+    FenwickTree ft = new FenwickTree(n);
+
+    for (int i = 0; i < n; i++) {
+        // at current location, attempts to place 0...9
+        for (int d = 0; d <= 9; d++) {
+            if (list.get(d).size() != 0) {
+                // finds the first occurrence of d
+                int index = list.get(d).peek();
+                // since a few numbers already shifted to left, this index might be outdated.
+                // finds how many numbers got shifted to the left of index
+                // e.g. "4192", k = 3
+                // Round #1: d = 1, index = 1, shift = 0, "1492"
+                // Round #2: d = 2, index = 3, shift = 1, "1249"
+                int shift = ft.sum(index);
+                // (index - shift) is number of swaps to make d move from index to i
+                // ensures the d is in the k-size sliding window
+                if (index - shift <= k) {
+                    k -= index - shift;
+                    // the "shift" value (calculated by ft.sum(num)) of all nums to the right of index
+                    // would increase by 1
+                    ft.add(index + 1, 1);
+                    list.get(d).poll();
+                    sb.append(d);
+                    break;
+                }
+            }
+        }
+    }
+    return sb.toString();
+}
+{% endhighlight %}
+
 ## 2D
 
 [Range Sum Query 2D - Mutable][range-sum-query-2d-mutable]
@@ -556,6 +604,7 @@ TreeNode -> Map<TreeNode, List<TreeNode>>
 [count-number-of-teams]: https://leetcode.com/problems/count-number-of-teams/
 [create-sorted-array-through-instructions]: https://leetcode.com/problems/create-sorted-array-through-instructions/
 [maximum-binary-tree]: https://leetcode.com/problems/maximum-binary-tree/
+[minimum-possible-integer-after-at-most-k-adjacent-swaps-on-digits]: https://leetcode.com/problems/minimum-possible-integer-after-at-most-k-adjacent-swaps-on-digits/
 [minimum-time-to-build-blocks]: https://leetcode.com/problems/minimum-time-to-build-blocks/
 [queries-on-a-permutation-with-key]: https://leetcode.com/problems/queries-on-a-permutation-with-key/
 [range-sum-query-mutable]: https://leetcode.com/problems/range-sum-query-mutable/

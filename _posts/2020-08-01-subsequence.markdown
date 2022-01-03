@@ -230,7 +230,7 @@ public int lengthOfLIS(int[] nums) {
 
 #### Variants
 
-Longest Non-Decreasing Sequence
+**Longest Non-Decreasing Sequence**
 
 [Find the Longest Valid Obstacle Course at Each Position][find-the-longest-valid-obstacle-course-at-each-position]
 
@@ -264,6 +264,10 @@ private int binarySearch(int[] piles, int end, int target) {
     return low;
 }
 {% endhighlight %}
+
+**Mountain Array**
+
+[Minimum Number of Removals to Make Mountain Array][minimum-number-of-removals-to-make-mountain-array]
 
 [Russian Doll Envelopes][russian-doll-envelopes]
 
@@ -483,7 +487,7 @@ public int numberOfUniqueGoodSubsequences(String binary) {
 }
 {% endhighlight %}
 
-# Buckets
+## Buckets
 
 [Number of Matching Subsequences][number-of-matching-subsequences]
 
@@ -554,6 +558,83 @@ count: 2
 count: 3
 ```
 
+## Backtracking
+
+[Longest Subsequence Repeated k Times][longest-subsequence-repeated-k-times]
+
+{% highlight java %}
+private List<String> candidates = new ArrayList<>();
+
+public String longestSubsequenceRepeatedK(String s, int k) {
+    int n = s.length(), total = 0;
+    int[] freq = new int[26];
+    for (int i = 0; i < n; i++) {
+        freq[s.charAt(i) - 'a']++;
+    }
+    for (int i = 0; i < freq.length; i++) {
+        freq[i] /= k;
+        total += freq[i];
+    }
+
+    // generates candidates in length decreasing order
+    for (int len = total; len >= 0; len--) {
+        backtrack(freq, len, new StringBuilder());
+    }
+
+    for (String c : candidates) {
+        if (isKSubSequence(s, c, k)) {
+            return c;
+        }
+    }
+
+    return "";
+}
+
+private boolean isKSubSequence(String s, String sub, int k) {
+    if (sub.length() == 0) {
+        return true;
+    }
+
+    int count = 0, j = 0;
+    for (int i = 0; i < s.length(); i++) {
+        if (s.charAt(i) == sub.charAt(j)) {
+            j++;
+        }
+
+        // a candidate subsequence is found, reset p to find next candidate.
+        if (j == sub.length()) {
+            count++;
+            j = 0;
+        }
+
+        if (count >= k) {
+            return true;
+        }
+    }
+    return false;
+}
+
+private void backtrack(int[] freq, int len, StringBuilder sb) {
+    if (len == 0) {
+        candidates.add(sb.toString());
+        return;
+    }
+
+    // generates candidates in lexicographically decreasing order
+    for (int i = freq.length - 1; i >= 0; i--) {
+        if (freq[i] > 0) {
+            sb.append((char)(i + 'a'));
+            freq[i]--;
+
+            backtrack(freq, len - 1, sb);
+
+            sb.deleteCharAt(sb.length() - 1);
+            freq[i]++;
+        }
+    }
+}
+{% endhighlight %}
+
 [arithmetic-slices-ii-subsequence]: https://leetcode.com/problems/arithmetic-slices-ii-subsequence/
 [delete-columns-to-make-sorted-iii]: https://leetcode.com/problems/delete-columns-to-make-sorted-iii/
 [find-the-longest-valid-obstacle-course-at-each-position]: https://leetcode.com/problems/find-the-longest-valid-obstacle-course-at-each-position/
@@ -563,6 +644,8 @@ count: 3
 [longest-arithmetic-subsequence]: https://leetcode.com/problems/longest-arithmetic-subsequence/
 [longest-arithmetic-subsequence-of-given-difference]: https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
 [longest-increasing-subsequence]: https://leetcode.com/problems/longest-increasing-subsequence/
+[longest-subsequence-repeated-k-times]: https://leetcode.com/problems/longest-subsequence-repeated-k-times/
+[minimum-number-of-removals-to-make-mountain-array]: https://leetcode.com/problems/minimum-number-of-removals-to-make-mountain-array/
 [minimum-operations-to-make-a-subsequence]: https://leetcode.com/problems/minimum-operations-to-make-a-subsequence/
 [number-of-matching-subsequences]: https://leetcode.com/problems/number-of-matching-subsequences/
 [number-of-unique-good-subsequences]: https://leetcode.com/problems/number-of-unique-good-subsequences/

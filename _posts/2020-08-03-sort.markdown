@@ -5,8 +5,12 @@ tags: sort
 ---
 [Sort an Array][sort-an-array]
 
-# Quick sort
-## Lumuto Partition Scheme
+# Quicksort
+
+[Quicksort](https://en.wikipedia.org/wiki/Quicksort): not stable
+
+## Lomuto Partition Scheme
+
 {% highlight java %}
 public int[] sortArray(int[] nums) {
     quickSort(nums, 0, nums.length - 1);
@@ -38,6 +42,30 @@ private void swap(int[] nums, int i, int j) {
     int tmp = nums[i];
     nums[i] = nums[j];
     nums[j] = tmp;
+}
+{% endhighlight %}
+
+## Hoare Partition Scheme
+
+{% highlight java %}
+private int partition(int[] nums, int low, int high) {
+    int pivot = nums[(low + high) >>> 1];
+    int i = low - 1, j = high + 1;
+    while (true) {
+        do {
+            i++;
+        } while (nums[i] < pivot) ;
+
+        do {
+            j--;
+        } while (nums[j] > pivot);
+
+        if (i >= j) {
+            return j;
+        }
+
+        swap(nums, i, j);
+    }
 }
 {% endhighlight %}
 

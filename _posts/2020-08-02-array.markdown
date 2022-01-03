@@ -526,9 +526,38 @@ public List<Integer> findDuplicates(int[] nums) {
 }
 {% endhighlight %}
 
+# Sort
+
+[Car Fleet][car-fleet]
+
+{% highlight java %}
+public int carFleet(int target, int[] position, int[] speed) {
+    int n = position.length;
+    Integer[] index = new Integer[n];
+    for (int i = 0; i < n; i++) {
+        index[i] = i;
+    }
+
+    Arrays.sort(index, Comparator.comparingInt(i -> -position[i]));
+
+    int count = 0;
+    // current largest time to reach target (slowest)
+    double curr = 0;
+    for (int i : index) {
+        double time = (double)(target - position[i]) / speed[i];
+        if (time > curr) {
+            curr = time;
+            count++;
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
 [array-nesting]: https://leetcode.com/problems/array-nesting/
 [array-with-elements-not-equal-to-average-of-neighbors]: https://leetcode.com/problems/array-with-elements-not-equal-to-average-of-neighbors/
 [candy]: https://leetcode.com/problems/candy/
+[car-fleet]: https://leetcode.com/problems/car-fleet/
 [count-the-repetitions]: https://leetcode.com/problems/count-the-repetitions/
 [couples-holding-hands]: https://leetcode.com/problems/couples-holding-hands/
 [divide-array-into-increasing-sequences]: https://leetcode.com/problems/divide-array-into-increasing-sequences/
