@@ -38,6 +38,17 @@ Integer sum = integers.stream()
   .sum();
 {% endhighlight %}
 
+## Range
+
+{% highlight java %}
+List<Integer> integers = Arrays.asList(0, 1, 2);
+Integer sum = integers.stream()
+  .skip(1)
+  .limit(1)
+  .mapToInt(Integer::intValue)
+  .sum();
+{% endhighlight %}
+
 # Frequency Map
 
 {% highlight java %}

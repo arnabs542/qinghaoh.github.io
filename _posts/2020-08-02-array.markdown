@@ -554,6 +554,47 @@ public int carFleet(int target, int[] position, int[] speed) {
 }
 {% endhighlight %}
 
+# Parity
+
+[Subsequence of Size K With the Largest Even Sum][subsequence-of-size-k-with-the-largest-even-sum]
+
+{% highlight java %}
+public long largestEvenSum(int[] nums, int k) {
+    int n = nums.length;
+    // or quick select k largest elements, O(n)
+    Arrays.sort(nums);
+
+    // selects largest k elements
+    long sum = Arrays.stream(nums).asLongStream().skip(n - k).sum();
+    if (sum % 2 == 0) {
+        return sum;
+    }
+
+    // replaces the smallest odd with remaining largest even
+    // or replaces the smallest even with remaining largest odd
+    int[] max = new int[2], min = new int[2];
+    Arrays.fill(max, -1);
+    Arrays.fill(min, Integer.MAX_VALUE);
+
+    for (int i = 0; i < n; i++) {
+        if (i < n - k) {
+            max[nums[i] % 2] = Math.max(max[nums[i] % 2], nums[i]);
+        } else {
+            min[nums[i] % 2] = Math.min(min[nums[i] % 2], nums[i]);
+        }
+    }
+
+    long updatedSum = -1;
+    if (min[0] != Integer.MAX_VALUE && max[1] >= 0) {
+        updatedSum = sum - min[0] + max[1];
+    }
+    if (min[1] != Integer.MAX_VALUE && max[0] >= 0) {
+        updatedSum = Math.max(updatedSum, sum - min[1] + max[0]);
+    }
+    return updatedSum;
+}
+{% endhighlight %}
+
 [array-nesting]: https://leetcode.com/problems/array-nesting/
 [array-with-elements-not-equal-to-average-of-neighbors]: https://leetcode.com/problems/array-with-elements-not-equal-to-average-of-neighbors/
 [candy]: https://leetcode.com/problems/candy/
@@ -575,4 +616,5 @@ public int carFleet(int target, int[] position, int[] speed) {
 [shortest-distance-to-a-character]: https://leetcode.com/problems/shortest-distance-to-a-character/
 [shortest-distance-to-target-color]: https://leetcode.com/problems/shortest-distance-to-target-color/
 [smallest-rotation-with-highest-score]: https://leetcode.com/problems/smallest-rotation-with-highest-score/
+[subsequence-of-size-k-with-the-largest-even-sum]: https://leetcode.com/problems/subsequence-of-size-k-with-the-largest-even-sum/
 [swap-adjacent-in-lr-string]: https://leetcode.com/problems/swap-adjacent-in-lr-string/

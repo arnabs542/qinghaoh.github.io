@@ -776,6 +776,43 @@ private void bfs(int[][] grid, int[][][] distances, int i, int j) {
 }
 {% endhighlight %}
 
+# Bit Mask
+
+[Shortest Path Visiting All Nodes][shortest-path-visiting-all-nodes]
+
+{% highlight java %}
+public int shortestPathLength(int[][] graph) {
+    int n = graph.length;
+    Set<String> visited = new HashSet<>();
+
+    // {label, mask}
+    Queue<int[]> q = new LinkedList<>();
+    for (int i = 0; i < n; i++) {
+        q.offer(new int[]{i, 1 << i});
+        visited.add(i + "#" + (1 << i));
+    }
+
+    int level = 0;
+    while (!q.isEmpty()) {
+        for (int i = q.size(); i > 0; i--) {
+            int[] node = q.poll();
+            if (node[1] == (1 << n) - 1) {
+                return level;
+            }
+
+            for (int neighbor : graph[node[0]]) {
+                int[] next = {neighbor, node[1] | (1 << neighbor)};
+                if (visited.add(next[0] + "#" + next[1])) {
+                    q.offer(next);
+                }
+            }
+        }
+        level++;
+    }
+    return level;
+}
+{% endhighlight %}
+
 [cheapest-flights-within-k-stops]: https://leetcode.com/problems/cheapest-flights-within-k-stops/
 [cut-off-trees-for-golf-event]: https://leetcode.com/problems/cut-off-trees-for-golf-event/
 [jump-game-ii]: https://leetcode.com/problems/jump-game-ii/
@@ -792,6 +829,7 @@ private void bfs(int[][] grid, int[][][] distances, int i, int j) {
 [shortest-distance-from-all-buildings]: https://leetcode.com/problems/shortest-distance-from-all-buildings/
 [shortest-path-in-a-grid-with-obstacles-elimination]: https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/
 [shortest-path-to-get-all-keys]: https://leetcode.com/problems/shortest-path-to-get-all-keys/
+[shortest-path-visiting-all-nodes]: https://leetcode.com/problems/shortest-path-visiting-all-nodes/
 [shortest-path-with-alternating-colors]: https://leetcode.com/problems/shortest-path-with-alternating-colors/
 [sliding-puzzle]: https://leetcode.com/problems/sliding-puzzle/
 [smallest-greater-multiple-made-of-two-digits]: https://leetcode.com/problems/smallest-greater-multiple-made-of-two-digits/

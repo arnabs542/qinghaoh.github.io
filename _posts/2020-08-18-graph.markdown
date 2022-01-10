@@ -434,6 +434,37 @@ private void dfs(int node) {
 
 Another solution is by disjoint set.
 
+# Bipartite
+
+[Is Graph Bipartite][is-graph-bipartite]
+
+{% highlight java %}
+public boolean isBipartite(int[][] graph) {
+    int[] colors = new int[graph.length];
+    // checks all unvisited vertex since the graph might be disconnected
+    for (int i = 0; i < graph.length; i++) {
+        if (colors[i] == 0 && !dfs(graph, colors, i, 1)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+private boolean dfs(int[][] graph, int[] colors, int index, int color) {
+    if (colors[index] != 0) {
+        return colors[index] == color;
+    }
+
+    colors[index] = color;
+    for (int neighbor : graph[index]) {
+        if (!dfs(graph, colors, neighbor, -color)) {
+            return false;
+        }
+    }
+    return true;
+}
+{% endhighlight %}
+
 # Matching
 
 [Matching](https://en.wikipedia.org/wiki/Matching_(graph_theory)): a matching or independent edge set in an undirected graph is a set of edges without common vertices.
@@ -441,6 +472,10 @@ Another solution is by disjoint set.
 A maximum matching (also known as maximum-cardinality matching) is a matching that contains the largest possible number of edges. 
 
 Time complexity: \\(O(\|V\|^3)\\)
+
+[Hungarian algorithm](https://en.wikipedia.org/wiki/Hungarian_algorithm): The Hungarian method is a combinatorial optimization algorithm that solves the assignment problem in polynomial time and which anticipated later primal–dual methods. The algorithm is known also as the Kuhn–Munkres algorithm or Munkres assignment algorithm.
+
+Implementation: https://cp-algorithms.com/graph/kuhn_maximum_bipartite_matching.html
 
 [Maximum Number of Accepted Invitations][maximum-number-of-accepted-invitations]
 
@@ -470,7 +505,7 @@ public int maximumInvitations(int[][] grid) {
 /**
  * Checks if there's a matching for the given boy.
  * @parameter i the index of the boy
- * @parameter isAsked indicates whether each girl is already asked for invitation by the boy
+ * @parameter isAsked indicates whether each girl is already asked for invitation by any boy
  * @return true if there's a girl that the boy invites, otherwise false
  */
 private boolean dfs(int i, int[] matching, boolean[] isAsked) {
@@ -495,34 +530,66 @@ private boolean dfs(int i, int[] matching, boolean[] isAsked) {
 }
 {% endhighlight %}
 
-# Bipartite
+[Vertex Cover](https://en.wikipedia.org/wiki/Vertex_cover): vertex cover (sometimes node cover) of a graph is a set of vertices that includes at least one endpoint of every edge of the graph. It is NP-hard.
 
-[Is Graph Bipartite][is-graph-bipartite]
+[Kőnig's theorem](https://en.wikipedia.org/wiki/K%C5%91nig%27s_theorem_(graph_theory)) describes an equivalence between the maximum matching problem and the minimum vertex cover problem in bipartite graphs.
+
+[Minimum Operations to Remove Adjacent Ones in Matrix][minimum-operations-to-remove-adjacent-ones-in-matrix]
 
 {% highlight java %}
-public boolean isBipartite(int[][] graph) {
-    int[] colors = new int[graph.length];
-    // checks all unvisited vertex since the graph might be disconnected
-    for (int i = 0; i < graph.length; i++) {
-        if (colors[i] == 0 && !dfs(graph, colors, i, 1)) {
-            return false;
+{% raw %}
+private static final int[][] DIRECTIONS = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+{% endraw %}
+private int[][] grid, match, visited;
+private int m, n;
+
+public int minimumOperations(int[][] grid) {
+    this.grid = grid;
+    this.m = grid.length;
+    this.n = grid[0].length;
+
+    // constructs a graph:
+    // if two 1-value cells are adjacent, then there's an edge between them
+    // we want to find the minimum vertex cover of this graph, so that
+    // removing all vertices in the set will make all the 1's disconneted
+    // minimum vertex cover <=> maximum matching
+    this.match = new int[m][n];
+
+    // visited[i][j]: the node (i, j) is visited in the attempt of visited[i][j]
+    this.visited = new int[m][n];
+    for (int i = 0; i < m; i++) {
+        Arrays.fill(match[i], -1);
+        Arrays.fill(visited[i], -1);
+    }
+
+    int count = 0;
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (grid[i][j] == 1 && match[i][j] < 0) {
+                if (dfs(i, j, visited[i][j] = i * n + j)) {
+                    count++;
+                }
+            }
         }
     }
-    return true;
+    return count;
 }
 
-private boolean dfs(int[][] graph, int[] colors, int index, int color) {
-    if (colors[index] != 0) {
-        return colors[index] == color;
-    }
+private boolean dfs(int i, int j, int v) {
+    for (int[] d : DIRECTIONS) {
+        int r = i + d[0], c = j + d[1];
+        if (r >= 0 && r < m && c >= 0 && c < n && grid[r][c] == 1 && visited[r][c] != v) {
+            visited[r][c] = v;
 
-    colors[index] = color;
-    for (int neighbor : graph[index]) {
-        if (!dfs(graph, colors, neighbor, -color)) {
-            return false;
+            // augment path
+            if (match[r][c] < 0 || dfs(match[r][c] / n, match[r][c] % n, v)) {
+                match[r][c] = i * n + j;
+                match[i][j] = r * n + c;
+                return true;
+            }
         }
     }
-    return true;
+    return false;
 }
 {% endhighlight %}
 
@@ -640,5 +707,6 @@ public List<Integer> mostSimilar(int n, int[][] roads, String[] names, String[] 
 [is-graph-bipartite]: https://leetcode.com/problems/is-graph-bipartite/
 [knight-dialer]: https://leetcode.com/problems/knight-dialer/
 [maximum-number-of-accepted-invitations]: https://leetcode.com/problems/maximum-number-of-accepted-invitations/
+[minimum-operations-to-remove-adjacent-ones-in-matrix]: https://leetcode.com/problems/minimum-operations-to-remove-adjacent-ones-in-matrix/
 [reconstruct-itinerary]: https://leetcode.com/problems/reconstruct-itinerary/
 [the-most-similar-path-in-a-graph]: https://leetcode.com/problems/the-most-similar-path-in-a-graph/

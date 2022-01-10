@@ -48,6 +48,43 @@ public int[] findOrder(int numCourses, int[][] prerequisites) {
 }
 {% endhighlight %}
 
+[Parallel Courses III][parallel-courses-iii]
+
+{% highlight java %}
+public int minimumTime(int n, int[][] relations, int[] time) {
+    int[] indegree = new int[n + 1];
+    List<Integer>[] graph = new List[n + 1];
+    for (int i = 0; i <= n; i++) {
+        graph[i] = new ArrayList<>();
+    }
+    for (int[] r : relations) {
+        graph[r[0]].add(r[1]);
+        indegree[r[1]]++;
+    }
+
+    // minimum time to reach this node
+    int[] cost = new int[n + 1];
+    Queue<Integer> q = new LinkedList<>();
+    for (int i = 1; i <= n; i++) {
+        if (indegree[i] == 0) {
+            q.offer(i);
+            cost[i] = time[i - 1];
+        }
+    }
+
+    while (!q.isEmpty()) {
+        int node = q.poll();
+        for (int neighbor : graph[node]) {
+            cost[neighbor] = Math.max(cost[neighbor], cost[node] + time[neighbor - 1]);
+            if (--indegree[neighbor] == 0) {
+                q.offer(neighbor);
+            }
+        }
+    }
+    return Arrays.stream(cost).max().getAsInt();
+}
+{% endhighlight %}
+
 [Largest Color Value in a Directed Graph][largest-color-value-in-a-directed-graph]
 
 {% highlight java %}
@@ -621,6 +658,7 @@ where \\(s_i\\) is the size of the subtree at the i-th node.
 [largest-color-value-in-a-directed-graph]: https://leetcode.com/problems/largest-color-value-in-a-directed-graph/
 [longest-increasing-path-in-a-matrix]: https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
 [minimum-height-trees]: https://leetcode.com/problems/minimum-height-trees/
+[parallel-courses-iii]: https://leetcode.com/problems/parallel-courses-iii/
 [sequence-reconstruction]: https://leetcode.com/problems/sequence-reconstruction/
 [sort-items-by-groups-respecting-dependencies]: https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies/
 [tree-diameter]: https://leetcode.com/problems/tree-diameter/

@@ -371,6 +371,54 @@ public int leastOpsExpressTarget(int x, int target) {
 }
 {% endhighlight %}
 
+# Parse
+
+[Brace Expansion II][brace-expansion-ii]
+
+{% highlight java %}
+public List<String> braceExpansionII(String expression) {
+    List<List<String>> groups = new ArrayList<>();
+    Set<String> set = new TreeSet<>();
+    int level = 0, start = -1;
+    for (int i = 0; i < expression.length(); i++) {
+        char c = expression.charAt(i);
+        if (c == '{') {
+            if (level++ == 0) {
+                start = i + 1;
+            }
+        } else if (c == '}') {
+            if (--level == 0) {
+                groups.add(braceExpansionII(expression.substring(start, i)));
+            }
+        } else if (c == ',' && level == 0) {
+            // processes the groups so far
+            set.addAll(combine(groups));
+            groups.clear();
+        } else if (level == 0) {
+            // singleton set at base level
+            groups.add(Arrays.asList(String.valueOf(c)));
+        }
+    }
+    set.addAll(combine(groups));
+    return new ArrayList<>(set);
+}
+
+// {a, b}{c, d} -> {ac, bc, ad, bd}
+private List<String> combine(List<List<String>> groups) {
+    List<String> prev = Collections.singletonList("");
+    for (List<String> group : groups) {
+        List<String> curr = new ArrayList<>();
+        for (String p : prev) {
+            for (String g : group) {
+                curr.add(p + g);
+            }
+        }
+        prev = curr;
+    }
+    return prev;
+}
+{% endhighlight %}
+
 # Mutual Recursion
 
 [Elimination Game][elimination-game]
@@ -423,6 +471,7 @@ public int lastRemaining(int n) {
 }
 {% endhighlight %}
 
+[brace-expansion-ii]: https://leetcode.com/problems/brace-expansion-ii/
 [elimination-game]: https://leetcode.com/problems/elimination-game/
 [largest-merge-of-two-strings]: https://leetcode.com/problems/largest-merge-of-two-strings/
 [least-operators-to-express-number]: https://leetcode.com/problems/least-operators-to-express-number/

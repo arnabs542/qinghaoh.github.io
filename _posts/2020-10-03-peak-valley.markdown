@@ -22,6 +22,21 @@ public int maxProfit(int[] prices) {
 }
 {% endhighlight %}
 
+Almost the same:
+
+[Maximum Alternating Subsequence Sum][maximum-alternating-subsequence-sum]
+
+{% highlight java %}
+public long maxAlternatingSum(int[] nums) {
+    // gets the first one for free
+    long max = nums[0];
+    for (int i = 1; i < nums.length; i++) {
+        max += Math.max(0, nums[i] - nums[i - 1]);
+    }
+    return max;
+}
+{% endhighlight %}
+
 [Decrease Elements To Make Array Zigzag][decrease-elements-to-make-array-zigzag]
 
 {% highlight java %}
@@ -136,4 +151,5 @@ public int findLengthOfShortestSubarray(int[] arr) {
 [candy]: https://leetcode.com/problems/candy/
 [decrease-elements-to-make-array-zigzag]: https://leetcode.com/problems/decrease-elements-to-make-array-zigzag/
 [find-permutation]: https://leetcode.com/problems/find-permutation/
+[maximum-alternating-subsequence-sum]: https://leetcode.com/problems/maximum-alternating-subsequence-sum/
 [shortest-subarray-to-be-removed-to-make-array-sorted]: https://leetcode.com/problems/find-permutation/shortest-subarray-to-be-removed-to-make-array-sorted/

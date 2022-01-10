@@ -80,7 +80,30 @@ public int findMaxLength(int[] nums) {
 }
 {% endhighlight %}
 
+[Longest Well-Performing Interval][longest-well-performing-interval]
+
+{% highlight java %}
+public int longestWPI(int[] hours) {
+    int max = 0, score = 0, n = hours.length;
+    Map<Integer, Integer> seen = new HashMap<>();
+    for (int i = 0; i < n; i++) {
+        // finds the longest subarray with positive sum
+        score += hours[i] > 8 ? 1 : -1;
+        if (score > 0) {
+            max = i + 1;
+        } else {
+            seen.putIfAbsent(score, i);
+            if (seen.containsKey(score - 1)) {
+                max = Math.max(max, i - seen.get(score - 1));
+            }
+        }
+    }
+    return max;
+}
+{% endhighlight %}
+
 # Variants
+
 ## Multi-dimension
 
 [Sum of Beauty of All Substrings][sum-of-beauty-of-all-substrings]
@@ -707,6 +730,7 @@ public int waysToPartition(int[] nums, int k) {
 [contiguous-array]: https://leetcode.com/problems/contiguous-array/
 [count-subarrays-with-more-ones-than-zeros]: https://leetcode.com/problems/count-subarrays-with-more-ones-than-zeros/
 [count-triplets-that-can-form-two-arrays-of-equal-xor]: https://leetcode.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/
+[longest-well-performing-interval]: https://leetcode.com/problems/longest-well-performing-interval/
 [make-sum-divisible-by-p]: https://leetcode.com/problems/make-sum-divisible-by-p/
 [max-sum-of-rectangle-no-larger-than-k]: https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/
 [maximize-the-beauty-of-the-garden]: https://leetcode.com/problems/maximize-the-beauty-of-the-garden/

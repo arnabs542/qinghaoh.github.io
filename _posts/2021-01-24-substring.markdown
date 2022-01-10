@@ -2,6 +2,7 @@
 layout: post
 title:  "Substring"
 tags: string
+usemathjax: true
 ---
 # Dynamic Programming
 
@@ -188,6 +189,8 @@ public String longestPrefix(String s) {
 
 [Rabin-Karp algorithm](https://en.wikipedia.org/wiki/Rabin%E2%80%93Karp_algorithm): a string-searching algorithm that uses hashing to find an exact match of a pattern string in a text. It uses a rolling hash to quickly filter out positions of the text that cannot match the pattern, and then checks for a match at the remaining positions.
 
+$$ h(x) = \sum_{i = 0}^n a^{n - i}s_{i}$$
+
 [Longest Duplicate Substring][longest-duplicate-substring]
 
 {% highlight java %}
@@ -223,9 +226,9 @@ private String search(String s, int len) {
         h = (h * a + s.charAt(i)) % mod;
     }
 
-    long coff = 1;
+    long coeff = 1;
     for (int i = 1; i < len; i++) {
-        coff = (coff * a) % mod;
+        coeff = (coeff * a) % mod;
     }
 
     // hash : start indexes
@@ -238,10 +241,10 @@ private String search(String s, int len) {
     int start = 0;
     while (start + len < s.length()) {
         // rolling hash
-        h = ((h + mod - coff * s.charAt(start) % mod) * a + s.charAt(start + len)) % mod;
+        h = ((h + mod - coeff * s.charAt(start) % mod) * a + s.charAt(start + len)) % mod;
         start++;
 
-        // Rabin-Karp
+        // Rabin-Karp collision check
         map.putIfAbsent(h, new ArrayList<>());
         for (int i : map.get(h)) {
             if (s.substring(start, start + len).equals(s.substring(i, i + len))) {
