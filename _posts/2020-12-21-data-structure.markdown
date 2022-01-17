@@ -18,6 +18,10 @@ stack and minStack
 * LinkedHashMap
 * Double linked list + TreeMap<Node>
 
+[Sequentially Ordinal Rank Tracker][sequentially-ordinal-rank-tracker]
+
+Two priority queues
+
 [Design A Leaderboard][design-a-leaderboard]
 
 [Stock Price Fluctuation][stock-price-fluctuation]
@@ -29,17 +33,6 @@ Map + TreeMap
 {% highlight java %}
 // {length : words}
 private Map<Integer, List<String>> map = new HashMap<>();
-{% endhighlight %}
-
-Multisets
-
-[Finding MK Average][finding-mk-average]
-
-{% highlight java %}
-// {element: count}
-private TreeMap<Integer, Integer> left = new TreeMap<>(), middle = new TreeMap<>(), right = new TreeMap<>();
-// circular array
-private int[] arr;
 {% endhighlight %}
 
 [All O`one Data Structure][all-oone-data-structure]
@@ -527,6 +520,17 @@ class Skiplist {
 }
 {% endhighlight %}
 
+## Multisets
+
+[Finding MK Average][finding-mk-average]
+
+{% highlight java %}
+// {element: count}
+private TreeMap<Integer, Integer> left = new TreeMap<>(), middle = new TreeMap<>(), right = new TreeMap<>();
+// circular array
+private int[] arr;
+{% endhighlight %}
+
 [all-oone-data-structure]: https://leetcode.com/problems/all-oone-data-structure/
 [design-a-leaderboard]: https://leetcode.com/problems/design-a-leaderboard/
 [design-a-stack-with-increment-operation]: https://leetcode.com/problems/design-a-stack-with-increment-operation/
@@ -544,5 +548,6 @@ class Skiplist {
 [max-stack]: https://leetcode.com/problems/max-stack/
 [maximum-frequency-stack]: https://leetcode.com/problems/maximum-frequency-stack/
 [min-stack]: https://leetcode.com/problems/min-stack/
+[sequentially-ordinal-rank-tracker]: https://leetcode.com/problems/sequentially-ordinal-rank-tracker/
 [sliding-window-median]: https://leetcode.com/problems/sliding-window-median/
 [stock-price-fluctuation]: https://leetcode.com/problems/stock-price-fluctuation/

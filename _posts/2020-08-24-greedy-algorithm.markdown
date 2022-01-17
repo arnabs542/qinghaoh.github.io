@@ -450,12 +450,24 @@ public int minimumTeachings(int n, int[][] languages, int[][] friendships) {
 }
 {% endhighlight %}
 
+[Maximum Score From Removing Substrings][maximum-score-from-removing-substrings]
+
+{% highlight java %}
+public int maximumGain(String s, int x, int y) {
+    StringBuilder sb = new StringBuilder(s);
+    // greedily removes the pattern with greater points, then remove the other pattern
+    // intuition: the total number of deletions is a fixed value, no matter which pattern is deleted first
+    return x > y ? remove(sb, "ab", x) + remove(sb, "ba", y) : remove(sb, "ba", y) + remove(sb, "ab", x);
+}
+{% endhighlight %}
+
 [broken-calculator]: https://leetcode.com/problems/broken-calculator/
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [hand-of-straights]: https://leetcode.com/problems/hand-of-straights/
 [jump-game]: https://leetcode.com/problems/jump-game/
 [maximum-binary-string-after-change]: https://leetcode.com/problems/maximum-binary-string-after-change/
 [maximum-number-of-ones]: https://leetcode.com/problems/maximum-number-of-ones/
+[maximum-score-from-removing-substrings]: https://leetcode.com/problems/maximum-score-from-removing-substrings/
 [minimum-adjacent-swaps-to-reach-the-kth-smallest-number]: https://leetcode.com/problems/minimum-adjacent-swaps-to-reach-the-kth-smallest-number/
 [minimum-factorization]: https://leetcode.com/problems/minimum-factorization/
 [minimum-initial-energy-to-finish-tasks]: https://leetcode.com/problems/minimum-initial-energy-to-finish-tasks/

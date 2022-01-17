@@ -117,6 +117,39 @@ for (int i = 0; i < n; i++) {
 }
 {% endhighlight %}
 
+[Minimum Absolute Difference Queries][minimum-absolute-difference-queries]
+
+{% highlight java %}
+private static final int MAX_NUM = 100;
+
+public int[] minDifference(int[] nums, int[][] queries) {
+    int n = nums.length, m = queries.length;
+    int[][] p = new int[n + 1][MAX_NUM + 1];
+    int[] count = new int[MAX_NUM + 1];
+    for (int i = 0; i < n; i++) {
+        count[nums[i]]++;
+        p[i + 1] = Arrays.copyOf(count, count.length);
+    }
+
+    int[] ans = new int[m];
+    for (int i = 0; i < m; i++) {
+        ans[i] = Integer.MAX_VALUE;
+        for (int j = 0, prev = 0; j < p[0].length; j++) {
+            if (p[queries[i][1] + 1][j] != p[queries[i][0]][j]) {
+                if (prev != 0) {
+                    ans[i] = Math.min(ans[i], j - prev);
+                }
+                prev = j;
+            }
+        }
+        if (ans[i] == Integer.MAX_VALUE) {
+            ans[i] = -1;
+        }
+    }
+    return ans;
+}
+{% endhighlight %}
+
 ## Exclusive Or
 
 [Count Triplets That Can Form Two Arrays of Equal XOR][count-triplets-that-can-form-two-arrays-of-equal-xor]
@@ -674,6 +707,8 @@ public int maxSumSubmatrix(int[][] matrix, int k) {
 }
 {% endhighlight %}
 
+# Prefix + Suffix Sum
+
 [Maximum Number of Ways to Partition an Array][maximum-number-of-ways-to-partition-an-array]
 
 {% highlight java %}
@@ -725,6 +760,59 @@ public int waysToPartition(int[] nums, int k) {
 }
 {% endhighlight %}
 
+[Super Washing Machines][super-washing-machines]
+
+{% highlight java %}
+public int findMinMoves(int[] machines) {
+    int n = machines.length;
+    int sum = Arrays.stream(machines).sum();
+    if (sum % n != 0) {
+        return -1;
+    }
+
+    // prefix and suffix sum
+    int[] p = new int[n], s = new int[n];
+    for (int i = 1; i < n; i++) {
+        p[i] = p[i - 1] + machines[i - 1];
+    }
+    for (int i = n - 2; i >= 0; i--) {
+        s[i] = s[i + 1] + machines[i + 1];
+    }
+
+    // minimum moves is the maximum dresses that pass through for each single machine
+    int move = 0, avg = sum / n, expLeft = 0, expRight = sum - avg;
+    for (int i = 0; i < n; i++) {
+        move = Math.max(move, Math.max(expLeft - p[i], 0) + Math.max(expRight - s[i], 0));
+        expLeft += avg;
+        expRight -= avg;
+    }
+    return move;
+}
+{% endhighlight %}
+
+Optimization:
+
+{% highlight java %}
+public int findMinMoves(int[] machines) {
+    int n = machines.length;
+    int sum = Arrays.stream(machines).sum();
+    if (sum % n != 0) {
+        return -1;
+    }
+
+    // minimum moves is the maximum dresses that pass through for each single machine
+    int target = sum / n, move = 0, toRight = 0;
+    for (int m : machines) {
+        // for each machines, toRight = right - left
+        // if toRight > 0, left -> right
+        // if toRight < 0, right -> left
+        toRight += m - target;
+        move = Math.max(move, Math.max(Math.abs(toRight), m - target));
+    }
+    return move;
+}
+{% endhighlight %}
+
 [can-make-palindrome-from-substring]: https://leetcode.com/problems/can-make-palindrome-from-substring/
 [change-minimum-characters-to-satisfy-one-of-three-conditions]: https://leetcode.com/problems/change-minimum-characters-to-satisfy-one-of-three-conditions/
 [contiguous-array]: https://leetcode.com/problems/contiguous-array/
@@ -738,6 +826,7 @@ public int waysToPartition(int[] nums, int k) {
 [maximum-number-of-non-overlapping-subarrays-with-sum-equals-target]: https://leetcode.com/problems/maximum-number-of-non-overlapping-subarrays-with-sum-equals-target/
 [maximum-number-of-ways-to-partition-an-array]: https://leetcode.com/problems/maximum-number-of-ways-to-partition-an-array/
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
+[minimum-absolute-difference-queries]: https://leetcode.com/problems/minimum-absolute-difference-queries/
 [number-of-ways-of-cutting-a-pizza]: https://leetcode.com/problems/number-of-ways-of-cutting-a-pizza/
 [number-of-ways-to-separate-numbers]: https://leetcode.com/problems/number-of-ways-to-separate-numbers/
 [number-of-wonderful-substrings]: https://leetcode.com/problems/number-of-wonderful-substrings/
@@ -748,3 +837,4 @@ public int waysToPartition(int[] nums, int k) {
 [sum-of-floored-pairs]: https://leetcode.com/problems/sum-of-floored-pairs/
 [sum-of-special-evenly-spaced-elements-in-array]: https://leetcode.com/problems/sum-of-special-evenly-spaced-elements-in-array/
 [sum-of-beauty-of-all-substrings]: https://leetcode.com/problems/sum-of-beauty-of-all-substrings/
+[super-washing-machines]: https://leetcode.com/problems/super-washing-machines/

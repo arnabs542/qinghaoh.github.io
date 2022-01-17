@@ -122,8 +122,30 @@ public int[] findBall(int[][] grid) {
 
 When the robot reaches a space that it has already cleaned and is facing the same direction as before, we can stop the simulation.
 
+[Reveal Cards In Increasing Order][reveal-cards-in-increasing-order]
+
+{% highlight java %}
+public int[] deckRevealedIncreasing(int[] deck) {
+    Arrays.sort(deck);
+    int n = deck.length;
+    int[] order = new int[n];
+    Queue<Integer> q = new LinkedList<>();
+    for (int i = 0; i < n; i++) {
+        q.offer(i);
+    }
+
+    int i = 0;
+    while (i < n) {
+        order[q.poll()] = deck[i++];
+        q.offer(q.poll());
+    }
+    return order;
+}
+{% endhighlight %}
+
 [champagne-tower]: https://leetcode.com/problems/champagne-tower/
 [dota2-senate]: https://leetcode.com/problems/dota2-senate/
 [number-of-spaces-cleaning-robot-cleaned]: https://leetcode.com/problems/number-of-spaces-cleaning-robot-cleaned/
 [pour-water]: https://leetcode.com/problems/pour-water/
+[reveal-cards-in-increasing-order]: https://leetcode.com/problems/reveal-cards-in-increasing-order/
 [where-will-the-ball-fall]: https://leetcode.com/problems/where-will-the-ball-fall/

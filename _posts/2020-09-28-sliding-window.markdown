@@ -944,6 +944,31 @@ public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWei
 }
 {% endhighlight %}
 
+# Dynamic Programming
+
+[Jump Game VII][jump-game-vii]
+
+{% highlight java %}
+public boolean canReach(String s, int minJump, int maxJump) {
+    // prev is the number of previous positions that we can jump from
+    int n = s.length(), prev = 0;
+    boolean[] dp = new boolean[n];
+    dp[0] = true;
+
+    for (int i = 1; i < n; i++) {
+        // checks if there's a true in sliding window dp[i - maxJump : i - minJump]
+        if (i >= minJump && dp[i - minJump]) {
+            prev++;
+        }
+        if (i > maxJump && dp[i - maxJump - 1]) {
+            prev--;
+        }
+        dp[i] = prev > 0 && s.charAt(i) == '0';
+    }
+    return dp[n - 1];
+}
+{% endhighlight %}
+
 # Variants
 
 [Maximum Number of Visible Points][maximum-number-of-visible-points]
@@ -993,6 +1018,7 @@ public int visiblePoints(List<List<Integer>> points, int angle, List<Integer> lo
 [frequency-of-the-most-frequent-element]: https://leetcode.com/problems/frequency-of-the-most-frequent-element/
 [fruit-into-baskets]: https://leetcode.com/problems/fruit-into-baskets/
 [get-equal-substrings-within-budget]: https://leetcode.com/problems/get-equal-substrings-within-budget/
+[jump-game-vii]: https://leetcode.com/problems/jump-game-vii/
 [k-empty-slots]: https://leetcode.com/problems/k-empty-slots/
 [kth-smallest-subarray-sum]: https://leetcode.com/problems/kth-smallest-subarray-sum/
 [longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit]: https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/

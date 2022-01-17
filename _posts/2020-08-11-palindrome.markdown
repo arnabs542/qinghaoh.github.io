@@ -115,6 +115,71 @@ private boolean isPalindrome(String s) {
 }
 {% endhighlight %}
 
+[Sum of k-Mirror Numbers][sum-of-k-mirror-numbers]
+
+{% highlight java %}
+private List<Long> prev = new ArrayList<>(), curr = new ArrayList<>();
+private int[] arr = new int[64];
+
+public long kMirror(int k, int n) {
+    prev.add(0l);
+    curr.add(0l);
+
+    long sum = 0;
+    // adds single-digit numbers to curr mirror list
+    for (long i = 1; n > 0 && i < 10; i++) {
+        curr.add(i);
+        if (isMirror(i, k)) {
+            sum += i;
+            n--;
+        }
+    }
+    return sum + generate(k, n, 10);
+}
+
+// generates mirrors to make sure curr mirror list is in order
+// firstMul: power of 10
+private long generate(int k, int n, long firstMul) {
+    List<Long> mirrors = new ArrayList<>();
+    long sum = 0;
+    for (int i = 0; n > 0 && i < 10; i++) {
+        for (int j = 0; n > 0 && j < prev.size(); j++) {
+            long num = firstMul * i + prev.get(j) * 10 + i;
+
+            // excludes leading zeros when checking if isMirror
+            if (i != 0 && isMirror(num, k)) {
+                sum += num;
+                n--;
+            }
+
+            // includes leading zerors when generating next level
+            mirrors.add(num);
+        }
+    }
+
+    prev = curr;
+    curr = mirrors;
+
+    return sum + (n == 0 ? 0 : generate(k, n, firstMul * 10));
+}
+
+private boolean isMirror(long num, int base) {
+    int j = -1;
+    while (num != 0) {
+        arr[++j] = (int)(num % base);
+        num /= base;
+    }
+
+    int i = 0;
+    while (i < j) {
+        if (arr[i++] != arr[j--]) {
+            return false;
+        }
+    }
+    return true;
+}
+{% endhighlight %}
+
 [Palindrome Pairs][palindrome-pairs]
 
 {% highlight java %}
@@ -631,4 +696,5 @@ public int countPalindromicSubsequences(String S) {
 [palindrome-removal]: https://leetcode.com/problems/palindrome-removal/
 [palindromic-substring]: https://leetcode.com/problems/palindromic-substring/
 [prime-palindrome]: https://leetcode.com/problems/prime-palindrome/
+[sum-of-k-mirror-numbers]: https://leetcode.com/problems/sum-of-k-mirror-numbers/
 [super-palindromes]: https://leetcode.com/problems/super-palindromes/

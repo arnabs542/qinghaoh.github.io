@@ -887,7 +887,7 @@ public int maxWidthRamp(int[] A) {
 
 Binary Search + BFS/DFS
 
-# Fraction
+## Fraction
 
 [Maximum Average Subarray II][maximum-average-subarray-ii]
 
@@ -908,7 +908,7 @@ public double findMaxAverage(int[] nums, int k) {
 
     // binary search the max avg between min and max
     while (min + MAX_ERROR < max) {
-        double mid = min + (max - min) / 2.0;
+        double mid = (min + max) / 2;
         if (hasAvgAbove(nums, k, mid)) {
             min = mid;
         } else {
@@ -1025,6 +1025,84 @@ private boolean condition(int[][] points, int days, int k) {
 }
 {% endhighlight %}
 
+[Pour Water Between Buckets to Make Water Levels Equal][pour-water-between-buckets-to-make-water-levels-equal]
+
+{% highlight java %}
+private boolean condition(int[] buckets, int loss, double w) {
+    double in = 0, out = 0;
+    for (int b : buckets) {
+        if (b < w) {
+            in += w - b;
+        } else {
+            out += b - w;
+        }
+    }
+    return out * (1 - loss / 100d) >= in;
+}
+{% endhighlight %}
+
+## Greedy
+
+[Maximum Number of Tasks You Can Assign][maximum-number-of-tasks-you-can-assign]
+
+{% highlight java %}
+public int maxTaskAssign(int[] tasks, int[] workers, int pills, int strength) {
+    Arrays.sort(tasks);
+    Arrays.sort(workers);
+
+    // finds the smallest k tasks that can be assigned
+    int low = 0, high = Math.min(tasks.length, workers.length);
+    while (low < high) {
+        int mid = low + (high - low + 1) / 2;
+        if (condition(tasks, workers, pills, strength, mid)) {
+            low = mid;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return low;
+}
+
+private boolean condition(int[] tasks, int[] workers, int pills, int strength, int k) {
+    int m = workers.length;
+    TreeMap<Integer, Integer> map = new TreeMap<>();
+    for (int i = 0; i < k; i++) {
+        map.put(workers[m - 1 - i], map.getOrDefault(workers[m - 1 - i], 0) + 1);
+    }
+
+    int count = 0;
+    // assigns tasks [0, k) in descending order
+    for (int i = k - 1; i >= 0; i--) {
+        // attempts to assign the task to the strongest worker without the pill
+        var e1 = map.lastEntry();
+        int k1 = e1.getKey();
+        if (tasks[i] <= k1) {
+            map.put(k1, e1.getValue() - 1);
+            map.remove(k1, 0);
+            continue;
+        }
+
+        // attempts to assign the task to a worker with the pill
+        // number of workers with pills exceeds limit
+        if (count++ == pills) {
+            return false;
+        }
+
+        // worker >= task - strength
+        var e2 = map.ceilingEntry(tasks[i] - strength);
+        // impossible to assign the task, or
+        if (e2 == null) {
+            return false;
+        }
+
+        int k2 = e2.getKey();
+        map.put(k2, e2.getValue() - 1);
+        map.remove(k2, 0);
+    }
+    return true;
+}
+{% endhighlight %}
+
 ## Combination
 
 [Ways to Split Array Into Three Subarrays][ways-to-split-array-into-three-subarrays]
@@ -1071,6 +1149,7 @@ if (insertionPoint < 0) {
 [maximum-average-subarray-ii]: https://leetcode.com/problems/maximum-average-subarray-ii/
 [maximum-font-to-fit-a-sentence-in-a-screen]: https://leetcode.com/problems/maximum-font-to-fit-a-sentence-in-a-screen/
 [maximum-number-of-removable-characters]: https://leetcode.com/problems/maximum-number-of-removable-characters/
+[maximum-number-of-tasks-you-can-assign]: https://leetcode.com/problems/maximum-number-of-tasks-you-can-assign/
 [maximum-value-at-a-given-index-in-a-bounded-array]: https://leetcode.com/problems/maximum-value-at-a-given-index-in-a-bounded-array/
 [maximum-width-ramp]: https://leetcode.com/problems/maximum-width-ramp/
 [minimize-max-distance-to-gas-station]: https://leetcode.com/problems/minimize-max-distance-to-gas-station/
@@ -1079,6 +1158,7 @@ if (insertionPoint < 0) {
 [minimum-number-of-days-to-make-m-bouquets]: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/
 [missing-element-in-sorted-array]: https://leetcode.com/problems/missing-element-in-sorted-array/
 [missing-number-in-arithmetic-progression]: https://leetcode.com/problems/missing-number-in-arithmetic-progression/
+[pour-water-between-buckets-to-make-water-levels-equal]: https://leetcode.com/problems/pour-water-between-buckets-to-make-water-levels-equal/
 [search-insert-position]: https://leetcode.com/problems/search-insert-position/
 [search-in-rotated-sorted-array]: https://leetcode.com/problems/search-in-rotated-sorted-array/
 [search-in-rotated-sorted-array-ii]: https://leetcode.com/problems/search-in-rotated-sorted-array-ii/

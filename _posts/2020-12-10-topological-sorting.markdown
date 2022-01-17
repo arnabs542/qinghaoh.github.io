@@ -414,6 +414,72 @@ private boolean dfs(int node) {
 
 Don't visit the last cell.
 
+## Cycle Length
+
+[Maximum Employees to Be Invited to a Meeting][maximum-employees-to-be-invited-to-a-meeting]
+
+{% highlight java %}
+public int maximumInvitations(int[] favorite) {
+    int n = favorite.length;
+    // for every index i, there is a directed edge from i to favorite[i]
+    // topological sort picks out acyclic part
+    int[] indegrees = new int[n];
+    for (int i = 0; i < n; i++) {
+        indegrees[favorite[i]]++;
+    }
+
+    // enqueues leaves
+    boolean[] removed = new boolean[n];
+    Queue<Integer> q = new LinkedList<>();
+    for (int i = 0; i < n; ++i) {
+        if (indegrees[i] == 0) {
+            removed[i] = true;
+            q.offer(i);
+        }
+    }
+
+    // dp[i]: longest path from leaves to i exclusively
+    int[] dp = new int[n]; 
+    while (!q.isEmpty()) {
+        int node = q.poll(), to = favorite[node];
+        dp[to] = Math.max(dp[to], dp[node] + 1);
+
+        if (--indegrees[to] == 0) {
+            removed[to] = true;
+            q.offer(to);
+        }
+    }
+
+    // now remaining nodes are all cycles
+    // checks each cycle's length.
+    // case 1: cycle length == 2. i.e. two nodes like each other
+    // finds the longest arm on each side
+    int count1 = 0;
+    // case 2: cycle length > 2
+    // finds the longest cycle
+    int count2 = 0;
+    for (int i = 0; i < n; i++) {
+        if (!removed[i]) {
+            // gets the cycle length
+            int length = 0;
+            for (int j = i; !removed[j]; j = favorite[j]) {
+                removed[j] = true;
+                length++;
+            }
+
+            if (length == 2) {
+                // there can be multiple isolated connected components of case 1
+                // adds them all up
+                count1 += 2 + dp[i] + dp[favorite[i]];
+            } else {
+                count2 = Math.max(count2, length);
+            }
+        }
+    }
+    return Math.max(count1, count2);
+}
+{% endhighlight %}
+
 [Critical Connections in a Network][critical-connections-in-a-network]
 
 {% highlight java %}
@@ -657,6 +723,7 @@ where \\(s_i\\) is the size of the subtree at the i-th node.
 [detect-cycles-in-2d-grid]: https://leetcode.com/problems/detect-cycles-in-2d-grid/
 [largest-color-value-in-a-directed-graph]: https://leetcode.com/problems/largest-color-value-in-a-directed-graph/
 [longest-increasing-path-in-a-matrix]: https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
+[maximum-employees-to-be-invited-to-a-meeting]: https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/
 [minimum-height-trees]: https://leetcode.com/problems/minimum-height-trees/
 [parallel-courses-iii]: https://leetcode.com/problems/parallel-courses-iii/
 [sequence-reconstruction]: https://leetcode.com/problems/sequence-reconstruction/

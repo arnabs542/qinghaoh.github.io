@@ -181,6 +181,14 @@ private void reverse(char[] s, int start, int end) {
 }
 {% endhighlight %}
 
+# Flips
+
+[Maximum Matrix Sum][maximum-matrix-sum]
+
+1. If there is a pair of adjacent negative numbers, just flip both negative signs
+1. If the remaining negative numbers are isolated from each other, just flip them and their adjacent positive numbers, until negative numbers are adjacent. Then go back to #1
+1. In the end, if there will be at most negative sign
+
 [Minimum Number of Flips to Make the Binary String Alternating][minimum-number-of-flips-to-make-the-binary-string-alternating]
 
 {% highlight java %}
@@ -606,6 +614,7 @@ public long largestEvenSum(int[] nums, int k) {
 [first-missing-positive]: https://leetcode.com/problems/first-missing-positive/
 [longest-consecutive-sequence]: https://leetcode.com/problems/longest-consecutive-sequence/
 [max-chunks-to-make-sorted-ii]: https://leetcode.com/problems/max-chunks-to-make-sorted-ii/
+[maximum-matrix-sum]: https://leetcode.com/problems/maximum-matrix-sum/
 [maximum-building-height]: https://leetcode.com/problems/maximum-building-height/
 [minimum-number-of-flips-to-make-the-binary-string-alternating]: https://leetcode.com/problems/minimum-number-of-flips-to-make-the-binary-string-alternating/
 [minimum-number-of-operations-to-reinitialize-a-permutation]: https://leetcode.com/problems/minimum-number-of-operations-to-reinitialize-a-permutation/

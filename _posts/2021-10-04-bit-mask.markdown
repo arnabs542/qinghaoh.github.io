@@ -367,6 +367,101 @@ public int maxStudents(char[][] seats) {
 
 # DFS
 
+[Maximize Score After N Operations][maximize-score-after-n-operations]
+
+{% highlight java %}
+private int[][] memo;
+
+public int maxScore(int[] nums) {
+    this.memo = new int[nums.length / 2 + 1][1 << nums.length];
+    return dfs(nums, 1, 0);
+}
+
+private int dfs(int[] nums, int k, int mask) {
+    int n = nums.length / 2;
+    if (k > n) {
+        return 0;
+    }
+
+    if (memo[k][mask] > 0) {
+        return memo[k][mask];
+    }
+
+    int max = 0;
+    for (int i = 0; i < 2 * n; i++) {
+        for (int j = i + 1; j < 2 * n; j++) {
+            int pair = (1 << i) + (1 << j);
+            if ((mask & pair) == 0) {
+                max = Math.max(max, k * gcd(nums[i], nums[j]) + dfs(nums, k + 1, mask | pair));
+            }
+        }
+    }
+    return memo[k][mask] = max;
+}
+{% endhighlight %}
+
+[The Number of Good Subsets][the-number-of-good-subsets]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7, MAX = 30;
+private static final int[] PRIMES = new int[]{2, 3, 5, 7, 11, 13, 17, 19, 23, 27, 29};
+private static final int[] BADS = new int[]{4, 8, 12, 16, 20, 24, 28, 9, 18, 27, 25};
+private static final Set<Integer> BAD_SET = new HashSet<>();
+private static int MASKS[] = new int[MAX + 1];
+static {
+    Arrays.stream(BADS).forEach(BAD_SET::add);
+
+    // MASKS[num]: mask representing the prime factors of num
+    for (int i = 0; i < PRIMES.length; i++) {
+        for (int num = 1; num <= MAX; num++) {
+            if (num % PRIMES[i] == 0) {
+                MASKS[num] |= 1 << i;
+            }
+        }
+    }
+}
+
+private int[] freq = new int[MAX + 1];
+private Long[][] memo = new Long[1 << PRIMES.length][MAX + 1];
+
+public int numberOfGoodSubsets(int[] nums) {
+    for (int num : nums) {
+        freq[num]++;
+    }
+
+    // computes `2 ^ fre[1]` with modulo
+    // e.g. [1, 1, 2]: (2 ^ 2) * 1
+    long ones = 1l;
+    for (int i = 0; i < freq[1]; i++) {
+        ones *= 2;
+        ones %= MOD;
+    }
+
+    // -1 because of empty list
+    return (int)(((dfs(0, 2) - 1) * ones) % MOD);
+}
+
+private long dfs(int mask, int num) {
+    if (num == MAX + 1) {
+        return 1;
+    }
+
+    if (memo[mask][num] != null) {
+        return memo[mask][num];
+    }
+
+    // doesn't pick num
+    long count = dfs(mask, num + 1);
+
+    // picks num
+    // if num doesn't have common prime factor with the current mask
+    if (!BAD_SET.contains(num) && (mask & MASKS[num]) == 0) {
+        count += dfs(mask | MASKS[num], num + 1) * freq[num];
+    }
+    return memo[mask][num] = count % MOD;
+}
+{% endhighlight %}
+
 [Minimum XOR Sum of Two Arrays][minimum-xor-sum-of-two-arrays]
 
 {% highlight java %}
@@ -540,9 +635,11 @@ private int dfs(int m, int n, int p, int in, int ex, int inMask, int exMask) {
 [distribute-repeating-integers]: https://leetcode.com/problems/distribute-repeating-integers/
 [iterator-for-combination]: https://leetcode.com/problems/iterator-for-combination/
 [maximize-grid-happiness]: https://leetcode.com/problems/maximize-grid-happiness/
+[maximize-score-after-n-operations]: https://leetcode.com/problems/maximize-score-after-n-operations/
 [maximum-students-taking-exam]: https://leetcode.com/problems/maximum-students-taking-exam/
 [minimum-cost-to-connect-two-groups-of-points]: https://leetcode.com/problems/minimum-cost-to-connect-two-groups-of-points/
 [minimum-xor-sum-of-two-arrays]: https://leetcode.com/problems/minimum-xor-sum-of-two-arrays/
 [number-of-ways-to-wear-different-hats-to-each-other]: https://leetcode.com/problems/number-of-ways-to-wear-different-hats-to-each-other/
 [partition-to-k-equal-sum-subsets]: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
 [smallest-sufficient-team]: https://leetcode.com/problems/smallest-sufficient-team/
+[the-number-of-good-subsets]: https://leetcode.com/problems/the-number-of-good-subsets/

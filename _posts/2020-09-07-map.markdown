@@ -366,6 +366,38 @@ public int oddEvenJumps(int[] arr) {
 
 Another solution is using Stack (next greater/less element).
 
+# Non Generic Map
+
+[Word Pattern][word-pattern]
+
+{% highlight java %}
+public boolean wordPattern(String pattern, String s) {
+    String[] words = s.split(" ");
+
+    if (words.length != pattern.length()) {
+        return false;
+    }
+
+    // non generic map
+    // <Object, Object>
+    Map map = new HashMap();
+    // the type of i must be Integer
+    // since there's no auto boxing for non generic map integer values
+    for (Integer i = 0; i < words.length; i++) {
+        char c = pattern.charAt(i);
+        String w = words[i];
+
+        map.putIfAbsent(c, i);
+        map.putIfAbsent(w, i);
+
+        if (map.get(c) != map.get(w)) {
+            return false;
+        }
+    }
+    return true;
+}
+{% endhighlight %}
+
 [array-of-doubled-pairs]: https://leetcode.com/problems/array-of-doubled-pairs/
 [contains-duplicate-iii]: https://leetcode.com/problems/contains-duplicate-iii/
 [depth-of-bst-given-insertion-order]: https://leetcode.com/problems/depth-of-bst-given-insertion-order/
@@ -374,3 +406,4 @@ Another solution is using Stack (next greater/less element).
 [odd-even-jump]: https://leetcode.com/problems/odd-even-jump/
 [tuple-with-same-product]: https://leetcode.com/problems/tuple-with-same-product/
 [vowel-spellchecker]: https://leetcode.com/problems/vowel-spellchecker/
+[word-pattern]: https://leetcode.com/problems/word-pattern/

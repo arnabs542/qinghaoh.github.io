@@ -718,14 +718,85 @@ public int minMalwareSpread(int[][] graph, int[] initial) {
 }
 {% endhighlight %}
 
+# Disconnected Components
+
+[Process Restricted Friend Requests][process-restricted-friend-requests]
+
+{% highlight java %}
+public boolean[] friendRequests(int n, int[][] restrictions, int[][] requests) {
+    this.parents = new Integer[n];
+
+    int m = requests.length;
+    boolean[] result = new boolean[m];
+    for (int i = 0; i < m; i++) {
+        int px = find(requests[i][0]), py = find(requests[i][1]);
+        result[i] = true;
+        if (px != py) {
+            for (int[] r : restrictions) {
+                int rx = find(r[0]), ry = find(r[1]);
+                // connecting x and y is restricted
+                if ((px == rx && py == ry) || (px == ry && py == rx)) {
+                    result[i] = false;
+                    break;
+                }
+            }
+        }
+
+        // unions two friends if request is valid
+        if (result[i]) {
+            union(px, py);
+        }
+    }
+    return result;
+}
+{% endhighlight %}
+
+[Find All People With Secret][find-all-people-with-secret]
+
+{% highlight java %}
+public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
+    this.parents = new Integer[n];
+
+    Arrays.sort(meetings, Comparator.comparingInt(m -> m[2]));
+    union(0, firstPerson);
+
+    int m = meetings.length;
+    Set<Integer> people = new HashSet<>();
+    for (int i = 0; i < m; i++) {
+        union(meetings[i][0], meetings[i][1]);
+        people.add(meetings[i][0]);
+        people.add(meetings[i][1]);
+
+        if (i == m - 1 || meetings[i][2] != meetings[i + 1][2]) {
+            for (int p : people) {
+                if (find(p) != find(0)) {
+                    parents[p] = null;
+                }
+            }
+            people.clear();
+        }
+    }
+
+    List<Integer> list = new ArrayList<>();
+    for (int i = 0; i < n; i++) {
+        if (find(i) == find(0)) {
+            list.add(i);
+        }
+    }
+    return list;
+}
+{% endhighlight %}
+
 [checking-existence-of-edge-length-limited-paths]: https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/
 [checking-existence-of-edge-length-limited-paths-ii]: https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths-ii/
 [evaluate-division]: https://leetcode.com/problems/evaluate-division/
+[find-all-people-with-secret]: https://leetcode.com/problems/find-all-people-with-secret/
 [graph-connectivity-with-threshold]: https://leetcode.com/problems/graph-connectivity-with-threshold/
 [minimize-malware-spread]: https://leetcode.com/problems/minimize-malware-spread/
 [minimize-malware-spread-ii]: https://leetcode.com/problems/minimize-malware-spread-ii/
 [most-stones-removed-with-same-row-or-column]: https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
 [number-of-connected-components-in-an-undirected-graph]: https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
+[process-restricted-friend-requests]: https://leetcode.com/problems/process-restricted-friend-requests/
 [rank-transform-of-a-matrix]: https://leetcode.com/problems/rank-transform-of-a-matrix/
 [redundant-connection]: https://leetcode.com/problems/redundant-connection/
 [redundant-connection-ii]: https://leetcode.com/problems/redundant-connection-ii/

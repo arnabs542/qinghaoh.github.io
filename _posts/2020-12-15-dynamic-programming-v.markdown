@@ -3,6 +3,8 @@ layout: post
 title:  "Dynamic Programming V"
 tag: dynamic programming
 ---
+# At i
+
 [Paint Fence][paint-fence]
 
 ![Paint Fence](/assets/paint_fence.png)
@@ -452,11 +454,34 @@ public int numWays(String[] words, String target) {
 }
 {% endhighlight %}
 
+# By i
+
+[Maximum Earnings From Taxi][maximum-earnings-from-taxi]
+
+{% highlight java %}
+public long maxTaxiEarnings(int n, int[][] rides) {
+    // we can use treemap to find the previous dp value, too
+    long[] dp = new long[n + 1];
+    Arrays.sort(rides, Comparator.comparingInt(r -> r[1]));
+
+    int prev = 0;
+    for (int[] r : rides) {
+        if (r[1] != prev) {
+            Arrays.fill(dp, prev + 1, r[1] + 1, dp[prev]);
+        }
+        dp[r[1]] = Math.max(dp[r[1]], dp[r[0]] + r[1] - r[0] + r[2]);
+        prev = r[1];
+    }
+    return dp[prev];
+}
+{% endhighlight %}
+
 [decode-ways]: https://leetcode.com/problems/decode-ways/
 [delete-and-earn]: https://leetcode.com/problems/delete-and-earn/
 [flip-string-to-monotone-increasing]: https://leetcode.com/problems/flip-string-to-monotone-increasing/
 [house-robber]: https://leetcode.com/problems/house-robber/
 [house-robber-ii]: https://leetcode.com/problems/house-robber-ii/
+[maximum-earnings-from-taxi]: https://leetcode.com/problems/maximum-earnings-from-taxi/
 [minimum-deletions-to-make-string-balanced]: https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/
 [number-of-sets-of-k-non-overlapping-line-segments]: https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/
 [number-of-ways-to-form-a-target-string-given-a-dictionary]: https://leetcode.com/problems/number-of-ways-to-form-a-target-string-given-a-dictionary/
