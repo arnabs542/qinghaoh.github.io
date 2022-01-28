@@ -5,7 +5,7 @@ tag: dynamic programming
 ---
 [Largest Sum of Averages][largest-sum-of-averages]
 
-### Top-down DP: divide and conquer + memoization
+## Top-down DP: divide and conquer + memoization
 
 {% highlight java %}
 private double[][] memo;
@@ -53,7 +53,7 @@ The result of each loop can be written to `memo` directly:
     return memo[end][K];
 {% endhighlight %}
 
-### Bottom-up DP
+## Bottom-up DP
 
 {% highlight java %}
 public double largestSumOfAverages(int[] A, int K) {
@@ -284,9 +284,34 @@ public int mergeStones(int[] stones, int k) {
 }
 {% endhighlight %}
 
+[Minimum Cost to Cut a Stick][minimum-cost-to-cut-a-stick]
+
+{% highlight java %}
+public int minCost(int n, int[] cuts) {
+    List<Integer> list = new ArrayList<>();
+    Arrays.stream(cuts).forEach(list::add);
+    list.add(0);
+    list.add(n);
+
+    Collections.sort(list);
+
+    int m = list.size();
+    int[][] dp = new int[m][m];
+    for (int i = m - 1; i >= 0; i--) {
+        for (int j = i + 1; j < m; j++) {
+            for (int k = i + 1; k < j; k++) {
+                dp[i][j] = Math.min(dp[i][j] == 0 ? Integer.MAX_VALUE : dp[i][j], dp[i][k] + dp[k][j] + list.get(j) - list.get(i));
+            }
+        }
+    }
+    return dp[0][m - 1];
+}
+{% endhighlight %}
+
 [burst-balloons]: https://leetcode.com/problems/burst-balloons/
 [largest-sum-of-averages]: https://leetcode.com/problems/largest-sum-of-averages/
 [maximum-score-from-performing-multiplication-operations]: https://leetcode.com/problems/maximum-score-from-performing-multiplication-operations/
+[minimum-cost-to-cut-a-stick]: https://leetcode.com/problems/minimum-cost-to-cut-a-stick/
 [minimum-cost-to-merge-stones]: https://leetcode.com/problems/minimum-cost-to-merge-stones/
 [minimum-score-triangulation-of-polygon]: https://leetcode.com/problems/minimum-score-triangulation-of-polygon/
 [remove-boxes]: https://leetcode.com/problems/remove-boxes/

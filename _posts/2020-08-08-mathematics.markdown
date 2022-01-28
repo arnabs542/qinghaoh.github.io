@@ -388,6 +388,34 @@ public boolean checkPowersOfThree(int n) {
 }
 {% endhighlight %}
 
+[Adding Two Negabinary Numbers][adding-two-negabinary-numbers]
+
+{% highlight java %}
+public int[] addNegabinary(int[] arr1, int[] arr2) {
+    int carry = 0, i = arr1.length - 1, j = arr2.length - 1;
+    Deque<Integer> st = new ArrayDeque<>();
+    while (i >= 0 || j >= 0 || carry != 0) {
+        if (i >= 0) {
+            carry += arr1[i--];
+        }
+        if (j >= 0) {
+            carry += arr2[j--];
+        }
+        st.push(carry & 1);
+        // carry = carry / (-2)
+        // carry can be -1, and -(carry >> 1) will be 1
+        carry = -(carry >> 1);
+    }
+
+    // clears leading zeros
+    while (st.size() > 1 && st.peek() == 0) {
+        st.pop();
+    }
+
+    return st.stream().mapToInt(a -> a).toArray();
+}
+{% endhighlight %}
+
 [Smallest Good Base][smallest-good-base]
 
 \\[
@@ -740,6 +768,7 @@ public int numSquares(int n) {
 {% endhighlight %}
 
 [4-keys-keyboard]: https://leetcode.com/problems/4-keys-keyboard/
+[adding-two-negabinary-numbers]: https://leetcode.com/problems/adding-two-negabinary-numbers/
 [allocate-mailboxes]: https://leetcode.com/problems/allocate-mailboxes/
 [best-meeting-point]: https://leetcode.com/problems/best-meeting-point/
 [check-if-number-is-a-sum-of-powers-of-three]: https://leetcode.com/problems/check-if-number-is-a-sum-of-powers-of-three/

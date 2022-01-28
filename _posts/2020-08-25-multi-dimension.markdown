@@ -210,7 +210,7 @@ public int[] findDiagonalOrder(List<List<Integer>> nums) {
 }
 {% endhighlight %}
 
-## Flood Fill
+# Flood Fill
 
 [Flood fill](https://en.wikipedia.org/wiki/Flood_fill): also called seed fill, is an algorithm that determines and alters the area connected to a given node in a **multi-dimensional** array with some matching attribute.
 
@@ -396,9 +396,29 @@ public int largestOverlap(int[][] img1, int[][] img2) {
 }
 {% endhighlight %}
 
+# Greedy
+
+[Find Valid Matrix Given Row and Column Sums][find-valid-matrix-given-row-and-column-sums]
+
+{% highlight java %}
+public int[][] restoreMatrix(int[] rowSum, int[] colSum) {
+    int m = rowSum.length, n = colSum.length;
+    int[][] matrix = new int[m][n];
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            matrix[i][j] = Math.min(rowSum[i], colSum[j]);
+            rowSum[i] -= matrix[i][j];
+            colSum[j] -= matrix[i][j];
+        }
+    }
+    return matrix;
+}
+{% endhighlight %}
+
 [diagonal-traverse-ii]: https://leetcode.com/problems/diagonal-traverse-ii/
 [edit-distance]: https://leetcode.com/problems/edit-distance/
 [find-positive-integer-solution-for-a-given-equation]: https://leetcode.com/problems/find-positive-integer-solution-for-a-given-equation/
+[find-valid-matrix-given-row-and-column-sums]: https://leetcode.com/problems/find-valid-matrix-given-row-and-column-sums/
 [image-overlap]: https://leetcode.com/problems/image-overlap/
 [largest-submatrix-with-rearrangements]: https://leetcode.com/problems/largest-submatrix-with-rearrangements/
 [lonely-pixel-i]: https://leetcode.com/problems/lonely-pixel-i/

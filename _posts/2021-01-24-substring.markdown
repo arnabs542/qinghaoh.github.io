@@ -134,6 +134,64 @@ public String encode(String s) {
 
 [Knuth–Morris–Pratt (KMP) algorithm](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm)
 
+* Construct an auxiliary array `lps[]` of the same size as pattern
+* `lps[i]` is the length of the longest matching proper prefix which is also a suffix of the sub-pattern `pat[0...i]`. A proper prefix of a string is a prefix that is not equal to the string itself. 
+
+For example, for the pattern `AABAACAABAA`, 
+```
+lps[] = [0, 1, 0, 1, 2, 0, 1, 2, 3, 4, 5]
+```
+
+{% highlight java %}
+int[] computeLps(String s) {
+    int m = s.length();
+    int[] lps = new int[m];
+
+    // lps[0] == 0
+    for (int i = 1, j = 0; i < m; i++) {
+        while (j > 0 && s.charAt(i) != s.charAt(j)) {
+            j = lps[j - 1];
+        }
+        
+        if (s.charAt(i) == s.charAt(j)) {
+            lps[i] = ++j;
+        }
+    }
+    return lps;
+}
+{% endhighlight %}
+
+[Longest Happy Prefix][longest-happy-prefix]
+
+{% highlight java %}
+public String longestPrefix(String s) {
+    return s.substring(0, computeLps(s)[s.length() - 1]);
+}
+{% endhighlight %}
+
+* Search pattern in text with the help of `lps[]`
+
+{% highlight java %}
+List<Integer> kmp(String text, String pattern) {
+    int n = text.length(), m = pattern.length();
+    int[] lps = computeLps(pattern);
+
+    List<Integer> list = new ArrayList<>();
+    for (int i = 0, j = 0; i < n; i++) {
+        while (j == m || (j > 0 && pattern.charAt(j) != text.charAt(i))) {
+            j = lps[j - 1];
+        }
+
+        if (pattern.charAt(j) == text.charAt(i)) {
+            if (++j == m) {
+                list.add(i - j + 1);
+            }
+        }
+    }
+    return list;
+}
+{% endhighlight %}
+
 [Shortest Palindrome][shortest-palindrome]
 
 {% highlight java %}
@@ -160,6 +218,67 @@ public String shortestPalindrome(String s) {
         }
     }
     return new StringBuilder(s.substring(table[table.length - 1])).reverse().toString() + s;
+}
+{% endhighlight %}
+
+[Find All Good Strings][find-all-good-strings]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+private String s1, s2, evil;
+private int[] memo = new int[1 << 17];
+private int[] lps;
+
+public int findGoodStrings(int n, String s1, String s2, String evil) {
+    this.s1 = s1;
+    this.s2 = s2;
+    this.evil = evil;
+    this.lps = computeLps(evil);
+
+    return dfs(0, 0, true, true);
+}
+
+// builds one character at each level
+private int dfs(int index, int evilMatched, boolean startInclusive, boolean endInclusive) {
+    // KMP found a match of evil
+    if (evilMatched == evil.length()) {
+        return 0;
+    }
+
+    // built a good string
+    if (index == s1.length()) {
+        return 1;
+    }
+
+    int key = getKey(index, evilMatched, startInclusive, endInclusive);
+    if (memo[key] != 0) {
+        return memo[key];
+    }
+
+    int count = 0;
+    char from = startInclusive ? s1.charAt(index) : 'a';
+    char to = endInclusive ? s2.charAt(index) : 'z';
+    for (char c = from; c <= to; c++) {
+        // KMP to count the number of matches of pattern evil in text current built string (ending at c)
+        int j = evilMatched;
+        while (j > 0 && evil.charAt(j) != c) {
+            j = lps[j - 1];
+        }
+        if (c == evil.charAt(j)) {
+            j++;
+        }
+        count = (count + dfs(index + 1, j, startInclusive && (c == from), endInclusive && (c == to))) % MOD;
+    }
+    return memo[key] = count;
+}
+
+private int getKey(int n, int m, boolean b1, boolean b2) {
+    // 9 bits to store n (2 ^ 9 = 512)
+    // 6 bits to store m (2 ^ 6 = 64)
+    // 1 bit to store b1
+    // 1 bit to store b2
+    // 17 bits in total
+    return (n << 8) | (m << 2) | ((b1 ? 1 : 0) << 1) | (b2 ? 1 : 0);
 }
 {% endhighlight %}
 
@@ -344,6 +463,7 @@ private void doStamp(int pos) {
 
 [distinct-echo-substrings]: https://leetcode.com/problems/distinct-echo-substrings/
 [encode-string-with-shortest-length]: https://leetcode.com/problems/encode-string-with-shortest-length/
+[find-all-good-strings]: https://leetcode.com/problems/find-all-good-strings/
 [longest-duplicate-substring]: https://leetcode.com/problems/longest-duplicate-substring/
 [longest-happy-prefix]: https://leetcode.com/problems/longest-happy-prefix/
 [longest-repeating-substring]: https://leetcode.com/problems/longest-repeating-substring/

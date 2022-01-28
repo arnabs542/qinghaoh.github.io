@@ -625,15 +625,102 @@ public int tallestBillboard(int[] rods) {
 }
 {% endhighlight %}
 
+[Stickers to Spell Word][stickers-to-spell-word]
+
+{% highlight java %}
+private Map<String, Integer> memo = new HashMap<>();
+private int[][] countMap;
+
+public int minStickers(String[] stickers, String target) {
+    int n = stickers.length;
+    this.countMap = new int[n][26];
+
+    for (int i = 0; i < n; i++) {
+        for (char c : stickers[i].toCharArray()) {
+            countMap[i][c - 'a']++;
+        }
+    }
+
+    memo.put("", 0);
+    return dfs(target);
+}
+
+private int dfs(String target) {
+    if (memo.containsKey(target)) {
+        return memo.get(target);
+    }
+
+    int[] t = new int[26];
+    for (char c : target.toCharArray()) {
+        t[c - 'a']++;
+    }
+
+    int min = Integer.MAX_VALUE;
+    StringBuilder sb = new StringBuilder();
+    for (int[] s : countMap) {
+        // the sticker has to contain the first character of target
+        if (s[target.charAt(0) - 'a'] > 0) {
+            // builds the string = (target - sticker)
+            // the string is sorted
+            for (int i = 0; i < 26; i++) {
+                sb.append(String.valueOf((char)('a' + i)).repeat(Math.max(0, t[i] - s[i])));
+            }
+
+            int tmp = dfs(sb.toString());
+            if (tmp != -1) {
+                min = Math.min(min, tmp + 1);
+            }
+        }
+        sb.setLength(0);
+    }
+
+    if (min == Integer.MAX_VALUE) {
+        min = -1;
+    }
+    memo.put(target, min);
+    return min;
+}
+{% endhighlight %}
+
+[Minimum Distance to Type a Word Using Two Fingers][minimum-distance-to-type-a-word-using-two-fingers]
+
+{% highlight java %}
+public int minimumDistance(String word) {
+    // distance is the total distance we get with right finger
+    int distance = 0, save = 0;
+    // dp[i]: the max distance that can be saved if left finger ends at character i
+    int[] dp = new int[26];
+    for (int i = 0; i < word.length() - 1; i++) {
+        int curr = word.charAt(i) - 'A', next = word.charAt(i + 1) - 'A';
+        for (int prev = 0; prev < 26; prev++) {
+            // moves right finger from curr to next
+            // or moves left finger from prev to next
+            dp[curr] = Math.max(dp[curr], dp[prev] + cost(curr, next) - cost(prev, next));
+        }
+        save = Math.max(save, dp[curr]);
+
+        // now right finger is at next, left finger is at curr
+        distance += cost(curr, next);
+    }
+    return distance - save;
+}
+
+private int cost(int a, int b) {
+    return Math.abs(a / 6 - b / 6) + Math.abs(a % 6 - b % 6);
+}
+{% endhighlight %}
+
 [best-team-with-no-conflicts]: https://leetcode.com/problems/best-team-with-no-conflicts/
 [build-array-where-you-can-find-the-maximum-exactly-k-comparisons]: https://leetcode.com/problems/build-array-where-you-can-find-the-maximum-exactly-k-comparisons/
 [frog-jump]: https://leetcode.com/problems/frog-jump/
 [make-the-xor-of-all-segments-equal-to-zero]: https://leetcode.com/problems/make-the-xor-of-all-segments-equal-to-zero/
 [maximum-height-by-stacking-cuboids]: https://leetcode.com/problems/maximum-height-by-stacking-cuboids/
 [minimum-difficulty-of-a-job-schedule]: https://leetcode.com/problems/minimum-difficulty-of-a-job-schedule/
+[minimum-distance-to-type-a-word-using-two-fingers]: https://leetcode.com/problems/minimum-distance-to-type-a-word-using-two-fingers/
 [minimum-skips-to-arrive-at-meeting-on-time]: https://leetcode.com/problems/minimum-skips-to-arrive-at-meeting-on-time/
 [number-of-music-playlists]: https://leetcode.com/problems/number-of-music-playlists/
 [number-of-ways-to-rearrange-sticks-with-k-sticks-visible]: https://leetcode.com/problems/number-of-ways-to-rearrange-sticks-with-k-sticks-visible/
 [paint-house-iii]: https://leetcode.com/problems/paint-house-iii/
+[stickers-to-spell-word]: https://leetcode.com/problems/stickers-to-spell-word/
 [stone-game-v]: https://leetcode.com/problems/stone-game-v/
 [tallest-billboard]: https://leetcode.com/problems/tallest-billboard/

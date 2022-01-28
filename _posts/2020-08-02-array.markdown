@@ -181,6 +181,28 @@ private void reverse(char[] s, int start, int end) {
 }
 {% endhighlight %}
 
+# Greedy
+
+[Gas Station][gas-station]
+
+{% highlight java %}
+public int canCompleteCircuit(int[] gas, int[] cost) {
+    int n = gas.length, tank = 0, minIndex = 0, min = Integer.MAX_VALUE;
+    // finds the station where the tank contains least gas,
+    // then the next station should be the start
+    for (int i = 0; i < n; i++) {
+        tank += (gas[i] - cost[i]);
+
+        if (tank < min) {
+            minIndex = i;
+            min = tank;
+        }
+    }
+
+    return tank < 0 ? -1 : (minIndex + 1) % n;
+}
+{% endhighlight %}
+
 # Flips
 
 [Maximum Matrix Sum][maximum-matrix-sum]
@@ -612,6 +634,7 @@ public long largestEvenSum(int[] nums, int k) {
 [divide-array-into-increasing-sequences]: https://leetcode.com/problems/divide-array-into-increasing-sequences/
 [find-all-duplicates-in-an-array]: https://leetcode.com/problems/find-all-duplicates-in-an-array/
 [first-missing-positive]: https://leetcode.com/problems/first-missing-positive/
+[gas-station]: https://leetcode.com/problems/gas-station/
 [longest-consecutive-sequence]: https://leetcode.com/problems/longest-consecutive-sequence/
 [max-chunks-to-make-sorted-ii]: https://leetcode.com/problems/max-chunks-to-make-sorted-ii/
 [maximum-matrix-sum]: https://leetcode.com/problems/maximum-matrix-sum/

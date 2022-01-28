@@ -441,7 +441,74 @@ public int longestDecomposition(String text) {
 }
 {% endhighlight %}
 
+# DFS
+
+[Check if an Original String Exists Given Two Encoded Strings][check-if-an-original-string-exists-given-two-encoded-strings]
+
+{% highlight java %}
+private static final int MAX_DIFF = 1000;
+private Boolean[][][] memo;
+
+public boolean possiblyEquals(String s1, String s2) {
+    // dp[i][j][d]:
+    // d = diff + MAX_DIFF
+    // if s1[i:] truncated by `diff` characters if diff > 0
+    // and s2[j:] truncated by `-diff` characters if diff < 0 are equal
+    this.memo = new Boolean[s1.length() + 1][s2.length() + 1][2 * MAX_DIFF];
+
+    return dfs(s1, s2, 0, 0, 0);
+}
+
+// two pointers
+private boolean dfs(String s1, String s2, int i, int j, int diff) {
+    int n1 = s1.length(), n2 = s2.length();
+    if (i == n1 && j == n2) {
+        return diff == 0;
+    }
+
+    if (memo[i][j][diff + MAX_DIFF] != null) {
+        return memo[i][j][diff + MAX_DIFF];
+    }
+
+    // literal matching on s1[i] and s2[j]
+    if (i < n1 && j < n2 && diff == 0 && s1.charAt(i) == s2.charAt(j)) {
+        if (dfs(s1, s2, i + 1, j + 1, 0)) {
+            return memo[i][j][MAX_DIFF] = true;
+        }
+    }
+
+    // literal matching on s1[i]
+    if (i < n1 && Character.isLetter(s1.charAt(i)) && diff > 0 && dfs(s1, s2, i + 1, j, diff - 1)) {
+        return memo[i][j][diff + MAX_DIFF] = true;
+    }
+
+    // literal matching on s2[j]
+    if (j < n2 && Character.isLetter(s2.charAt(j)) && diff < 0 && dfs(s1, s2, i, j + 1, diff + 1)) {
+        return memo[i][j][diff + MAX_DIFF] = true;
+    }
+
+    // wildcard matching on s1[i]
+    for (int k = i, val = 0; k < n1 && Character.isDigit(s1.charAt(k)); k++) {
+        val = val * 10 + (s1.charAt(k) - '0');
+        if (dfs(s1, s2, k + 1, j, diff - val)) {
+            return memo[i][j][diff + MAX_DIFF] = true;
+        }
+    }
+
+    // wildcard matching on s2[j]
+    for (int k = j, val = 0; k < n2 && Character.isDigit(s2.charAt(k)); k++) {
+        val = val * 10 + (s2.charAt(k) - '0');
+        if (dfs(s1, s2, i, k + 1, diff + val)) {
+            return memo[i][j][diff + MAX_DIFF] = true;
+        }
+    }
+
+    return memo[i][j][diff + MAX_DIFF] = false;
+}
+{% endhighlight %}
+
 [backspace-string-compare]: https://leetcode.com/problems/backspace-string-compare/
+[check-if-an-original-string-exists-given-two-encoded-strings]: https://leetcode.com/problems/check-if-an-original-string-exists-given-two-encoded-strings/
 [container-with-most-water]: https://leetcode.com/problems/container-with-most-water/
 [count-substrings-that-differ-by-one-character]: https://leetcode.com/problems/count-substrings-that-differ-by-one-character/
 [count-unique-characters-of-all-substrings-of-a-given-string]: https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/

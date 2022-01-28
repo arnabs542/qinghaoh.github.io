@@ -265,6 +265,8 @@ private int binarySearch(int[] piles, int end, int target) {
 }
 {% endhighlight %}
 
+[Minimum Operations to Make the Array K-Increasing][minimum-operations-to-make-the-array-k-increasing]
+
 **Mountain Array**
 
 [Minimum Number of Removals to Make Mountain Array][minimum-number-of-removals-to-make-mountain-array]
@@ -296,7 +298,7 @@ public int minOperations(int[] target, int[] arr) {
     // since target has distinct elements,
     // stores the index of each target element
     Map<Integer, Integer> map = new HashMap<>();
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; i++) {
         map.put(target[i], i);
     }
 
@@ -647,6 +649,7 @@ private void backtrack(int[] freq, int len, StringBuilder sb) {
 [longest-subsequence-repeated-k-times]: https://leetcode.com/problems/longest-subsequence-repeated-k-times/
 [minimum-number-of-removals-to-make-mountain-array]: https://leetcode.com/problems/minimum-number-of-removals-to-make-mountain-array/
 [minimum-operations-to-make-a-subsequence]: https://leetcode.com/problems/minimum-operations-to-make-a-subsequence/
+[minimum-operations-to-make-the-array-k-increasing]: https://leetcode.com/problems/minimum-operations-to-make-the-array-k-increasing/
 [number-of-matching-subsequences]: https://leetcode.com/problems/number-of-matching-subsequences/
 [number-of-unique-good-subsequences]: https://leetcode.com/problems/number-of-unique-good-subsequences/
 [russian-doll-envelopes]: https://leetcode.com/problems/russian-doll-envelopes/

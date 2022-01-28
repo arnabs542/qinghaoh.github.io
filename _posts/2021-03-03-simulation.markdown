@@ -143,8 +143,32 @@ public int[] deckRevealedIncreasing(int[] deck) {
 }
 {% endhighlight %}
 
+[Find Latest Group of Size M][find-latest-group-of-size-m]
+
+{% highlight java %}
+public int findLatestStep(int[] arr, int m) {
+    int n = arr.length;
+    if (n == m) {
+        return n;
+    }
+
+    int[] length = new int[n + 2];
+    int step = -1;
+    for (int i = 0; i < n; i++) {
+        int index = arr[i];
+        int left = length[index - 1], right = length[index + 1];
+        if (left == m || right == m) {
+            step = i;
+        }
+        length[index + right] = length[index - left] = length[index] = left + right + 1;
+    }
+    return step;
+}
+{% endhighlight %}
+
 [champagne-tower]: https://leetcode.com/problems/champagne-tower/
 [dota2-senate]: https://leetcode.com/problems/dota2-senate/
+[find-latest-group-of-size-m]: https://leetcode.com/problems/find-latest-group-of-size-m/
 [number-of-spaces-cleaning-robot-cleaned]: https://leetcode.com/problems/number-of-spaces-cleaning-robot-cleaned/
 [pour-water]: https://leetcode.com/problems/pour-water/
 [reveal-cards-in-increasing-order]: https://leetcode.com/problems/reveal-cards-in-increasing-order/

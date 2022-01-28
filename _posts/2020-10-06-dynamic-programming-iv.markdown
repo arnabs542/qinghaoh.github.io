@@ -446,6 +446,41 @@ right[]:
 [0,4,4,3,4]
 ```
 
+[Count Fertile Pyramids in a Land][count-fertile-pyramids-in-a-land]
+
+{% highlight java %}
+public int countPyramids(int[][] grid) {
+    return helper(inverse(grid)) + helper(grid);
+}
+
+public int helper(int[][] grid) {
+    int count = 0;
+    for (int i = 1; i < grid.length; i++) {
+        for (int j = 1; j < grid[0].length - 1; j++) {
+            if (grid[i][j] > 0) {
+                // apex + three child pyramids
+                grid[i][j] = Math.min(Math.min(grid[i - 1][j], grid[i - 1][j - 1]), grid[i - 1][j + 1]) + 1;
+                // if grid[i][j] == k
+                // there are (k - 1) pyramids whose apex is (i, j)
+                count += grid[i][j] - 1;
+            }
+        }
+    }
+    return count;
+}
+
+public int[][] inverse(int[][] grid) {
+    int m = grid.length, n = grid[0].length;
+    int[][] g = new int[m][n];
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            g[i][j] = grid[m - i - 1][j];
+        }
+    }
+    return g;
+}
+{% endhighlight %}
+
 [Largest Plus Sign][largest-plus-sign]
 
 {% highlight java %}
@@ -601,6 +636,7 @@ public int cherryPickup(int[][] grid) {
 [bomb-enemy]: https://leetcode.com/problems/bomb-enemy/
 [cherry-pickup]: https://leetcode.com/problems/cherry-pickup/
 [cherry-pickup-ii]: https://leetcode.com/problems/cherry-pickup-ii/
+[count-fertile-pyramids-in-a-land]: https://leetcode.com/problems/count-fertile-pyramids-in-a-land/
 [count-square-submatrices-with-all-ones]: https://leetcode.com/problems/count-square-submatrices-with-all-ones/
 [count-submatrices-with-all-ones]: https://leetcode.com/problems/count-submatrices-with-all-ones/
 [dungeon-game]: https://leetcode.com/problems/dungeon-game/
