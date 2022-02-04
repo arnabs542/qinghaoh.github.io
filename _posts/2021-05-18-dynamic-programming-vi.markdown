@@ -710,8 +710,28 @@ private int cost(int a, int b) {
 }
 {% endhighlight %}
 
+[First Day Where You Have Been in All the Rooms][first-day-where-you-have-been-in-all-the-rooms]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int firstDayBeenInAllRooms(int[] nextVisit) {
+    int n = nextVisit.length;
+    long[] dp = new long[n];
+    for (int i = 1; i < n; i++) {
+        // 0 -> (i - 1): dp[i - 1]
+        // (i - 1) -> nextVisit[i - 1]: 1
+        // nextVisit[i - 1] -> (i - 1): dp[i - 1] - dp[nextVisit[i - 1]]
+        // (i - 1) -> i: 1
+        dp[i] = (2 * dp[i - 1] - dp[nextVisit[i - 1]] + 2 + MOD) % MOD;
+    }
+    return (int)dp[n - 1];
+}
+{% endhighlight %}
+
 [best-team-with-no-conflicts]: https://leetcode.com/problems/best-team-with-no-conflicts/
 [build-array-where-you-can-find-the-maximum-exactly-k-comparisons]: https://leetcode.com/problems/build-array-where-you-can-find-the-maximum-exactly-k-comparisons/
+[first-day-where-you-have-been-in-all-the-rooms]: https://leetcode.com/problems/first-day-where-you-have-been-in-all-the-rooms/
 [frog-jump]: https://leetcode.com/problems/frog-jump/
 [make-the-xor-of-all-segments-equal-to-zero]: https://leetcode.com/problems/make-the-xor-of-all-segments-equal-to-zero/
 [maximum-height-by-stacking-cuboids]: https://leetcode.com/problems/maximum-height-by-stacking-cuboids/

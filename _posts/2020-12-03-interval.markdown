@@ -299,7 +299,7 @@ public int[][] merge(int[][] intervals) {
         }
     }
 
-    return list.toArray(new int[list.size()][]);
+    return list.toArray(new int[0][]);
 }
 {% endhighlight %}
 
@@ -325,7 +325,7 @@ public int[][] intervalIntersection(int[][] firstList, int[][] secondList) {
             j++;
         }
     }
-    return list.toArray(new int[list.size()][]);
+    return list.toArray(new int[0][]);
 }
 {% endhighlight %}
 

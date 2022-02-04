@@ -4,6 +4,32 @@ title:  "Line Sweep"
 tags: math
 usemathjax: true
 ---
+# Discrete Time
+
+[Discrete Time](https://en.wikipedia.org/wiki/Discrete_time_and_continuous_time#Discrete_time) Signal Processing
+
+[Range Addition][range-addition]
+
+{% highlight java %}
+public int[] getModifiedArray(int length, int[][] updates) {
+    int[] result = new int[length];
+    // finds pulses
+    for (int[] u : updates) {
+        result[u[0]] += u[2];
+        if (u[1] + 1 < length) {
+            result[u[1] + 1] -= u[2];
+        }
+    }
+
+    // accumulates pulses
+    for (int i = 1; i < length; i++) {
+        result[i] += result[i - 1];
+    }
+
+    return result;
+}
+{% endhighlight %}
+
 # Ordered Map
 
 [Describe the Painting][describe-the-painting]
@@ -285,4 +311,5 @@ public int brightestPosition(int[][] lights) {
 [describe-the-painting]: https://leetcode.com/problems/describe-the-painting/
 [maximum-number-of-darts-inside-of-a-circular-dartboard]: https://leetcode.com/problems/maximum-number-of-darts-inside-of-a-circular-dartboard/
 [minimum-interval-to-include-each-query]: https://leetcode.com/problems/minimum-interval-to-include-each-query/
+[range-addition]: https://leetcode.com/problems/range-addition/
 [the-skyline-problem]: https://leetcode.com/problems/the-skyline-problem/

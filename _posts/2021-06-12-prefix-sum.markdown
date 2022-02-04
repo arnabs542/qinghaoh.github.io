@@ -416,6 +416,37 @@ private int dfs(int m, int n, int cuts, int i, int j, int[][] p) {
 }
 {% endhighlight %}
 
+## Discrete
+
+[Maximum Fruits Harvested After at Most K Steps][maximum-fruits-harvested-after-at-most-k-steps]
+
+{% highlight java %}
+public int maxTotalFruits(int[][] fruits, int startPos, int k) {
+    int n = fruits.length, m = Math.max(startPos, fruits[n - 1][0]);
+
+    int[] p = new int[m + 2];
+    for (int i = 0, j = 0; i <= m; i++) {
+        p[i + 1] = p[i] + (j < n && fruits[j][0] == i ? fruits[j++][1] : 0);
+    }
+
+    int max = 0;
+    // moves i steps to right, then turns left
+    for (int i = 0; i <= Math.min(k, m - startPos); i++) {
+        int left = Math.max(0, startPos - Math.max(0, k - 2 * i));
+        int right = startPos + i;
+        max = Math.max(max, p[right + 1] - p[left]);
+    }
+
+    // moves i steps to left, then turns right
+    for (int i = 0; i <= Math.min(k, startPos); i++) {
+        int right = Math.min(m, startPos + Math.max(0, k - 2 * i));
+        int left = startPos - i;
+        max = Math.max(max, p[right + 1] - p[left]);
+    }
+    return max;
+}
+{% endhighlight %}
+
 # Rolling Prefix Sum
 
 [Maximize the Beauty of the Garden][maximize-the-beauty-of-the-garden]
@@ -823,6 +854,7 @@ public int findMinMoves(int[] machines) {
 [max-sum-of-rectangle-no-larger-than-k]: https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/
 [maximize-the-beauty-of-the-garden]: https://leetcode.com/problems/maximize-the-beauty-of-the-garden/
 [maximum-absolute-sum-of-any-subarray]: https://leetcode.com/problems/maximum-absolute-sum-of-any-subarray/
+[maximum-fruits-harvested-after-at-most-k-steps]: https://leetcode.com/problems/maximum-fruits-harvested-after-at-most-k-steps/
 [maximum-number-of-non-overlapping-subarrays-with-sum-equals-target]: https://leetcode.com/problems/maximum-number-of-non-overlapping-subarrays-with-sum-equals-target/
 [maximum-number-of-ways-to-partition-an-array]: https://leetcode.com/problems/maximum-number-of-ways-to-partition-an-array/
 [maximum-size-subarray-sum-equals-k]: https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/

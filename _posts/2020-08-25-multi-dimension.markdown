@@ -145,6 +145,49 @@ private int squareSum(int[][] p, int i, int j, int k) {
 }
 {% endhighlight %}
 
+[Stamping the Grid][stamping-the-grid]
+
+{% highlight java %}
+public boolean possibleToStamp(int[][] grid, int stampHeight, int stampWidth) {
+    int m = grid.length, n = grid[0].length;
+    // stamp[i][j]: whether it's possible to fit the bottom right corner of a stamp at (i, j)
+    int[][] stamp = new int[m][n], p = initRangeSum(grid);
+    for (int i = stampHeight - 1; i < m; i++) {
+        for (int j = stampWidth - 1; j < n; j++) {
+            stamp[i][j] = sum(p, i - stampHeight + 1, j - stampWidth + 1, i, j) == 0 ? 1 : 0;
+        }
+    }
+
+    // grid[i][j] is covered by some stamp
+    // if there is a stamp with right bottom corner within the range (i, j) - (i + h - 1, j + w - 1)
+    p = initRangeSum(stamp);
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (grid[i][j] == 0 &&
+                sum(p, i, j, Math.min(m - 1, i + stampHeight - 1), Math.min(n - 1, j + stampWidth - 1)) == 0) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+private int[][] initRangeSum(int[][] matrix) {
+    int m = matrix.length, n = matrix[0].length;
+    int[][] p = new int[m + 1][n + 1];
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            p[i + 1][j + 1] = p[i + 1][j] + p[i][j + 1] - p[i][j] + matrix[i][j];
+        }
+    }
+    return p;
+}
+
+private int sum(int[][] p, int r1, int c1, int r2, int c2) {
+    return p[r2 + 1][c2 + 1] - p[r2 + 1][c1] - p[r1][c2 + 1] + p[r1][c1];
+}
+{% endhighlight %}
+
 # 2D Prefix Sum
 
 2D -> 1D: Calculates prefix sum for each row, and then each column, or vice versa.
@@ -427,5 +470,6 @@ public int[][] restoreMatrix(int[] rowSum, int[] colSum) {
 [number-of-enclaves]: https://leetcode.com/problems/number-of-enclaves/
 [number-of-submatrices-that-sum-to-target]: https://leetcode.com/problems/number-of-submatrices-that-sum-to-target/
 [search-a-2d-matrix]: https://leetcode.com/problems/search-a-2d-matrix/
+[stamping-the-grid]: https://leetcode.com/problems/stamping-the-grid/
 [surrounded-regions]: https://leetcode.com/problems/surrounded-regions/
 [transform-to-chessboard]: https://leetcode.com/problems/transform-to-chessboard/

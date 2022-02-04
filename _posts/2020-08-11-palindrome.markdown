@@ -391,7 +391,6 @@ public String longestPalindrome(String s) {
     int c = -1, r = -1;
     int max = Integer.MIN_VALUE, pos = -1;
 
-
     for (int i = 0; i < n; i++) {
         // 2 * c - i is the mirrored center of i
         // radius is bounded by the outer palindrome

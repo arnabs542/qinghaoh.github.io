@@ -386,15 +386,15 @@ public int sumSubarrayMins(int[] arr) {
 {% highlight java %}
 private int MOD = (int)1e9 + 7;
 
-public int sumSubarrayMins(int[] A) {
+public int sumSubarrayMins(int[] arr) {
     Deque<Integer> st = new ArrayDeque<>();
-    int result = 0;
-    for (int i = 0; i <= A.length; i++) {
-        // when A is at the end, set i as 0 so that all stack elements are popped
-        while (!st.isEmpty() && A[st.peek()] > (i == A.length ? 0 : A[i])) {
+    int result = 0, n = arr.length;
+    for (int i = 0; i <= n; i++) {
+        // when arr is at the end, set i as 0 so that all stack elements are popped
+        while (!st.isEmpty() && (i == n ? 0 : arr[i]) < arr[st.peek()]) {
             int j = st.pop();
             int k = st.isEmpty() ? -1 : st.peek();
-            result = (result + A[j] * (i - j) * (j - k)) % MOD;
+            result = (result + arr[j] * (i - j) * (j - k)) % MOD;
         }
         st.push(i);
     }

@@ -135,7 +135,7 @@ public String encode(String s) {
 [Knuth–Morris–Pratt (KMP) algorithm](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm)
 
 * Construct an auxiliary array `lps[]` of the same size as pattern
-* `lps[i]` is the length of the longest matching proper prefix which is also a suffix of the sub-pattern `pat[0...i]`. A proper prefix of a string is a prefix that is not equal to the string itself. 
+* `lps[i]` is the length of the longest matching proper prefix of the sub-pattern `pat[0...i]`, which is also a suffix of the sub-pattern `pat[0...i]`. A proper prefix of a string is a prefix that is not equal to the string itself.
 
 For example, for the pattern `AABAACAABAA`, 
 ```
@@ -169,9 +169,21 @@ public String longestPrefix(String s) {
 }
 {% endhighlight %}
 
+[Shortest Palindrome][shortest-palindrome]
+
+{% highlight java %}
+public String shortestPalindrome(String s) {
+    // "abace" -> "ec" + "aba" + "ce"
+    // finds the longest prefix palindrome of s
+    int[] lps = computeLps(s + "#" + new StringBuilder(s).reverse().toString());
+    return new StringBuilder(s.substring(lps[lps.length - 1])).reverse().toString() + s;
+}
+{% endhighlight %}
+
 * Search pattern in text with the help of `lps[]`
 
 {% highlight java %}
+// finds the start indices of matches
 List<Integer> kmp(String text, String pattern) {
     int n = text.length(), m = pattern.length();
     int[] lps = computeLps(pattern);
@@ -189,35 +201,6 @@ List<Integer> kmp(String text, String pattern) {
         }
     }
     return list;
-}
-{% endhighlight %}
-
-[Shortest Palindrome][shortest-palindrome]
-
-{% highlight java %}
-// KMP
-// O(n + k)
-public String shortestPalindrome(String s) {
-    // finds the longest palindrome substring that starts from index 0
-    int n = s.length();
-    String r = new StringBuilder(s).reverse().toString();
-    String str = s + "#" + r;
-
-    // partial match table
-    int[] table = new int[str.length()];
-    int i = 1, index = 0;
-    while (i < str.length()) {
-        if (str.charAt(index) == str.charAt(i)) {
-            table[i++] = ++index;
-        } else {
-            if (index > 0) {
-                index = table[index - 1];
-            } else {
-                i++;
-            }
-        }
-    }
-    return new StringBuilder(s.substring(table[table.length - 1])).reverse().toString() + s;
 }
 {% endhighlight %}
 

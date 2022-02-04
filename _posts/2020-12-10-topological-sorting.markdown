@@ -85,6 +85,55 @@ public int minimumTime(int n, int[][] relations, int[] time) {
 }
 {% endhighlight %}
 
+[Find All Possible Recipes from Given Supplies][find-all-possible-recipes-from-given-supplies]
+
+{% highlight java %}
+public List<String> findAllRecipes(String[] recipes, List<List<String>> ingredients, String[] supplies) {
+    Set<String> set = new HashSet<>();
+    Arrays.stream(supplies).forEach(set::add);
+
+    int n = recipes.length;
+    // {ingredient : recipe index}
+    Map<String, List<Integer>> graph = new HashMap<>();
+    int[] indegree = new int[n];
+    for (int i = 0; i < n; i++) {
+        // if an ingredient is not in supplies, makes it a graph node
+        // i.e. supplied ingredients are omitted in the graph
+        // the graph helps us to find the topological order of unsupplied ingredients (in fact recipes)
+        for (String in : ingredients.get(i)) {
+            if (!set.contains(in)) {
+                graph.computeIfAbsent(in, k -> new ArrayList<>()).add(i);
+                indegree[i]++;
+            }
+        }
+    }
+
+    // leaves are recipes with 0 indegree
+    // i.e. whose ingredients are all supplied
+    // q contains recipes only
+    Queue<String> q = new LinkedList<>();
+    for (int i = 0; i < n; i++) {
+        if (indegree[i] == 0) {
+            q.offer(recipes[i]);
+        }
+    }
+
+    List<String> list = new ArrayList<>();
+    while (!q.isEmpty()) {
+        String node = q.poll();
+        list.add(node);
+        if (graph.containsKey(node)) {
+            for (int i : graph.get(node)) {
+                if (--indegree[i] == 0) {
+                    q.offer(recipes[i]);
+                }
+            }
+        }
+    }
+    return list;
+}
+{% endhighlight %}
+
 [Largest Color Value in a Directed Graph][largest-color-value-in-a-directed-graph]
 
 {% highlight java %}
@@ -721,6 +770,7 @@ where \\(s_i\\) is the size of the subtree at the i-th node.
 [course-schedule-ii]: https://leetcode.com/problems/course-schedule-ii/
 [critical-connections-in-a-network]: https://leetcode.com/problems/critical-connections-in-a-network/
 [detect-cycles-in-2d-grid]: https://leetcode.com/problems/detect-cycles-in-2d-grid/
+[find-all-possible-recipes-from-given-supplies]: https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/
 [largest-color-value-in-a-directed-graph]: https://leetcode.com/problems/largest-color-value-in-a-directed-graph/
 [longest-increasing-path-in-a-matrix]: https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
 [maximum-employees-to-be-invited-to-a-meeting]: https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/

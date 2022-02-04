@@ -461,7 +461,32 @@ public int maximumGain(String s, int x, int y) {
 }
 {% endhighlight %}
 
+[Earliest Possible Day of Full Bloom][earliest-possible-day-of-full-bloom]
+
+{% highlight java %}
+public int earliestFullBloom(int[] plantTime, int[] growTime) {
+    int n = plantTime.length;
+    Integer[] index = new Integer[n];
+    for (int i = 0; i < n; i++) {
+        index[i] = i;
+    }
+
+    // switching between seeds just delays the starting grow time for (at least one of) the seeds
+    // so we never switch
+    // plants seeds with greater growTime first
+    Arrays.sort(index, Comparator.comparingInt(i -> -growTime[i]));
+
+    int start = 0, end = 0;
+    for (int i : index) {
+        end = Math.max(end, start + plantTime[i] + growTime[i]);
+        start += plantTime[i];
+    }
+    return end;
+}
+{% endhighlight %}
+
 [broken-calculator]: https://leetcode.com/problems/broken-calculator/
+[earliest-possible-day-of-full-bloom]: https://leetcode.com/problems/earliest-possible-day-of-full-bloom/
 [flower-planting-with-no-adjacent]: https://leetcode.com/problems/flower-planting-with-no-adjacent/
 [hand-of-straights]: https://leetcode.com/problems/hand-of-straights/
 [jump-game]: https://leetcode.com/problems/jump-game/

@@ -122,6 +122,79 @@ public int minimumIncompatibility(int[] nums, int k) {
 }
 {% endhighlight %}
 
+[Partition Array Into Two Arrays to Minimize Sum Difference][partition-array-into-two-arrays-to-minimize-sum-difference]
+
+{% highlight java %}
+public int minimumDifference(int[] nums) {
+    int n = nums.length / 2;
+    List<Integer>[] leftSums = subsetSums(nums, 0), rightSums = subsetSums(nums, n);
+
+    // p1: sum of Partition 1
+    // p2: sum of Partition 2
+    //
+    // d = Math.abs(p1 - p2)
+    //   = Math.abs(p1 - (sum - p1))
+    //   = Math.abs(sum - 2 * p1)
+    //
+    // to make d == 0, p1 == sum / 2
+    int min = Integer.MAX_VALUE, sum = Arrays.stream(nums).sum();
+    for (int i = 0; i <= n; i++) {
+        for (int l : leftSums[i]) {
+            // l: sum of p1 elements that are on the left half of nums
+            // r: sum of p1 elements that are on the right half of nums
+            // p1 = l + r
+            // r = p1 - l
+            //   = sum / 2 - l
+            int target = sum / 2 - l;
+            int r = binarySearch(rightSums[n - i], target);
+
+            min = Math.min(min, Math.abs(sum - 2 * (l + r)));
+        }
+    }
+    return min;
+}
+
+// subset sums of nums[start, ..., start + n - 1]
+private List<Integer>[] subsetSums(int[] nums, int start) {
+    int n = nums.length / 2;
+
+    // sums[i]: list of sums with bitCount == i
+    List<Integer>[] sums = new List[n + 1];
+    for (int i = 0; i <= n; i++) {
+        sums[i] = new ArrayList<>();
+    }
+
+    // computes the subset sum of each state
+    for (int s = 0; s < (1 << n); s++) {
+        int len = Integer.bitCount(s);
+        int sum = 0;
+        for (int i = 0; i < n; i++) {
+            if ((s & (1 << i)) > 0) {
+                sum += nums[start + i];
+            }
+        }
+        sums[len].add(sum);
+    }
+
+    Arrays.stream(sums).forEach(Collections::sort);
+    return sums;
+}
+
+private int binarySearch(List<Integer> list, int target) {
+    // searches for the element closest to target.
+    int low = 0, high = list.size() - 1;
+    while (low < high) {
+        int mid = (low + high) >>> 1;
+        if (list.get(mid + 1) - target >= target - list.get(mid)) {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return list.get(low);
+}
+{% endhighlight %}
+
 # Set Cover Problem
 
 [Set cover problem](https://en.wikipedia.org/wiki/Set_cover_problem): NP-complete
@@ -709,6 +782,7 @@ private int dfs(int m, int n, int p, int in, int ex, int inMask, int exMask) {
 [minimum-incompatibility]: https://leetcode.com/problems/minimum-incompatibility/
 [minimum-xor-sum-of-two-arrays]: https://leetcode.com/problems/minimum-xor-sum-of-two-arrays/
 [number-of-ways-to-wear-different-hats-to-each-other]: https://leetcode.com/problems/number-of-ways-to-wear-different-hats-to-each-other/
+[partition-array-into-two-arrays-to-minimize-sum-difference]: https://leetcode.com/problems/partition-array-into-two-arrays-to-minimize-sum-difference/
 [partition-to-k-equal-sum-subsets]: https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
 [smallest-sufficient-team]: https://leetcode.com/problems/smallest-sufficient-team/
 [the-number-of-good-subsets]: https://leetcode.com/problems/the-number-of-good-subsets/

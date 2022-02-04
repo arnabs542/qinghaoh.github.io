@@ -611,7 +611,7 @@ A directed graph has an Eulerian trail if and only if at most one vertex has (ou
 
 {% highlight java %}
 private Map<String, Queue<String>> map = new HashMap<>();
-private List<String> list = new ArrayList<>();
+private LinkedList<String> list = new LinkedList<>();
 
 public List<String> findItinerary(List<List<String>> tickets) {
     for (List<String> t : tickets) {
@@ -628,9 +628,10 @@ private void visit(String node) {
         visit(map.get(node).poll());
     }
 
+    // postorder DFS
     // current vertex is an exit
     // adds the vertext to the route backwards
-    list.add(0, node);
+    list.addFirst(node);
 }
 {% endhighlight %}
 
