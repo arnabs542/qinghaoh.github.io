@@ -10,6 +10,52 @@ usemathjax: true
 * `(x & y) == x`: check if `x` is a subset of `y`
 * `(x & (x >> 1)) == 0`: check if there are no adjancent valid states in `x`
 
+[Groups of Strings][groups-of-strings]
+
+{% highlight java %}
+private Map<Integer, Integer> map = new HashMap<>();
+private Set<Integer> visited = new HashSet<>();
+
+public int[] groupStrings(String[] words) {
+    int groups = 0, maxSize = 0;
+    for (String w : words) {
+        int mask = 0;
+        for (char ch : w.toCharArray()) {
+            mask |= 1 << (ch - 'a');
+        }
+        map.put(mask, map.getOrDefault(mask, 0) + 1);
+    }
+
+    for (int k : map.keySet()) {
+        int size = dfs(k);
+        maxSize = Math.max(maxSize, size);
+        if (size > 0) {
+            groups++;
+        }
+    }
+    return new int[]{groups, maxSize};
+}
+
+private int dfs(int mask) {
+    if (!map.containsKey(mask) || !visited.add(mask)) {
+        return 0;
+    }
+
+    int count = map.get(mask);
+    for (int i = 0; i < 26; i++) {
+        // add/delete: flips one bit
+        count += dfs(mask ^ (1 << i));
+        for (int j = i + 1; j < 26; j++) {
+            // replace: flips two bits with different values
+            if (((mask >> i) & 1) != ((mask >> j) & 1)) {
+                count += dfs(mask ^ (1 << i) ^ (1 << j));
+            }
+        }
+    }
+    return count;
+}
+{% endhighlight %}
+
 # Iteration
 
 [Iterator for Combination][iterator-for-combination]
@@ -51,6 +97,68 @@ class CombinationIterator {
     public boolean hasNext() {
         return bitmask > 0;
     }
+}
+{% endhighlight %}
+
+[Minimum Number of Lines to Cover Points][minimum-number-of-lines-to-cover-points]
+
+{% highlight java %}
+public int minimumLines(int[][] points) {
+    int n = points.length;
+    if (n < 3) {
+        return 1;
+    }
+
+    // {a#b : list of point index}
+    Map<String, List<Integer>> map = new HashMap<>();
+
+    // y = a * x + b
+    double a = 0, b = 0;
+    for (int i = 0; i < n; i++) {
+        int x1 = points[i][0], y1 = points[i][1];
+        for (int j = i + 1; j < n; j++) {
+            int x2 = points[j][0], y2 = points[j][1];
+            if (x1 == x2) {
+                a = x1;
+                b = Double.NaN;
+            } else {
+                a = (double)(y2 - y1) / (x2 - x1);
+                b = y1 - a * x1;
+            }
+
+            String key = a + "#" + b;
+            map.computeIfAbsent(key, k -> new ArrayList<>()).add(i);
+            map.computeIfAbsent(key, k -> new ArrayList<>()).add(j);
+        }
+    }
+
+    // filters out lines that cover >= 3 points
+    List<String> lines = map.entrySet().stream()
+        .filter(e -> e.getValue().size() > 2)
+        .map(e -> e.getKey())
+        .collect(Collectors.toList());
+
+    // max possible answer is Math.ceil(n / 2d)
+    // m is the number of (a, b) pairs with >= 3 points
+    int min = (n + 1) / 2, m = lines.size();
+    Set<Integer> set = new HashSet<>();
+
+    for (int mask = 1; mask < (1 << m); mask++) {
+        int i = mask, j = 0, count = Integer.bitCount(mask);
+        set.clear();
+
+        // computes the number of points in each combination of `lines`
+        while (i > 0) {
+            if ((i & 1) == 1) {
+                map.get(lines.get(j)).forEach(set::add);
+            }
+            i >>= 1;
+            j++;
+        }
+
+        min = Math.min(min, count + (int)Math.ceil((n - set.size()) / 2d));
+    }
+    return min;
 }
 {% endhighlight %}
 
@@ -508,6 +616,44 @@ public int maxStudents(char[][] seats) {
 
 # DFS
 
+[Minimum Number of Work Sessions to Finish the Tasks][minimum-number-of-work-sessions-to-finish-the-tasks]
+
+{% highlight java %}
+private int sessionTime;
+// memo[mask][remaining session time]
+private Integer[][] memo = new Integer[1 << 14][15];
+
+public int minSessions(int[] tasks, int sessionTime) {
+    this.sessionTime = sessionTime;
+    return dfs(tasks, 0, 0);
+}
+
+private int dfs(int[] tasks, int mask, int remainTime) {
+    int n = tasks.length;
+    if (mask == (1 << n) - 1) {
+        return 0;
+    }
+
+    if (memo[mask][remainTime] != null) {
+        return memo[mask][remainTime];
+    }
+
+    int min = n;
+    for (int i = 0; i < n; i++) {
+        if ((mask & (1 << i)) == 0) {
+            // assigns i-th bit
+            int next = mask | (1 << i);
+            if (tasks[i] <= remainTime) {
+                min = Math.min(min, dfs(tasks, next, remainTime - tasks[i]));
+            } else {
+                min = Math.min(min, dfs(tasks, next, sessionTime - tasks[i]) + 1);
+            }
+        }
+    }
+    return memo[mask][remainTime] = min;
+}
+{% endhighlight %}
+
 [Maximize Score After N Operations][maximize-score-after-n-operations]
 
 {% highlight java %}
@@ -697,7 +843,7 @@ int dfs(List<Integer>[] h2p, int n, int hat, int mask, Integer[][] memo) {
 # Multi-dimension
 
 [Maximize Grid Happiness][maximize-grid-happiness]
-OB
+
 {% highlight java %}
 private Integer[][][][][] dp;
 
@@ -773,13 +919,47 @@ private int dfs(int m, int n, int p, int in, int ex, int inMask, int exMask) {
 }
 {% endhighlight %}
 
+# Radix
+
+[Maximum AND Sum of Array][maximum-and-sum-of-array]
+
+{% highlight java %}
+public int maximumANDSum(int[] nums, int numSlots) {
+    // base-3 bit mask
+    int mask = (int)Math.pow(3, numSlots) - 1;
+    return dp(nums, numSlots, 0, mask, new int[mask + 1]);
+}
+
+private int dp(int[] nums, int numSlots, int index, int mask, int[] memo) {
+    if (index == nums.length) {
+        return 0;
+    }
+
+    if (memo[mask] > 0) {
+        return memo[mask];
+    }
+
+    int max = 0;
+    for (int slot = 1, bit = 1; slot <= numSlots; slot++, bit *= 3) {
+        if (mask / bit % 3 > 0) {
+            max = Math.max(max, (nums[index] & slot) + dp(nums, numSlots, index + 1, mask - bit, memo));
+        }
+    }
+    return memo[mask] = max;
+}
+{% endhighlight %}
+
 [distribute-repeating-integers]: https://leetcode.com/problems/distribute-repeating-integers/
+[groups-of-strings]: https://leetcode.com/problems/groups-of-strings/
 [iterator-for-combination]: https://leetcode.com/problems/iterator-for-combination/
+[maximum-and-sum-of-array]: https://leetcode.com/problems/maximum-and-sum-of-array/
 [maximize-grid-happiness]: https://leetcode.com/problems/maximize-grid-happiness/
 [maximize-score-after-n-operations]: https://leetcode.com/problems/maximize-score-after-n-operations/
 [maximum-students-taking-exam]: https://leetcode.com/problems/maximum-students-taking-exam/
 [minimum-cost-to-connect-two-groups-of-points]: https://leetcode.com/problems/minimum-cost-to-connect-two-groups-of-points/
 [minimum-incompatibility]: https://leetcode.com/problems/minimum-incompatibility/
+[minimum-number-of-lines-to-cover-points]: https://leetcode.com/problems/minimum-number-of-lines-to-cover-points/
+[minimum-number-of-work-sessions-to-finish-the-tasks]: https://leetcode.com/problems/minimum-number-of-work-sessions-to-finish-the-tasks/
 [minimum-xor-sum-of-two-arrays]: https://leetcode.com/problems/minimum-xor-sum-of-two-arrays/
 [number-of-ways-to-wear-different-hats-to-each-other]: https://leetcode.com/problems/number-of-ways-to-wear-different-hats-to-each-other/
 [partition-array-into-two-arrays-to-minimize-sum-difference]: https://leetcode.com/problems/partition-array-into-two-arrays-to-minimize-sum-difference/

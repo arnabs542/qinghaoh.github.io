@@ -35,6 +35,12 @@ Map + TreeMap
 private Map<Integer, List<String>> map = new HashMap<>();
 {% endhighlight %}
 
+[Design Bitset][design-bitset]
+
+{% highlight java %}
+private Set<Integer> ones = new HashSet<>(), zeros = new HashSet<>();
+{% endhighlight %}
+
 [All O`one Data Structure][all-oone-data-structure]
 
 Doubly linked list (buckets)
@@ -534,6 +540,7 @@ private int[] arr;
 [all-oone-data-structure]: https://leetcode.com/problems/all-oone-data-structure/
 [design-a-leaderboard]: https://leetcode.com/problems/design-a-leaderboard/
 [design-a-stack-with-increment-operation]: https://leetcode.com/problems/design-a-stack-with-increment-operation/
+[design-bitset]: https://leetcode.com/problems/design-bitset/
 [design-hashmap]: https://leetcode.com/problems/design-phone-hashmap/
 [design-movie-rental-system]: https://leetcode.com/problems/design-movie-rental-system/
 [design-phone-directory]: https://leetcode.com/problems/design-phone-directory/

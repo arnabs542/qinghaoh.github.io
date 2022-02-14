@@ -729,8 +729,71 @@ public int firstDayBeenInAllRooms(int[] nextVisit) {
 }
 {% endhighlight %}
 
+[Choose Numbers From Two Arrays in Range][choose-numbers-from-two-arrays-in-range]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int countSubranges(int[] nums1, int[] nums2) {
+    // dp[i]: number of ways to sum to i
+    Map<Integer, Integer> dp = new HashMap<>(), dp2;
+
+    int count = 0;
+    for (int i = 0; i < nums1.length; i++) {
+        dp2 = new HashMap<>();
+        dp2.put(nums1[i], 1);
+        // negates nums2 elements
+        // the goal is to find the number of different ranges that sum to 0
+        dp2.put(-nums2[i], dp2.getOrDefault(-nums2[i], 0) + 1);
+
+        for (var e : dp.entrySet()) {
+            int k = e.getKey(), v = e.getValue();
+            // picks nums1[i]
+            dp2.put(k + nums1[i], (dp2.getOrDefault(k + nums1[i], 0) + v) % MOD);
+            // picks -nums2[i]
+            dp2.put(k - nums2[i], (dp2.getOrDefault(k - nums2[i], 0) + v) % MOD);
+        }
+
+        count = (count + dp2.getOrDefault(0, 0)) % MOD;
+        dp = dp2;
+    }
+    return count;
+}
+{% endhighlight %}
+
+[Minimum Total Space Wasted With K Resizing Operations][minimum-total-space-wasted-with-k-resizing-operations]
+
+{% highlight java %}
+public int minSpaceWastedKResizing(int[] nums, int k) {
+    int n = nums.length, max = 0, sum = 0;
+    int[][] dp = new int[n][k + 1];
+    for (int i = n - 1; i >= 0; i--) {
+        max = Math.max(max, nums[i]);
+        sum += nums[i];
+        dp[i][0] = max * (n - i) - sum;
+    }
+
+    for (int m = 1; m <= k; m++) {
+        for (int i = n - 1; i >= 0; i--) {
+            dp[i][m] = dp[i][m - 1];
+            max = sum = 0;
+
+            // resizes at i
+            // finds the wasted space in [i, j)
+            for (int j = i + 1; j < n; j++) {
+                max = Math.max(max, nums[j - 1]);
+                sum += nums[j - 1];
+                dp[i][m] = Math.min(dp[i][m], dp[j][m - 1] + max * (j - i) - sum);
+            }
+        }
+    }
+    return dp[0][k];
+}
+{% endhighlight %}
+
 [best-team-with-no-conflicts]: https://leetcode.com/problems/best-team-with-no-conflicts/
 [build-array-where-you-can-find-the-maximum-exactly-k-comparisons]: https://leetcode.com/problems/build-array-where-you-can-find-the-maximum-exactly-k-comparisons/
+[choose-numbers-from-two-arrays-in-range]: https://leetcode.com/problems/choose-numbers-from-two-arrays-in-range/
 [first-day-where-you-have-been-in-all-the-rooms]: https://leetcode.com/problems/first-day-where-you-have-been-in-all-the-rooms/
 [frog-jump]: https://leetcode.com/problems/frog-jump/
 [make-the-xor-of-all-segments-equal-to-zero]: https://leetcode.com/problems/make-the-xor-of-all-segments-equal-to-zero/
@@ -738,6 +801,7 @@ public int firstDayBeenInAllRooms(int[] nextVisit) {
 [minimum-difficulty-of-a-job-schedule]: https://leetcode.com/problems/minimum-difficulty-of-a-job-schedule/
 [minimum-distance-to-type-a-word-using-two-fingers]: https://leetcode.com/problems/minimum-distance-to-type-a-word-using-two-fingers/
 [minimum-skips-to-arrive-at-meeting-on-time]: https://leetcode.com/problems/minimum-skips-to-arrive-at-meeting-on-time/
+[minimum-total-space-wasted-with-k-resizing-operations]: https://leetcode.com/problems/minimum-total-space-wasted-with-k-resizing-operations/
 [number-of-music-playlists]: https://leetcode.com/problems/number-of-music-playlists/
 [number-of-ways-to-rearrange-sticks-with-k-sticks-visible]: https://leetcode.com/problems/number-of-ways-to-rearrange-sticks-with-k-sticks-visible/
 [paint-house-iii]: https://leetcode.com/problems/paint-house-iii/

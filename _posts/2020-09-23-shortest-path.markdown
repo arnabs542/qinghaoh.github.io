@@ -42,6 +42,55 @@ Comparison with BFS:
 | queue | queue  | priority queue  |
 | time complexity | O(V + E) | O(V + Elog(V)) |
 
+[Number of Ways to Arrive at Destination][number-of-ways-to-arrive-at-destination]
+
+{% highlight java %}
+private static final int MOD = (int)1e9 + 7;
+
+public int countPaths(int n, int[][] roads) {
+    List<int[]>[] graph = new List[n];
+    for (int i = 0; i < n; i++) {
+        graph[i] = new ArrayList<>();
+    }
+
+    for (int[] r : roads) {
+        graph[r[0]].add(new int[]{r[1], r[2]});
+        graph[r[1]].add(new int[]{r[0], r[2]});
+    }
+
+    // time[i]: shortest amount of time from 0 to i so far
+    int[] time = new int[n], ways = new int[n];
+    Arrays.fill(time, Integer.MAX_VALUE);
+    time[0] = 0;
+    ways[0] = 1;
+
+    // {city, time from 0 to city at the time of enqueue}
+    Queue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
+    int[] node = {0, 0};
+    pq.offer(node);
+
+    while (!pq.isEmpty()) {
+        node = pq.poll();
+        int city = node[0], currentTime = node[1];
+        if (currentTime > time[city]) {
+            continue;
+        }
+
+        for (int[] next : graph[city]) {
+            int neighbor = next[0], betweenTime = next[1];
+            if (time[neighbor] > currentTime + betweenTime) {
+                time[neighbor] = currentTime + betweenTime;
+                ways[neighbor] = ways[city];
+                pq.offer(new int[]{neighbor, time[neighbor]});
+            } else if (time[neighbor] == currentTime + betweenTime) {
+                ways[neighbor] = (ways[neighbor] + ways[city]) % MOD;
+            }
+        }
+    }
+    return ways[n - 1];
+}
+{% endhighlight %}
+
 [Path with Maximum Probability][path-with-maximum-probability]
 
 {% highlight java %}
@@ -831,6 +880,7 @@ private int paint(int[][] grid, int i, int j, int color) {
 [minimum-cost-to-reach-destination-in-time]: https://leetcode.com/problems/minimum-cost-to-reach-destination-in-time/
 [minimum-number-of-days-to-disconnect-island]: https://leetcode.com/problems/minimum-number-of-days-to-disconnect-island/
 [number-of-restricted-paths-from-first-to-last-node]: https://leetcode.com/problems/number-of-restricted-paths-from-first-to-last-node/
+[number-of-ways-to-arrive-at-destination]: https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/
 [path-with-maximum-minimum-value]: https://leetcode.com/problems/path-with-maximum-minimum-value/
 [path-with-maximum-probability]: https://leetcode.com/problems/path-with-maximum-probability/
 [path-with-minimum-effort]: https://leetcode.com/problems/path-with-minimum-effort/

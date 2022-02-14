@@ -499,6 +499,73 @@ private void dfs(int i, int j, GridMaster master, Cell[][] grid) {
 }
 {% endhighlight %}
 
+# Multi-dimension
+
+[Number of Valid Move Combinations On Chessboard][number-of-valid-move-combinations-on-chessboard]
+
+{% highlight java %}
+{% raw %}
+private static final int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}, {1, 1}, {1, -1}, {-1, -1}, {-1, 1}};
+{% endraw %}
+// board[p][i][j]: the steps for piece p to reach (i, j)
+//   if (i, j) is destination, its value is negative
+private int[][][] board = new int[4][8][8];
+
+public int countCombinations(String[] pieces, int[][] positions) {
+    return dfs(pieces, positions, 0);
+}
+
+public int dfs(String[] pieces, int[][] positions, int p) {
+    if (p >= pieces.length) {
+        return 1;
+    }
+
+    int count = 0;
+    for (int i = 0; i < DIRECTIONS.length; i++) {
+        if ((i < 4 && pieces[p].equals("bishop")) || (i >= 4 && pieces[p].equals("rook"))) {
+            continue;
+        }
+
+        boolean isBlocked = false;
+        // ensures only one direction marks the start position as step 1
+        int step = Math.min(2, count + 1);
+        while (!isBlocked) {
+            int r = (positions[p][0] - 1) + (step - 1) * DIRECTIONS[i][0];
+            int c = (positions[p][1] - 1) + (step - 1) * DIRECTIONS[i][1];
+
+            if (r < 0 || r >= board[0].length || c < 0 || c >= board[0][0].length) {
+                break;
+            }
+
+            boolean canStop = true;
+            for (int j = 0; j < p; j++) {
+                // no other pieces stopped at this position, and
+                // other pieces already passed by this position (or haven't reached this position (== 0))
+                canStop &= board[j][r][c] >= 0 && board[j][r][c] < step;
+
+                // another piece stopped at this position with <= steps to get there, or
+                // another piece passed by this position at the same time
+                isBlocked |= (board[j][r][c] < 0 && -board[j][r][c] <= step)
+                    || board[j][r][c] == step;
+            }
+
+            if (canStop)  {
+                // if this piece stops at current position
+                // marks destination by negative step
+                board[p][r][c] = -step;
+                count += dfs(pieces, positions, p + 1);
+            }
+
+            board[p][r][c] = step++;
+        }
+
+        // clears board to prepare for a new direction of this piece
+        board[p] = new int[8][8];
+    }
+    return count;
+}
+{% endhighlight %}
+
 [bricks-falling-when-hit]: https://leetcode.com/problems/bricks-falling-when-hit/
 [clone-graph]: https://leetcode.com/problems/clone-graph/
 [contain-virus]: https://leetcode.com/problems/contain-virus/
@@ -506,6 +573,7 @@ private void dfs(int i, int j, GridMaster master, Cell[][] grid) {
 [lexicographical-numbers]: https://leetcode.com/problems/lexicographical-numbers/
 [lexicographically-smallest-string-after-applying-operations]: https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/
 [number-of-distinct-islands]: https://leetcode.com/problems/number-of-distinct-islands/
+[number-of-valid-move-combinations-on-chessboard]: https://leetcode.com/problems/number-of-valid-move-combinations-on-chessboard/
 [pyramid-transition-matrix]: https://leetcode.com/problems/pyramid-transition-matrix/
 [shortest-path-in-a-hidden-grid]: https://leetcode.com/problems/shortest-path-in-a-hidden-grid/
 [the-earliest-and-latest-rounds-where-players-compete]: https://leetcode.com/problems/the-earliest-and-latest-rounds-where-players-compete/

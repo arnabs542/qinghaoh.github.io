@@ -195,38 +195,39 @@ public int[][] averageHeightOfBuildings(int[][] buildings) {
 [Minimum Interval to Include Each Query][minimum-interval-to-include-each-query]
 
 {% highlight java %}
-public int[][] averageHeightOfBuildings(int[][] buildings) {
-    // {point, (+/-)height}
-    Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
-    for (int[] b : buildings) {
-        pq.offer(new int[]{b[0], b[2]});
-        pq.offer(new int[]{b[1], -b[2]});
-    }
+public int[] minInterval(int[][] intervals, int[] queries) {
+    // {size, end}
+    // we can use priority queue as well
+    TreeMap<Integer, Integer> map = new TreeMap<>();
 
-    Deque<int[]> dq = new ArrayDeque<>();
-    int prev = 0, sum = 0, count = 0;
-    while (!pq.isEmpty()) {
-        int[] curr = pq.poll();
-        if (count != 0 && curr[0] != prev) {
-            int avg = sum / count;
-            // updates end and average of prev int[]
-            if (!dq.isEmpty() && dq.peekLast()[1] == prev && dq.peekLast()[2] == avg) {
-                dq.peekLast()[1] = curr[0];
-                dq.peekLast()[2] = avg;
-            } else {
-                dq.offerLast(new int[] {prev, curr[0], avg});
-            }
+    // sorts intervals
+    Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+
+    // sorts queries index mapping array
+    int n = intervals.length, m = queries.length;
+    Integer[] index = new Integer[m];
+    for (int i = 0; i < m; i++) {
+        index[i] = i;
+    }
+    Arrays.sort(index, Comparator.comparingInt(i -> queries[i]));
+
+    int j = 0;  // index of current interval
+    int[] ans = new int[m];
+    // scans through queries in order
+    for (int i : index) {
+        // enqueues
+        while (j < n && intervals[j][0] <= queries[i]) {
+            map.put(intervals[j][1] - intervals[j][0] + 1, intervals[j][1]);
+            j++;
         }
-        prev = curr[0];
-        sum += curr[1];
-        count += curr[1] > 0 ? 1 : -1;
-    }
 
-    int[][] street = new int[dq.size()][];
-    for (int i = 0; i < street.length; i++) {
-        street[i] = dq.pollFirst();
+        // dequeues
+        while (!map.isEmpty() && map.firstEntry().getValue() < queries[i]) {
+            map.pollFirstEntry();
+        }
+        ans[i] = map.isEmpty() ? -1 : map.firstKey();
     }
-    return street;
+    return ans;
 }
 {% endhighlight %}
 
@@ -306,6 +307,42 @@ public int brightestPosition(int[][] lights) {
 }
 {% endhighlight %}
 
+[Amount of New Area Painted Each Day][amount-of-new-area-painted-each-day]
+
+{% highlight java %}
+public int[] amountPainted(int[][] paint) {
+    int n = paint.length;
+    int max = Arrays.stream(paint).mapToInt(p -> p[1]).max().getAsInt();
+
+    // area[i]: end of continuous painted area starting at i
+    int[] area = new int[max + 1], worklog = new int[n];
+    for (int i = 0; i < n; i++) {
+        int start = paint[i][0], end = paint[i][1];
+        while (start < end) {
+            // next position of the brush
+            int jump = 0;
+            // if the area is empty (area[start] == 0), jumps one step forward
+            if (area[start] == 0) {
+                jump = start + 1;
+                worklog[i]++;
+            } else {
+                // jumps to the end of existing painted area
+                jump = area[start];
+            }
+
+            // updates the end of the painted area starting from current `start`
+            if (end > area[start]) {
+                area[start] = end;
+            }
+
+            start = jump;
+        }
+    }
+    return worklog;
+}
+{% endhighlight %}
+
+[amount-of-new-area-painted-each-day]: https://leetcode.com/problems/amount-of-new-area-painted-each-day/
 [average-height-of-buildings-in-each-segment]: https://leetcode.com/problems/average-height-of-buildings-in-each-segment/
 [brightest-position-on-street]: https://leetcode.com/problems/brightest-position-on-street/
 [describe-the-painting]: https://leetcode.com/problems/describe-the-painting/

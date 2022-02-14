@@ -1010,6 +1010,52 @@ public int visiblePoints(List<List<Integer>> points, int angle, List<Integer> lo
 }
 {% endhighlight %}
 
+[Permutation in String][permutation-in-string]
+
+{% highlight java %}
+public boolean checkInclusion(String s1, String s2) {
+    int n1 = s1.length(), n2 = s2.length();
+    if (n1 > n2) {
+        return false;
+    }
+
+    int[] map1 = new int[26], map2 = new int[26];
+    for (int i = 0; i < n1; i++) {
+        map1[s1.charAt(i) - 'a']++;
+        map2[s2.charAt(i) - 'a']++;
+    }
+
+    int count = 0;
+    for (int i = 0; i < 26; i++) {
+        if (map1[i] == map2[i]) {
+            count++;
+        }
+    }
+
+    for (int i = 0; i + n1 < n2; i++) {
+        int r = s2.charAt(i + n1) - 'a', l = s2.charAt(i) - 'a';
+        if (count == 26) {
+            return true;
+        }
+
+        map2[r]++;
+        if (map2[r] == map1[r]) {
+            count++;
+        } else if (map2[r] == map1[r] + 1) {
+            count--;
+        }
+
+        map2[l]--;
+        if (map2[l] == map1[l]) {
+            count++;
+        } else if (map2[l] == map1[l] - 1) {
+            count--;
+        }
+    }
+    return count == 26;
+}
+{% endhighlight %}
+
 [count-number-of-nice-subarrays]: https://leetcode.com/problems/count-number-of-nice-subarrays/
 [count-vowel-substrings-of-a-string]: https://leetcode.com/problems/count-vowel-substrings-of-a-string/
 [delivering-boxes-from-storage-to-ports]: https://leetcode.com/problems/delivering-boxes-from-storage-to-ports/
@@ -1042,6 +1088,7 @@ public int visiblePoints(List<List<Integer>> points, int angle, List<Integer> lo
 [moving-stones-until-consecutive-ii]: https://leetcode.com/problems/moving-stones-until-consecutive-ii/
 [number-of-equal-count-substrings]: https://leetcode.com/problems/number-of-equal-count-substrings/
 [number-of-substrings-containing-all-three-characters]: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
+[permutation-in-string]: https://leetcode.com/problems/permutation-in-string/
 [replace-the-substring-for-balanced-string]: https://leetcode.com/problems/replace-the-substring-for-balanced-string/
 [subarray-product-less-than-k]: https://leetcode.com/problems/subarray-product-less-than-k/submissions/
 [subarray-sum-equals-k]: https://leetcode.com/problems/subarray-sum-equals-k/

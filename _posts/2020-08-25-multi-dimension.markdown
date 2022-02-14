@@ -320,7 +320,7 @@ public int movesToChessboard(int[][] board) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             // two types of rows if it can transform to a chessboard
-            // e.g., if there's a row 01010011
+            // e.g. if there's a row 01010011
             // then any other row must be either 01010011 or 10101100 (inverse)
             //
             // corollary: the 4 corners of any rectangle inside the board must be one of the following:
@@ -336,15 +336,15 @@ public int movesToChessboard(int[][] board) {
     }
 
     // first row and column
-    // sum, i.e. count of one's
+    // sum, i.e. count of ones
     int rowSum = 0, colSum = 0;
-    // count of misplaced element
+    // count of misplaced elements if the final pattern is "1010..."
+    // then the count of misplaced elements of inverse pattern ("0101...") is (n - misplaced)
     int rowMisplaced = 0, colMisplaced = 0;
     for (int i = 0; i < n; i++) {
         rowSum += board[0][i];
         colSum += board[i][0];
 
-        // if the final pattern is "1010..."
         if (board[i][0] == i % 2) {
             rowMisplaced++;
         }
@@ -367,19 +367,13 @@ public int movesToChessboard(int[][] board) {
     }
 
     if (n % 2 == 1) {
-        // when n is odd
-        // only one final pattern is possible
+        // when n is odd, only one final pattern is possible
         //
-        // if misplaced is even
-        // then the final pattern is "1010..."
+        // if misplaced is even, then the final pattern is "1010..."
+        // else the final pattern is the inverse ("0101...")
         //
-        // if misplaced is odd,
-        // then the final pattern is the inverse of "1010..."
-        // i.e. "0101..."
-        // and the actual count of misplaced elements is (n - misplace)
-        //
-        // e.g. "001", misplaced == 1
-        // the final pattern should be "010",
+        // e.g. n is odd, "001", misplaced == 1
+        // the final pattern should be the inverse "010",
         // and the actual count of misplaced elements is 2 == n - misplaced
         //
         // in either case, the actual count of misplaced elements is even
@@ -391,11 +385,7 @@ public int movesToChessboard(int[][] board) {
         }
     } else {
         // when n is even
-        // the final pattern can be either "1010..." or "0101..."
-        //
-        // if the final pattern is "0101..." (inverse)
-        // the misplaced counts for row and col will be
-        // (n - rowMisplaced) and (n - colMisplaced) respectively
+        // the final pattern can be either "1010..." or the inverse "0101..."
         //
         // misplaced and (n - misplaced) are both even
         // picks the minimum of them
@@ -405,6 +395,24 @@ public int movesToChessboard(int[][] board) {
 
     // one swap fixes two misplaced elements
     return (colMisplaced + rowMisplaced) / 2;
+}
+{% endhighlight %}
+
+# Flip
+
+[Remove All Ones With Row and Column Flips][remove-all-ones-with-row-and-column-flips]
+
+{% highlight java %}
+public boolean removeOnes(int[][] grid) {
+    // checks if the current row is the same or the reverse of the first row
+    for (int i = 1; i < grid.length; i++) {
+        for (int j = 0; j < grid[0].length; j++) {
+            if ((grid[i][j] ^ grid[0][j]) != (grid[i][0] ^ grid[0][0])) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 {% endhighlight %}
 
@@ -469,6 +477,7 @@ public int[][] restoreMatrix(int[] rowSum, int[] colSum) {
 [maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold]: https://leetcode.com/problems/maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold/
 [number-of-enclaves]: https://leetcode.com/problems/number-of-enclaves/
 [number-of-submatrices-that-sum-to-target]: https://leetcode.com/problems/number-of-submatrices-that-sum-to-target/
+[remove-all-ones-with-row-and-column-flips]: https://leetcode.com/problems/remove-all-ones-with-row-and-column-flips/
 [search-a-2d-matrix]: https://leetcode.com/problems/search-a-2d-matrix/
 [stamping-the-grid]: https://leetcode.com/problems/stamping-the-grid/
 [surrounded-regions]: https://leetcode.com/problems/surrounded-regions/

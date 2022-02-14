@@ -204,6 +204,52 @@ List<Integer> kmp(String text, String pattern) {
 }
 {% endhighlight %}
 
+[Remove All Occurrences of a Substring][remove-all-occurrences-of-a-substring]
+
+{% highlight java %}
+public String removeOccurrences(String s, String part) {
+    int n = s.length(), m = part.length();
+    int[] lps = computeLps(part);
+
+    Deque<Character> st = new ArrayDeque<>();
+
+    // stores pattern index j so that after character deletion it can be restored
+    int[] index = new int[n + 1];
+
+    for (int i = 0, j = 0; i < n; i++) {
+        st.push(s.charAt(i));
+
+        if (st.peek() == part.charAt(j)) {
+            // stores the next index of j
+            index[st.size()] = ++j;
+
+            if (j == m) {
+                // deletes the whole part when a match is found
+                int count = m;
+                while (count > 0) {
+                    st.pop();
+                    count--;
+                }
+
+                // restores the index of j to find next match
+                j = st.isEmpty() ? 0 : index[st.size()];
+            }
+        } else {
+            if (j > 0) {
+                j = lps[j - 1];
+                st.pop();
+                i--;
+            } else {
+                // resets the stored index
+                index[st.size()] = 0;
+            }
+        }
+    }
+
+    return new StringBuilder(st.stream().map(Object::toString).collect(Collectors.joining())).reverse().toString();
+}
+{% endhighlight %}
+
 [Find All Good Strings][find-all-good-strings]
 
 {% highlight java %}
@@ -450,6 +496,7 @@ private void doStamp(int pos) {
 [longest-duplicate-substring]: https://leetcode.com/problems/longest-duplicate-substring/
 [longest-happy-prefix]: https://leetcode.com/problems/longest-happy-prefix/
 [longest-repeating-substring]: https://leetcode.com/problems/longest-repeating-substring/
+[remove-all-occurrences-of-a-substring]: https://leetcode.com/problems/remove-all-occurrences-of-a-substring/
 [shortest-palindrome]: https://leetcode.com/problems/shortest-palindrome/
 [stamping-the-sequence]: https://leetcode.com/problems/stamping-the-sequence/
 [word-break]: https://leetcode.com/problems/word-break/
